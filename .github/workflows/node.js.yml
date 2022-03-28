@@ -28,7 +28,7 @@ jobs:
     - run: npm install typescript
     - run: npm ci
     - run: npm run build --if-present
-    - run: tsc src/*.ts
+    - run: tsc *.ts
 
   test:
     runs-on: ubuntu-latest
@@ -47,4 +47,4 @@ jobs:
     - run: npm install typescript
     - run: npm ci
     - run: npm run build --if-present
-    - run: tsc src/*.ts
+    - run: tsc *.ts
