@@ -5,7 +5,8 @@
   "main": "./dist/helltfbot.js",
   "type": "module",
   "scripts": {
-    "test": "npm run test"
+    "test": "",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
