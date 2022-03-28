@@ -17,5 +17,13 @@
   "bugs": {
     "url": "https://github.com/helltf/helltfbot-v2/issues"
   },
-  "homepage": "https://github.com/helltf/helltfbot-v2#readme"
+  "homepage": "https://github.com/helltf/helltfbot-v2#readme",
+  "dependencies": {
+    "@types/tmi.js": "^1.8.1",
+    "dotenv": "^16.0.0",
+    "tmi.js": "^1.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23"
+  }
 }
