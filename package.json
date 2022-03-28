@@ -2,7 +2,7 @@
   "name": "helltfbot-v2",
   "version": "1.0.0",
   "description": "version 2 for helltfbot",
-  "main": "helltfbot.ts",
+  "main": "./dist/helltfbot.js",
   "type": "module",
   "scripts": {
     "test": "npm run test"
