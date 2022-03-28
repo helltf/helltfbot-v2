@@ -1,0 +1,20 @@
+{
+  "name": "helltfbot-v2",
+  "version": "1.0.0",
+  "description": "version 2 for helltfbot",
+  "main": "helltfbot.ts",
+  "type": "module",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helltf/helltfbot-v2.git"
+  },
+  "author": "helltf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/helltf/helltfbot-v2/issues"
+  },
+  "homepage": "https://github.com/helltf/helltfbot-v2#readme"
+}
