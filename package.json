@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "",
-    "compile": "tsc *.ts"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
