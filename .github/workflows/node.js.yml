@@ -25,9 +25,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install typescript
-    - run: npm ci
-    - run: npm run build --if-present
+    - name: Run build script
+      run: |
+        npm install typescript
+        npm run build
 
   test:
     runs-on: ubuntu-latest
@@ -43,7 +44,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Run build script
+    - name: Run test script
       run: |
         npm install typescript
         npm run build
