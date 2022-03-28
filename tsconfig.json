@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "ES2022",
+        "target": "ES2022",
+        "watch": true,
+        "outDir": "./dist"
+    },
+    "exclude": [
+        "node_modules"
+    ],
+}
