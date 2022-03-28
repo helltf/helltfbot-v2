@@ -47,5 +47,4 @@ jobs:
     - name: Run build script
       run: |
         npm install typescript
-        tsc *.ts
-        pwd
+        npm compile
