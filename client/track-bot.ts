@@ -1,13 +1,11 @@
-import * as tmi from 'tmi.js'
+import { IdentityOptions } from '../config/config.js'
+import { Client } from 'tmi.js'
 
-import {getTrackClientConfig } from '../config/config'
+const watchClient = createWatchClient()
 
-
-
-const create = () => {
-    let options = getTrackClientConfig()
-    return tmi.Client({
-        
-    })
-
+function createWatchClient(){
+    let watchClientOptions = new IdentityOptions("sajkdkjls" ,"justinfan284")
+    return Client({identity: watchClientOptions})
 }
+
+export { watchClient }
