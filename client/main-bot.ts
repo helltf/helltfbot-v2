@@ -1,7 +1,6 @@
 import { ChatUserstate, Client } from 'tmi.js'
 import * as tmi from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
-import { hb } from '../helltfbot.js'
 
 const mainClient = createMainClient()
 
