@@ -4,7 +4,7 @@ set -e
 
 npm i 
 
-tsc
+npm run build
 
 cd ./dist
 
