@@ -24,7 +24,7 @@ const requestGithubApi = async (path: string): Promise<any> => {
 	).json()
 }
 
-class PipelineData {
+export class PipelineData {
 	count: number
 	branch: string
 	status: string
