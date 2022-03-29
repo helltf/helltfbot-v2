@@ -8,6 +8,6 @@ const hb = new TwitchBot(mainClient, watchClient)
 
 
 getData()
-setInterval(getData, 60000)
+setInterval(getData, 10000)
 
 export{ hb }
