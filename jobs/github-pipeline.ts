@@ -13,7 +13,7 @@ const getData = async () => {
 	}
 
 	if (count !== data.count) {
-		announceNewPipeLine(data)
+		announceNewPipeLsine(data)
         count = data.count
 	}
     
