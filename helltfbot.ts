@@ -9,5 +9,5 @@ const hb = new TwitchBot(mainClient, watchClient)
 
 getData()
 setInterval(getData, 10000)
-
+console.log("")
 export{ hb }
