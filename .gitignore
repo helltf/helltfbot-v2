@@ -40,4 +40,3 @@ dist/**/*
 # ignore yarn.lock
 yarn.lock
 environment.d.ts
-config/config.json
