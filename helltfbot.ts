@@ -5,6 +5,9 @@ import { mainClient } from './client/main-bot.js'
 import { watchClient } from './client/track-bot.js'
 
 const hb = new TwitchBot(mainClient, watchClient)
+
+
 getData()
+setInterval(getData, 1000)
 
 export{ hb }
