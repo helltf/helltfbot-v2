@@ -1,17 +1,18 @@
-import * as tmi from 'tmi.js'
+import { Client } from 'tmi.js'
 
 class TwitchBot {
-    client: tmi.Client
-    watchclient: tmi.Client
-    commands: string[]
-    constructor(client: tmi.Client, watchclient: tmi.Client){
-        this.client = client
-        this.watchclient = watchclient
-
-        this.client.connect()
-        this.watchclient.connect()
-
-    }
+	client: Client
+	watchclient: Client
+	commands: string[]
+	constructor(client: Client, watchclient: Client) {
+		this.client = client
+		this.watchclient = watchclient
+	}
+	async init(): Promise<TwitchBot> {
+		this.client.connect()
+		this.watchclient.connect()
+        return this
+	}
 }
 
-export {TwitchBot}
+export { TwitchBot }

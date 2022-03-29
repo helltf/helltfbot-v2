@@ -1,8 +1,13 @@
 import 'dotenv/config'
+import { updateGithubPipeline } from './jobs/github-pipeline.js'
 import { TwitchBot } from './client/bot.js'
 import { mainClient } from './client/main-bot.js'
 import { watchClient } from './client/track-bot.js'
 
-const hb = new TwitchBot(mainClient, watchClient)
+const hb = await new TwitchBot(mainClient, watchClient).init()
 
-export{ hb }
+updateGithubPipeline()
+
+setInterval(updateGithubPipeline, 60000)
+
+export { hb }
