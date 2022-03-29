@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
-        "target": "ES2022",
+        "module": "esnext",
+        "target": "es2017",
         "outDir": "./dist",
         "baseUrl" : "./",
+        "types" : [ "node" ],
+        "skipLibCheck": true
     },
     "exclude": [
         "node_modules",
