@@ -1,7 +1,8 @@
 import 'dotenv/config'
-import { getMainClientConfig } from './config/config.js'
-import * as tmi from 'tmi.js'
+import { TwitchBot } from './client/bot.js'
+import { mainClient } from './client/main-bot.js'
+import { watchClient } from './client/track-bot.js'
 
-let config = getMainClientConfig()
+const hb = new TwitchBot(mainClient, watchClient)
 
-console.log(config)
+export{ hb }
