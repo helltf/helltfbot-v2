@@ -12,24 +12,19 @@ const getData = async () => {
 		count = data.count
 	}
 
-	if (count !== data.count) {
-		announceNewPipeLines(data)
+	if (count !== data.count && data.status === 'completed') {
+		announceNewPipeLine(data)
 		count = data.count
 	}
 }
 
-function announceNewPipeLine({
-	status,
-	conclusion,
-	repository,
-	branch,
-}: PipelineData) {
-	if (status === 'completed' && conclusion === 'success') {
+function announceNewPipeLine({ conclusion, repository, branch }: PipelineData) {
+	if (conclusion === 'success') {
 		hb.client.say(
 			'helltf',
 			`catJAM 👉 pipeline in ${repository} on branch ${branch} was successful`
 		)
-	} else if (status === 'completed' && conclusion === 'failure') {
+	} else if (conclusion === 'failure') {
 		hb.client.say(
 			'helltf',
 			`monkaS 👉 pipeline in ${repository} on branch ${branch} failed @helltf`
