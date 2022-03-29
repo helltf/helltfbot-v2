@@ -3,7 +3,7 @@ import { getPipeLineData, PipelineData } from '../api/github/github-api.js'
 import { Projects } from '../api/github/github-projects.js'
 let count: number = undefined
 
-const getData = async () => {
+const updateGithubPipeline = async () => {
 	let { success, data, error } = await getPipeLineData(Projects.helltfbot_v2)
 
 	if (!success) return
@@ -32,4 +32,4 @@ function announceNewPipeLine({ conclusion, repository, branch }: PipelineData) {
 	}
 }
 
-export { getData }
+export { updateGithubPipeline }
