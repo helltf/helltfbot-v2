@@ -21,6 +21,7 @@
   "dependencies": {
     "@types/tmi.js": "^1.8.1",
     "dotenv": "^16.0.0",
+    "strict-event-emitter-types": "^2.0.0",
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {
