@@ -6,6 +6,6 @@ npm i
 
 npm run build
 
-cp .env ./dist
+sudo cp .env ./dist
 
-pm2 restart helltfbot.js
+pm2 restart helltfbot
