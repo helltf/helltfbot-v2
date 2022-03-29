@@ -1,10 +1,10 @@
-import * as tmi from 'tmi.js'
+import {Client} from 'tmi.js'
 
 class TwitchBot {
-    client: tmi.Client
-    watchclient: tmi.Client
+    client: Client
+    watchclient: Client
     commands: string[]
-    constructor(client: tmi.Client, watchclient: tmi.Client){
+    constructor(client: Client, watchclient: Client){
         this.client = client
         this.watchclient = watchclient
 
