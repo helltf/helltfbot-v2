@@ -7,7 +7,6 @@ const mainClient = createMainClient()
 
 function createMainClient (): Client {
     let clientOptions = new IdentityOptions(process.env.TWITCH_OAUTH, "helltfbot")
-    console.log(process.env.TWITCH_OAUTH)
     return tmi.Client({identity: clientOptions})
 }
 
@@ -20,7 +19,6 @@ mainClient.on(
 		message: string,
 		self: boolean
 	) => {
-        console.log(hb.commands)
     }
 )
 
