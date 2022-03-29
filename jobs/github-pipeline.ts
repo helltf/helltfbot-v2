@@ -29,12 +29,12 @@ const checkForUpdate = async (project: Projects, count: number) => {
 	}
 
 	if (count !== data.count && data.status === 'completed') {
-		announceNewPipeLine(data)
+		announcePipeLineFinish(data)
 		setCount(project, data.count)
 	}
 }
 
-function announceNewPipeLine({ conclusion, repository, branch }: PipelineData) {
+function announcePipeLineFinish({ conclusion, repository, branch }: PipelineData) {
 	if (conclusion === 'success') {
 		hb.client.say(
 			'helltf',
