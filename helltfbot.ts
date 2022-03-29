@@ -8,6 +8,6 @@ const hb = await new TwitchBot(mainClient, watchClient).init()
 
 updateGithubPipeline()
 
-setInterval(updateGithubPipeline, 10000)
+setInterval(updateGithubPipeline, 60000)
 
 export { hb }
