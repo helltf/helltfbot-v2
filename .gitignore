@@ -39,4 +39,3 @@ dist/**/*
 
 # ignore yarn.lock
 yarn.lock
-environment.d.ts
