@@ -8,4 +8,4 @@ npm run build
 
 cd ./dist
 
-pm2 start helltfbot.js
+pm2 restart helltfbot.js
