@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "",
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "sh deploy.sh"
   },
   "repository": {
     "type": "git",
