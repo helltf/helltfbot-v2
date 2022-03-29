@@ -34,7 +34,7 @@ const checkForUpdate = async (project: Projects, count: number) => {
 	}
 }
 
-function announcePipeLineFinish({ conclusion, repository, branch }: PipelineData) {
+function announcePipeLineFinish({ conclusion, repository, branch, event }: PipelineData) {
 	if (conclusion === 'success') {
 		hb.client.say(
 			'helltf',
@@ -43,7 +43,7 @@ function announcePipeLineFinish({ conclusion, repository, branch }: PipelineData
 	} else if (conclusion === 'failure') {
 		hb.client.say(
 			'helltf',
-			`monkaS 👉🔴 pipeline in ${repository} on branch ${branch} failed @helltf`
+			`monkaS 👉🔴 pipeline in ${repository} on branch ${branch} failed @helltf (${event})`
 		)
 	}
 }

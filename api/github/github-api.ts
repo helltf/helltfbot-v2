@@ -31,9 +31,10 @@ export class PipelineData {
 	conclusion: string
 	repository: string
     project: Projects
+	event: string
 
 	constructor({ workflow_runs, total_count }: any, project: Projects) {
-		let { head_branch, status, conclusion, repository } = workflow_runs[0]
+		let { head_branch, status, conclusion, repository, event } = workflow_runs[0]
 
 		this.count = total_count
 		this.branch = head_branch
@@ -41,6 +42,7 @@ export class PipelineData {
 		this.conclusion = conclusion
 		this.repository = repository.name
         this.project = project
+		this.event = event
 	}
 }
 
