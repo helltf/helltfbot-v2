@@ -3,6 +3,7 @@ import { Projects } from '../api/github/github-projects.js'
 let count: number = undefined
 
 const getData = async () => {
+
 	let { success, data, error } = await getPipeLineData(Projects.helltfbot_v2)
 
 	if (!success) return
@@ -13,7 +14,9 @@ const getData = async () => {
 
 	if (count !== data.count) {
 		announceNewPipeLine(data)
+        count = data.count
 	}
+    
 }
 
 function announceNewPipeLine({
