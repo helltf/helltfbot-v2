@@ -21,7 +21,7 @@ const updateGithubPipeline = async () => {
 const checkForUpdate = async (project: Projects, count: number) => {
 	let { success, data, error } = await getPipeLineData(project)
 
-	if (!successs) return
+	if (!success) return
 
 	if (count === undefined) {
 		setCount(project, data.count)
