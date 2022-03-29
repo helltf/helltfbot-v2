@@ -38,12 +38,12 @@ function announceNewPipeLine({ conclusion, repository, branch }: PipelineData) {
 	if (conclusion === 'success') {
 		hb.client.say(
 			'helltf',
-			`catJAM 👉 pipeline in ${repository} on branch ${branch} was successful`
+			`catJAM 👉🟢 pipeline in ${repository} on branch ${branch} was successful`
 		)
 	} else if (conclusion === 'failure') {
 		hb.client.say(
 			'helltf',
-			`monkaS 👉 pipeline in ${repository} on branch ${branch} failed @helltf`
+			`monkaS 👉🔴 pipeline in ${repository} on branch ${branch} failed @helltf`
 		)
 	}
 }
