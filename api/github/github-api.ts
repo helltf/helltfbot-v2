@@ -1,43 +1,47 @@
+import { Resource } from '../resource.js'
 import fetch from 'node-fetch'
 import { Projects } from './github-projects'
 
-const getPipeLineData = async (project: Projects): Promise<PipelineData> => {
-    let test = Resource.ok(new PipelineData([]))
-
-	let result = await (await fetch(process.env[project], {
-		method: 'GET',
-		headers: {
-			Authorization: 'token ' + process.env.GITHUB_TOKEN,
-		},
-	})).json()
-	return new PipelineData(result)
+const getPipeLineData = async (
+	project: Projects
+): Promise<Resource<PipelineData>> => {
+	try {
+		let data = await requestGithubApi(process.env[project])
+		return Resource.ok(new PipelineData(data, project))
+	} catch (e) {
+		return Resource.error(e)
+	}
 }
 
-const requestGithubApi = (path: string): Promise<any> => {
-
+const requestGithubApi = async (path: string): Promise<any> => {
+	return await (
+		await fetch(path, {
+			method: 'GET',
+			headers: {
+				Authorization: 'token ' + process.env.GITHUB_TOKEN,
+			},
+		})
+	).json()
 }
 
 class PipelineData {
-	constructor(result: any) {
+	count: number
+	branch: string
+	status: string
+	conclusion: string
+	repository: string
+    project: Projects
 
-    }
-}
-class Resource<T>{
-    data:T | undefined
-    success: boolean
-    error: string | undefined
-    constructor(success: boolean, data: T | undefined, error: string | undefined){
-        this.data = data
-        this.error = error
-        this.success = success
-    }
-    static ok<U>(data: U): Resource<U>{
-        return new Resource(true, data, undefined)
-    }
-    static error<U>(error: string): Resource<U>{
-        return new Resource(true, undefined, error)
-    }
-}
+	constructor({ workflow_runs, total_count }: any, project: Projects) {
+		let { head_branch, status, conclusion, repository } = workflow_runs[0]
 
+		this.count = total_count
+		this.branch = head_branch
+		this.status = status
+		this.conclusion = conclusion
+		this.repository = repository.name
+        this.project = project
+	}
+}
 
 export { getPipeLineData }
