@@ -14,7 +14,13 @@ export class TwitchBot {
 		return this
 	}
 	setCommands(commands: Command[]) {
-		let commandMap = new Map()
+		let commandMap = new Map<string, Command>()
+
+		for(let command of commands){
+			commandMap.set(command.name, command)
+		}
+
+		this.commands = commandMap
 	}
 }
 
