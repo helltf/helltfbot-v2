@@ -9,14 +9,14 @@ export class TwitchBot {
 		this.watchclient = watchclient
 	}
 	async init(): Promise<TwitchBot> {
-		this.client.connect()
-		this.watchclient.connect()
+		await this.client.connect()
+		await this.watchclient.connect()
 		return this
 	}
 	setCommands(commands: Command[]) {
 		let commandMap = new Map<string, Command>()
 
-		for(let command of commands){
+		for (let command of commands) {
 			commandMap.set(command.name, command)
 		}
 
@@ -33,7 +33,7 @@ export class Command {
 	execute: (
 		channel: string,
 		userstate: ChatUserstate,
-		message: string
+		message: string[]
 	) => Promise<BotResponse>
 
 	constructor({
@@ -55,5 +55,12 @@ export class Command {
 
 export class BotResponse {
 	success: boolean
-	respone: string
+	response: string
+	channel: string
+
+	constructor(success: boolean, response: string, channel: string){
+		this.success = success
+		this.response = response
+		this.channel = channel
+	}
 }
