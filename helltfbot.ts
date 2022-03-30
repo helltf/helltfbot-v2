@@ -3,11 +3,17 @@ import { updateGithubPipeline } from './jobs/github-pipeline.js'
 import { TwitchBot } from './client/bot.js'
 import { mainClient } from './client/main-bot.js'
 import { watchClient } from './client/track-bot.js'
+import { loadCommands } from './commands/export/export-commands.js'
 
 const hb = await new TwitchBot(mainClient, watchClient).init()
+hb.setCommands(await loadCommands())
 
 updateGithubPipeline()
+startJobs()
 
-setInterval(updateGithubPipeline, 60000)
+function startJobs () {
+    if(process.env.NODE_ENV === 'dev') return
+    setInterval(updateGithubPipeline, 60000)
+}
 
 export { hb }
