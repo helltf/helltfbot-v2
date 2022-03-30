@@ -12,7 +12,7 @@ const ping = new Command({
 		userstate: Userstate,
 		message: string
 	): Promise<BotResponse> => {
-		return new BotResponse()
+		return new BotResponse(true, 'pong', channel)
 	},
 })
 
