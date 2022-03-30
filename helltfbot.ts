@@ -7,12 +7,13 @@ import { loadCommands } from './commands/export/export-commands.js'
 
 const hb = await new TwitchBot(mainClient, watchClient).init()
 hb.setCommands(await loadCommands())
-
+hb.client.join('helltf')
 updateGithubPipeline()
 startJobs()
 
 function startJobs () {
     if(process.env.NODE_ENV === 'dev') return
+
     setInterval(updateGithubPipeline, 60000)
 }
 
