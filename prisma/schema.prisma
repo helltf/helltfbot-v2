@@ -18,7 +18,7 @@ model BANNED_USER {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model CHANNEL_INFO {
-  CHANNEL_NAME   String? @db.TinyText
+  CHANNEL_NAME   String  @id @db.VarChar(25)
   LIVE           String? @db.TinyText
   TITLE          String? @db.MediumText
   GAME_ID        Int?
@@ -32,7 +32,7 @@ model CHANNEL_INFO {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model COLOR_HISTORY {
-  TWITCH_ID     String? @db.Text
+  TWITCH_ID     Int     @id
   COLOR_HIST    String? @db.Text
   LAST_CHANGE   BigInt?
   REGISTER_TIME BigInt?
@@ -61,7 +61,7 @@ model COOKIE_RESET {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model EMOTEGAME_STATS {
-  TWITCH_ID       Int?
+  TWITCH_ID       Int  @id
   LETTERS_GUESSED Int?
   EMOTES_GUESSED  Int?
 
@@ -70,7 +70,7 @@ model EMOTEGAME_STATS {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model EMOTES {
-  CHANNELNAME  String? @db.TinyText
+  CHANNELNAME  String? @db.VarChar(25)
   FFZ_EMOTES   String? @db.LongText
   BTTV_EMOTES  String? @db.LongText
   LAST_ADDED   String? @db.LongText
@@ -85,7 +85,7 @@ model IGNORED_PING_USER {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model LASTPING {
-  TWITCH_ID         Int?
+  TWITCH_ID         Int     @id
   COUNTER           BigInt?
   LAST_PING_CHANNEL String? @db.TinyText
   LAST_PING_TIME    BigInt?
@@ -98,9 +98,9 @@ model LASTPING {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model NOTIFY {
-  TWITCH_ID       Int?
+  TWITCH_ID       Int
   CHANNEL         String? @db.Text
-  STREAMER        String? @db.Text
+  STREAMER        String  @default("") @db.VarChar(25)
   LIVE            Int?    @db.TinyInt
   OFFLINE         Int?    @db.TinyInt
   TITLE           Int?    @db.TinyInt
@@ -109,6 +109,7 @@ model NOTIFY {
   EMOTE_REMOVED   Int?    @db.TinyInt
   ADDITIONAL_INFO String? @db.LongText
 
+  @@id([TWITCH_ID, STREAMER])
   @@ignore
 }
 
@@ -161,7 +162,7 @@ model TWITCH_USER {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model WATCHCHANNELS {
-  CHANNEL_NAME String? @db.TinyText
+  CHANNEL_NAME String @id @default("0") @db.VarChar(25)
 
   @@ignore
 }
@@ -204,8 +205,8 @@ model pings {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model wordle_words {
-  word      String? @db.VarChar(5)
-  is_answer Int?    @db.TinyInt
+  word      String @id @db.VarChar(5)
+  is_answer Int?   @db.TinyInt
 
   @@ignore
 }
