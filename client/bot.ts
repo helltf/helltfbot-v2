@@ -30,6 +30,7 @@ export class Command {
 	description: string
 	requiredParams: string[]
 	optionalParams: string[]
+	cooldown: number
 	execute: (
 		channel: string,
 		userstate: ChatUserstate,
