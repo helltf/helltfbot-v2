@@ -1,5 +1,6 @@
+import { Command } from '../export/command.js'
 import { Userstate } from 'tmi.js'
-import { BotResponse, Command } from '../../client/bot.js'
+import { BotResponse } from '../../client/bot.js'
 
 const ping = new Command({
 	name: 'ping',
@@ -7,6 +8,7 @@ const ping = new Command({
 	permissions: 1,
 	requiredParams: [],
 	optionalParams: [],
+	cooldown: 5000,
 	execute: async (
 		channel: string,
 		userstate: Userstate,
