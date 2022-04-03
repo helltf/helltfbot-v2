@@ -1,16 +1,20 @@
 import { PrismaClient } from '@prisma/client'
-import { ChatUserstate, Client } from 'tmi.js'
+import { Client } from 'tmi.js'
+import { Command } from '../commands/export/command'
+import { Cooldown } from '../commands/export/cooldown.js'
 
 export class TwitchBot {
 	client: Client
 	watchclient: Client
 	commands: Map<string, Command>
 	database: PrismaClient
+	cooldown: Cooldown
 
 	constructor(client: Client, watchclient: Client, db: PrismaClient) {
 		this.client = client
 		this.watchclient = watchclient
 		this.database = db
+		this.cooldown = new Cooldown
 	}
 
 	async init(): Promise<TwitchBot> {
@@ -28,35 +32,6 @@ export class TwitchBot {
 		}
 
 		this.commands = commandMap
-	}
-}
-
-export class Command {
-	name: string
-	permissions: number
-	description: string
-	requiredParams: string[]
-	optionalParams: string[]
-	execute: (
-		channel: string,
-		userstate: ChatUserstate,
-		message: string[]
-	) => Promise<BotResponse>
-
-	constructor({
-		name,
-		permissions,
-		description,
-		requiredParams,
-		optionalParams,
-		execute,
-	}: any) {
-		this.name = name
-		this.permissions = permissions
-		this.description = description
-		this.requiredParams = requiredParams
-		this.optionalParams = optionalParams
-		this.execute = execute
 	}
 }
 

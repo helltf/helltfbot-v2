@@ -1,8 +1,8 @@
 import { ChatUserstate, Client } from 'tmi.js'
-import * as tmi from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
 import { hb } from '../helltfbot.js'
 import { BotResponse } from './bot.js'
+import { Command } from 'commands/export/command.js'
 
 const mainClient = createMainClient()
 const prefix = process.env.PREFIX
@@ -10,14 +10,14 @@ const DEFAULT_ERROR = `Error while executing your command monkaS`
 
 function createMainClient(): Client {
 	let clientOptions = new IdentityOptions(process.env.TWITCH_OAUTH, 'helltfbot')
-	return tmi.Client({ identity: clientOptions })
+	return Client({ identity: clientOptions })
 }
 
 mainClient.on(
 	'chat',
 	async (
 		channel: string,
-		userstate: ChatUserstate,
+		user: ChatUserstate,
 		message: string,
 		self: boolean
 	) => {
@@ -26,16 +26,18 @@ mainClient.on(
 
 		channel = channel.replace('#', '')
 
-		let [commandName, ...data] = message
+		let [commandLookup, ...data] = message
 			.substring(prefix.length)
 			.replace(/\s{2,}/g, ' ')
 			.split(' ')
 
-		let command = hb.commands.get(commandName)
+		let command = hb.commands.get(commandLookup.toLowerCase())
 
-		if (command === undefined) return
+		if (command === undefined || userHasCooldown(command, user)) return
 
-		let response = await command.execute(channel, userstate, data)
+		setCooldown(command, user)
+
+		let response = await command.execute(channel, user, data)
 
 		sendResponse(response)
 	}
@@ -51,6 +53,14 @@ function sendResponse({ success, response, channel }: BotResponse) {
 	} else {
 		mainClient.say(channel, DEFAULT_ERROR)
 	}
+}
+
+function setCooldown(command: Command, user: ChatUserstate) {
+	hb.cooldown.setCooldown(command, user['user-id'])
+}
+
+function userHasCooldown(command: Command, user: ChatUserstate): boolean {
+	return hb.cooldown.userHasCooldown(command, user['user-id'])
 }
 
 export { mainClient }
