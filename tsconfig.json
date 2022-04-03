@@ -5,7 +5,8 @@
         "outDir": "./dist",
         "baseUrl" : "./",
         "types" : [ "node" ],
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "moduleResolution": "node"
     },
     "exclude": [
         "node_modules",
