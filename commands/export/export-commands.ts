@@ -1,4 +1,4 @@
-import { Command } from 'client/bot'
+import { Command } from './command'
 import { readdir } from 'fs/promises'
 
 const getCommandInfo = (module: any): any => {
