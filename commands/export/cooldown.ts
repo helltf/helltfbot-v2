@@ -41,6 +41,6 @@ export class Cooldown {
 	}
 
 	userHasCooldown({ name }: Command, userId: string): boolean {
-		return this.getCooldownsForUser(userId).includes(name)
+		return this.getCooldownsForUser(userId)?.includes(name)
 	}
 }
