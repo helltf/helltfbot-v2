@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import { ChatUserstate, Client } from 'tmi.js'
-import { Command } from '../commands/export/command'
 import { Client } from 'tmi.js'
+import { Command } from '../commands/export/command'
 import { Cooldown } from '../commands/export/cooldown.js'
 
 export class TwitchBot {
