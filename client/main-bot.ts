@@ -3,6 +3,7 @@ import * as tmi from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
 import { hb } from '../helltfbot.js'
 import { BotResponse } from './bot.js'
+import { Command } from 'commands/export/command.js'
 
 const mainClient = createMainClient()
 const prefix = process.env.PREFIX
@@ -27,14 +28,16 @@ mainClient.on(
 
 		channel = channel.replace('#', '')
 
-		let [commandName, ...data] = message
+		let [commandLookup, ...data] = message
 			.substring(prefix.length)
 			.replace(/\s{2,}/g, ' ')
 			.split(' ')
 
-		let command = hb.commands.get(commandName)
+		let command = hb.commands.get(commandLookup.toLowerCase())
 
 		if(command === undefined) return
+
+		setCooldown(command, userstate['user-id'])
 
 		let response = await command.execute(channel, userstate, data)
 
@@ -52,6 +55,10 @@ function sendResponse({success, response, channel}: BotResponse){
 	}else{
 		mainClient.say(channel, DEFAULT_ERROR)
 	}
+}
+
+function setCooldown(command: Command, userId: string) {
+	hb.cooldown.setCooldown(command, userId)
 }
 
 export { mainClient }
