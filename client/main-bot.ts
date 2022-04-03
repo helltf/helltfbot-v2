@@ -8,7 +8,6 @@ const mainClient = createMainClient()
 const prefix = process.env.PREFIX
 const DEFAULT_ERROR = `Error while executing your command monkaS`
 
-
 function createMainClient(): Client {
 	let clientOptions = new IdentityOptions(process.env.TWITCH_OAUTH, 'helltfbot')
 	return tmi.Client({ identity: clientOptions })
@@ -34,7 +33,7 @@ mainClient.on(
 
 		let command = hb.commands.get(commandName)
 
-		if(command === undefined) return
+		if (command === undefined) return
 
 		let response = await command.execute(channel, userstate, data)
 
@@ -42,14 +41,14 @@ mainClient.on(
 	}
 )
 
-function sendMessage(channel: string, message: string){
+function sendMessage(channel: string, message: string) {
 	mainClient.say(channel, message)
 }
 
-function sendResponse({success, response, channel}: BotResponse){
-	if(success){
+function sendResponse({ success, response, channel }: BotResponse) {
+	if (success) {
 		sendMessage(channel, response)
-	}else{
+	} else {
 		mainClient.say(channel, DEFAULT_ERROR)
 	}
 }

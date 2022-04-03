@@ -1,18 +1,25 @@
+import { PrismaClient } from '@prisma/client'
 import { ChatUserstate, Client } from 'tmi.js'
 
 export class TwitchBot {
 	client: Client
 	watchclient: Client
 	commands: Map<string, Command>
-	constructor(client: Client, watchclient: Client) {
+	database: PrismaClient
+
+	constructor(client: Client, watchclient: Client, db: PrismaClient) {
 		this.client = client
 		this.watchclient = watchclient
+		this.database = db
 	}
+
 	async init(): Promise<TwitchBot> {
 		await this.client.connect()
 		await this.watchclient.connect()
+		await this.database.$connect()
 		return this
 	}
+
 	setCommands(commands: Command[]) {
 		let commandMap = new Map<string, Command>()
 
@@ -58,7 +65,7 @@ export class BotResponse {
 	response: string
 	channel: string
 
-	constructor(success: boolean, response: string, channel: string){
+	constructor(success: boolean, response: string, channel: string) {
 		this.success = success
 		this.response = response
 		this.channel = channel

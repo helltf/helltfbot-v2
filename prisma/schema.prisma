@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model BANNED_USER {
+  USERNAME String? @db.TinyText
+  CHANNEL  String? @db.TinyText
+  TIME     BigInt?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model CHANNEL_INFO {
+  CHANNEL_NAME   String  @id @db.VarChar(25)
+  LIVE           String? @db.TinyText
+  TITLE          String? @db.MediumText
+  GAME_ID        Int?
+  NEXT_UPDATE    BigInt?
+  LIVE_COOLDOWN  BigInt?
+  TITLE_COOLDOWN BigInt?
+  GAME_COOLDOWN  BigInt?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model COLOR_HISTORY {
+  TWITCH_ID     Int     @id
+  COLOR_HIST    String? @db.Text
+  LAST_CHANGE   BigInt?
+  REGISTER_TIME BigInt?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model COOKIES {
+  USERNAME String? @db.Text
+  AMOUNT   Int?    @db.TinyInt
+  TIME     BigInt?
+  CHANNEL  String? @db.Text
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model COOKIE_RESET {
+  USERNAME String? @db.TinyText
+  TIME     BigInt?
+  CHANNEL  String? @db.Text
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model EMOTEGAME_STATS {
+  TWITCH_ID       Int  @id
+  LETTERS_GUESSED Int?
+  EMOTES_GUESSED  Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model EMOTES {
+  CHANNELNAME  String? @db.VarChar(25)
+  FFZ_EMOTES   String? @db.LongText
+  BTTV_EMOTES  String? @db.LongText
+  LAST_ADDED   String? @db.LongText
+  LAST_REMOVED String? @db.LongText
+
+  @@ignore
+}
+
+model IGNORED_PING_USER {
+  TWITCH_ID Int @id
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model LASTPING {
+  TWITCH_ID         Int     @id
+  COUNTER           BigInt?
+  LAST_PING_CHANNEL String? @db.TinyText
+  LAST_PING_TIME    BigInt?
+  REGEX             String? @db.LongText
+  MATCHED           String? @db.LongText
+  BY_USER           String? @db.TinyText
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model NOTIFY {
+  TWITCH_ID       Int
+  CHANNEL         String? @db.Text
+  STREAMER        String  @default("") @db.VarChar(25)
+  LIVE            Int?    @db.TinyInt
+  OFFLINE         Int?    @db.TinyInt
+  TITLE           Int?    @db.TinyInt
+  GAME            Int?    @db.TinyInt
+  EMOTE_ADDED     Int?    @db.TinyInt
+  EMOTE_REMOVED   Int?    @db.TinyInt
+  ADDITIONAL_INFO String? @db.LongText
+
+  @@id([TWITCH_ID, STREAMER])
+  @@ignore
+}
+
+model NOTIFY_MESSAGE {
+  CHANNEL_NAME  String  @id @default("") @db.VarChar(25)
+  LIVE          String? @db.LongText
+  OFFLINE       String? @db.LongText
+  TITLE         String? @db.LongText
+  GAME          String? @db.LongText
+  EMOTE_ADDED   String? @db.LongText
+  EMOTE_REMOVED String? @db.LongText
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model RPS_STATS {
+  TWITCH_ID Int?
+  DRAW      Int?
+  WIN       Int?
+  LOSE      Int?
+
+  @@ignore
+}
+
+model SUGGESTIONS {
+  ID         Int    @id
+  SUGGESTION String @db.LongText
+  TIME       BigInt @default(0)
+  TWITCH_ID  Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model TIMEOUT_USER {
+  USERNAME String? @db.TinyText
+  CHANNEL  String? @db.TinyText
+  TIME     BigInt?
+  DURATION BigInt?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model TWITCH_USER {
+  USERNAME      String? @db.TinyText
+  TWITCH_ID     Int     @id
+  COLOR         String? @db.TinyText
+  PERMISSIONS   Int?    @default(0)
+  REGISTER_TIME BigInt?
+  DISPLAYNAME   String? @db.TinyText
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model WATCHCHANNELS {
+  CHANNEL_NAME String @id @default("0") @db.VarChar(25)
+
+  @@ignore
+}
+
+model channels {
+  CHANNEL_NAME    String  @default("") @db.VarChar(255)
+  ID              Int     @id @default(autoincrement())
+  ALLOWED         Int?    @db.TinyInt
+  TIMES_CONNECTED Int?    @default(0)
+  CURR_CONNECTED  Int?    @db.TinyInt
+  FIRST_CONNECTED BigInt?
+  ALLOWED_LIVE    Int?    @db.TinyInt
+}
+
+model commands {
+  NAME                 String? @db.VarChar(50)
+  COUNTER              Int?
+  REQUIRED_PERMISSIONS Int?    @db.TinyInt
+  DESCRIPTION          String? @db.VarChar(255)
+  REQUIRED_PARAMETERS  String? @db.VarChar(255)
+  OPTIONAL_PARAMETERS  String? @db.VarChar(255)
+  ID                   Int     @id @default(autoincrement())
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model hibernate_sequence {
+  next_val BigInt?
+
+  @@ignore
+}
+
+model pings {
+  ID                Int     @id @default(autoincrement())
+  TWITCH_ID         Int
+  LAST_PING_CHANNEL String  @db.Text
+  LAST_PING_TIME    BigInt  @default(0)
+  BY_USER           String? @db.Text
+  MESSAGE           String? @db.LongText
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model wordle_words {
+  word      String @id @db.VarChar(5)
+  is_answer Int?   @db.TinyInt
+
+  @@ignore
+}
