@@ -1,3 +1,5 @@
+import { PrismaClient } from '@prisma/client'
+import { ChatUserstate, Client } from 'tmi.js'
 import { Command } from '../commands/export/command'
 import { Client } from 'tmi.js'
 import { Cooldown } from '../commands/export/cooldown.js'
@@ -6,17 +8,20 @@ export class TwitchBot {
 	client: Client
 	watchclient: Client
 	commands: Map<string, Command>
+	database: PrismaClient
 	cooldown: Cooldown
 
-	constructor(client: Client, watchclient: Client) {
+	constructor(client: Client, watchclient: Client, db: PrismaClient) {
 		this.client = client
 		this.watchclient = watchclient
-		this.cooldown = new Cooldown()
+		this.database = db
+		this.cooldown = new Cooldown
 	}
 
 	async init(): Promise<TwitchBot> {
 		await this.client.connect()
 		await this.watchclient.connect()
+		await this.database.$connect()
 		return this
 	}
 
