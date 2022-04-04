@@ -1,5 +1,5 @@
-import { BotResponse } from 'client/bot'
-import { Command } from 'commands/export/command'
+import { BotResponse } from '../../client/bot.js'
+import { Command } from '../../commands/export/command.js'
 import { ChatUserstate } from 'tmi.js'
 
 const github = new Command({
@@ -14,7 +14,10 @@ const github = new Command({
 		userstate: ChatUserstate,
 		message: string[]
 	): Promise<BotResponse> => {
-		return new BotResponse('pong', channel)
+        let response = `You can find my github profile by following this link https://github.com/helltf. ` + 
+        `Feel free to leave a follow <3 To visit the github page for this bot go to https://github.com/helltf/helltfbot-v2`
+
+		return new BotResponse(response, channel)
 	},
 })
 
