@@ -22,8 +22,12 @@
   "dependencies": {
     "@types/node-fetch": "^2.6.1",
     "@types/tmi.js": "^1.8.1",
+    "chalk": "^5.0.1",
+    "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
+    "i": "^0.3.7",
     "node-fetch": "^3.2.3",
+    "npm": "^8.6.0",
     "strict-event-emitter-types": "^2.0.0",
     "tmi.js": "^1.8.5"
   },
