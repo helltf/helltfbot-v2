@@ -1,5 +1,5 @@
 import { Command } from '../export/command.js'
-import { Userstate } from 'tmi.js'
+import { ChatUserstate, Userstate } from 'tmi.js'
 import { BotResponse } from '../../client/bot.js'
 
 const ping = new Command({
@@ -11,10 +11,10 @@ const ping = new Command({
 	cooldown: 5000,
 	execute: async (
 		channel: string,
-		userstate: Userstate,
-		message: string
+		userstate: ChatUserstate,
+		message: string[]
 	): Promise<BotResponse> => {
-		return new BotResponse(true, 'pong', channel)
+		return new BotResponse('pong', channel)
 	},
 })
 
