@@ -1,3 +1,4 @@
+import { customLogMessage } from '../logger/logger-export.js'
 import { Client } from 'tmi.js'
 import { Command } from '../commands/export/command'
 import { Cooldown } from '../commands/export/cooldown.js'
@@ -7,16 +8,19 @@ export class TwitchBot {
 	watchclient: Client
 	commands: Map<string, Command>
 	cooldown: Cooldown
+	log: (...args: any) => void
 
 	constructor(client: Client, watchclient: Client) {
+		this.log = customLogMessage
 		this.client = client
 		this.watchclient = watchclient
-		this.cooldown = new Cooldown
+		this.cooldown = new Cooldown()
 	}
 
 	async init(): Promise<TwitchBot> {
 		await this.client.connect()
 		await this.watchclient.connect()
+		this.log('Successfully logged in')
 		return this
 	}
 
