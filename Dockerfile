@@ -1,10 +1,10 @@
-FROM node:alpine
+FROM node:12
 WORKDIR /usr/helltfbot-v2
 COPY package.json .
 COPY tsconfig.json .
 
-RUN npm install\
-    && npm install typescript -g
+RUN npm install
+RUN npm install typescript -g
 COPY . .
 RUN npm run build
 
