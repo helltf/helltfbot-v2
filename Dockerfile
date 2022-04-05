@@ -8,4 +8,6 @@ RUN npm install typescript -g
 COPY . .
 RUN npm run build
 
-CMD ["node", "./dist/helltfbot.js"]
+COPY ./dist .
+
+CMD ["node", "helltfbot.js"]
