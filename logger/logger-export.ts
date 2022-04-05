@@ -1,9 +1,13 @@
 
 import chalk from 'chalk';
-import { Temporal } from "proposal-temporal"; 
+import { format } from 'date-fns'
+
+const getCurrentDateString = (): string => {
+    return `[${format(new Date(Date.now()), 'yyyy-MM-dd hh:mm')}]`
+}
 
 const log = (...args: any) => {
-    console.log(Temporal.now.instant())
+    console.log(`${chalk.green(getCurrentDateString())}: ${chalk.magenta(`[TWITCHBOT]`)} -> ${args}`)
 }
 
 
