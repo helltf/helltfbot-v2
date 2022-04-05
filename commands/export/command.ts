@@ -22,7 +22,7 @@ export class Command {
 		optionalParams,
 		execute,
 		cooldown
-	}: any) {
+	}: CommandInfo) {
 		this.name = name
 		this.permissions = permissions
 		this.description = description
@@ -31,4 +31,18 @@ export class Command {
 		this.execute = execute
 		this.cooldown = cooldown
 	}
+}
+
+interface CommandInfo{
+	name: string
+	permissions: number
+	description: string
+	requiredParams: string[]
+	optionalParams: string[]
+	cooldown: number
+	execute: (
+		channel: string,
+		userstate: ChatUserstate,
+		message: string[]
+	) => Promise<BotResponse>
 }
