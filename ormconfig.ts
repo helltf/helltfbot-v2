@@ -1,4 +1,3 @@
-import { WordleWord } from "./db/entity/wordle.js"
 import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions"
 const {DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE} = process.env
 
@@ -10,11 +9,10 @@ const typeormconf: MysqlConnectionOptions = {
     password: DB_PASSWORD,
     database: DB_DATABASE,
     synchronize: false,
-    // "entities": [
-    //     "db/entity/**/*.ts"
-    // ],
-    "entities":
-        [WordleWord],
+    logging: false,
+    "entities": [
+        "dist/db/entity/**/*.js"
+    ],
     "migrations": [
          "db/migrations/**/*.ts"
     ],
@@ -22,7 +20,5 @@ const typeormconf: MysqlConnectionOptions = {
         "db/subscriber/**/*.ts"
     ],
 }
-
-console.log(WordleWord)
 
 export {typeormconf}
