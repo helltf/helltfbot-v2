@@ -3,13 +3,16 @@ import { TwitchBot } from './client/bot.js'
 import { mainClient } from './client/main-bot.js'
 import { watchClient } from './client/track-bot.js'
 import { loadCommands } from './commands/export/export-commands.js'
+import { AppDataSource } from './db/export-orm.js'
+
 import jobs from './jobs/jobs-export.js'
 
 const hb = await new TwitchBot(mainClient, watchClient).init()
 hb.setCommands(await loadCommands())
-
+AppDataSource.initialize()
 hb.client.join('helltf')
-
+// hb.db = initDbRepositories()
+console.log(AppDataSource.entityMetadatas)
 startJobs()
 
 function startJobs() {
