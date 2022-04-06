@@ -19,7 +19,7 @@ const updateGithubPipeline = async () => {
 }
 
 const checkForUpdate = async (project: Projects, count: number) => {
-	let { success, data, error } = await getPipeLineData(project)
+	let { success, data } = await getPipeLineData(project)
 
 	if (!success) return
 
