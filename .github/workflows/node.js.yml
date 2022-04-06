@@ -5,9 +5,9 @@ name: run build and tests
 
 on:
   push:
-    branches: '**'
+    branches: [master, feature, dev, hotfix-**]
   pull_request:
-    branches: '**'
+    branches: [master, feature, dev]
 
 jobs:
   build:
