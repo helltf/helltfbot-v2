@@ -6,7 +6,8 @@
         "baseUrl" : "./",
         "types" : [ "node" ],
         "skipLibCheck": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "experimentalDecorators": true
     },
     "exclude": [
         "node_modules",

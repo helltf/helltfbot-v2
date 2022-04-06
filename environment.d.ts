@@ -12,6 +12,12 @@ declare global {
 			GITHUB_ENDPOINT_INST_MONO: string
 			GITHUB_ENDPOINT_GO_DISCORD_BOT: string
 			PREFIX: string
+			DB_PORT: string
+			DB_HOST: string
+			DB_USERNAME: string
+			DB_PASSWORD: string
+			DB_DATABASE: string
+			MAIN_USER: string
 		}
 	}
 }
