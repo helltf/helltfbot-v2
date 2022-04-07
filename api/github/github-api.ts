@@ -1,6 +1,6 @@
 import { Resource } from '../resource.js'
 import fetch from 'node-fetch'
-import { Projects } from './github-projects'
+import { Projects } from './github-projects.js'
 
 const getPipeLineData = async (
 	project: Projects

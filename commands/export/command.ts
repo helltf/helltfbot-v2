@@ -1,4 +1,4 @@
-import { BotResponse } from "client/bot"
+import { BotResponse } from "client/bot.js"
 import { ChatUserstate } from "tmi.js"
 
 export class Command {
