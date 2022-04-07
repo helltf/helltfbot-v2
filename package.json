@@ -5,7 +5,7 @@
   "main": "./dist/helltfbot.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "",
     "build": "tsc",
     "deploy": "sh deploy.sh"
   },
