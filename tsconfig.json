@@ -1,14 +1,16 @@
 {
     "compilerOptions": {
-        "module": "esnext",
+        "module": "ESNext",
         "target": "ESNext",
         "outDir": "./dist",
         "baseUrl" : "./",
-        "types" : [ "node" ],
+        "types" : [ "node", "jest" ],
         "skipLibCheck": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        
     },
     "exclude": [
         "node_modules",
-    ],
+    ]
 }
