@@ -10,7 +10,7 @@ const getCommandInfo = (module: any): any => {
 const loadCommands = async (): Promise<Command[]> => {
     let commands: Command[] = []
 	let commandDir = await readdir('./dist/commands/cmd')
-    
+    console.log(__dirname)
     for(let command of commandDir){
         let importedCommand = (await import('../cmd/' + command))
         commands.push(getCommandInfo(importedCommand))
