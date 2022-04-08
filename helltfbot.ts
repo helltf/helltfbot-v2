@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { TwitchBot } from './client/bot.js'
-import { mainClient } from './client/main-bot.js'
+import { mainClient, mainJoinAllChannels } from './client/main-bot.js'
 import { watchClient } from './client/track-bot.js'
 import { loadCommands } from './commands/export/export-commands.js'
 import { AppDataSource } from './db/export-orm.js'
@@ -16,6 +16,7 @@ hb.setRepositories(repositories)
 await hb.client.join(process.env.MAIN_USER)
 await hb.watchclient.join(process.env.MAIN_USER)
 
+mainJoinAllChannels()
 startJobs()
 initModules()
 
