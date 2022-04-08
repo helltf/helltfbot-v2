@@ -8,6 +8,7 @@ import { wait } from '../utilities/timeout.js'
 const mainClient = createMainClient()
 const prefix = process.env.PREFIX
 const DEFAULT_ERROR = `Error while executing your command monkaS`
+const TWITCH_ERROR_MESSAGE = ['msg_channel_suspended']
 
 function createMainClient(): Client {
 	let clientOptions = new IdentityOptions(process.env.TWITCH_OAUTH, 'helltfbot')
@@ -63,13 +64,24 @@ function setCooldown(command: Command, user: ChatUserstate) {
 function userHasCooldown(command: Command, user: ChatUserstate): boolean {
 	return hb.cooldown.userHasCooldown(command, user['user-id'])
 }
+
 const mainJoinChannel = async (channel: string) => {
 	try {
 		await mainClient.join(channel)
 	} catch (e) {
-		console.log(e)
+		if (TWITCH_ERROR_MESSAGE.includes(e)) {
+			hb.db.channelRepo.update(
+				{
+					channel: channel,
+				},
+				{
+					joined: false,
+				}
+			)
+		}
 	}
 }
+
 const mainJoinAllChannels = async () => {
 	if (process.env.NODE_ENV === 'dev') {
 		await hb.client.join(process.env.MAIN_USER)
