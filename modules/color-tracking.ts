@@ -32,7 +32,6 @@ const init = () => {
 
 			if (latestColor !== userColor) {
 				let updatedColors = updateCurrentColors(savedColors, userColor)
-                console.log('saved colors:' +updatedColors )
 
 				hb.db.colorRepo.save({
 					twitch_id: Number(userId),
