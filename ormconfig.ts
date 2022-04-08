@@ -1,3 +1,5 @@
+import { ColorHistory } from "./db/entity/color_history.js"
+import { WordleWord } from "./db/entity/wordle.js"
 import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions"
 const {DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE} = process.env
 
@@ -11,7 +13,9 @@ const typeormconf: MysqlConnectionOptions = {
     synchronize: false,
     logging: false,
     "entities": [
-        "dist/db/entity/**/*.js"
+        "dist/db/entity/**/*.js",
+        ColorHistory,
+        WordleWord
     ],
     "migrations": [
          "db/migrations/**/*.ts"
