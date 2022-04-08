@@ -3,6 +3,7 @@ import { IdentityOptions } from '../config/config.js'
 import { hb } from '../helltfbot.js'
 import { BotResponse } from './bot.js'
 import { Command } from 'commands/export/command.js'
+import { wait } from '../utilities/timeout.js'
 
 const mainClient = createMainClient()
 const prefix = process.env.PREFIX
@@ -62,5 +63,27 @@ function setCooldown(command: Command, user: ChatUserstate) {
 function userHasCooldown(command: Command, user: ChatUserstate): boolean {
 	return hb.cooldown.userHasCooldown(command, user['user-id'])
 }
+const mainJoinChannel = async (channel: string) => {
+	try {
+		await mainClient.join(channel)
+	} catch (e) {
+		console.log(e)
+	}
+}
+const mainJoinAllChannels = async () => {
+	if (process.env.NODE_ENV === 'dev') {
+		await hb.client.join(process.env.MAIN_USER)
+		return
+	}
 
-export { mainClient }
+	let joinedChannels = await hb.db.channelRepo.findBy({
+		joined: true,
+	})
+
+	for await (let { channel } of joinedChannels) {
+		await mainJoinChannel(channel)
+		await wait`1s`
+	}
+}
+
+export { mainClient, mainJoinAllChannels }
