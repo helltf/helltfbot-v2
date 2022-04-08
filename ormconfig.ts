@@ -1,5 +1,5 @@
-import { ColorHistory } from "db/entity/color_history.js"
-import { WordleWord } from "db/entity/wordle.js"
+import { ColorHistory } from "./db/entity/color_history.js"
+import { WordleWord } from "./db/entity/wordle.js"
 import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions"
 const {DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE} = process.env
 
