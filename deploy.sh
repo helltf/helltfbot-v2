@@ -1,15 +1,5 @@
 #!/bin/bash
 
-set -e
+docker build -f ./Dockerfile . -t helltfbot-v2
 
-pm2 stop helltfbot
-
-npm i 
-
-npm install typescript
-
-npm run build
-
-sudo cp .env ./dist
-
-pm2 restart helltfbot
+docker run -d --network="host" helltfbot-v2
