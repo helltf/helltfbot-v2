@@ -1,5 +1,5 @@
 import 'jasmine'
-import { updateCurrentColors } from './color-tracking.js'
+import { addNewColor, updateCurrentColors } from './color-tracking.js'
 
 describe('color tracking tests', () => {
 	let examples = {
@@ -36,6 +36,16 @@ describe('color tracking tests', () => {
 
 		let result = updateCurrentColors(initialArray, colorToAdd)
 		let expected = [examples.a, examples.c, colorToAdd]
+
+		expect(result).toEqual(expected)
+	})
+
+    it('array is full splice', () => {
+		let initialArray = [examples.a, examples.b, examples.c]
+
+		let result = addNewColor(initialArray, colorToAdd, 3)
+		let expected = [examples.b, examples.c, colorToAdd]
+        
 		expect(result).toEqual(expected)
 	})
 })
