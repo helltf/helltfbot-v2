@@ -16,7 +16,7 @@ describe('test timeout mappings', () => {
 	})
 
 	it('100ms should return 100', () => {
-		let result = mapTime('100ms')
+		let result = mapTime('1001ms')
 		let expected = 100
 
 		expect(result).toBe(expected)
