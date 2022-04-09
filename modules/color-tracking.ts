@@ -1,7 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { hb } from '../helltfbot.js'
 
-const maxSavedColors = 15
+const MAX_SAVED_COLORS = 15
 
 const initializeColorTracking = () => {
 	hb.watchclient.on(
@@ -51,8 +51,8 @@ function updateCurrentColors(colors: string[], newColor: string): string[] {
 	return addNewColor(colors, newColor)
 }
 
-function addNewColor(colors: string[], newColor: string): string[] {
-	if (colors.length < maxSavedColors) {
+function addNewColor(colors: string[], newColor: string, max: number = MAX_SAVED_COLORS): string[] {
+	if (colors.length < max) {
 		colors.push(newColor)
 	} else {
 		colors.splice(0, 1)
@@ -69,4 +69,4 @@ function setNewPosition(colors: string[], newColor: string): string[] {
 	return colors
 }
 
-export { initializeColorTracking, updateCurrentColors }
+export { initializeColorTracking, updateCurrentColors, addNewColor }
