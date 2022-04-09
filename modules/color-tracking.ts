@@ -3,7 +3,7 @@ import { hb } from '../helltfbot.js'
 
 const maxSavedColors = 15
 
-const init = () => {
+const initializeColorTracking = () => {
 	hb.watchclient.on(
 		'chat',
 		async (
@@ -69,4 +69,4 @@ function setNewPosition(colors: string[], newColor: string): string[] {
 	return colors
 }
 
-export { init, updateCurrentColors }
+export { initializeColorTracking, updateCurrentColors }

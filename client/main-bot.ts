@@ -3,10 +3,12 @@ import { IdentityOptions } from '../config/config.js'
 import { hb } from '../helltfbot.js'
 import { BotResponse } from './bot.js'
 import { Command } from 'commands/export/command.js'
+import { wait } from '../utilities/timeout.js'
 
 const mainClient = createMainClient()
 const prefix = process.env.PREFIX
 const DEFAULT_ERROR = `Error while executing your command monkaS`
+const TWITCH_ERROR_MESSAGE = ['msg_channel_suspended']
 
 function createMainClient(): Client {
 	let clientOptions = new IdentityOptions(process.env.TWITCH_OAUTH, 'helltfbot')
@@ -63,4 +65,39 @@ function userHasCooldown(command: Command, user: ChatUserstate): boolean {
 	return hb.cooldown.userHasCooldown(command, user['user-id'])
 }
 
-export { mainClient }
+const mainJoinChannel = async (channel: string) => {
+	try {
+		await mainClient.join(channel)
+	} catch (e) {
+		if (TWITCH_ERROR_MESSAGE.includes(e)) {
+			hb.db.channelRepo.update(
+				{
+					channel: channel,
+				},
+				{
+					joined: false,
+				}
+			)
+		}
+	}
+}
+
+const mainJoinAllChannels = async () => {
+	if (process.env.NODE_ENV === 'dev') {
+		await hb.client.join(process.env.MAIN_USER)
+		return
+	}
+
+	let joinedChannels = await hb.db.channelRepo.findBy({
+		joined: true,
+	})
+
+	for await (let { channel } of joinedChannels) {
+		await mainJoinChannel(channel)
+		await wait`1s`
+	}
+
+	hb.log(`Successfully joined ${joinedChannels.length} channels`)
+}
+
+export { mainClient, mainJoinAllChannels }
