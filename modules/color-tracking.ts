@@ -1,9 +1,9 @@
 import { ChatUserstate } from 'tmi.js'
 import { hb } from '../helltfbot.js'
 
-const maxSavedColors = 15
+const MAX_SAVED_COLORS = 15
 
-const init = () => {
+const initializeColorTracking = () => {
 	hb.watchclient.on(
 		'chat',
 		async (
@@ -32,7 +32,6 @@ const init = () => {
 
 			if (latestColor !== userColor) {
 				let updatedColors = updateCurrentColors(savedColors, userColor)
-                console.log('saved colors:' +updatedColors )
 
 				hb.db.colorRepo.save({
 					twitch_id: Number(userId),
@@ -52,22 +51,22 @@ function updateCurrentColors(colors: string[], newColor: string): string[] {
 	return addNewColor(colors, newColor)
 }
 
-function addNewColor(colors: string[], newColor: string): string[] {
-	if (colors.length < maxSavedColors) {
+function addNewColor(colors: string[], newColor: string, max: number = MAX_SAVED_COLORS): string[] {
+	if (colors.length < max) {
 		colors.push(newColor)
 	} else {
 		colors.splice(0, 1)
-        colors.push(newColor)
+		colors.push(newColor)
 	}
 
 	return colors
 }
 
 function setNewPosition(colors: string[], newColor: string): string[] {
-	let index = colors.findIndex((c) => c === newColor)
+	let index = colors.findIndex(c => c === newColor)
 	colors.splice(index, 1)
-    colors.push(newColor)
+	colors.push(newColor)
 	return colors
 }
 
-export { init, updateCurrentColors }
+export { initializeColorTracking, updateCurrentColors, addNewColor }

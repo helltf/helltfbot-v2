@@ -3,6 +3,10 @@ import { Client } from 'tmi.js'
 import { Command } from '../commands/export/command'
 import { Cooldown } from '../commands/export/cooldown.js'
 import { DbRepositories } from 'db/export-repositories.js'
+import { mainJoinAllChannels } from './main-bot.js'
+import { watchJoinAllChannels } from './track-bot.js'
+import { initializeColorTracking } from '../modules/color-tracking.js'
+import jobs from '../jobs/jobs-export.js'
 
 export class TwitchBot {
 	client: Client
@@ -36,8 +40,26 @@ export class TwitchBot {
 		this.commands = commandMap
 	}
 
-	setRepositories(repos: DbRepositories){
+	setRepositories(repos: DbRepositories) {
 		this.db = repos
+	}
+
+	async joinChannels() {
+		mainJoinAllChannels()
+		watchJoinAllChannels()
+	}
+
+	startJobs() {
+		if (process.env.NODE_ENV === 'dev') return
+
+		for (let { delay, execute } of jobs) {
+			execute()
+			setInterval(execute, delay)
+		}
+	}
+
+	initModules() {
+		initializeColorTracking()
 	}
 }
 

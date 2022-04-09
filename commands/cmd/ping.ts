@@ -1,5 +1,5 @@
 import { Command } from '../export/command.js'
-import { ChatUserstate, Userstate } from 'tmi.js'
+import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/bot.js'
 
 const ping = new Command({
@@ -18,4 +18,4 @@ const ping = new Command({
 	},
 })
 
-export { ping }
+export {ping}
