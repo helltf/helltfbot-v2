@@ -19,4 +19,4 @@ const mapTime = (string: string): number => {
 const wait = ([time]: TemplateStringsArray): Promise<any> =>
 	new Promise((res) => setTimeout(res, mapTime(time)))
 
-export { wait }
+export { wait, mapTime }
