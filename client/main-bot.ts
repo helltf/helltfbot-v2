@@ -96,6 +96,8 @@ const mainJoinAllChannels = async () => {
 		await mainJoinChannel(channel)
 		await wait`1s`
 	}
+
+	hb.log(`Successfully joined ${joinedChannels.length} channels`)
 }
 
 export { mainClient, mainJoinAllChannels }
