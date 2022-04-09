@@ -56,16 +56,16 @@ function addNewColor(colors: string[], newColor: string): string[] {
 		colors.push(newColor)
 	} else {
 		colors.splice(0, 1)
-        colors.push(newColor)
+		colors.push(newColor)
 	}
 
 	return colors
 }
 
 function setNewPosition(colors: string[], newColor: string): string[] {
-	let index = colors.findIndex((c) => c === newColor)
+	let index = colors.findIndex(c => c === newColor)
 	colors.splice(index, 1)
-    colors.push(newColor)
+	colors.push(newColor)
 	return colors
 }
 
