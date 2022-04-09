@@ -6,14 +6,19 @@ import commands from './commands/export/export-commands.js'
 import { AppDataSource } from './db/export-orm.js'
 import { repositories } from './db/export-repositories.js'
 
-
 await AppDataSource.initialize()
-const hb = await new TwitchBot(mainClient, watchClient).init()
-
+const hb = new TwitchBot(mainClient, watchClient)
 hb.setCommands(commands)
 hb.setRepositories(repositories)
-hb.joinChannels()
-hb.startJobs()
-hb.initModules()
+
+const start = async() => {
+	if(process.env.NODE_ENV === 'test') return
+	await hb.init()
+	hb.joinChannels()
+	hb.startJobs()
+	hb.initModules()
+}
+
+start()
 
 export { hb }
