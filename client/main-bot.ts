@@ -4,6 +4,7 @@ import { hb } from '../helltfbot.js'
 import { BotResponse } from './bot.js'
 import { Command } from 'commands/export/command.js'
 import { wait } from '../utilities/timeout.js'
+import { getUserPermissions } from '../utilities/twitch/permission.js'
 
 const mainClient = createMainClient()
 const prefix = process.env.PREFIX
@@ -36,6 +37,7 @@ mainClient.on(
 		let command = hb.commands.get(commandLookup.toLowerCase())
 
 		if (command === undefined || userHasCooldown(command, user)) return
+		if(command.permissions > await getUserPermissions(user)) return
 
 		setCooldown(command, user)
 
