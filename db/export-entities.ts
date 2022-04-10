@@ -5,6 +5,8 @@ import { Timeout } from './entity/timeout.js'
 import { TwitchUser } from './entity/user.js'
 import { WatchChannel } from './entity/watchchannel.js'
 import { WordleWord } from './entity/wordle.js'
+import { CommandEntity } from './entity/command.js'
+
 
 export {
 	Ban,
@@ -14,4 +16,5 @@ export {
 	TwitchUser,
 	WatchChannel,
 	WordleWord,
+	CommandEntity
 }

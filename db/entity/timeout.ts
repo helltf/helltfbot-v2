@@ -1,7 +1,10 @@
-import { BaseEntity, Column, Entity } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('timeout')
 export class Timeout extends BaseEntity{
+    @PrimaryGeneratedColumn('increment')
+    id: number
+
     @Column('varchar')
     user: string
 

@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm'
-import { WordleWord, ColorHistory, Channel, WatchChannel, TwitchUser, Ban, Timeout } from './export-entities.js'
+import { WordleWord, ColorHistory, Channel, WatchChannel, TwitchUser, Ban, Timeout, CommandEntity } from './export-entities.js'
 import { AppDataSource } from './export-orm.js'
 
 
@@ -10,7 +10,8 @@ const repositories = {
 	watchRepo:  AppDataSource.getRepository(WatchChannel),
     userRepo: AppDataSource.getRepository(TwitchUser),
 	banRepo: AppDataSource.getRepository(Ban),
-	timeoutRepo: AppDataSource.getRepository(Timeout)
+	timeoutRepo: AppDataSource.getRepository(Timeout),
+	commandRepo: AppDataSource.getRepository(CommandEntity)
 }
 
 export interface DbRepositories {
@@ -21,6 +22,7 @@ export interface DbRepositories {
     userRepo: Repository<TwitchUser>
 	banRepo: Repository<Ban>,
 	timeoutRepo: Repository<Timeout>
+	commandRepo: Repository<CommandEntity>
 }
 
 export { repositories }
