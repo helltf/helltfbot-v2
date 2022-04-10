@@ -4,8 +4,8 @@ import { ChatUserstate } from 'tmi.js'
 
 const website = new Command({
     name: 'website',
-    description: '',
-    permissions: 1,
+    description: 'link to my website',
+    permissions: 5,
 	requiredParams: [],
 	optionalParams: [],
     cooldown: 5000,
