@@ -1,3 +1,4 @@
+import 'jasmine'
 import { mapTime } from './timeout.js'
 
 describe('test timeout mappings', () => {
