@@ -1,17 +1,16 @@
 import { Repository } from 'typeorm'
-import { Channel } from './entity/channel.js'
-import { ColorHistory } from './entity/color_history.js'
-import { TwitchUser } from './entity/user.js'
-import { WatchChannel } from './entity/watchchannel.js'
-import { WordleWord } from './entity/wordle.js'
+import { WordleWord, ColorHistory, Channel, WatchChannel, TwitchUser, Ban, Timeout } from './export-entities.js'
 import { AppDataSource } from './export-orm.js'
+
 
 const repositories = {
 	wordleRepo:  AppDataSource.getRepository(WordleWord),
 	colorRepo:  AppDataSource.getRepository(ColorHistory),
 	channelRepo:  AppDataSource.getRepository(Channel),
 	watchRepo:  AppDataSource.getRepository(WatchChannel),
-    userRepo: AppDataSource.getRepository(TwitchUser)
+    userRepo: AppDataSource.getRepository(TwitchUser),
+	banRepo: AppDataSource.getRepository(Ban),
+	timeoutRepo: AppDataSource.getRepository(Timeout)
 }
 
 export interface DbRepositories {
@@ -20,6 +19,8 @@ export interface DbRepositories {
 	channelRepo: Repository<Channel>
     watchRepo: Repository<WatchChannel>
     userRepo: Repository<TwitchUser>
+	banRepo: Repository<Ban>,
+	timeoutRepo: Repository<Timeout>
 }
 
 export { repositories }
