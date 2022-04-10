@@ -1,4 +1,4 @@
-import { Channel } from 'diagnostics_channel'
+import { Channel } from './entity/channel.js'
 import { Ban } from './entity/ban.js'
 import { ColorHistory } from './entity/color_history.js'
 import { Timeout } from './entity/timeout.js'
