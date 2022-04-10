@@ -4,8 +4,8 @@ import { BotResponse } from '../../client/bot.js'
 
 const ping = new Command({
 	name: 'ping',
-	description: 'ping',
-	permissions: 1,
+	description: 'just a ping command',
+	permissions: 5,
 	requiredParams: [],
 	optionalParams: [],
 	cooldown: 5000,

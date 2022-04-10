@@ -4,8 +4,8 @@ import { ChatUserstate } from 'tmi.js'
 
 const github = new Command({
     name: 'github',
-    description: '',
-    permissions: 1,
+    description: 'Link to my repo and my github profile',
+    permissions: 5,
 	requiredParams: [],
 	optionalParams: [],
     cooldown: 5000,
