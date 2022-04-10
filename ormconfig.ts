@@ -16,10 +16,6 @@ const typeormconf: MysqlConnectionOptions = {
     logging: false,
     "entities": [
         "dist/db/entity/**/*.js",
-        ColorHistory,
-        WordleWord,
-        Channel,
-        TwitchUser
     ],
     "migrations": [
          "db/migrations/**/*.ts"
