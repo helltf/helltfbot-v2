@@ -6,6 +6,7 @@ import { DbRepositories } from 'db/export-repositories.js'
 import { initializeColorTracking } from '../modules/color-tracking.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
+import { updateCommandsInDb } from '../commands/update-db.js'
 
 export class TwitchBot {
 	client: Client
@@ -26,6 +27,7 @@ export class TwitchBot {
 		await this.client.connect()
 		await this.watchclient.connect()
 		this.log('Successfully logged in')
+		updateCommandsInDb()
 		return this
 	}
 
