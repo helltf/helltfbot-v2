@@ -3,10 +3,10 @@ import { Client } from 'tmi.js'
 import { Command } from '../commands/export/command'
 import { Cooldown } from '../commands/export/cooldown.js'
 import { DbRepositories } from 'db/export-repositories.js'
-import { mainJoinAllChannels } from './main-bot.js'
 import { watchJoinAllChannels } from './track-bot.js'
 import { initializeColorTracking } from '../modules/color-tracking.js'
 import jobs from '../jobs/jobs-export.js'
+import { mainJoinAllChannels } from './mainhandlers/join.js'
 
 export class TwitchBot {
 	client: Client
