@@ -1,6 +1,6 @@
 import { Command } from '../export/command.js'
 import { ChatUserstate } from 'tmi.js'
-import { BotResponse } from '../../client/bot.js'
+import { BotResponse } from '../../client/response.js'
 
 const ping = new Command({
 	name: 'ping',

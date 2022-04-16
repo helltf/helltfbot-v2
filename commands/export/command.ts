@@ -1,5 +1,5 @@
-import { BotResponse } from "client/bot.js"
 import { ChatUserstate } from "tmi.js"
+import { BotResponse } from "../../client/response.js"
 
 export class Command {
 	name: string
