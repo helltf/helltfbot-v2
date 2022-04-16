@@ -30,13 +30,13 @@ export class Cooldown {
 		}
 	}
 
-	addCooldown(userId: string, comamndName: string) {
+	addCooldown(userId: string, commandName: string) {
 		let userCooldowns = this.getCooldownsForUser(userId)
 
 		if (!userCooldowns) {
-			this.cooldowns.set(userId, [comamndName])
+			this.cooldowns.set(userId, [commandName])
 		} else {
-			userCooldowns.push(comamndName)
+			userCooldowns.push(commandName)
 		}
 	}
 
