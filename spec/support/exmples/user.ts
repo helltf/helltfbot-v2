@@ -1,6 +1,6 @@
 import { ChatUserstate } from "tmi.js";
 
-export const user: ChatUserstate = {
+export const exampleUser: ChatUserstate = {
     username: 'helltf',
     "user-id": "109035947",
     color: '#FFFFFF',
