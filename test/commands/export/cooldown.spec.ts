@@ -93,6 +93,30 @@ describe('testing cooldown class', () => {
 
 		expect(result).toHaveSize(expectedSize)
 	})
+
+	it('entry should be gone after cooldown is over', (done) => {
+		let userId = user['user-id']
+
+		cooldown.setCooldown(command, userId)
+
+		setTimeout(() => {
+			let entries = cooldown.userHasCooldown(command, userId)
+			expect(entries).toBeFalse()
+			done()
+		}, command.cooldown)
+	})
+
+	it('entry should not be gone after cooldown is not fully over', (done) => {
+		let userId = user['user-id']
+
+		cooldown.setCooldown(command, userId)
+
+		setTimeout(() => {
+			let entries = cooldown.userHasCooldown(command, userId)
+			expect(entries).toBeTrue()
+			done()
+		}, command.cooldown - command.cooldown / 2)
+	})
 })
 
 function getCooldownMapSize(cooldown: Cooldown) {
