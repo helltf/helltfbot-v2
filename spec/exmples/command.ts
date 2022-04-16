@@ -1,5 +1,5 @@
-import { BotResponse } from "../../../client/response.js";
-import { Command } from "../../../commands/export/command.js";
+import { BotResponse } from "../../client/response.js";
+import { Command } from "../../commands/export/command.js";
 
 export const exampleCommand = new Command({
     name: 'example',

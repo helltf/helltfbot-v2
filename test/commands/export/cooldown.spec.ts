@@ -1,8 +1,8 @@
 import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../../commands/export/command.js'
 import { Cooldown } from '../../../commands/export/cooldown.js'
-import { exampleCommand } from '../../../spec/support/exmples/command.js'
-import { exampleUser } from '../../../spec/support/exmples/user.js'
+import { exampleCommand } from '../../../spec/exmples/command.js'
+import { exampleUser } from '../../../spec/exmples/user.js'
 
 describe('testing cooldown class', () => {
 	let cooldown: Cooldown
@@ -123,8 +123,8 @@ function getCooldownMapSize(cooldown: Cooldown) {
 	return cooldown.cooldowns.size
 }
 
-function createOtherCommand(name: string): Command{
-	let obj =  Object.assign({}, exampleCommand)
+function createOtherCommand(name: string): Command {
+	let obj = Object.assign({}, exampleCommand)
 	obj.name = name
 	return obj
 }
