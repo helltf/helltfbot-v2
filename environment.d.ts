@@ -2,7 +2,6 @@ declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
 			NODE_ENV: 'dev' | 'prod' | 'test'
-			DATABASE_URL: string
 			CLIENT_ID: string
 			CLIENT_SECRET: string
 			BEARERTOKEN_STREAMELEMENTS: string
@@ -18,6 +17,7 @@ declare global {
 			DB_PASSWORD: string
 			DB_DATABASE: string
 			MAIN_USER: string
+			DEBUG: 'false'|'true'
 		}
 	}
 }
