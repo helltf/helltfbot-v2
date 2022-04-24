@@ -3,10 +3,11 @@ import { Client } from 'tmi.js'
 import { Command } from '../commands/export/command'
 import { Cooldown } from '../commands/export/cooldown.js'
 import { DbRepositories } from 'db/export-repositories.js'
-import { initializeColorTracking } from '../modules/color-tracking.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
+import { Module } from '../modules/export/module.js'
+import { modules } from '../modules/export/export-modules.js'
 
 export class TwitchBot {
 	client: Client
@@ -60,18 +61,10 @@ export class TwitchBot {
 	}
 
 	initModules() {
-		initializeColorTracking()
-	}
-}
+		for (let module of modules) {
+			module.initialize()
+		}
 
-export class BotResponse {
-	success: boolean
-	response: string
-	channel: string
-
-	constructor(response: string, channel: string, success: boolean = true) {
-		this.success = success
-		this.response = response
-		this.channel = channel
+		this.log(`Successfully initialized ${modules.length} modules`)
 	}
 }

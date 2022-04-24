@@ -2,12 +2,23 @@ import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/export/command.js'
 import { hb } from '../../helltfbot.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
-import { BotResponse } from '../bot.js'
+import { BotResponse } from '../response.js'
 
 const prefix = process.env.PREFIX
 const DEFAULT_ERROR = `Error while executing your command monkaS`
 
-const handleChat = async (channel: string, user: ChatUserstate, message: string) => {
+const handleChat = async (
+	channel: string,
+	user: ChatUserstate,
+	message: string,
+	self: boolean
+) => {
+
+	if (self) return
+	if (!message?.toLowerCase()?.startsWith(prefix)) return
+
+	channel = channel.replace('#', '')
+
 	let [commandLookup, ...data] = message
 		.substring(prefix.length)
 		.replace(/\s{2,}/g, ' ')
@@ -25,23 +36,6 @@ const handleChat = async (channel: string, user: ChatUserstate, message: string)
 	sendResponse(response)
 }
 
-hb.client.on(
-	'chat',
-	async (
-		channel: string,
-		user: ChatUserstate,
-		message: string,
-		self: boolean
-	) => {
-		if (self) return
-		if (!message?.toLowerCase()?.startsWith(prefix)) return
-
-		channel = channel.replace('#', '')
-
-		handleChat(channel, user, message)
-	}
-)
-
 function sendMessage(channel: string, message: string) {
 	hb.client.say(channel, message)
 }
@@ -54,10 +48,16 @@ function sendResponse({ success, response, channel }: BotResponse) {
 	}
 }
 
-function setCooldown(command: Command, {"user-id": id}: ChatUserstate) {
+function setCooldown(command: Command, { 'user-id': id }: ChatUserstate) {
 	hb.cooldown.setCooldown(command, id)
 }
 
-function userHasCooldown(command: Command, {"user-id": id}: ChatUserstate): boolean {
+function userHasCooldown(
+	command: Command,
+	{ 'user-id': id }: ChatUserstate
+): boolean {
 	return hb.cooldown.userHasCooldown(command, id)
 }
+
+
+export {handleChat}
