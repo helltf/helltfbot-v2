@@ -9,17 +9,16 @@ import { repositories } from './db/export-repositories.js'
 
 const hb = new TwitchBot(mainClient, watchClient)
 hb.setCommands(commands)
-hb.setRepositories(repositories)
+hb.setRepositories(repositories);
 
-const start = async() => {
+(async() => {
 	if(process.env.NODE_ENV === 'test') return;
 	await AppDataSource.initialize()
 	await hb.init()
 	hb.joinChannels()
 	hb.startJobs()
 	hb.initModules()
-}
+})()
 
-start()
 
 export { hb }

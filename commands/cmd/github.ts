@@ -1,6 +1,6 @@
-import { BotResponse } from '../../client/bot.js'
 import { Command } from '../../commands/export/command.js'
 import { ChatUserstate } from 'tmi.js'
+import { BotResponse } from '../../client/response.js'
 
 const github = new Command({
     name: 'github',

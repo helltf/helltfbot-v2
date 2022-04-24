@@ -1,5 +1,5 @@
 import 'jasmine'
-import { mapTime } from './timeout.js'
+import { mapTime } from '../../utilities/timeout.js'
 
 describe('test timeout mappings', () => {
 	it('1ms should return 1', () => {
