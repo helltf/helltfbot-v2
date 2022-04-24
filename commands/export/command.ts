@@ -1,5 +1,6 @@
 import { ChatUserstate } from "tmi.js"
 import { BotResponse } from "../../client/response.js"
+import { getUserPermissions } from "../../utilities/twitch/permission.js"
 
 export class Command {
 	name: string
@@ -30,6 +31,10 @@ export class Command {
 		this.optionalParams = optionalParams
 		this.execute = execute
 		this.cooldown = cooldown
+	}
+
+	async isPermitted(user: ChatUserstate): Promise<boolean>{
+		return this.permissions > await getUserPermissions(user)
 	}
 }
 
