@@ -3,7 +3,7 @@ import { hb } from '../helltfbot.js'
 
 const MAX_SAVED_COLORS = 15
 
-const initializeColorTracking = () => {
+function initializeColorTracking() {
 	hb.watchclient.on(
 		'chat',
 		async (
@@ -51,7 +51,11 @@ function updateCurrentColors(colors: string[], newColor: string): string[] {
 	return addNewColor(colors, newColor)
 }
 
-function addNewColor(colors: string[], newColor: string, max: number = MAX_SAVED_COLORS): string[] {
+function addNewColor(
+	colors: string[],
+	newColor: string,
+	max: number = MAX_SAVED_COLORS
+): string[] {
 	if (colors.length < max) {
 		colors.push(newColor)
 	} else {
@@ -63,7 +67,7 @@ function addNewColor(colors: string[], newColor: string, max: number = MAX_SAVED
 }
 
 function setNewPosition(colors: string[], newColor: string): string[] {
-	let index = colors.findIndex(c => c === newColor)
+	let index = colors.findIndex((c) => c === newColor)
 	colors.splice(index, 1)
 	colors.push(newColor)
 	return colors
