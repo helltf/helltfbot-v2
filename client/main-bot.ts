@@ -11,10 +11,10 @@ function createMainClient(): Client {
 
 	return Client({
 		identity,
-		options: { debug: true, messagesLogLevel: 'info' },
 		connection: { reconnect: true },
 		logger: {
 			info: (msg) => {
+				if(process.env.DEBUG === 'true')
 				hb.log(msg)
 			},
 			error: (msg) => {
