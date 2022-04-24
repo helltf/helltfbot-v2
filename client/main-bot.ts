@@ -1,12 +1,49 @@
-import { Client } from 'tmi.js'
+import { ChatUserstate, Client } from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
+import { hb } from '../helltfbot.js'
+import { handleChat } from './mainhandlers/chat.js'
+import { handlePart } from './mainhandlers/part.js'
 
 const mainClient = createMainClient()
 
 function createMainClient(): Client {
-	let identity = new IdentityOptions(process.env.TWITCH_OAUTH, 'helltfbot')
+	let identity = new IdentityOptions(process.env.TWITCH_OAUTH, 'xdforsenxdlol')
 
-	return Client({ identity })
+	return Client({
+		identity,
+		options: { debug: true, messagesLogLevel: 'info' },
+		connection: { reconnect: true },
+		logger: {
+			info: (msg) => {
+				hb.log(msg)
+			},
+			error: (msg) => {
+				hb.log(msg)
+			},
+			warn: (msg) => {
+				hb.log(msg)
+			},
+		},
+	})
 }
+
+mainClient.on(
+	'chat',
+	async (
+		channel: string,
+		user: ChatUserstate,
+		message: string,
+		self: boolean
+	) => {
+		handleChat(channel, user, message, self)
+	}
+)
+
+mainClient.on('part', (channel: string, username: string, self: boolean) => {
+	if (!self) return
+	channel = channel.replace('#', '')
+
+	handlePart(channel, username)
+})
 
 export { mainClient }
