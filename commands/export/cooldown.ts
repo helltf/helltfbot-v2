@@ -8,10 +8,10 @@ export class Cooldown {
 	}
 
 	setCooldown({ name, cooldown }: Command, userId: string) {
-		this.#addCooldown(userId, name)
+		this.addCooldown(userId, name)
 
 		setTimeout(() => {
-			this.#removeCooldown(userId, name)
+			this.removeCooldown(userId, name)
 		}, cooldown)
 	}
 
@@ -19,7 +19,7 @@ export class Cooldown {
 		return this.cooldowns.get(userId)
 	}
 
-	#removeCooldown(userId: string, commandName: string) {
+	removeCooldown(userId: string, commandName: string) {
 		let userCooldowns = this.getCooldownsForUser(userId)
 
 		if (userCooldowns.includes(commandName)) {
@@ -30,13 +30,13 @@ export class Cooldown {
 		}
 	}
 
-	#addCooldown(userId: string, comamndName: string) {
+	addCooldown(userId: string, commandName: string) {
 		let userCooldowns = this.getCooldownsForUser(userId)
 
 		if (!userCooldowns) {
-			this.cooldowns.set(userId, [comamndName])
+			this.cooldowns.set(userId, [commandName])
 		} else {
-			userCooldowns.push(comamndName)
+			userCooldowns.push(commandName)
 		}
 	}
 

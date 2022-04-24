@@ -1,5 +1,5 @@
 import 'jasmine'
-import { addNewColor, updateCurrentColors } from './color-tracking.js'
+import { addNewColor, updateCurrentColors } from '../../modules/color-tracking.js';
 
 describe('color tracking tests', () => {
 	let examples = {
