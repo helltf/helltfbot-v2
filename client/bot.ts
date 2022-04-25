@@ -28,7 +28,6 @@ export class TwitchBot {
 
 	async init(): Promise<TwitchBot> {
 		this.twitchAT = await generateToken()
-		console.log(this.twitchAT)
 		await this.client.connect()
 		await this.watchclient.connect()
 		this.log('Successfully logged in')
