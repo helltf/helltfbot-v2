@@ -24,16 +24,19 @@ const getToken = async(): Promise<Resource<string>> => {
 }
 
 const requestApi = async(): Promise<any> => {
+    return await (await fetch(tokenUrl, {
+        method: 'post',
+        body: getTokenBody() 
+    })).json()
+}
 
+function getTokenBody(){
     const body = new URLSearchParams()
     body.append( "client_id", process.env.CLIENT_ID)
     body.append( "client_secret", process.env.CLIENT_SECRET)
     body.append( "grant_type", "client_credentials")
 
-    return await (await fetch(tokenUrl, {
-        method: 'post',
-        body: body 
-    })).json()
+    return body
 }
 
-export {generateToken}
+export {generateToken, getTokenBody}
