@@ -8,6 +8,7 @@ import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
 import { Module } from '../modules/export/module.js'
 import { modules } from '../modules/export/export-modules.js'
+import { generateToken } from '../api/twitch/token.js'
 
 export class TwitchBot {
 	client: Client
@@ -15,6 +16,7 @@ export class TwitchBot {
 	commands: Map<string, Command>
 	cooldown: Cooldown
 	db: DbRepositories
+	twitchAT: string
 	log: (...args: any) => void
 
 	constructor(client: Client, watchclient: Client) {
@@ -25,10 +27,13 @@ export class TwitchBot {
 	}
 
 	async init(): Promise<TwitchBot> {
+		this.twitchAT = await generateToken()
+		console.log(this.twitchAT)
 		await this.client.connect()
 		await this.watchclient.connect()
 		this.log('Successfully logged in')
 		updateCommandsInDb()
+
 		return this
 	}
 
