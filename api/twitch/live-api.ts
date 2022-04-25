@@ -1,9 +1,9 @@
 const liveEndpoint = "https://api.twitch.tv/helix/search/channels?query="
 
-const fetchLiveData = async(channel: string): Promise<TwitchInfo> => {
-    return{
-        channel: 'ds'
-    }
+const fetchLiveData = async(channel: string) => {
+    let result = await fetch(liveEndpoint + channel, {
+        method: 'get'
+    })
 }
 
 interface TwitchInfo{
@@ -12,3 +12,5 @@ interface TwitchInfo{
     title?: string
     game?: number
 }
+
+export {fetchLiveData}
