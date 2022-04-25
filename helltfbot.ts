@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import { connectPubSub } from './api/twitch/pubsub.js'
 import { TwitchBot } from './client/bot.js'
 import { mainClient } from './client/main-bot.js'
 import { watchClient } from './client/track-bot.js'
@@ -15,6 +16,7 @@ hb.setRepositories(repositories);
 	if(process.env.NODE_ENV === 'test') return;
 	await AppDataSource.initialize()
 	await hb.init()
+	connectPubSub()
 	hb.joinChannels()
 	hb.startJobs()
 	hb.initModules()
