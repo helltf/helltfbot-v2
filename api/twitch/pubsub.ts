@@ -2,7 +2,7 @@ import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
 import { wait } from '../../utilities/timeout.js'
 
-let channels: number[] = [109035947, 85397463, 478429724, 229225576]
+let channels: Map<number,string> = new Map([[109035947,'helltf'], [85397463, 'NoWay4u_Sir '], [22484632, 'forsen']])
 let nonce = 0
 
 const PubSubMessageHandler = {
@@ -30,10 +30,8 @@ enum TopicType {
 	INFO = 'broadcast-settings-update.',
 	LIVE = 'video-playback-by-id.',
 }
-interface PubSubData {
-	topic?: string
-	message?: any
-}
+
+
 const size = 25
 
 const connections: WebSocketConnections[] = []
