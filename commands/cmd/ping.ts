@@ -18,4 +18,4 @@ const ping = new Command({
 	},
 })
 
-export {ping}
+export { ping }
