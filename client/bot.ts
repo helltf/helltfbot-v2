@@ -6,7 +6,6 @@ import { DbRepositories } from 'db/export-repositories.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
-import { Module } from '../modules/export/module.js'
 import { modules } from '../modules/export/export-modules.js'
 import { generateToken } from '../api/twitch/token.js'
 
