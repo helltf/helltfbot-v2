@@ -3,14 +3,17 @@ import * as WS from 'ws'
 import { wait } from '../utilities/timeout.js'
 import { Module } from './export/module.js'
 
-let channels: Map<number,string> = new Map([[109035947,'helltf'], [85397463, 'NoWay4u_Sir '], [22484632, 'forsen']])
+let channels: PubSubChannel[] = [
+	{ id: 109035947, name: 'helltf' },
+	{ id: 85397463, name: 'NoWay4u_Sir' },
+	{ id: 22484632, name: 'forsen' },
+]
 let nonce = 0
-const size = 25
 
 const PubSubMessageHandler = {
 	'stream-up': () => console.log('live'),
 	'stream-down': () => console.log('offline'),
-	'broadcast_settings_update': () => console.log('changed'),
+	broadcast_settings_update: () => console.log('changed'),
 }
 
 type PubSubType = 'RESPONSE' | 'MESSAGE' | 'PONG' | 'LISTEN'
@@ -18,7 +21,10 @@ interface WebSocketConnections {
 	connection: ReconnectingWebSocket
 	interval: NodeJS.Timer
 }
-
+interface PubSubChannel {
+	name: string
+	id: number
+}
 interface PubSubMessage {
 	type: PubSubType
 	nonce: string
@@ -32,8 +38,6 @@ enum TopicType {
 	INFO = 'broadcast-settings-update.',
 	LIVE = 'video-playback-by-id.',
 }
-
-
 
 const connections: WebSocketConnections[] = []
 
@@ -58,7 +62,7 @@ function handleIncomingMessage({ data }: any) {
 	}
 }
 const connectPubSub = async () => {
-	const chunkedChannels = chunkTopicsInto50(channels)
+	const chunkedChannels = chunkTopicsIntoSize(channels)
 
 	for await (let channels of chunkedChannels) {
 		const connection = new RWS.default('wss://pubsub-edge.twitch.tv', [], {
@@ -124,13 +128,16 @@ const createMessageForTopic = (
 		},
 	}
 }
-const chunkTopicsInto50 = (array: Map<number, string>):  Map<number, string>[] => {
-// 	return array.reduce((acc, _, index) => {
-// 		return index % size ? acc : [...acc, array.slice(index, index + size)]
-// 	}, [])
-	return []
+const chunkTopicsIntoSize = (
+	arr: PubSubChannel[],
+	size: number = 25
+): PubSubChannel[][] => {
+	return arr.reduce(
+		(acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]),
+		[]
+	)
 }
 const liveTrackingModule: Module = {
-	initialize: connectPubSub
+	initialize: connectPubSub,
 }
-export { liveTrackingModule, chunkTopicsInto50 }
+export { liveTrackingModule, chunkTopicsIntoSize }
