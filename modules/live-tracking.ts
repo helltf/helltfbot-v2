@@ -82,8 +82,8 @@ const connectPubSub = async () => {
 			})
 		})
 
-		for await (let [channelId, channelName] of channels) {
-			await startPubSubConnection(connection, channelId)
+		for await (let {id, name} of channels) {
+			await startPubSubConnection(connection, id)
 			await wait`5s`
 		}
 	}
