@@ -1,9 +1,11 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
-import { wait } from '../../utilities/timeout.js'
+import { wait } from '../utilities/timeout.js'
+import { Module } from './export/module.js'
 
 let channels: Map<number,string> = new Map([[109035947,'helltf'], [85397463, 'NoWay4u_Sir '], [22484632, 'forsen']])
 let nonce = 0
+const size = 25
 
 const PubSubMessageHandler = {
 	'stream-up': () => console.log('live'),
@@ -32,7 +34,6 @@ enum TopicType {
 }
 
 
-const size = 25
 
 const connections: WebSocketConnections[] = []
 
@@ -77,7 +78,7 @@ const connectPubSub = async () => {
 			})
 		})
 
-		for await (let channelId of channels) {
+		for await (let [channelId, channelName] of channels) {
 			await startPubSubConnection(connection, channelId)
 			await wait`5s`
 		}
@@ -123,10 +124,13 @@ const createMessageForTopic = (
 		},
 	}
 }
-const chunkTopicsInto50 = (array: number[]): number[][] => {
-	return array.reduce((acc, _, index) => {
-		return index % size ? acc : [...acc, array.slice(index, index + size)]
-	}, [])
+const chunkTopicsInto50 = (array: Map<number, string>):  Map<number, string>[] => {
+// 	return array.reduce((acc, _, index) => {
+// 		return index % size ? acc : [...acc, array.slice(index, index + size)]
+// 	}, [])
+	return []
 }
-
-export { connectPubSub }
+const liveTrackingModule: Module = {
+	initialize: connectPubSub
+}
+export { liveTrackingModule, chunkTopicsInto50 }
