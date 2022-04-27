@@ -9,8 +9,12 @@ import {
 	PubSubType,
 	PubSubMessage,
 	TopicType,
+	SettingMessage,
+	StatusMessage,
 } from './types.js'
+import { UpdateEventHandler } from './update-event-handler.js'
 
+const updateEventHandler = new UpdateEventHandler()
 const connections: WebSocketConnection[] = []
 
 let channels: PubSubChannel[] = [
@@ -19,27 +23,6 @@ let channels: PubSubChannel[] = [
 	{ id: 22484632, name: 'forsen' },
 	{ id: 31545223, name: 'agurin' },
 ]
-const handleLiveEvent = (data: PubSubData) => {
-	let name = getNameForTopic(data.topic)
-
-	console.log(`${name} has gone live`)
-}
-const handleOfflineEvent = (data: PubSubData) => {
-	let name = getNameForTopic(data.topic)
-
-	console.log(`${name} has gone offline`)
-}
-const handleSettingUpdateEvent = (data: PubSubData) => {
-	let name = getNameForTopic(data.topic)
-
-	console.log(`${name} has updated the settings`)
-}
-const PubSubMessageHandler = {
-	'stream-up': (data: PubSubData) => handleLiveEvent(data),
-	'stream-down': (data: PubSubData) => handleOfflineEvent(data),
-	broadcast_settings_update: (data: PubSubData) =>
-		handleSettingUpdateEvent(data),
-}
 
 const setPingInterval = (con: ReconnectingWebSocket): NodeJS.Timer => {
 	return setInterval(() => {
@@ -53,14 +36,21 @@ const setPingInterval = (con: ReconnectingWebSocket): NodeJS.Timer => {
 
 function handleIncomingMessage({ data }: any) {
 	if (!data?.message) return
-	let message = JSON.parse(data.message)
 
-	if (!message) return
-	const handler = PubSubMessageHandler[`${message.type}`]
+	data.message = JSON.parse(data.message)
 
-	if (handler) {
-		handler(data)
+	if (!data.message) return
+
+	let name = getNameForTopic(data.topic)
+
+	if(data.message.type === 'stream-up' || data.message.type === 'stream-down'){
+		updateEventHandler.handleStatusEvent(data, name)
 	}
+
+	if(data.message.type === 'broadcast_settings_update'){
+		updateEventHandler.handleSettingUpdateEvent(data, name)
+	}
+	
 }
 const connectPubSub = async () => {
 	const chunkedChannels = chunkTopicsIntoSize(channels)
