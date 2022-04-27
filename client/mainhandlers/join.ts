@@ -1,4 +1,5 @@
 import { hb } from "../../helltfbot.js"
+import { LogType } from "../../logger/log-type.js"
 import { wait } from "../../utilities/timeout.js"
 
 const TWITCH_ERROR_MESSAGE = ['msg_channel_suspended']
@@ -35,7 +36,7 @@ const mainJoinAllChannels = async () => {
 		await wait`1s`
 	}
 
-	hb.log(`Successfully joined ${joinedChannels.length} channels`)
+	hb.log(LogType.TWITCHBOT, `Successfully joined ${joinedChannels.length} channels`)
 }
 
 export{mainJoinAllChannels}

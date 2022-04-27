@@ -1,4 +1,5 @@
 import { hb } from '../../helltfbot.js'
+import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { watchClient } from '../track-bot.js'
 
@@ -15,7 +16,7 @@ async function watchJoinAllChannels() {
 		await wait`1s`
 	}
 
-	hb.log(`Successfully joined ${channels.length} channels to watch`)
+	hb.log(LogType.TWITCHBOT, `Successfully joined ${channels.length} channels to watch`)
 }
 
 export { watchJoinAllChannels }

@@ -37,7 +37,7 @@ const handleChat = async (
 }
 
 function sendMessage(channel: string, message: string) {
-	hb.client.say(channel, message)
+	hb.sendMessage(channel, message)
 }
 
 function sendResponse({ success, response, channel }: BotResponse) {
