@@ -1,6 +1,6 @@
-import { chunkTopicsIntoSize } from "../../modules/live-tracking.js"
+import { chunkTopicsIntoSize, getIdForTopic } from "../../modules/live-tracking.js"
 
-describe('tests for live tracking module', () => {
+describe('test chunking function', () => {
 
     it('array reduce should return 0 entries' , () => {
         const channels = []
@@ -18,6 +18,7 @@ describe('tests for live tracking module', () => {
 
         expect(result).toEqual(expectedResult)
     })
+    
     it('array reduce should return 0 entries' , () => {
         const channels = [{id: 1, name: 'user1'}, {id: 2, name: 'user2'}, {id: 3, name: 'user3'} ]
         const expectedLength = 1
@@ -26,6 +27,7 @@ describe('tests for live tracking module', () => {
 
         expect(result).toHaveSize(expectedLength)
     })
+
     it('array reduce should return 0 entries' , () => {
         let maxArraySize = 1
         const channels = [{id: 1, name: 'user1'}, {id: 2, name: 'user2'}, {id: 3, name: 'user3'} ]
@@ -34,5 +36,25 @@ describe('tests for live tracking module', () => {
         const result = chunkTopicsIntoSize(channels, maxArraySize)
 
         expect(result).toHaveSize(expectedLength)
+    })
+})
+
+describe('test get username from topic', () => {
+    it('get id for topic', () => {
+        let topic = 'video-playback-by-id.31545223'
+
+        let id = getIdForTopic(topic)
+        let expectedId = '31545223'
+
+        expect(id).toBe(expectedId)
+    })
+
+    it('get id for broadcaster setting update topic', () => {
+        let topic = 'broadcast-settings-update.1'
+
+        let id = getIdForTopic(topic)
+        let expectedId = '1'
+
+        expect(id).toBe(expectedId)
     })
 })
