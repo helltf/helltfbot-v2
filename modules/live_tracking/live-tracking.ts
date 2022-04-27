@@ -47,7 +47,7 @@ export class LiveTracking implements Module {
 		}, 250 * 1000)
 	}
 
-	handleIncomingMessage({ data }: any) {
+	async handleIncomingMessage({ data }: any) {
 		if (!data?.message) return
 		data.message = JSON.parse(data.message)
 
@@ -58,7 +58,7 @@ export class LiveTracking implements Module {
 		if (
 			type === 'stream-up' || type === 'stream-down' || type === 'broadcast_settings_update'
 		) {
-			let messages = this.updateEventHandler.handleUpdate(data, streamer, type)
+			let messages = await this.updateEventHandler.handleUpdate(data, streamer, type)
 			this.notificationHandler.sendNotifications(messages)
 		}
 
