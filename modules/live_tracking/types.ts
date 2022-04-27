@@ -1,13 +1,35 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
-export interface PubSubData {
+export interface PubSubData<T extends PubSubDataMessage>{
 	topic: string
-	message: JSON
+	message: T
 }
+
+interface PubSubDataMessage {
+	type: PubSubMessageEventType
+}
+
+export interface StatusMessage extends PubSubDataMessage{
+    server_time: number,
+    play_delay: number,
+}
+
+export interface SettingMessage  extends PubSubDataMessage{
+    channel?: string,
+    channel_id?: string,
+    old_status?: string,
+    status?: string,
+    old_game?: string,
+    game?: string,
+    old_game_id?: number,
+    game_id?: number
+}
+
+export type PubSubMessageEventType = 'stream-up' | 'stream-down' | 'broadcast_settings_update'
 
 export type PubSubType = 'RESPONSE' | 'MESSAGE' | 'PONG' | 'LISTEN'
 
-export type UpdateEventsType = 'LIVE' | 'OFFLINE' | 'TITLE' | 'GAME'
+export type UpdateEventType = 'LIVE' | 'OFFLINE' | 'TITLE' | 'GAME'
 
 export interface WebSocketConnection {
 	connection: ReconnectingWebSocket
