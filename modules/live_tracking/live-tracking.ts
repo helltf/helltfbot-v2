@@ -8,11 +8,11 @@ import {
 	PubSubType,
 	PubSubMessage,
 	TopicType,
-	PubSubMessageEventType,
 } from './types.js'
 import { NotificationHandler, UpdateEventHandler } from './update-event-handler.js'
+const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
-let channels: PubSubChannel[] = [
+const channels: PubSubChannel[] = [
 	{ id: 109035947, name: 'helltf' },
 	{ id: 85397463, name: 'NoWay4u_Sir' },
 	{ id: 22484632, name: 'forsen' },
@@ -24,6 +24,7 @@ export class LiveTracking implements Module {
 	updateEventHandler: UpdateEventHandler
 	connections: WebSocketConnection[]
 	notificationHandler: NotificationHandler
+	name: string = 'LiveTracking'
 
 	constructor() {
 		this.updateEventHandler = new UpdateEventHandler()
@@ -33,7 +34,7 @@ export class LiveTracking implements Module {
 
 	async initialize() {
 		this.channels = channels
-		this.connectPubSub()
+		await this.connectPubSub()
 	}
 
 	setPingInterval(con: ReconnectingWebSocket): NodeJS.Timer {
@@ -52,7 +53,7 @@ export class LiveTracking implements Module {
 
 		if (!data.message) return
 		let type = data.message.type
-		let streamer = this.getNameForTopic(data.topic)
+		let streamer = this.getStreamerForTopic(data.topic)
 
 		if (
 			type === 'stream-up' || type === 'stream-down' || type === 'broadcast_settings_update'
@@ -67,7 +68,7 @@ export class LiveTracking implements Module {
 		const chunkedChannels = this.chunkTopicsIntoSize(channels)
 
 		for await (let channels of chunkedChannels) {
-			const connection = new RWS.default('wss://pubsub-edge.twitch.tv', [], {
+			const connection = new RWS.default(PUBSUB_URL, [], {
 				WebSocket: WS.WebSocket,
 			})
 
@@ -138,7 +139,7 @@ export class LiveTracking implements Module {
 			[]
 		)
 	}
-	getNameForTopic(topic: string): string {
+	getStreamerForTopic(topic: string): string {
 		let id = this.getIdForTopic(topic)
 
 		let { name } = channels.find((c) => c.id === parseInt(id))
