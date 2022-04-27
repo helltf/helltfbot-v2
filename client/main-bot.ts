@@ -15,13 +15,13 @@ function createMainClient(): Client {
 		logger: {
 			info: (msg) => {
 				if(process.env.DEBUG === 'true')
-				hb.log(msg)
+				console.log(msg)
 			},
 			error: (msg) => {
-				hb.log(msg)
+				console.log(msg)
 			},
 			warn: (msg) => {
-				hb.log(msg)
+				console.log(msg)
 			},
 		},
 	})
