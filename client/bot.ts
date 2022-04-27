@@ -63,14 +63,15 @@ export class TwitchBot {
 		}
 	}
 
-	initModules() {
+	async initModules() {
 		for (let module of modules) {
-			module.initialize()
+			await module.initialize()
+			this.log(`${module.name} has been initialized`)
 		}
 
 		this.log(`Successfully initialized ${modules.length} modules`)
 	}
-	
+
 	sendMessage(channel: string, message: string){
 		this.client.say(channel, message)
 	}
