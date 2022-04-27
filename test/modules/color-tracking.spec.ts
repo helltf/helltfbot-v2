@@ -1,7 +1,13 @@
 import 'jasmine'
-import { addNewColor, updateCurrentColors } from '../../modules/color-tracking.js';
+import { ColorTracking } from '../../modules/color-tracking.js';
 
 describe('color tracking tests', () => {
+	let module: ColorTracking
+
+	beforeEach(() => {
+		module = new ColorTracking()
+	})
+
 	let examples = {
 		a: '#aaaaaa',
 		b: '#bbbbbb',
@@ -16,7 +22,7 @@ describe('color tracking tests', () => {
 	it('update color pushs new color', () => {
 		let initialArray = []
 
-		let result = updateCurrentColors(initialArray, colorToAdd)
+		let result = module.updateCurrentColors(initialArray, colorToAdd)
 		let expected = [colorToAdd]
 
 		expect(result).toEqual(expected)
@@ -25,7 +31,7 @@ describe('color tracking tests', () => {
 	it('update color pushs new color', () => {
 		let initialArray = [examples.a, examples.b]
 
-		let result = updateCurrentColors(initialArray, colorToAdd)
+		let result = module.updateCurrentColors(initialArray, colorToAdd)
 		let expected = [examples.a, examples.b, colorToAdd]
 
 		expect(result).toEqual(expected)
@@ -34,7 +40,7 @@ describe('color tracking tests', () => {
 	it('add new existing color, changes position', () => {
 		let initialArray = [examples.a, colorToAdd, examples.c]
 
-		let result = updateCurrentColors(initialArray, colorToAdd)
+		let result = module.updateCurrentColors(initialArray, colorToAdd)
 		let expected = [examples.a, examples.c, colorToAdd]
 
 		expect(result).toEqual(expected)
@@ -43,7 +49,7 @@ describe('color tracking tests', () => {
     it('array is full splice', () => {
 		let initialArray = [examples.a, examples.b, examples.c]
 
-		let result = addNewColor(initialArray, colorToAdd, 3)
+		let result = module.addNewColor(initialArray, colorToAdd, 3)
 		let expected = [examples.b, examples.c, colorToAdd]
         
 		expect(result).toEqual(expected)

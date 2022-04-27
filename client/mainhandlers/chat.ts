@@ -1,6 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/export/command.js'
-import { hb } from '../../helltfbot.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { BotResponse } from '../response.js'
 

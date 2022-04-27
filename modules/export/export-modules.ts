@@ -1,8 +1,11 @@
-import { banModule } from '../ban-tracking.js'
-import { initializeColorTracking } from '../color-tracking.js'
+import { BanTracking } from '../ban-tracking.js'
+import { ColorTracking } from '../color-tracking.js'
 import { LiveTracking } from '../live_tracking/live-tracking.js'
-import { timeoutModule } from '../timeout-tracking.js'
+import { TimeoutTracking } from '../timeout-tracking.js'
 import { Module } from './module.js'
 const liveTracking = new LiveTracking()
-const modules: Module[] = [timeoutModule, banModule, {initialize: initializeColorTracking, name: 'ColorTracking'}, liveTracking]
+const timeoutModule = new TimeoutTracking()
+const colorModule = new ColorTracking()
+const banModule = new BanTracking()
+const modules: Module[] = [timeoutModule, banModule, colorModule, liveTracking]
 export { modules }

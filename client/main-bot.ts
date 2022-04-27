@@ -1,6 +1,5 @@
 import { ChatUserstate, Client } from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
-import { hb } from '../helltfbot.js'
 import { handleChat } from './mainhandlers/chat.js'
 import { handlePart } from './mainhandlers/part.js'
 

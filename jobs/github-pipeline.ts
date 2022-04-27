@@ -1,4 +1,3 @@
-import { hb } from './../helltfbot.js'
 import { getPipeLineData, PipelineData } from '../api/github/github-api.js'
 import { Projects } from '../api/github/github-projects.js'
 
