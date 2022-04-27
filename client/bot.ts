@@ -70,4 +70,8 @@ export class TwitchBot {
 
 		this.log(`Successfully initialized ${modules.length} modules`)
 	}
+	
+	sendMessage(channel: string, message: string){
+		this.client.say(channel, message)
+	}
 }
