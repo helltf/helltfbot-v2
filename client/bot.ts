@@ -8,6 +8,7 @@ import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
 import { modules } from '../modules/export/export-modules.js'
 import { generateToken } from '../api/twitch/token.js'
+import { LogType } from '../logger/log-type.js'
 
 export class TwitchBot {
 	client: Client
@@ -29,7 +30,7 @@ export class TwitchBot {
 		this.twitchAT = await generateToken()
 		await this.client.connect()
 		await this.watchclient.connect()
-		this.log('Successfully logged in')
+		this.log(LogType.TWITCHBOT, 'Successfully logged in')
 		updateCommandsInDb()
 
 		return this
@@ -61,15 +62,16 @@ export class TwitchBot {
 			execute()
 			setInterval(execute, delay)
 		}
+		this.log(LogType.JOBS, `${jobs.length} have been initialized`)
 	}
 
 	async initModules() {
 		for (let module of modules) {
 			await module.initialize()
-			this.log(`${module.name} has been initialized`)
+			this.log(LogType.MODULE, `${module.name} has been initialized`)
 		}
 
-		this.log(`Successfully initialized ${modules.length} modules`)
+		this.log(LogType.MODULE, `Successfully initialized ${modules.length} modules`)
 	}
 
 	sendMessage(channel: string, message: string){
