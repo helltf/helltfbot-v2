@@ -1,4 +1,3 @@
-import { hb } from '../../helltfbot.js'
 import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { watchClient } from '../track-bot.js'

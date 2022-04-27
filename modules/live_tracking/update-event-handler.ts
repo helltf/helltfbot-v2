@@ -1,5 +1,3 @@
-import { title } from 'process'
-import { hb } from '../../helltfbot.js'
 import {
 	PubSubData,
 	PubSubMessageEventType,

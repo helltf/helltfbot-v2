@@ -1,3 +1,5 @@
+import { TwitchBot } from "./client/bot.js"
+
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
@@ -21,5 +23,7 @@ declare global {
 		}
 	}
 }
-
+declare global {
+	var hb: TwitchBot;
+  }
 export {}
