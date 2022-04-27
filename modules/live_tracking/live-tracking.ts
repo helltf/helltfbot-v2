@@ -1,37 +1,15 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
-import { wait } from '../utilities/timeout.js'
-import { Module } from './export/module.js'
-
-interface PubSubData{
-	topic: string, 
-	message: JSON
-}
-type PubSubType = 'RESPONSE' | 'MESSAGE' | 'PONG' | 'LISTEN'
-type UpdateEventsType = 'LIVE' | 'OFFLINE' | 'TITLE' | 'GAME'
-
-interface WebSocketConnection {
-	connection: ReconnectingWebSocket
-	interval: NodeJS.Timer
-}
-interface PubSubChannel {
-	name: string
-	id: number
-}
-interface PubSubMessage {
-	type: PubSubType
-	nonce: string
-	data: {
-		topics: string[]
-		auth_token: string
-	}
-}
-
-enum TopicType {
-	INFO = 'broadcast-settings-update.',
-	LIVE = 'video-playback-by-id.',
-}
-
+import { wait } from '../../utilities/timeout.js'
+import { Module } from '../export/module.js'
+import {
+	WebSocketConnection,
+	PubSubChannel,
+	PubSubData,
+	PubSubType,
+	PubSubMessage,
+	TopicType,
+} from './types.js'
 
 const connections: WebSocketConnection[] = []
 
@@ -39,7 +17,7 @@ let channels: PubSubChannel[] = [
 	{ id: 109035947, name: 'helltf' },
 	{ id: 85397463, name: 'NoWay4u_Sir' },
 	{ id: 22484632, name: 'forsen' },
-	{ id: 31545223, name: 'agurin'}
+	{ id: 31545223, name: 'agurin' },
 ]
 const handleLiveEvent = (data: PubSubData) => {
 	let name = getNameForTopic(data.topic)
@@ -59,9 +37,9 @@ const handleSettingUpdateEvent = (data: PubSubData) => {
 const PubSubMessageHandler = {
 	'stream-up': (data: PubSubData) => handleLiveEvent(data),
 	'stream-down': (data: PubSubData) => handleOfflineEvent(data),
-	'broadcast_settings_update': (data: PubSubData) => handleSettingUpdateEvent(data),
+	broadcast_settings_update: (data: PubSubData) =>
+		handleSettingUpdateEvent(data),
 }
-
 
 const setPingInterval = (con: ReconnectingWebSocket): NodeJS.Timer => {
 	return setInterval(() => {
@@ -74,7 +52,6 @@ const setPingInterval = (con: ReconnectingWebSocket): NodeJS.Timer => {
 }
 
 function handleIncomingMessage({ data }: any) {
-	console.log(data)
 	if (!data?.message) return
 	let message = JSON.parse(data.message)
 
@@ -161,20 +138,25 @@ const chunkTopicsIntoSize = (
 		[]
 	)
 }
-function getNameForTopic(topic: string): string{
+function getNameForTopic(topic: string): string {
 	let id = getIdForTopic(topic)
 
-	let {name} = channels.find(c => c.id === parseInt(id))
+	let { name } = channels.find((c) => c.id === parseInt(id))
 
 	return name
 }
 
-function getIdForTopic(topic: string): string{
-	return topic.match(/(?<=\.)\d+/gmi)[0]
+function getIdForTopic(topic: string): string {
+	return topic.match(/(?<=\.)\d+/gim)[0]
 }
 
 const liveTrackingModule: Module = {
 	initialize: connectPubSub,
 }
 
-export { liveTrackingModule, chunkTopicsIntoSize, getNameForTopic, getIdForTopic }
+export {
+	liveTrackingModule,
+	chunkTopicsIntoSize,
+	getNameForTopic,
+	getIdForTopic,
+}
