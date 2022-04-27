@@ -4,6 +4,5 @@ import { LiveTracking } from '../live_tracking/live-tracking.js'
 import { timeoutModule } from '../timeout-tracking.js'
 import { Module } from './module.js'
 const liveTracking = new LiveTracking()
-
-const modules: Module[] = [timeoutModule, banModule, {initialize: initializeColorTracking}, liveTracking]
+const modules: Module[] = [timeoutModule, banModule, {initialize: initializeColorTracking, name: 'ColorTracking'}, liveTracking]
 export { modules }

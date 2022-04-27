@@ -18,7 +18,8 @@ const initialize = () => {
 	
 }
 const timeoutModule: Module = {
-	initialize: initialize
+	initialize: initialize,
+	name: "Timeout"
 }
 
 export { timeoutModule }

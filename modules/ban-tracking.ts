@@ -16,7 +16,8 @@ const initialize = () => {
 }
 
 const banModule: Module = {
-    initialize: initialize
+    initialize: initialize,
+    name: 'Ban'
 }
 
 export { banModule }
