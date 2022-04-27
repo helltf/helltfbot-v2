@@ -8,6 +8,9 @@ export class Notification extends BaseEntity{
     @Column('varchar')
     streamer: string
 
+    @Column('varchar')
+    channel: string
+
     @Column('tinyint')
     live: boolean
 
