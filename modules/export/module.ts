@@ -1,3 +1,4 @@
 export interface Module {
-	initialize: () => any
+	initialize: () => any | Promise<any>,
+	name: string
 }

@@ -1,4 +1,3 @@
-import { hb } from "../helltfbot.js"
 
 const addNewCommands = () => {
     for(let [_, command] of hb.commands){

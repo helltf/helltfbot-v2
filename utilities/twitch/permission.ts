@@ -1,5 +1,4 @@
 import { Userstate, Badges } from "tmi.js"
-import { hb } from "../../helltfbot.js"
 
 const getChatPermissions = (badges: Badges): number => {
     if(badges.broadcaster !== undefined) return 1

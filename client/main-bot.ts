@@ -1,6 +1,5 @@
 import { ChatUserstate, Client } from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
-import { hb } from '../helltfbot.js'
 import { handleChat } from './mainhandlers/chat.js'
 import { handlePart } from './mainhandlers/part.js'
 
@@ -15,13 +14,13 @@ function createMainClient(): Client {
 		logger: {
 			info: (msg) => {
 				if(process.env.DEBUG === 'true')
-				hb.log(msg)
+				console.log(msg)
 			},
 			error: (msg) => {
-				hb.log(msg)
+				console.log(msg)
 			},
 			warn: (msg) => {
-				hb.log(msg)
+				console.log(msg)
 			},
 		},
 	})
