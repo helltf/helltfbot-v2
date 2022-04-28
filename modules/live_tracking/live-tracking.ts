@@ -1,5 +1,6 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
+import { NotificationChannel } from '../../db/export-entities.js'
 import { wait } from '../../utilities/timeout.js'
 import { Module } from '../export/module.js'
 import { NotificationHandler } from './notification-handler.js'
@@ -13,15 +14,7 @@ import {
 import { UpdateEventHandler } from './update-event-handler.js'
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
-const channels: PubSubChannel[] = [
-	{ id: 109035947, name: 'helltf' },
-	{ id: 85397463, name: 'NoWay4u_Sir' },
-	{ id: 22484632, name: 'forsen' },
-	{ id: 31545223, name: 'agurin' },
-]
-
 export class LiveTracking implements Module {
-	channels: PubSubChannel[]
 	updateEventHandler: UpdateEventHandler
 	connections: WebSocketConnection[]
 	notificationHandler: NotificationHandler
@@ -34,7 +27,6 @@ export class LiveTracking implements Module {
 	}
 
 	async initialize() {
-		this.channels = channels
 		await this.connectPubSub()
 	}
 
@@ -54,7 +46,7 @@ export class LiveTracking implements Module {
 
 		if (!data.message) return
 		let type = data.message.type
-		let streamer = this.getStreamerForTopic(data.topic)
+		let streamer = await this.getStreamerForTopic(data.topic)
 
 		if (
 			type === 'stream-up' || type === 'stream-down' || type === 'broadcast_settings_update'
@@ -66,6 +58,7 @@ export class LiveTracking implements Module {
 	}
 
 	connectPubSub = async () => {
+		let channels = await hb.db.notificationChannelRepo.find()
 		const chunkedChannels = this.chunkTopicsIntoSize(channels)
 
 		for await (let channels of chunkedChannels) {
@@ -132,21 +125,23 @@ export class LiveTracking implements Module {
 		}
 	}
 	chunkTopicsIntoSize = (
-		arr: PubSubChannel[],
+		arr: NotificationChannel[],
 		size: number = 25
-	): PubSubChannel[][] => {
+	): NotificationChannel[][] => {
 		return arr.reduce(
 			(acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]),
 			[]
 		)
 	}
-	getStreamerForTopic(topic: string): string {
+
+	async getStreamerForTopic(topic: string): Promise<string> {
 		let id = this.getIdForTopic(topic)
 
-		let { name } = channels.find((c) => c.id === parseInt(id))
-
-		return name
+		return (await hb.db.notificationChannelRepo.findOneBy({
+			id: parseInt(id)
+		})).name
 	}
+
 	getIdForTopic(topic: string): string {
 		return topic.match(/(?<=\.)\d+/gim)[0]
 	}
