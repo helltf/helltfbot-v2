@@ -1,5 +1,5 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
-
+import { Notification } from '../../db/export-entities.js'
 export interface PubSubData<T extends PubSubDataMessage> {
 	topic: string
 	message: T
@@ -8,7 +8,12 @@ export interface PubSubData<T extends PubSubDataMessage> {
 interface PubSubDataMessage {
 	type: PubSubMessageEventType
 }
-
+export interface NotificationMessageInfo{
+	type: UpdateEventType
+	message: string, 
+	streamer: string,
+	notifiedUsers: Notification[]
+}
 export interface StatusMessage extends PubSubDataMessage {
 	server_time: number
 	play_delay: number
