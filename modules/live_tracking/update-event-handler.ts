@@ -1,5 +1,7 @@
 import { Notification } from '../../db/export-entities.js'
+import { MessageGenerator } from './message-generator.js'
 import {
+	NotificationMessageInfo,
 	PubSubData,
 	PubSubMessageEventType,
 	SettingMessage,
@@ -7,60 +9,10 @@ import {
 } from './types.js'
 
 export class UpdateEventHandler {
-	constructor() {}
+	messageGenerator: MessageGenerator
 
-	handleSettingUpdateEvent(
-		{ message }: PubSubData<SettingMessage>,
-		streamer: string
-	): Map<string, string[]> {
-		let messages: Map<string, string[]> = new Map()
-
-		if (message.old_status !== message.status) {
-			messages = this.addMessageToEntry(
-				messages,
-				`${streamer} has changed the title to ${message.status}`,
-				'helltf'
-			)
-		}
-
-		if (message.old_game !== message.game) {
-			messages = this.addMessageToEntry(
-				messages,
-				`${streamer} has changed the game to ${message.game}`,
-				'helltf'
-			)
-		}
-
-		return messages
-	}
-
-	handleLiveEvent(streamer: string): Map<string, string[]> {
-		let notifiedUsers = this.getNotifiedUser(streamer, UpdateEventType.LIVE)
-		return new Map([['helltf', [`${streamer} has gone live`]]])
-	}
-
-	async handleOfflineEvent(streamer: string): Promise<Map<string, string[]>> {
-        let type = UpdateEventType.OFFLINE 
-		let notifiedUsers = await this.getNotifiedUser(
-			streamer,
-			type
-		)
-
-		return this.generateMessageMap(notifiedUsers, streamer, type)
-	}
-
-	generateMessageMap(
-		notifications: Notification[],
-		streamer: string,
-		type: UpdateEventType
-	): Map<string, string[]> {
-		let messageMap: Map<string, string[]> = new Map()
-
-		for (let notification of notifications) {
-			messageMap.set(notification.channel, [`${streamer} has gone offline`])
-		}
-
-		return messageMap
+	constructor() {
+		this.messageGenerator = new MessageGenerator()
 	}
 
 	async handleUpdate(
@@ -81,23 +33,56 @@ export class UpdateEventHandler {
 		}
 	}
 
-	addMessageToEntry(
-		map: Map<string, string[]>,
-		newMessage: string,
-		channel: string
-	): Map<string, string[]> {
-		let entry = map.get(channel)
+	async handleSettingUpdateEvent(
+		{ message }: PubSubData<SettingMessage>,
+		streamer: string
+	): Promise<Map<string, string[]>> {
+		let titleMessages = new Map<string, string[]>()
+		let gameMessages = new Map<string, string[]>()
+		
+		if (message.old_status !== message.status) {
+			let notificationMessageInfo = await this.getNotificationMessageInfo(
+				UpdateEventType.TITLE,
+				streamer,
+				message.status
+			)
 
-		if (entry) {
-			entry.push(newMessage)
-		} else {
-			map.set(channel, [newMessage])
+			titleMessages =  this.messageGenerator.generateMessages(notificationMessageInfo)
 		}
 
-		return map
+		if (message.old_game !== message.game) {
+			let notificationMessageInfo = await this.getNotificationMessageInfo(
+				UpdateEventType.GAME,
+				streamer,
+				message.game
+			)
+
+			gameMessages = this.messageGenerator.generateMessages(notificationMessageInfo)
+		}
+
+	
+		return this.messageGenerator.concatMaps(titleMessages, gameMessages)
 	}
 
-	async getNotifiedUser(
+	async handleLiveEvent(streamer: string): Promise<Map<string, string[]>> {
+		let notificationMessageInfo = await this.getNotificationMessageInfo(
+			UpdateEventType.OFFLINE,
+			streamer
+		)
+
+		return this.messageGenerator.generateMessages(notificationMessageInfo)
+	}
+
+	async handleOfflineEvent(streamer: string): Promise<Map<string, string[]>> {
+		let notificationMessageInfo = await this.getNotificationMessageInfo(
+			UpdateEventType.OFFLINE,
+			streamer
+		)
+
+		return this.messageGenerator.generateMessages(notificationMessageInfo)
+	}
+
+	async getNotifiedUsers(
 		streamer: string,
 		event: UpdateEventType
 	): Promise<Notification[]> {
@@ -109,14 +94,33 @@ export class UpdateEventHandler {
 		})
 		return users
 	}
-}
 
-export class NotificationHandler {
-	constructor() {}
+	getNotificationMessage(
+		type: UpdateEventType,
+		streamer: string,
+		value: string | undefined
+	): string {
+		if (type === UpdateEventType.LIVE) return `@${streamer} has gone live`
+		if (type === UpdateEventType.OFFLINE) return `@${streamer} has gone offline`
+		if (type === UpdateEventType.GAME)
+			return `@${streamer} has changed the game to ${value}`
+		if (type === UpdateEventType.TITLE)
+			return `@${streamer} has changed the title to ${value}`
+	}
 
-	sendNotifications(notifications: Map<string, string[]>) {
-		for (let [channel, messages] of notifications) {
-			messages.forEach((m) => hb.sendMessage(channel, m))
+	async getNotificationMessageInfo(
+		type: UpdateEventType,
+		streamer: string,
+		value: string | undefined = undefined
+	): Promise<NotificationMessageInfo> {
+		let notifiedUsers = await this.getNotifiedUsers(streamer, type)
+		let message = this.getNotificationMessage(type, streamer, value)
+
+		return {
+			message: message,
+			notifiedUsers: notifiedUsers,
+			streamer: streamer,
+			type: type,
 		}
 	}
 }
