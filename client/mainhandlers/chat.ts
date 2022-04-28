@@ -1,6 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/export/command.js'
-import { hb } from '../../helltfbot.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { BotResponse } from '../response.js'
 
@@ -27,7 +26,7 @@ const handleChat = async (
 	let command = hb.commands.get(commandLookup.toLowerCase())
 
 	if (command === undefined || userHasCooldown(command, user)) return
-	if (command.permissions > (await getUserPermissions(user))) return
+	if (command.permissions < (await getUserPermissions(user))) return
 
 	setCooldown(command, user)
 
@@ -37,7 +36,7 @@ const handleChat = async (
 }
 
 function sendMessage(channel: string, message: string) {
-	hb.client.say(channel, message)
+	hb.sendMessage(channel, message)
 }
 
 function sendResponse({ success, response, channel }: BotResponse) {

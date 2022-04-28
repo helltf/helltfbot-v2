@@ -1,5 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
-
+import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Notification } from "./notification.js";
 @Entity('user')
 export class TwitchUser extends BaseEntity{
     @PrimaryColumn('int')
@@ -19,4 +19,7 @@ export class TwitchUser extends BaseEntity{
 
     @Column('varchar')
     display_name: string
+    
+    @OneToMany(() => Notification, notification => notification.user)
+    notifications: Notification[]
 }
