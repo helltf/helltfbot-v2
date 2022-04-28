@@ -2,6 +2,7 @@ import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
 import { wait } from '../../utilities/timeout.js'
 import { Module } from '../export/module.js'
+import { NotificationHandler } from './notification-handler.js'
 import {
 	WebSocketConnection,
 	PubSubChannel,
@@ -9,7 +10,7 @@ import {
 	PubSubMessage,
 	TopicType,
 } from './types.js'
-import { NotificationHandler, UpdateEventHandler } from './update-event-handler.js'
+import { UpdateEventHandler } from './update-event-handler.js'
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
 const channels: PubSubChannel[] = [
