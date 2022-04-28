@@ -1,12 +1,10 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { TwitchUser } from "./user.js";
 
 @Entity('notification')
 export class Notification extends BaseEntity{
     @PrimaryGeneratedColumn('increment')
     id: number
-    
-    @Column('int')
-    userId: number
 
     @Column('varchar')
     streamer: string
@@ -25,5 +23,7 @@ export class Notification extends BaseEntity{
 
     @Column('tinyint')
     game: boolean
-    
+
+    @ManyToOne(()=> TwitchUser, user => user.notifications)
+    user: TwitchUser
 }
