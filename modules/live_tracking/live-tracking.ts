@@ -1,12 +1,11 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
-import { NotificationChannel } from '../../db/export-entities.js'
+import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
 import { wait } from '../../utilities/timeout.js'
 import { Module } from '../export/module.js'
 import { NotificationHandler } from './notification-handler.js'
 import {
 	WebSocketConnection,
-	PubSubChannel,
 	PubSubType,
 	PubSubMessage,
 	TopicType,
@@ -125,9 +124,9 @@ export class LiveTracking implements Module {
 		}
 	}
 	chunkTopicsIntoSize = (
-		arr: NotificationChannel[],
+		arr: NotificationChannelInfo[],
 		size: number = 25
-	): NotificationChannel[][] => {
+	): NotificationChannelInfo[][] => {
 		return arr.reduce(
 			(acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]),
 			[]
