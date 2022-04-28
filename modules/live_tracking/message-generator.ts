@@ -9,8 +9,8 @@ export class MessageGenerator {
 	}: NotificationMessageInfo): Map<string, string[]> {
 		let messageMap: Map<string, string[]> = new Map()
 
-		for (let {channel, userId} of notifiedUsers) {
-			messageMap.set(channel, [message + 'helltf'])
+		for (let {channel, user} of notifiedUsers) {
+			messageMap.set(channel, [message + user.name])
 		}
 
 		return messageMap
