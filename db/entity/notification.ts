@@ -1,10 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('notification')
 export class Notification extends BaseEntity{
-    @PrimaryColumn('int')
+    @PrimaryGeneratedColumn('increment')
     id: number
     
+    @Column('int')
+    userId: number
+
     @Column('varchar')
     streamer: string
 
