@@ -2,6 +2,7 @@ import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
 import { wait } from '../../utilities/timeout.js'
 import { Module } from '../export/module.js'
+import { NotificationHandler } from './notification-handler.js'
 import {
 	WebSocketConnection,
 	PubSubChannel,
@@ -9,7 +10,7 @@ import {
 	PubSubMessage,
 	TopicType,
 } from './types.js'
-import { NotificationHandler, UpdateEventHandler } from './update-event-handler.js'
+import { UpdateEventHandler } from './update-event-handler.js'
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
 const channels: PubSubChannel[] = [
@@ -47,7 +48,7 @@ export class LiveTracking implements Module {
 		}, 250 * 1000)
 	}
 
-	handleIncomingMessage({ data }: any) {
+	async handleIncomingMessage({ data }: any) {
 		if (!data?.message) return
 		data.message = JSON.parse(data.message)
 
@@ -58,7 +59,7 @@ export class LiveTracking implements Module {
 		if (
 			type === 'stream-up' || type === 'stream-down' || type === 'broadcast_settings_update'
 		) {
-			let messages = this.updateEventHandler.handleUpdate(data, streamer, type)
+			let messages = await this.updateEventHandler.handleUpdate(data, streamer, type)
 			this.notificationHandler.sendNotifications(messages)
 		}
 
