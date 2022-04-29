@@ -1,4 +1,3 @@
-import { NotificationChannel } from '../../../db/export-entities.js'
 import { LiveTracking } from '../../../modules/live_tracking/live-tracking.js'
 
 describe('test chunking function', () => {
