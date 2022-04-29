@@ -9,8 +9,7 @@ import { updateCommandsInDb } from '../commands/update-db.js'
 import { modules } from '../modules/export/export-modules.js'
 import { generateToken } from '../api/twitch/token.js'
 import { LogType } from '../logger/log-type.js'
-import { WebSocketConnection } from '../modules/live_tracking/types.js'
-import { PubSub } from '../modules/live_tracking/live-tracking.js'
+import { PubSub } from '../modules/pubsub/pubsub.js'
 
 export class TwitchBot {
 	client: Client
