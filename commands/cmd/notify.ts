@@ -1,4 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
+import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
 import { UpdateEventType } from '../../modules/live_tracking/types.js'
 import { Command } from '../export/types.js'
@@ -17,15 +18,16 @@ const notify = new Command({
 	): Promise<BotResponse> => {
 		if (eventIsNotValid(event)) return getUnknownEventErrorResponse(channel)
 
-		if (await streamerAlreadyExists(streamer)) {
-			await updateNotification(
-				channel,
-				streamer,
-				event as UpdateEventType,
-				user['user-id']
-			)
-		} else {
+		if (!await streamerAlreadyExists(streamer)) {
+            createNewStreamerConnection(streamer)
 		}
+
+        await updateNotification(
+            channel,
+            streamer,
+            event as UpdateEventType,
+            user['user-id']
+        )
 
 		return {
 			response: 'Successfully created your notification',
@@ -34,6 +36,19 @@ const notify = new Command({
 		}
 	},
 })
+async function createNewStreamerConnection(streamer: string){
+    let id = await getUserIdByName(streamer)
+    if(!id) return 
+
+    await hb.db.notificationChannelRepo.save({
+        name: streamer
+    })
+
+    startPubSubConnection(id)
+}
+function startPubSubConnection(){
+    
+}
 async function streamerAlreadyExists(streamer: string): Promise<boolean> {
 	return (
 		(await hb.db.notificationChannelRepo.findOneBy({ name: streamer })) !==
