@@ -13,20 +13,15 @@ import {
 import { UpdateEventHandler } from './update-event-handler.js'
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
-export class LiveTracking implements Module {
+export class PubSub {
 	updateEventHandler: UpdateEventHandler
-	connections: WebSocketConnection[]
 	notificationHandler: NotificationHandler
 	name: string = 'LiveTracking'
+	connections: WebSocketConnection[] = []
 
 	constructor() {
 		this.updateEventHandler = new UpdateEventHandler()
 		this.notificationHandler = new NotificationHandler()
-		this.connections = []
-	}
-
-	async initialize() {
-		await this.connectPubSub()
 	}
 
 	setPingInterval(con: ReconnectingWebSocket): NodeJS.Timer {
@@ -56,27 +51,32 @@ export class LiveTracking implements Module {
 
 	}
 
-	connectPubSub = async () => {
+	createNewWebSocket(): ReconnectingWebSocket{
+		const connection = new RWS.default(PUBSUB_URL, [], {
+			WebSocket: WS.WebSocket,
+		})
+
+		connection.addEventListener('message', ({ data }) => {
+			this.handlePubSubMessage(JSON.parse(data))
+		})
+
+		let conInterval = this.setPingInterval(connection)
+
+		connection.addEventListener('open', () => {
+			this.connections.push({
+				connection: connection,
+				interval: conInterval,
+			})
+		})
+		return connection
+	}
+
+	connect = async () => {
 		let channels = await hb.db.notificationChannelRepo.find()
 		const chunkedChannels = this.chunkTopicsIntoSize(channels)
 
 		for await (let channels of chunkedChannels) {
-			const connection = new RWS.default(PUBSUB_URL, [], {
-				WebSocket: WS.WebSocket,
-			})
-
-			connection.addEventListener('message', ({ data }) => {
-				this.handlePubSubMessage(JSON.parse(data))
-			})
-
-			let conInterval = this.setPingInterval(connection)
-
-			connection.addEventListener('open', () => {
-				this.connections.push({
-					connection: connection,
-					interval: conInterval,
-				})
-			})
+			const connection = this.createNewWebSocket()
 
 			for await (let { id } of channels) {
 				await this.startListenToTopics(connection, id)
