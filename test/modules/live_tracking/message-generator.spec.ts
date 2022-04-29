@@ -1,3 +1,4 @@
+import { NotificationInfo } from '../../../db/entity/notification.js'
 import { MessageGenerator } from '../../../modules/live_tracking/message-generator.js'
 
 describe('Testing message generator service', () => {
@@ -12,7 +13,7 @@ describe('Testing message generator service', () => {
 		let newMessages = ['abc']
 		let channel = 'a'
 
-		let result = service.addMessageToEntry(map, newMessages, channel)
+		let result = service.addNewEntryToMap(map, newMessages, channel)
 
 		let expectedResult = new Map()
 		expectedResult.set(channel, [...newMessages])
@@ -28,7 +29,7 @@ describe('Testing message generator service', () => {
 
 		map.set(channel, [existingMessage])
 
-		let result = service.addMessageToEntry(map, [newMessages], channel)
+		let result = service.addNewEntryToMap(map, [newMessages], channel)
 
 		let expectedResult = new Map()
 		expectedResult.set(channel, [existingMessage, newMessages])
@@ -41,7 +42,7 @@ describe('Testing message generator service', () => {
 		let newMessages = ['abc', 'bc']
 		let channel = 'a'
 
-		let result = service.addMessageToEntry(map, newMessages, channel)
+		let result = service.addNewEntryToMap(map, newMessages, channel)
 
 		let expectedResult = new Map()
 		expectedResult.set(channel, [...newMessages])
@@ -57,7 +58,7 @@ describe('Testing message generator service', () => {
 
 		map.set(channel, existingMessages)
 
-		let result = service.addMessageToEntry(map, newMessages, channel)
+		let result = service.addNewEntryToMap(map, newMessages, channel)
 
 		let expectedResult = new Map()
 		expectedResult.set(channel, ['1', '2', '3', '4'])
@@ -74,7 +75,7 @@ describe('Testing message generator service', () => {
 
 		map.set(channel1, channel1Messages)
 
-		let result = service.addMessageToEntry(map, channel2Messages, channel2)
+		let result = service.addNewEntryToMap(map, channel2Messages, channel2)
 
 		let expectedResult = new Map()
 		expectedResult.set(channel1, channel1Messages)
@@ -118,4 +119,20 @@ describe('Testing message generator service', () => {
 
 		expect(result).toEqual(expectedResult)
 	})
+
+	it('group two entries by channel', () => {
+	})
 })
+
+
+function getNotificationInfoExample(): NotificationInfo {
+	return {
+		channel:'test',
+		game: true,
+		live: true,
+		title: true,
+		offline: true,
+		id: 1,
+		streamer: 'test',
+	}
+}
