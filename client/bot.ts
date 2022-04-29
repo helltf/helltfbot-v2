@@ -1,6 +1,6 @@
 import { customLogMessage } from '../logger/logger-export.js'
 import { Client } from 'tmi.js'
-import { Command } from '../commands/export/command'
+import { Command } from '../commands/export/types'
 import { Cooldown } from '../commands/export/cooldown.js'
 import { DbRepositories } from 'db/export-repositories.js'
 import jobs from '../jobs/jobs-export.js'

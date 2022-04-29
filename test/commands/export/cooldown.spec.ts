@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../../commands/export/command.js'
+import { Command } from '../../../commands/export/types.js'
 import { Cooldown } from '../../../commands/export/cooldown.js'
 import { exampleCommand } from '../../../spec/examples/command.js'
 import { exampleUser } from '../../../spec/examples/user.js'
