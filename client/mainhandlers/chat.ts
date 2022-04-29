@@ -12,8 +12,8 @@ const handleChat = async (
 	message: string,
 	self: boolean
 ) => {
-
 	if (self) return
+	updateUser(user)
 	if (!message?.toLowerCase()?.startsWith(prefix)) return
 
 	channel = channel.replace('#', '')
@@ -58,5 +58,32 @@ function userHasCooldown(
 	return hb.cooldown.userHasCooldown(command, id)
 }
 
+async function updateUser(user: ChatUserstate){
+	let id = parseInt(user['user-id'])
+
+	let userEntry = await hb.db.userRepo.findOneBy({
+		id: id
+	})
+
+	if(userEntry){
+		return await hb.db.userRepo.update({
+			id: id
+		},{
+			color: user.color,
+			display_name: user['display-name'],
+			name: user.username,
+		})
+	}
+
+	hb.db.userRepo.save({
+		color: user.color,
+		display_name: user['display-name'],
+		name: user.username,
+		id: id,
+		notifications: [],
+		permission: 5,
+		registered_at: Date.now(),
+	})
+}
 
 export {handleChat}
