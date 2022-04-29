@@ -1,4 +1,4 @@
-import { Command } from '../export/command.js'
+import { Command } from '../export/types.js'
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/response.js'
 
@@ -14,7 +14,11 @@ const ping = new Command({
 		userstate: ChatUserstate,
 		message: string[]
 	): Promise<BotResponse> => {
-		return new BotResponse('pong', channel)
+		return {
+			response: 'pong',
+			channel: channel,
+			success: true
+		}
 	},
 })
 
