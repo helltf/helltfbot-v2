@@ -1,7 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
-import { UpdateEventType } from '../../modules/live_tracking/types.js'
+import { UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -44,10 +44,13 @@ async function createNewStreamerConnection(streamer: string){
         name: streamer
     })
 
-    startPubSubConnection(id)
+    startPubSubConnection(parseInt(id))
 }
-function startPubSubConnection(){
-    
+function startPubSubConnection(id: number){
+    // rethink adding of new channels
+    let connectionsLength = hb.pubSub.connections.length
+        let connection = hb.pubSub.createNewWebSocket()
+        hb.pubSub.startListenToTopics(connection, id)
 }
 async function streamerAlreadyExists(streamer: string): Promise<boolean> {
 	return (
