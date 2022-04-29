@@ -2,6 +2,7 @@ import {
 	BaseEntity,
 	Column,
 	Entity,
+	Index,
 	JoinColumn,
 	ManyToOne,
 	OneToOne,
@@ -11,6 +12,7 @@ import {
 import { TwitchUser } from './user.js'
 
 @Entity('notification')
+@Index(['streamer', 'channel'], {unique: true})
 export class Notification extends BaseEntity implements NotificationInfo {
 	@PrimaryGeneratedColumn('increment')
 	id: number
@@ -21,16 +23,16 @@ export class Notification extends BaseEntity implements NotificationInfo {
 	@Column('varchar')
 	channel: string
 
-	@Column('tinyint')
+	@Column('tinyint', { default: false })
 	live: boolean
 
-	@Column('tinyint')
+	@Column('tinyint', { default: false })
 	offline: boolean
 
-	@Column('tinyint')
+	@Column('tinyint', { default: false })
 	title: boolean
 
-	@Column('tinyint')
+	@Column('tinyint', { default: false })
 	game: boolean
 
 	@ManyToOne(() => TwitchUser, (user) => user.notifications)
