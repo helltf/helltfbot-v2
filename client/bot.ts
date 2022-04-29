@@ -9,6 +9,8 @@ import { updateCommandsInDb } from '../commands/update-db.js'
 import { modules } from '../modules/export/export-modules.js'
 import { generateToken } from '../api/twitch/token.js'
 import { LogType } from '../logger/log-type.js'
+import { WebSocketConnection } from '../modules/live_tracking/types.js'
+import { PubSub } from '../modules/live_tracking/live-tracking.js'
 
 export class TwitchBot {
 	client: Client
@@ -18,6 +20,7 @@ export class TwitchBot {
 	db: DbRepositories
 	twitchAT: string
 	log: (...args: any) => void
+	pubSub: PubSub
 
 	constructor(client: Client, watchclient: Client) {
 		this.log = customLogMessage
@@ -30,6 +33,7 @@ export class TwitchBot {
 		this.twitchAT = await generateToken()
 		await this.client.connect()
 		await this.watchclient.connect()
+		await this.pubSub.connect()
 		this.log(LogType.TWITCHBOT, 'Successfully logged in')
 		updateCommandsInDb()
 
