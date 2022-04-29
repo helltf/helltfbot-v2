@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../commands/export/command.js'
+import { Command } from '../../commands/export/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { BotResponse } from '../response.js'
 
@@ -40,10 +40,12 @@ function sendMessage(channel: string, message: string) {
 }
 
 function sendResponse({ success, response, channel }: BotResponse) {
+	if(!response) return
+
 	if (success) {
 		sendMessage(channel, response)
 	} else {
-		hb.client.say(channel, DEFAULT_ERROR)
+		sendMessage(channel, `❗ Error while executing ➡ ` + response)
 	}
 }
 
