@@ -42,7 +42,8 @@ export interface SettingMessage extends PubSubDataMessage {
 
 export interface WebSocketConnection {
 	connection: ReconnectingWebSocket
-	interval: NodeJS.Timer
+	interval: NodeJS.Timer,
+	listenedTopicsLength: number
 }
 
 export interface PubSubChannel {
