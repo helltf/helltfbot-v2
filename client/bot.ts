@@ -26,6 +26,7 @@ export class TwitchBot {
 		this.client = client
 		this.watchclient = watchclient
 		this.cooldown = new Cooldown()
+		this.pubSub = new PubSub()
 	}
 
 	async init(): Promise<TwitchBot> {
