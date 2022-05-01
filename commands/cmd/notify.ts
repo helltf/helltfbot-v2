@@ -1,7 +1,8 @@
 import { ChatUserstate } from 'tmi.js'
 import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
-import { UpdateEventType } from '../../modules/pubsub/types.js'
+import { PubSubConnection } from '../../modules/pubsub/pubsub.js'
+import { TopicType, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -17,45 +18,71 @@ const notify = new Command({
 		[streamer, event]: string[]
 	): Promise<BotResponse> => {
 		if (eventIsNotValid(event)) return getUnknownEventErrorResponse(channel)
+		let eventType = event as UpdateEventType
 
-		if (!await streamerAlreadyExists(streamer)) {
-            createNewStreamerConnection(streamer)
+		if (await streamerNotExisting(streamer)) {
+			let success = await createNewStreamerConnection(streamer, eventType)
+
+			if (!success) {
+				return {
+					channel: channel,
+					success: false,
+					response: 'Could not establish new connection. Streamer not found!',
+				}
+			}
 		}
 
-        await updateNotification(
-            channel,
-            streamer,
-            event as UpdateEventType,
-            user['user-id']
-        )
+		await updateNotification(channel, streamer, eventType, user['user-id'])
 
 		return {
-			response: 'Successfully created your notification',
 			channel: channel,
 			success: true,
+			response: 'Successfully created your notification',
 		}
 	},
 })
-async function createNewStreamerConnection(streamer: string){
-    let id = await getUserIdByName(streamer)
-    if(!id) return 
 
-    await hb.db.notificationChannelRepo.save({
-        name: streamer
-    })
+async function createNewStreamerConnection(
+	streamer: string,
+	event: UpdateEventType
+): Promise<boolean> {
+	let id = await getUserIdByName(streamer)
+	if (!id) return false
 
-    startPubSubConnection(parseInt(id))
+	await hb.db.notificationChannelRepo.save({
+		name: streamer,
+	})
+
+	startPubSubConnection(parseInt(id), event)
+
+	return true
 }
 
-function startPubSubConnection(id: number){
-    // rethink adding of new channels
-    // let connectionsLength = hb.pubSub.connections.length
-    //     let connection = hb.pubSub.createNewWebSocket()
-    //     hb.pubSub.startListenToTopics(connection, id)
+function mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
+	if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
+		return TopicType.INFO
+	if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
+		return TopicType.LIVE
 }
 
-async function streamerAlreadyExists(streamer: string): Promise<boolean> {
-	return (
+function startPubSubConnection(id: number, event: UpdateEventType) {
+	let connection = getConnection()
+	let topicType = mapUpdateEventTypeToTopic(event)
+
+	connection.listenToTopic(id, topicType)
+}
+
+function getConnection(): PubSubConnection {
+	let openConnections = hb.pubSub.connections.filter(
+		(c) => c.listenedTopicsLength < 50
+	)
+	return openConnections.length === 0
+		? new PubSubConnection()
+		: openConnections[0]
+}
+
+async function streamerNotExisting(streamer: string): Promise<boolean> {
+	return !(
 		(await hb.db.notificationChannelRepo.findOneBy({ name: streamer })) !==
 		undefined
 	)
@@ -63,6 +90,7 @@ async function streamerAlreadyExists(streamer: string): Promise<boolean> {
 function eventIsNotValid(event: string) {
 	return !Object.values(UpdateEventType).includes(event as UpdateEventType)
 }
+
 async function updateNotification(
 	channel: string,
 	streamer: string,
