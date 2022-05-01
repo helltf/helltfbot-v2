@@ -13,25 +13,91 @@ import {
 import { UpdateEventHandler } from './update-event-handler.js'
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
+export class PubSubConnection implements WebSocketConnection {
+	connection: ReconnectingWebSocket
+	listenedTopicsLength: number
+	interval: NodeJS.Timer
+
+	constructor() {
+		this.connection = new RWS.default(PUBSUB_URL, [], {
+			WebSocket: WS.WebSocket,
+		})
+
+		this.interval = this.setPingInterval()
+		this.listenedTopicsLength = 0
+
+		this.connection.addEventListener('message', message => {
+			this.handleIncomingMessage(message)
+		})
+	}
+
+	setPingInterval(): NodeJS.Timer {
+		return setInterval(() => {
+			this.connection.send(
+				JSON.stringify({
+					type: 'PING',
+				})
+			)
+		}, 250 * 1000)
+	}
+
+	listenToTopic(id: number, type: TopicType): TopicType {
+		
+		if(this.listenedTopicsLength === 50 ){
+			return type
+		}
+
+		let message = this.createMessageForTopic(type, id)
+
+		this.sendMessage(message)
+
+		this.listenedTopicsLength++
+
+		return undefined
+	}
+
+	sendMessage(message: PubSubMessage) {
+		this.connection.send(JSON.stringify(message))
+	}
+
+	createMessageForTopic = (
+		type: TopicType,
+		channelId: number
+	): PubSubMessage => {
+		return {
+			type: 'LISTEN',
+			nonce: '',
+			data: {
+				auth_token: process.env.TWITCH_OAUTH,
+				topics: [`${type}${channelId}`],
+			},
+		}
+	}
+	handleIncomingMessage({data}: any) {
+		
+	}
+}
+
 export class PubSub {
 	updateEventHandler: UpdateEventHandler
 	notificationHandler: NotificationHandler
-	name: string = 'LiveTracking'
-	connections: WebSocketConnection[] = []
+	connections: PubSubConnection[] = []
 
 	constructor() {
 		this.updateEventHandler = new UpdateEventHandler()
 		this.notificationHandler = new NotificationHandler()
 	}
 
-	setPingInterval(con: ReconnectingWebSocket): NodeJS.Timer {
-		return setInterval(() => {
-			con.send(
-				JSON.stringify({
-					type: 'PING',
-				})
-			)
-		}, 250 * 1000)
+	createNewPubSubConnection(): PubSubConnection {
+		const connection = new PubSubConnection()
+
+		connection.connection.addEventListener('message', ({ data }) => {
+			this.handlePubSubMessage(JSON.parse(data))
+		})
+
+		this.connections.push(connection)
+
+		return connection
 	}
 
 	async handleIncomingMessage({ data }: any) {
@@ -43,32 +109,17 @@ export class PubSub {
 		let streamer = await this.getStreamerForTopic(data.topic)
 
 		if (
-			type === 'stream-up' || type === 'stream-down' || type === 'broadcast_settings_update'
+			type === 'stream-up' ||
+			type === 'stream-down' ||
+			type === 'broadcast_settings_update'
 		) {
-			let messages = await this.updateEventHandler.handleUpdate(data, streamer, type)
+			let messages = await this.updateEventHandler.handleUpdate(
+				data,
+				streamer,
+				type
+			)
 			this.notificationHandler.sendNotifications(messages)
 		}
-
-	}
-
-	createNewWebSocket(): ReconnectingWebSocket{
-		const connection = new RWS.default(PUBSUB_URL, [], {
-			WebSocket: WS.WebSocket,
-		})
-
-		connection.addEventListener('message', ({ data }) => {
-			this.handlePubSubMessage(JSON.parse(data))
-		})
-
-		let conInterval = this.setPingInterval(connection)
-
-		connection.addEventListener('open', () => {
-			this.connections.push({
-				connection: connection,
-				interval: conInterval,
-			})
-		})
-		return connection
 	}
 
 	connect = async () => {
@@ -76,10 +127,12 @@ export class PubSub {
 		const chunkedChannels = this.chunkTopicsIntoSize(channels)
 
 		for await (let channels of chunkedChannels) {
-			const connection = this.createNewWebSocket()
+			const connection = this.createNewPubSubConnection()
 
 			for await (let { id } of channels) {
-				await this.startListenToTopics(connection, id)
+				connection.listenToTopic(id, TopicType.LIVE)
+				await wait`1s`
+				connection.listenToTopic(id, TopicType.INFO)
 				await wait`5s`
 			}
 		}
@@ -97,32 +150,6 @@ export class PubSub {
 		con.send(JSON.stringify(message))
 	}
 
-	startListenToTopics = async (
-		con: ReconnectingWebSocket,
-		channelId: number
-	) => {
-		const liveMessage = this.createMessageForTopic(TopicType.LIVE, channelId)
-		const infoMessage = this.createMessageForTopic(TopicType.INFO, channelId)
-
-		this.sendMessage(con, liveMessage)
-
-		await wait`1s`
-
-		this.sendMessage(con, infoMessage)
-	}
-	createMessageForTopic = (
-		topic: TopicType,
-		channelId: number
-	): PubSubMessage => {
-		return {
-			type: 'LISTEN',
-			nonce: '',
-			data: {
-				auth_token: process.env.TWITCH_OAUTH,
-				topics: [`${topic}${channelId}`],
-			},
-		}
-	}
 	chunkTopicsIntoSize = (
 		arr: NotificationChannelInfo[],
 		size: number = 25
@@ -136,9 +163,11 @@ export class PubSub {
 	async getStreamerForTopic(topic: string): Promise<string> {
 		let id = this.getIdForTopic(topic)
 
-		return (await hb.db.notificationChannelRepo.findOneBy({
-			id: parseInt(id)
-		})).name
+		return (
+			await hb.db.notificationChannelRepo.findOneBy({
+				id: parseInt(id),
+			})
+		).name
 	}
 
 	getIdForTopic(topic: string): string {
