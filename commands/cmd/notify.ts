@@ -51,6 +51,7 @@ async function createNewStreamerConnection(
 
 	await hb.db.notificationChannelRepo.save({
 		name: streamer,
+		id: parseInt(id)
 	})
 
 	startPubSubConnection(parseInt(id), event)
@@ -82,9 +83,8 @@ function getConnection(): PubSubConnection {
 }
 
 async function streamerNotExisting(streamer: string): Promise<boolean> {
-	return !(
-		(await hb.db.notificationChannelRepo.findOneBy({ name: streamer })) !==
-		undefined
+	return (
+		(await hb.db.notificationChannelRepo.findOneBy({ name: streamer })) === null
 	)
 }
 function eventIsNotValid(event: string) {
@@ -112,7 +112,7 @@ async function updateNotification(
 			}
 		)
 	} else {
-		await hb.db.notificationRepo.save({
+		let result = await hb.db.notificationRepo.save({
 			channel: channel,
 			streamer: streamer,
 			[event]: true,
@@ -131,7 +131,7 @@ async function userHasNotification(
 				id: id,
 			},
 			streamer: streamer,
-		})) !== undefined
+		})) !== null
 	)
 }
 
