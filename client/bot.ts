@@ -18,7 +18,7 @@ export class TwitchBot {
 	cooldown: Cooldown
 	db: DbRepositories
 	twitchAT: string
-	log: (...args: any) => void
+	log: (type: LogType,...args: any) => void
 	pubSub: PubSub
 
 	constructor(client: Client, watchclient: Client) {
@@ -33,7 +33,7 @@ export class TwitchBot {
 		this.twitchAT = await generateToken()
 		await this.client.connect()
 		await this.watchclient.connect()
-		await this.pubSub.connect()
+		this.pubSub.connect()
 		this.log(LogType.TWITCHBOT, 'Successfully logged in')
 		updateCommandsInDb()
 
