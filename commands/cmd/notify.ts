@@ -46,12 +46,14 @@ async function createNewStreamerConnection(streamer: string){
 
     startPubSubConnection(parseInt(id))
 }
+
 function startPubSubConnection(id: number){
     // rethink adding of new channels
-    let connectionsLength = hb.pubSub.connections.length
-        let connection = hb.pubSub.createNewWebSocket()
-        hb.pubSub.startListenToTopics(connection, id)
+    // let connectionsLength = hb.pubSub.connections.length
+    //     let connection = hb.pubSub.createNewWebSocket()
+    //     hb.pubSub.startListenToTopics(connection, id)
 }
+
 async function streamerAlreadyExists(streamer: string): Promise<boolean> {
 	return (
 		(await hb.db.notificationChannelRepo.findOneBy({ name: streamer })) !==
