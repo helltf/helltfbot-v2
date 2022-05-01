@@ -1,6 +1,7 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import * as WS from 'ws'
 import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
+import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { Module } from '../export/module.js'
 import { NotificationHandler } from './notification-handler.js'
@@ -26,7 +27,7 @@ export class PubSubConnection implements WebSocketConnection {
 		this.interval = this.setPingInterval()
 		this.listenedTopicsLength = 0
 
-		this.connection.addEventListener('message', message => {
+		this.connection.addEventListener('message', (message) => {
 			this.handleIncomingMessage(message)
 		})
 	}
@@ -42,8 +43,7 @@ export class PubSubConnection implements WebSocketConnection {
 	}
 
 	listenToTopic(id: number, type: TopicType): TopicType {
-		
-		if(this.listenedTopicsLength === 50 ){
+		if (this.listenedTopicsLength === 50) {
 			return type
 		}
 
@@ -52,8 +52,6 @@ export class PubSubConnection implements WebSocketConnection {
 		this.sendMessage(message)
 
 		this.listenedTopicsLength++
-
-		return undefined
 	}
 
 	sendMessage(message: PubSubMessage) {
@@ -73,8 +71,15 @@ export class PubSubConnection implements WebSocketConnection {
 			},
 		}
 	}
-	handleIncomingMessage({data}: any) {
-		
+	handleIncomingMessage({ data }: any) {
+		let parsedData = JSON.parse(data)
+		this.logError(parsedData.error)
+	}
+
+	logError(error: any) {
+		if (!error) return
+
+		hb.log(LogType.PUBSUB, 'Error occured: ' + error)
 	}
 }
 
@@ -123,19 +128,27 @@ export class PubSub {
 	}
 
 	connect = async () => {
+		hb.log(LogType.PUBSUB, 'Connecting...')
+
 		let channels = await hb.db.notificationChannelRepo.find()
 		const chunkedChannels = this.chunkTopicsIntoSize(channels)
 
-		for await (let channels of chunkedChannels) {
+		for await(let channels of chunkedChannels) {
 			const connection = this.createNewPubSubConnection()
 
-			for await (let { id } of channels) {
-				connection.listenToTopic(id, TopicType.LIVE)
-				await wait`1s`
-				connection.listenToTopic(id, TopicType.INFO)
-				await wait`5s`
+			for await(let { id } of channels) {
+				await this.listenToTopics(connection, id)
 			}
 		}
+		
+		hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
+	}
+
+	async listenToTopics(connection: PubSubConnection, id: number) {
+		connection.listenToTopic(id, TopicType.LIVE)
+		await wait`1s`
+		connection.listenToTopic(id, TopicType.INFO)
+		await wait`5s`
 	}
 
 	handlePubSubMessage = (data: any) => {
