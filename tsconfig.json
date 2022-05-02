@@ -8,7 +8,7 @@
         "skipLibCheck": true,
         "moduleResolution": "node",
         "experimentalDecorators": true,
-        
+        "esModuleInterop": true,
     },
     "exclude": [
         "node_modules",
