@@ -2,7 +2,7 @@ import { customLogMessage } from '../logger/logger-export.js'
 import { Client } from 'tmi.js'
 import { Command } from '../commands/export/command'
 import { Cooldown } from '../commands/export/cooldown.js'
-import { DbRepositories } from 'db/export-repositories.js'
+import { DB, DbRepositories } from 'db/export-repositories.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
@@ -46,8 +46,8 @@ export class TwitchBot {
 		this.commands = commandMap
 	}
 
-	setRepositories(repos: DbRepositories) {
-		this.db = repos
+	setRepositories(db: DB) {
+		this.db = db
 	}
 
 	async joinChannels() {
