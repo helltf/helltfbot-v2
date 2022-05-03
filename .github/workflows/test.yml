@@ -1,0 +1,31 @@
+name: PostgreSQL service example
+on: push
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    container: node:10.18-jessie
+    services:
+      postgres:
+        image: mariadb:latest
+      env: 
+          MYSQL_USER: root
+          MYSQL_PASSWORD: test
+          MYSQL_DATABASE: twitch
+          MYSQL_ROOT_PASSWORD: test
+          options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+      ports:
+        - 3306:3306
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+    - name: Run test script
+      env:
+        NODE_ENV: test
+        TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+        PIPELINE: true
+      run: |
+        npm install typescript
+        npm run build
+        npm run pipeline-test
