@@ -16,16 +16,15 @@ jobs:
           options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
       ports:
         - 3306:3306
-
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-    - name: Run test script
-      env:
-        NODE_ENV: test
-        TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
-        PIPELINE: true
-      run: |
-        npm install typescript
-        npm run build
-        npm run pipeline-test
+  steps:
+    - name: Check out repository code
+      uses: actions/checkout@v3
+  - name: Run test script
+    env:
+      NODE_ENV: test
+      TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+      PIPELINE: true
+    run: |
+      npm install typescript
+      npm run build
+      npm run pipeline-test
