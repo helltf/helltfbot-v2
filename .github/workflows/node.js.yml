@@ -58,8 +58,8 @@ jobs:
       env:
         NODE_ENV: test
         TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+        PIPELINE: true
       run: |
-        env
         npm install typescript
         npm run build
         npm run pipeline-test
