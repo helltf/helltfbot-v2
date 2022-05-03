@@ -11,6 +11,7 @@ describe('', () => {
 
     beforeAll(async()=>{
         let src = new DataSource(getOrmConf())
+        console.log(src)
         hb.db = await new DB(src).initialize()
     })
 
