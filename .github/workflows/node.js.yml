@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [16.x]
@@ -27,10 +25,8 @@ jobs:
       run: |
         npm install typescript
         npm run build
-
-  test:
+  container:
     runs-on: ubuntu-latest
-
     services: 
       mariadb:
         image: mariadb:latest
@@ -42,6 +38,9 @@ jobs:
           MYSQL_DATABASE: twitch
           MYSQL_ROOT_PASSWORD: test
           options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+ 
+  test:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [16.x]
