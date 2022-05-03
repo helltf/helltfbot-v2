@@ -23,7 +23,6 @@ const getOrmConf = (): MysqlConnectionOptions => {
 	return getDevOrmConf()
 }
 function getTestOrmConf(): MysqlConnectionOptions {
-	console.log(process.env)
 	let host = '192.168.178.27'
 	let port = 3333
 	let username = 'root'
