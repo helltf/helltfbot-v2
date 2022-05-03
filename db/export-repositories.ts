@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm'
+import { DataSource, Repository } from 'typeorm'
 import {
 	WordleWord,
 	ColorHistory,
@@ -37,22 +37,25 @@ export class DB implements DbRepositories {
 	commandRepo: Repository<CommandEntity>
 	notificationRepo: Repository<Notification>
 	notificationChannelRepo: Repository<NotificationChannel>
+	dataSource: DataSource
 
-	constructor() {
-		this.wordleRepo = AppDataSource.getRepository(WordleWord)
-		this.colorRepo = AppDataSource.getRepository(ColorHistory)
-		this.channelRepo = AppDataSource.getRepository(Channel)
-		this.watchRepo = AppDataSource.getRepository(WatchChannel)
-		this.userRepo = AppDataSource.getRepository(TwitchUser)
-		this.banRepo = AppDataSource.getRepository(Ban)
-		this.timeoutRepo = AppDataSource.getRepository(Timeout)
-		this.commandRepo = AppDataSource.getRepository(CommandEntity)
-		this.notificationRepo = AppDataSource.getRepository(Notification)
+	constructor(dataSource: DataSource = AppDataSource) {
+		this.wordleRepo = dataSource.getRepository(WordleWord)
+		this.colorRepo = dataSource.getRepository(ColorHistory)
+		this.channelRepo = dataSource.getRepository(Channel)
+		this.watchRepo = dataSource.getRepository(WatchChannel)
+		this.userRepo = dataSource.getRepository(TwitchUser)
+		this.banRepo = dataSource.getRepository(Ban)
+		this.timeoutRepo = dataSource.getRepository(Timeout)
+		this.commandRepo = dataSource.getRepository(CommandEntity)
+		this.notificationRepo = dataSource.getRepository(Notification)
 		this.notificationChannelRepo =
-			AppDataSource.getRepository(NotificationChannel)
+			dataSource.getRepository(NotificationChannel)
+
+		this.dataSource = dataSource
 	}
 	async initialize(): Promise<DB>{
-		await AppDataSource.initialize()
+		await this.dataSource.initialize()
 		return this
 	}
 }
