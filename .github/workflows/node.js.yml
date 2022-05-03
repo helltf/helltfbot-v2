@@ -55,6 +55,7 @@ jobs:
     
     - name: Run test script
       run: |
+        env
         npm install typescript
         npm run build
         npm run pipeline-test
