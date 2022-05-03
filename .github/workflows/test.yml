@@ -10,7 +10,7 @@ jobs:
     
     services:
       
-      postgres:
+      mariadb:
         
         image: mariadb:latest
         ports:
@@ -38,6 +38,7 @@ jobs:
 
         run: |
           echo ${{ job.services.mariadb }}
+          docker network ls
           npm install typescript
           npm run build
           npm run pipeline-test
