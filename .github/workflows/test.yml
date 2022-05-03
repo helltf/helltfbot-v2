@@ -14,17 +14,15 @@ jobs:
       
       postgres:
         
-        image: postgres
-        
+        image: mariadb:latest
+        ports:
+          - 3306:3306
         env:
-          POSTGRES_PASSWORD: postgres
-        
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
+          MYSQL_USER: root
+          MYSQL_PASSWORD: test
+          MYSQL_DATABASE: twitch
+          MYSQL_ROOT_PASSWORD: test
+          options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     steps:
       
       - name: Check out repository code
@@ -36,12 +34,14 @@ jobs:
         run: npm ci
 
       - name: Connect to PostgreSQL
-        
-        
-        run: node client.js
-        
         env:
-          
-          POSTGRES_HOST: postgres
-          
-          POSTGRES_PORT: 5432
+          NODE_ENV: test
+          TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
+          PIPELINE: true
+
+        run: |
+        npm install typescript
+        npm run build
+        npm run pipeline-test
+        
+        
