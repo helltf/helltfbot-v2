@@ -1,14 +1,17 @@
+import { DataSource } from "typeorm"
 import { TwitchBot } from "../../../client/bot.js"
 import { mainClient } from "../../../client/main-bot.js"
 import { watchClient } from "../../../client/track-bot.js"
 import { DB } from "../../../db/export-repositories.js"
+import { getOrmConf } from "../../../ormconfig.js"
 import { clearDb } from "../../test-utils/clear.js"
 
 describe('', () => {
     globalThis.hb = new TwitchBot(mainClient, watchClient)
 
     beforeAll(async()=>{
-        hb.db = await new DB().initialize()
+        let src = new DataSource(getOrmConf())
+        hb.db = await new DB(src).initialize()
     })
 
     beforeEach(async()=>{
@@ -16,7 +19,7 @@ describe('', () => {
     })
 
     afterAll(async()=>{
-        clearDb(hb.db.dataSource)
+        await clearDb(hb.db.dataSource)
     })
 
     it('', async()=> {
@@ -30,6 +33,4 @@ describe('', () => {
             registered_at: Date.now()
         })
     })
-
-
 })
