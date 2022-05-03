@@ -23,6 +23,7 @@ declare global {
 			TEST_DB_USERNAME: string
 			TEST_DB_PASSWORD: string
 			TEST_DB_DATABASE: string
+			PIPELINE: 'false'|'true'
 		}
 	}
 }
