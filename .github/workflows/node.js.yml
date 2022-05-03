@@ -30,6 +30,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
     services: 
       mariadb:
         image: mariadb:latest
