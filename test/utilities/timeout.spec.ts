@@ -30,49 +30,49 @@ describe('test timeout mappings', () => {
 
 		expect(fn).toThrowError()
 	})
-    it('unit missing throws error', () => {
+	it('unit missing throws error', () => {
 		let fn = () => {
 			mapTime('1')
 		}
-        
+
 		expect(fn).toThrowError()
 	})
-    it('input missing throws error', () => {
+	it('input missing throws error', () => {
 		let fn = () => {
 			mapTime('')
 		}
-        
+
 		expect(fn).toThrowError()
 	})
 
-    it('1s should return 1000', () => {
+	it('1s should return 1000', () => {
 		let result = mapTime('1s')
 		let expected = 1000
 
 		expect(result).toBe(expected)
 	})
-    it('5s should return 5000', () => {
+	it('5s should return 5000', () => {
 		let result = mapTime('5s')
 		let expected = 5000
 
 		expect(result).toBe(expected)
 	})
 
-    it('1m should return 60000', () => {
+	it('1m should return 60000', () => {
 		let result = mapTime('1m')
 		let expected = 60000
 
 		expect(result).toBe(expected)
 	})
 
-    it('1h should return 360000', () => {
+	it('1h should return 360000', () => {
 		let result = mapTime('1h')
 		let expected = 3600_000
 
 		expect(result).toBe(expected)
 	})
 
-    it('1d should return 8640000', () => {
+	it('1d should return 8640000', () => {
 		let result = mapTime('1d')
 		let expected = 86_400_000
 
