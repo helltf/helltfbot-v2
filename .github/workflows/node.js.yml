@@ -30,8 +30,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    env:
-      NODE_ENV: test
+
     services: 
       mariadb:
         image: mariadb:latest
@@ -56,6 +55,8 @@ jobs:
         cache: 'npm'
     
     - name: Run test script
+      env:
+        NODE_ENV: test
       run: |
         env
         npm install typescript
