@@ -34,7 +34,7 @@ jobs:
           NODE_ENV: test
           TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
           PIPELINE: true
-          TEST_DB_HOST: localhost
+          TEST_DB_HOST: postgres
 
         run: |
           npm install typescript
