@@ -15,7 +15,7 @@ export class TwitchBot {
 	watchclient: Client
 	commands: Map<string, Command>
 	cooldown: Cooldown
-	db: DbRepositories
+	db: DB
 	twitchAT: string
 	log: (...args: any) => void
 
