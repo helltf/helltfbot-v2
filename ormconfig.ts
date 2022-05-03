@@ -31,6 +31,7 @@ function getTestOrmConf(): MysqlConnectionOptions {
 
 	if (process.env.PIPELINE === 'true') {
 		host = 'localhost'
+		port = 3306
 	}
 
 	return {
