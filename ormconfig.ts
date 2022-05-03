@@ -30,7 +30,7 @@ function getTestOrmConf(): MysqlConnectionOptions {
 	let database = 'twitch'
 
 	if (process.env.PIPELINE === 'true') {
-		host = '127.0.0.1'
+		host = 'localhost'
 	}
 
 	return {
