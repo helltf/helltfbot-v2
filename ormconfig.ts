@@ -30,7 +30,7 @@ function getTestOrmConf(): MysqlConnectionOptions {
 	let database = 'twitch'
 
 	if (process.env.PIPELINE === 'true') {
-		host = 'localhost'
+		host = 'mariadb'
 		port = parseInt(process.env.TEST_DB_PORT)
 	}
 
