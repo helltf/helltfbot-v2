@@ -35,7 +35,7 @@ jobs:
       mariadb:
         image: mariadb:latest
         ports:
-          - 3306
+          - 3306:3306
         env: 
           MYSQL_USER: root
           MYSQL_PASSWORD: test
