@@ -40,8 +40,8 @@ jobs:
           PIPELINE: true
 
         run: |
-        npm install typescript
-        npm run build
-        npm run pipeline-test
+          npm install typescript
+          npm run build
+          npm run pipeline-test
         
         
