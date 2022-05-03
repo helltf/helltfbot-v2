@@ -5,8 +5,7 @@ name: run build and tests
 
 on:
   push:
-    # branches: [master, feature, dev, hotfix-**]
-    branches: [**]
+    branches: [master, feature, dev, hotfix-**]
   pull_request:
     branches: [master, feature, dev]
 
