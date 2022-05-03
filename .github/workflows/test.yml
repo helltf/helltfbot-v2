@@ -4,11 +4,9 @@ on: push
 jobs:
   
   container-job:
-    
     runs-on: ubuntu-latest
-    
-    container: node:10.18-jessie
 
+    container: node:16
     
     services:
       
@@ -31,7 +29,7 @@ jobs:
       
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Connect to PostgreSQL
         env:
