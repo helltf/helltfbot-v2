@@ -37,6 +37,7 @@ jobs:
           TEST_DB_HOST: postgres
 
         run: |
+          echo ${{ job.services.mariadb }}
           npm install typescript
           npm run build
           npm run pipeline-test
