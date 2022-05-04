@@ -5,8 +5,9 @@
   "main": "./dist/helltfbot.js",
   "type": "module",
   "scripts": {
-    "test": "set NODE_ENV=test&&set PIPELINE=false&&jasmine",
-    "pipeline-test": "set NODE_ENV=test&&set PIPELINE=true&&jasmine",
+    "test": "jasmine",
+    "unit-test": "jasmine jasmine --config=spec/support/jasmine-unit.json",
+    "integration-test": "jasmine --config=spec/support/jasmine-integration.json",
     "build": "tsc",
     "deploy": "sh deploy.sh"
   },
