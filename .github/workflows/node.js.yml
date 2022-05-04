@@ -1,64 +1,69 @@
-# name: run build and tests
+name: run build and tests
 
-# on:
-#   push:
-#     branches: [master, feature, dev, hotfix-**]
-#   pull_request:
-#     branches: [master, feature, dev]
+on:
+  push:
+    branches: [master, feature, dev, hotfix-**]
+  pull_request:
+    branches: [master, feature, dev]
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         node-version: [16.x]
-#     env: 
-#       NODE_ENV: prod
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Use Node.js ${{ matrix.node-version }}
-#       uses: actions/setup-node@v3
-#       with:
-#         node-version: ${{ matrix.node-version }}
-#         cache: 'npm'
-#     - name: Run build script
-#       run: |
-#         npm install typescript
-#         npm run build
-#   container:
-#     runs-on: ubuntu-latest
-#     services: 
-#       mariadb:
-#         image: mariadb:latest
-#         ports:
-#           - 3306:3306
-#         env: 
-#           MYSQL_USER: root
-#           MYSQL_PASSWORD: test
-#           MYSQL_DATABASE: twitch
-#           MYSQL_ROOT_PASSWORD: test
-#           options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    env: 
+      NODE_ENV: prod
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Run build script
+      run: |
+        npm install typescript
+        npm run build
  
-#   test:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         node-version: [16.x]
-
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Use Node.js ${{ matrix.node-version }}
-#       uses: actions/setup-node@v3
-#       with:
-#         node-version: ${{ matrix.node-version }}
-#         cache: 'npm'
+  test:
     
-#     - name: Run test script
-#       env:
-#         NODE_ENV: test
-#         TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
-#         PIPELINE: true
-#       run: |
-#         npm install typescript
-#         npm run build
-#         npm run pipeline-test
+    runs-on: ubuntu-latest
+    
+    container: node:16
+    
+    services:
+      
+      mariadb:
+        ports:
+          - 3306:3306
+        image: mariadb
+        
+        env:
+          MYSQL_DATABASE: twitch
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_USER: admin
+          MYSQL_PASSWORD: test
+          MYSQL_ROOT_PASSWORD: test
+        
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install typescript
+          npm run build
+      - name: Run Tests
+        run: npm t
+        
+        env:
+          DB_HOST: mariadb
+          DB_PORT: 3306
+          DB_USERNAME: admin
+          DB_PASSWORD: test
+          DB_DATABASE: twitch
