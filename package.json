@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jasmine",
-    "unit-test": "jasmine jasmine --config=spec/support/jasmine-unit.json",
-    "integration-test": "jasmine --config=spec/support/jasmine-integration.json",
+    "unit-tests": "jasmine jasmine --config=spec/support/jasmine-unit.json",
+    "integration-tests": "jasmine --config=spec/support/jasmine-integration.json",
     "build": "tsc",
     "deploy": "sh deploy.sh"
   },
