@@ -1,5 +1,4 @@
-import { NotificationInfo } from '../../../db/entity/notification.js'
-import { MessageGenerator } from '../../../modules/pubsub/message-generator.js'
+import { MessageGenerator } from "../../../../modules/live_tracking/message-generator.js"
 
 describe('Testing message generator service', () => {
 	let service: MessageGenerator

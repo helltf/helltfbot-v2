@@ -10,9 +10,6 @@ declare global {
 			BEARERTOKEN_STREAMELEMENTS: string
 			TWITCH_OAUTH: string
 			GITHUB_TOKEN: string
-			GITHUB_ENDPOINT_HELLTFBOT_V2: string
-			GITHUB_ENDPOINT_INST_MONO: string
-			GITHUB_ENDPOINT_GO_DISCORD_BOT: string
 			PREFIX: string
 			DB_PORT: string
 			DB_HOST: string
@@ -21,6 +18,12 @@ declare global {
 			DB_DATABASE: string
 			MAIN_USER: string
 			DEBUG: 'false'|'true'
+			TEST_DB_PORT: string
+			TEST_DB_HOST: string
+			TEST_DB_USERNAME: string
+			TEST_DB_PASSWORD: string
+			TEST_DB_DATABASE: string
+			PIPELINE: 'false'|'true'
 		}
 	}
 }
