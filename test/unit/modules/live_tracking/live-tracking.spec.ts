@@ -1,5 +1,4 @@
-import { NotificationChannel } from '../../../db/export-entities.js'
-import { LiveTracking } from '../../../modules/live_tracking/live-tracking.js'
+import { LiveTracking } from "../../../../modules/live_tracking/live-tracking.js"
 
 describe('test chunking function', () => {
 	let module: LiveTracking

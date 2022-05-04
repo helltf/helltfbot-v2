@@ -1,8 +1,8 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../../commands/export/command.js'
-import { Cooldown } from '../../../commands/export/cooldown.js'
-import { exampleCommand } from '../../../spec/examples/command.js'
-import { exampleUser } from '../../../spec/examples/user.js'
+import { Command } from '../../../../commands/export/command.js'
+import { Cooldown } from '../../../../commands/export/cooldown.js'
+import { exampleCommand } from '../../../../spec/examples/command.js'
+import { exampleUser } from '../../../../spec/examples/user.js'
 
 describe('testing cooldown class', () => {
 	let cooldown: Cooldown

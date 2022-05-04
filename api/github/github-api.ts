@@ -6,7 +6,7 @@ const getPipeLineData = async (
 	project: Projects
 ): Promise<Resource<PipelineData>> => {
 	try {
-		let data = await requestGithubApi(process.env[project])
+		let data = await requestGithubApi(project)
 		return Resource.ok(new PipelineData(data, project))
 	} catch (e) {
 		return Resource.error(e)
