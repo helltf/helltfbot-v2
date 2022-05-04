@@ -12,7 +12,18 @@ import {
 	NotificationChannel,
 } from './db/export-entities.js'
 
-const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE } = process.env
+const {
+	DB_HOST,
+	DB_PORT,
+	DB_USERNAME,
+	DB_PASSWORD,
+	DB_DATABASE,
+	TEST_DB_PORT,
+	TEST_DB_HOST,
+	TEST_DB_USERNAME,
+	TEST_DB_PASSWORD,
+	TEST_DB_DATABASE,
+} = process.env
 
 const env = process.env.NODE_ENV
 const getOrmConf = (): MysqlConnectionOptions => {
@@ -23,24 +34,13 @@ const getOrmConf = (): MysqlConnectionOptions => {
 	return getDevOrmConf()
 }
 function getTestOrmConf(): MysqlConnectionOptions {
-	let host = '192.168.178.27'
-	let port = 3333
-	let username = 'root'
-	let password = 'test'
-	let database = 'twitch'
-
-	if (process.env.PIPELINE === 'true') {
-		host = process.env.TEST_DB_HOST
-		port = parseInt(process.env.TEST_DB_PORT)
-	}
-
 	return {
 		type: 'mariadb',
-		host: host,
-		port: port,
-		username: username,
-		password: password,
-		database: database,
+		host: TEST_DB_HOST,
+		port: parseInt(TEST_DB_PORT),
+		username: TEST_DB_USERNAME,
+		password: TEST_DB_PASSWORD,
+		database: TEST_DB_DATABASE,
 		synchronize: true,
 		logging: false,
 		entities: getEntities(),
@@ -48,6 +48,7 @@ function getTestOrmConf(): MysqlConnectionOptions {
 		subscribers: ['db/subscriber/**/*.ts'],
 	}
 }
+
 function getDevOrmConf(): MysqlConnectionOptions {
 	return {
 		type: 'mariadb',
