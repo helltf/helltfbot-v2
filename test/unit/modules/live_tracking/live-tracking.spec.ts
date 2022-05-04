@@ -1,10 +1,10 @@
-import { LiveTracking } from "../../../../modules/live_tracking/live-tracking.js"
+import { PubSub } from "../../../../modules/pubsub/pubsub.js"
 
 describe('test chunking function', () => {
-	let module: LiveTracking
+	let module: PubSub
 
 	beforeEach(() => {
-		module = new LiveTracking()
+		module = new PubSub()
 	})
 
 	it('array reduce should return 0 entries', () => {
@@ -53,10 +53,10 @@ describe('test chunking function', () => {
 })
 
 describe('test get username from topic', () => {
-	let module: LiveTracking
+	let module: PubSub
 
 	beforeEach(() => {
-		module = new LiveTracking()
+		module = new PubSub()
 	})
 
 	it('get id for topic', () => {

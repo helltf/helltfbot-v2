@@ -103,12 +103,12 @@ export class UpdateEventHandler {
 		streamer: string,
 		value: string | undefined
 	): string {
-		if (type === UpdateEventType.LIVE) return `@${streamer} has gone live `
-		if (type === UpdateEventType.OFFLINE) return `@${streamer} has gone offline `
+		if (type === UpdateEventType.LIVE) return `@${streamer} has gone live`
+		if (type === UpdateEventType.OFFLINE) return `@${streamer} has gone offline`
 		if (type === UpdateEventType.GAME)
-			return `@${streamer} has changed the game to ${value} `
+			return `@${streamer} has changed the game to ${value}`
 		if (type === UpdateEventType.TITLE)
-			return `@${streamer} has changed the title to ${value} `
+			return `@${streamer} has changed the title to ${value}`
 	}
 
 	async getNotificationMessageInfo(
