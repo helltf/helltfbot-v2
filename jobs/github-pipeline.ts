@@ -40,14 +40,14 @@ function announcePipeLineFinish({
 	event,
 }: PipelineData) {
 	if (conclusion === 'success') {
-		hb.client.say(
+		hb.sendMessage(
 			process.env.MAIN_USER,
-			`catJAM 👉🟢 pipeline in ${repository} on branch ${branch} was successful`
+			`catJAM 👉✅ pipeline in ${repository} on branch ${branch} was successful`
 		)
 	} else if (conclusion === 'failure') {
-		hb.client.say(
+		hb.sendMessage(
 			process.env.MAIN_USER,
-			`monkaS 👉🔴 pipeline in ${repository} on branch ${branch} failed @helltf (${event})`
+			`monkaS 👉❌ pipeline in ${repository} on branch ${branch} failed @helltf (${event})`
 		)
 	}
 }
