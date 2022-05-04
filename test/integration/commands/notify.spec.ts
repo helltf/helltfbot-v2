@@ -21,36 +21,4 @@ describe('', () => {
     afterAll(async()=>{
         await clearDb(hb.db.dataSource)
     })
-
-    it('', async()=> {
-        await hb.db.userRepo.save({
-            color: '',
-            display_name:'a',
-            id:1,
-            name:'a',
-            permission: 1,
-            notifications:[],
-            registered_at: Date.now()
-        })
-
-        let entity = await hb.db.userRepo.count()
-
-        expect(entity).toBe(1)
-    })
-
-    it('', async()=> {
-        await hb.db.userRepo.save({
-            color: '',
-            display_name:'a',
-            id:1,
-            name:'a',
-            permission: 1,
-            notifications:[],
-            registered_at: Date.now()
-        })
-
-        let entity = await hb.db.userRepo.count()
-
-        expect(entity).toBe(1)
-    })
 })
