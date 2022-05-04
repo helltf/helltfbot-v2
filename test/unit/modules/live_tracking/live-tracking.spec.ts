@@ -1,4 +1,4 @@
-import { PubSub } from "../../../modules/pubsub/pubsub.js"
+import { PubSub } from "../../../../modules/pubsub/pubsub.js"
 
 describe('test chunking function', () => {
 	let module: PubSub
