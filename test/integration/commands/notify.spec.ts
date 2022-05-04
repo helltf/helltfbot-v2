@@ -3,28 +3,42 @@ import { DataSource, Db } from 'typeorm'
 import { TwitchBot } from '../../../client/bot.js'
 import { mainClient } from '../../../client/main-bot.js'
 import { watchClient } from '../../../client/track-bot.js'
-import { eventIsNotValid, notify, streamerNotExisting, updateNotification, userHasNotification } from '../../../commands/cmd/notify.js'
+import {
+	eventIsNotValid,
+	notify,
+	streamerNotExisting,
+	updateNotification,
+	userHasNotification,
+} from '../../../commands/cmd/notify.js'
 import { DB } from '../../../db/export-repositories.js'
 import { UpdateEventType } from '../../../modules/pubsub/types.js'
 import { getOrmConf } from '../../../ormconfig.js'
-import { exampleNotificationEntity, exampleTwitchUserEntity, exampleUser } from '../../../spec/examples/user.js'
+import {
+	exampleNotificationEntity,
+	exampleTwitchUserEntity,
+	exampleUser,
+} from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
+import { Notification } from '../../../db/export-entities.js'
 
 describe('', () => {
 	globalThis.hb = new TwitchBot(mainClient, watchClient)
 	let channel = 'testChannel'
 	let streamer = 'streamer'
-    let user = exampleTwitchUserEntity
+	let user = exampleTwitchUserEntity
+	let notification = exampleNotificationEntity
 
 	beforeAll(async () => {
 		let src = new DataSource(getOrmConf())
 		hb.db = await new DB(src).initialize()
-        user = exampleTwitchUserEntity
 	})
 
 	beforeEach(async () => {
 		channel = 'testChannel'
 		streamer = 'streamer'
+		notification = exampleNotificationEntity
+		user = exampleTwitchUserEntity
+
 		await clearDb(hb.db.dataSource)
 	})
 
@@ -45,65 +59,86 @@ describe('', () => {
 		)
 	})
 
-    it('given streamer does not exist in db return true', async () => {
-        let result = await streamerNotExisting(streamer)
+	it('given streamer does exist in db return false', async () => {
+		let result = await streamerNotExisting(streamer)
 
-        expect(result).toBeTrue()
-    })
+		expect(result).toBeTrue()
+	})
 
-    
-    it('given streamer does not exist in db return true', async () => {
-        let exampleNotificationChannel = {
-            id: 1,
-            name: streamer
-        }
-
-        await hb.db.notificationChannelRepo.save({
-            ...exampleNotificationChannel
+	it('given streamer does not exist in db return true', async () => {
+		await hb.db.notificationChannelRepo.save({
+            name: streamer,
+            id: 1
         })
 
-        let result = await streamerNotExisting(streamer)
+		let result = await streamerNotExisting(streamer)
 
-        expect(result).toBeFalse()
-    })
+		expect(result).toBeFalse()
+	})
 
-    it('events from UpdateEventType are valid', () => {
-        const events = ['live', 'offline', 'title', 'game']
+	it('events from UpdateEventType are valid', () => {
+		const events = ['live', 'offline', 'title', 'game']
 
-        for(let event of events){
-            let isNotValid = eventIsNotValid(event)
-            expect(isNotValid).toBeFalse() 
-        }
-    })
+		for (let event of events) {
+			let isNotValid = eventIsNotValid(event)
+			expect(isNotValid).toBeFalse()
+		}
+	})
 
-    it('update db entry for user updates notification in db', async() => {
-        let event = UpdateEventType.LIVE
-        let id = `1`
+	it('save new db entry for notification creates new entry in db', async () => {
+		let event = UpdateEventType.LIVE
+		await hb.db.userRepo.save(user)
 
-        await updateNotification(channel, streamer, event, id)
+		await updateNotification(channel, streamer, event, `${user.id}`)
 
-        // let result = 
-    })
+		let result = await findNotification(user.id, streamer)
 
-    it('user has no notification for streamer return false', async() => {
-        let id = 1
-        let result =  await userHasNotification(id, streamer)
+		expect(result.live).toBeTruthy()
+	})
 
-        expect(result).toBeFalse()
-    })
+	it('update new db entry for user updates the notificatin', async () => {
+		let event = UpdateEventType.LIVE
+		await hb.db.userRepo.save(user)
+		await hb.db.notificationRepo.save(notification)
 
+		await updateNotification(channel, streamer, event, `${user.id}`)
 
-    it('user has notification for streamer return true', async() => {
-        await hb.db.userRepo.save({
-            ...user
-        })
+        let result = await findNotification(user.id, streamer)
 
-        await hb.db.notificationRepo.save({
-            ...exampleNotificationEntity
-        })
+        expect(result.live).toBeTruthy()
+	})
 
-        let result =  await userHasNotification(user.id, streamer)
+	it('user has no notification for streamer return false', async () => {
+		let id = 1
+		let result = await userHasNotification(id, streamer)
 
-        expect(result).toBeTrue()
-    })
+		expect(result).toBeFalse()
+	})
+
+	it('user has notification for streamer return true', async () => {
+		await hb.db.userRepo.save(user)
+
+		await hb.db.notificationRepo.save(notification)
+
+		let result = await userHasNotification(user.id, streamer)
+
+		expect(result).toBeTrue()
+	})
 })
+
+async function findNotification(
+	userId: number,
+	streamer: string
+): Promise<Notification> {
+	return hb.db.notificationRepo.findOne({
+		where: {
+			user: {
+				id: userId,
+			},
+			streamer: streamer,
+		},
+		relations: {
+			user: true,
+		},
+	})
+}
