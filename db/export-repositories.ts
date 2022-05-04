@@ -1,30 +1,61 @@
-import { Repository } from 'typeorm'
-import { WordleWord, ColorHistory, Channel, WatchChannel, TwitchUser, Ban, Timeout, CommandEntity, Notification } from './export-entities.js'
+import { DataSource, Repository } from 'typeorm'
+import {
+	WordleWord,
+	ColorHistory,
+	Channel,
+	WatchChannel,
+	TwitchUser,
+	Ban,
+	Timeout,
+	CommandEntity,
+	Notification,
+	NotificationChannel,
+} from './export-entities.js'
 import { AppDataSource } from './export-orm.js'
-
-
-const repositories = {
-	wordleRepo:  AppDataSource.getRepository(WordleWord),
-	colorRepo:  AppDataSource.getRepository(ColorHistory),
-	channelRepo:  AppDataSource.getRepository(Channel),
-	watchRepo:  AppDataSource.getRepository(WatchChannel),
-    userRepo: AppDataSource.getRepository(TwitchUser),
-	banRepo: AppDataSource.getRepository(Ban),
-	timeoutRepo: AppDataSource.getRepository(Timeout),
-	commandRepo: AppDataSource.getRepository(CommandEntity),
-	notificationRepo: AppDataSource.getRepository(Notification)
-}
 
 export interface DbRepositories {
 	wordleRepo: Repository<WordleWord>
 	colorRepo: Repository<ColorHistory>
 	channelRepo: Repository<Channel>
-    watchRepo: Repository<WatchChannel>
-    userRepo: Repository<TwitchUser>
-	banRepo: Repository<Ban>,
+	watchRepo: Repository<WatchChannel>
+	userRepo: Repository<TwitchUser>
+	banRepo: Repository<Ban>
 	timeoutRepo: Repository<Timeout>
 	commandRepo: Repository<CommandEntity>
 	notificationRepo: Repository<Notification>
+	notificationChannelRepo: Repository<NotificationChannel>
 }
 
-export { repositories }
+export class DB implements DbRepositories {
+	wordleRepo: Repository<WordleWord>
+	colorRepo: Repository<ColorHistory>
+	channelRepo: Repository<Channel>
+	watchRepo: Repository<WatchChannel>
+	userRepo: Repository<TwitchUser>
+	banRepo: Repository<Ban>
+	timeoutRepo: Repository<Timeout>
+	commandRepo: Repository<CommandEntity>
+	notificationRepo: Repository<Notification>
+	notificationChannelRepo: Repository<NotificationChannel>
+	dataSource: DataSource
+
+	constructor(dataSource: DataSource = AppDataSource) {
+		this.wordleRepo = dataSource.getRepository(WordleWord)
+		this.colorRepo = dataSource.getRepository(ColorHistory)
+		this.channelRepo = dataSource.getRepository(Channel)
+		this.watchRepo = dataSource.getRepository(WatchChannel)
+		this.userRepo = dataSource.getRepository(TwitchUser)
+		this.banRepo = dataSource.getRepository(Ban)
+		this.timeoutRepo = dataSource.getRepository(Timeout)
+		this.commandRepo = dataSource.getRepository(CommandEntity)
+		this.notificationRepo = dataSource.getRepository(Notification)
+		this.notificationChannelRepo =
+			dataSource.getRepository(NotificationChannel)
+
+		this.dataSource = dataSource
+	}
+	async initialize(): Promise<DB>{
+		await this.dataSource.initialize()
+		return this
+	}
+}

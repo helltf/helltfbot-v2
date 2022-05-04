@@ -1,35 +1,39 @@
 import { customLogMessage } from '../logger/logger-export.js'
 import { Client } from 'tmi.js'
-import { Command } from '../commands/export/command'
+import { Command } from '../commands/export/types'
 import { Cooldown } from '../commands/export/cooldown.js'
-import { DbRepositories } from 'db/export-repositories.js'
+import { DB, DbRepositories } from 'db/export-repositories.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
 import { modules } from '../modules/export/export-modules.js'
 import { generateToken } from '../api/twitch/token.js'
 import { LogType } from '../logger/log-type.js'
+import { PubSub } from '../modules/pubsub/pubsub.js'
 
 export class TwitchBot {
 	client: Client
 	watchclient: Client
 	commands: Map<string, Command>
 	cooldown: Cooldown
-	db: DbRepositories
+	db: DB
 	twitchAT: string
-	log: (...args: any) => void
+	log: (type: LogType,...args: any) => void
+	pubSub: PubSub
 
 	constructor(client: Client, watchclient: Client) {
 		this.log = customLogMessage
 		this.client = client
 		this.watchclient = watchclient
 		this.cooldown = new Cooldown()
+		this.pubSub = new PubSub()
 	}
 
 	async init(): Promise<TwitchBot> {
 		this.twitchAT = await generateToken()
 		await this.client.connect()
 		await this.watchclient.connect()
+		this.pubSub.connect()
 		this.log(LogType.TWITCHBOT, 'Successfully logged in')
 		updateCommandsInDb()
 
@@ -46,8 +50,8 @@ export class TwitchBot {
 		this.commands = commandMap
 	}
 
-	setRepositories(repos: DbRepositories) {
-		this.db = repos
+	setRepositories(db: DB) {
+		this.db = db
 	}
 
 	async joinChannels() {

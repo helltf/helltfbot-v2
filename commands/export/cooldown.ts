@@ -1,4 +1,4 @@
-import { Command } from './command.js'
+import { Command } from './types.js'
 
 export class Cooldown {
 	cooldowns: Map<string, string[]>
