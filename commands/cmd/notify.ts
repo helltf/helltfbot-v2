@@ -82,16 +82,17 @@ function getConnection(): PubSubConnection {
 		: openConnections[0]
 }
 
-async function streamerNotExisting(streamer: string): Promise<boolean> {
+export async function streamerNotExisting(streamer: string): Promise<boolean> {
 	return (
 		(await hb.db.notificationChannelRepo.findOneBy({ name: streamer })) === null
 	)
 }
-function eventIsNotValid(event: string) {
+
+export function eventIsNotValid(event: string) {
 	return !Object.values(UpdateEventType).includes(event as UpdateEventType)
 }
 
-async function updateNotification(
+export async function updateNotification(
 	channel: string,
 	streamer: string,
 	event: UpdateEventType,
@@ -112,7 +113,7 @@ async function updateNotification(
 			}
 		)
 	} else {
-		let result = await hb.db.notificationRepo.save({
+		await hb.db.notificationRepo.save({
 			channel: channel,
 			streamer: streamer,
 			[event]: true,
@@ -121,14 +122,14 @@ async function updateNotification(
 	}
 }
 
-async function userHasNotification(
-	id: number,
+export async function userHasNotification(
+	userId: number,
 	streamer: string
 ): Promise<boolean> {
 	return (
 		(await hb.db.notificationRepo.findOneBy({
 			user: {
-				id: id,
+				id: userId,
 			},
 			streamer: streamer,
 		})) !== null
