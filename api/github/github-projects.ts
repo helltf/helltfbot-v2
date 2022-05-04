@@ -1,6 +1,6 @@
 export enum Projects{
-    helltfbot_v2 = "GITHUB_ENDPOINT_HELLTFBOT_V2",
-    inst_mono = "GITHUB_ENDPOINT_INST_MONO",
-    go_discord_bot = "GITHUB_ENDPOINT_GO_DISCORD_BOT"
+    helltfbot_v2 = "https://api.github.com/repos/helltf/helltfbot-v2/actions/workflows/build-test.yml/runs",
+    inst_mono = "https://api.github.com/repos/helltf/inst_mono/actions/workflows/main.yml/runs",
+    go_discord_bot = "https://api.github.com/repos/helltf/go-discord-bot/actions/workflows/go.yml/runs"
 }
 

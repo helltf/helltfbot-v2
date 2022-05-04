@@ -1,4 +1,5 @@
 import { DataSource} from "typeorm";
-import {typeormconf} from '../ormconfig.js'
+import { getOrmConf } from "../ormconfig.js";
 
-export const AppDataSource = new DataSource(typeormconf)
+const config = getOrmConf()
+export const AppDataSource = new DataSource(config)

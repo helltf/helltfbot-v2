@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../commands/export/command.js'
+import { Command } from '../../commands/export/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { BotResponse } from '../response.js'
 
@@ -12,8 +12,8 @@ const handleChat = async (
 	message: string,
 	self: boolean
 ) => {
-
 	if (self) return
+	updateUser(user)
 	if (!message?.toLowerCase()?.startsWith(prefix)) return
 
 	channel = channel.replace('#', '')
@@ -40,10 +40,12 @@ function sendMessage(channel: string, message: string) {
 }
 
 function sendResponse({ success, response, channel }: BotResponse) {
+	if(!response) return
+
 	if (success) {
 		sendMessage(channel, response)
 	} else {
-		hb.client.say(channel, DEFAULT_ERROR)
+		sendMessage(channel, `❗ Error while executing ➡ ` + response)
 	}
 }
 
@@ -58,5 +60,32 @@ function userHasCooldown(
 	return hb.cooldown.userHasCooldown(command, id)
 }
 
+async function updateUser(user: ChatUserstate){
+	let id = parseInt(user['user-id'])
+
+	let userEntry = await hb.db.userRepo.findOneBy({
+		id: id
+	})
+
+	if(userEntry){
+		return await hb.db.userRepo.update({
+			id: id
+		},{
+			color: user.color,
+			display_name: user['display-name'],
+			name: user.username,
+		})
+	}
+
+	hb.db.userRepo.save({
+		color: user.color,
+		display_name: user['display-name'],
+		name: user.username,
+		id: id,
+		notifications: [],
+		permission: 5,
+		registered_at: Date.now(),
+	})
+}
 
 export {handleChat}
