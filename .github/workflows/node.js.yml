@@ -12,8 +12,6 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-    env: 
-      NODE_ENV: prod
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -25,8 +23,28 @@ jobs:
       run: |
         npm install typescript
         npm run build
- 
-  test:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Run build script
+      run: |
+        npm install typescript
+        npm run build
+    - name: Run unit tests
+      env: 
+        NODE_ENV: test
+      run: npm run unit-tests
+
+  integration-tests:
     
     runs-on: ubuntu-latest
     
@@ -59,7 +77,7 @@ jobs:
           npm install typescript
           npm run build
       - name: Run Tests
-        run: npm t
+        run: npm run integration-tests
         
         env:
           DB_HOST: mariadb
