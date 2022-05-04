@@ -1,46 +1,45 @@
-name: PostgreSQL service example
+name: Integration tests
 on: push
-
 jobs:
   
   container-job:
+    
     runs-on: ubuntu-latest
-
+    
     container: node:16
     
     services:
       
       mariadb:
-        
-        image: mariadb:latest
         ports:
           - 3306:3306
+        image: mariadb
+        
         env:
-          MYSQL_USER: root
-          MYSQL_PASSWORD: test
           MYSQL_DATABASE: twitch
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_USER: admin
+          MYSQL_PASSWORD: test
           MYSQL_ROOT_PASSWORD: test
-          options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+        
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       
       - name: Check out repository code
         uses: actions/checkout@v3
       
+      
       - name: Install dependencies
-        run: npm install
-
-      - name: Connect to PostgreSQL
-        env:
-          NODE_ENV: test
-          TEST_DB_PORT: ${{ job.services.mariadb.ports[3306] }}
-          PIPELINE: true
-          TEST_DB_HOST: postgres
-
         run: |
-          echo ${{ job.services.mariadb }}
-          docker network ls
+          npm ci
           npm install typescript
           npm run build
-          npm run pipeline-test
+      - name: Run Tests
+        run: npm t
         
-        
+        env:
+          DB_HOST: mariadb
+          DB_PORT: 3306
+          DB_USERNAME: admin
+          DB_PASSWORD: test
+          DB_DATABASE: twitch
