@@ -23,13 +23,13 @@ const checkForUpdate = async (project: Projects, count: number) => {
 	if (!success) return
 
 	if (count === undefined) {
-		setCount(project, data.count)
+		setCount(project, data?.count)
 		return
 	}
 
 	if (count !== data?.count && data?.status === 'completed') {
 		announcePipeLineFinish(data)
-		setCount(project, data.count)
+		setCount(project, data?.count)
 	}
 }
 
