@@ -3,7 +3,6 @@ import * as WS from 'ws'
 import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
 import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
-import { Module } from '../export/module.js'
 import { NotificationHandler } from './notification-handler.js'
 import {
 	WebSocketConnection,
@@ -71,6 +70,7 @@ export class PubSubConnection implements WebSocketConnection {
 			},
 		}
 	}
+	
 	handleIncomingMessage({ data }: any) {
 		let parsedData = JSON.parse(data)
 		this.logError(parsedData.error)
