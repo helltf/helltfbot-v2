@@ -25,7 +25,8 @@ const {
 	TEST_DB_DATABASE,
 } = process.env
 
-const getOrmConf = (env:string = process.env.NODE_ENV): MysqlConnectionOptions => {
+const env = process.env.NODE_ENV
+const getOrmConf = (): MysqlConnectionOptions => {
 	if (env === 'test') {
 		return getTestOrmConf()
 	}

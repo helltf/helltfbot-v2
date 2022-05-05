@@ -29,7 +29,7 @@ describe('', () => {
 	let notification = exampleNotificationEntity
 
 	beforeAll(async () => {
-		let src = new DataSource(getOrmConf('test'))
+		let src = new DataSource(getOrmConf())
 		hb.db = await new DB(src).initialize()
 	})
 
@@ -38,6 +38,7 @@ describe('', () => {
 		streamer = 'streamer'
 		notification = exampleNotificationEntity
 		user = exampleTwitchUserEntity
+
 		await clearDb(hb.db.dataSource)
 	})
 
