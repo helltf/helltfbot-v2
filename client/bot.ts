@@ -2,7 +2,6 @@ import { customLogMessage } from '../logger/logger-export.js'
 import { Client } from 'tmi.js'
 import { Command } from '../commands/export/types'
 import { Cooldown } from '../commands/export/cooldown.js'
-import { DB, DbRepositories } from 'db/export-repositories.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
@@ -12,6 +11,7 @@ import { LogType } from '../logger/log-type.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
 import { watchJoinAllChannels } from './watchhandlers/join.js'
 import commands from '../commands/export/export-commands.js'
+import { DB } from '../db/export-repositories.js'
 
 export class TwitchBot {
 	client: Client
