@@ -9,5 +9,4 @@ globalThis.hb = new TwitchBot(mainClient, watchClient)
 	hb.joinChannels()
 	hb.startJobs()
 	hb.initModules()
-
 })()

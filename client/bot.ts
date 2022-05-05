@@ -22,7 +22,7 @@ export class TwitchBot {
 	twitchAT: string
 	log: (type: LogType,...args: any) => void
 	pubSub: PubSub
-	NODE_ENV: 'prod'|'dev'|'test'
+	NODE_ENV: 'prod' | 'dev' | 'test'
 
 	constructor(client: Client, watchclient: Client) {
 		this.NODE_ENV = process.env.NODE_ENV
@@ -76,7 +76,7 @@ export class TwitchBot {
 			execute()
 			setInterval(execute, delay)
 		}
-		
+
 		this.log(LogType.JOBS, `${jobs.length} have been initialized`)
 	}
 
