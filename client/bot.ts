@@ -10,6 +10,8 @@ import { modules } from '../modules/export/export-modules.js'
 import { generateToken } from '../api/twitch/token.js'
 import { LogType } from '../logger/log-type.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
+import { watchJoinAllChannels } from './watchhandlers/join.js'
+import commands from '../commands/export/export-commands.js'
 
 export class TwitchBot {
 	client: Client
@@ -20,24 +22,34 @@ export class TwitchBot {
 	twitchAT: string
 	log: (type: LogType,...args: any) => void
 	pubSub: PubSub
+	NODE_ENV: 'prod'|'dev'|'test'
 
 	constructor(client: Client, watchclient: Client) {
+		this.NODE_ENV = process.env.NODE_ENV
 		this.log = customLogMessage
 		this.client = client
 		this.watchclient = watchclient
 		this.cooldown = new Cooldown()
 		this.pubSub = new PubSub()
+		this.db = new DB()
+		this.setCommands(commands)
 	}
 
 	async init(): Promise<TwitchBot> {
 		this.twitchAT = await generateToken()
 		await this.client.connect()
 		await this.watchclient.connect()
-		this.pubSub.connect()
+		await this.db.initialize()
+		this.startPubSub()
 		this.log(LogType.TWITCHBOT, 'Successfully logged in')
 		updateCommandsInDb()
 
 		return this
+	}
+
+	startPubSub(){
+		if(hb.NODE_ENV === 'dev') return
+		this.pubSub.connect()
 	}
 
 	setCommands(commands: Command[]) {
@@ -50,13 +62,11 @@ export class TwitchBot {
 		this.commands = commandMap
 	}
 
-	setRepositories(db: DB) {
-		this.db = db
-	}
-
 	async joinChannels() {
-		mainJoinAllChannels()
-		mainJoinAllChannels()
+		watchJoinAllChannels()
+		await mainJoinAllChannels()
+		hb.sendMessage(process.env.MAIN_USER, 'Okayge TeaTime')
+
 	}
 
 	startJobs() {
@@ -66,6 +76,7 @@ export class TwitchBot {
 			execute()
 			setInterval(execute, delay)
 		}
+		
 		this.log(LogType.JOBS, `${jobs.length} have been initialized`)
 	}
 
