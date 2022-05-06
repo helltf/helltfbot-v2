@@ -60,9 +60,9 @@ jobs:
         env:
           MYSQL_DATABASE: twitch
           MYSQL_HOST: 127.0.0.1
-          MYSQL_USER: admin
-          MYSQL_PASSWORD: test
-          MYSQL_ROOT_PASSWORD: test
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
@@ -82,6 +82,6 @@ jobs:
         env:
           DB_HOST: mariadb
           DB_PORT: 3306
-          DB_USERNAME: admin
-          DB_PASSWORD: test
+          DB_USERNAME: ${{ secrets.MYSQL_USER }}
+          DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           DB_DATABASE: twitch

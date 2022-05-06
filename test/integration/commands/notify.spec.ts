@@ -21,7 +21,7 @@ import {
 import { clearDb } from '../../test-utils/clear.js'
 import { Notification } from '../../../db/export-entities.js'
 
-describe('', () => {
+describe('test notify command', () => {
 	globalThis.hb = new TwitchBot(mainClient, watchClient)
 	let channel = 'testChannel'
 	let streamer = 'streamer'
