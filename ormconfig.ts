@@ -25,15 +25,15 @@ const {
 	TEST_DB_DATABASE,
 } = process.env
 
-const env = process.env.NODE_ENV
 const getOrmConf = (): MysqlConnectionOptions => {
-	if (env === 'test') {
+	if (process.env.NODE_ENV == 'test') {
 		return getTestOrmConf()
 	}
 
 	return getDevOrmConf()
 }
 function getTestOrmConf(): MysqlConnectionOptions {
+
 	return {
 		type: 'mariadb',
 		host: TEST_DB_HOST,
