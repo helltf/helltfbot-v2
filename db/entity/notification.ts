@@ -12,7 +12,7 @@ import {
 import { TwitchUser } from './user.js'
 
 @Entity('notification')
-@Index(['streamer', 'channel'], {unique: true})
+@Index(['streamer', 'user'], {unique: true})
 export class Notification extends BaseEntity implements NotificationInfo {
 	@PrimaryGeneratedColumn('increment')
 	id: number

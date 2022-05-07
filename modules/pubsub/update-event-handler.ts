@@ -66,7 +66,7 @@ export class UpdateEventHandler {
 
 	async handleLiveEvent(streamer: string): Promise<Map<string, string[]>> {
 		let notificationMessageInfo = await this.getNotificationMessageInfo(
-			UpdateEventType.OFFLINE,
+			UpdateEventType.LIVE,
 			streamer
 		)
 
