@@ -59,10 +59,29 @@ describe('Test event handler to return the correct messages', () => {
 
         await saveNotificationWithUser(notification1)
         await saveNotificationWithUser(notification2)
-        console.log(await hb.db.notificationRepo.find())
         let result = await eventHandler.getNotifiedUsers(streamer, type)
 
         let expectedResult = 2
+
+        expect(result).toHaveSize(expectedResult)
+    })
+
+    it('get notified user, 2 users have notifications on different events return 1 notification', async() => {
+        let type = UpdateEventType.LIVE
+        let notification1 = getExampleNotificationEntity()
+        let notification2 = getExampleNotificationEntity()
+
+        notification1[type] = true
+        notification2[UpdateEventType.GAME] = true
+        notification2.user.id = 2
+        notification2.channel = 'channel2'
+
+        await saveNotificationWithUser(notification1)
+        await saveNotificationWithUser(notification2)
+
+        let result = await eventHandler.getNotifiedUsers(streamer, type)
+
+        let expectedResult = 1
 
         expect(result).toHaveSize(expectedResult)
     })
