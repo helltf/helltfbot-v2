@@ -27,4 +27,35 @@ describe('test update event handler unit tests', () => {
         let expectedMessage = `@${streamer} has gone live`
         expect(result).toBe(expectedMessage)
     })
+
+    it('get notification message for title event return title message', () => {
+        let type = UpdateEventType.TITLE
+
+        let result = handler.getNotificationMessage(type, streamer, value)
+
+        let expectedMessage = `@${streamer} has changed the title to ${value}`
+
+        expect(result).toBe(expectedMessage)
+    })
+
+    it('get notification message for game event return game message', () => {
+        let type = UpdateEventType.GAME
+
+        let result = handler.getNotificationMessage(type, streamer, value)
+
+        let expectedMessage = `@${streamer} has changed the game to ${value}`
+
+        expect(result).toBe(expectedMessage)
+    })
+
+    
+    it('get notification message for offline event return offline message', () => {
+        let type = UpdateEventType.GAME
+
+        let result = handler.getNotificationMessage(type, streamer, value)
+
+        let expectedMessage = `@${streamer} has changed the title to ${value}`
+
+        expect(result).toBe(expectedMessage)
+    })
 })
