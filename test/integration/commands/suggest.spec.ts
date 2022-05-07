@@ -1,6 +1,7 @@
 import { suggest } from "../../../commands/cmd/suggest.js"
 import { getExampleUserState } from "../../../spec/examples/user.js"
 import { clearDb } from "../../test-utils/clear.js"
+import { disconnectDatabase } from "../../test-utils/disconnect.js"
 import { setupDatabase } from "../../test-utils/setup-db.js"
 
 describe('test suggest command', () => {
@@ -11,15 +12,14 @@ describe('test suggest command', () => {
         channel = 'channel'
         await setupDatabase()
     })
-
     
-	afterEach(async () => {
-		await clearDb(hb.db.dataSource)
-	})
-
     beforeEach(async () => {
 		await clearDb(hb.db.dataSource)
 	})
+
+    afterAll(async () => {
+        await disconnectDatabase()
+    })
 
     it('suggestion is undefined return error', async() => {
         let suggestion = ''
