@@ -21,7 +21,8 @@ export const exampleTwitchUserEntity = {
 	notifications: [],
 }
 
-const getTwitchUserEntity = (): TwitchUser => {
+
+export const getTwitchUserEntity = (): TwitchUser => {
 	let user = new TwitchUser()
 
 	const {
@@ -55,9 +56,11 @@ export const exampleNotificationEntity: NotificationInfo = {
 	user: getTwitchUserEntity(),
 }
 
-export const getExampleNotificationEntity = async(): Promise<Notification> => {
+export const getExampleNotificationEntity = (): Notification => {
 	let notification = new Notification()
+
 	const {streamer, channel, live, offline, title, game, user} = exampleNotificationEntity
+	
 	notification.channel = channel
 	notification.game = game
 	notification.live = live
