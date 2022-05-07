@@ -20,7 +20,7 @@ const suggest = new Command({
             success: false
         }
 
-        await saveSuggestion(suggestion)
+        await saveSuggestion(suggestion, parseInt(userstate['user-id']))
 		return {
 			response: '',
 			channel: channel,
@@ -28,7 +28,13 @@ const suggest = new Command({
 		}
 	},
 })
-function saveSuggestion(suggestion: string){
-    
+function saveSuggestion(suggestion: string, user_id: number){
+    hb.db.suggestionRepo.save({
+        date: Date.now(),
+        suggestion,
+        user: {
+            id: user_id
+        }
+    })
 }
 export {suggest}
