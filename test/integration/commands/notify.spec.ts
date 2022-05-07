@@ -15,6 +15,7 @@ import {
 import { clearDb } from '../../test-utils/clear.js'
 import { Notification, TwitchUser } from '../../../db/export-entities.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
+import { disconnectDatabase } from '../../test-utils/disconnect.js'
 
 describe('test notify command', () => {
 	let channel = 'testChannel'
@@ -36,7 +37,7 @@ describe('test notify command', () => {
 	})
 
 	afterAll(async () => {
-		await clearDb(hb.db.dataSource)
+		await disconnectDatabase()
 	})
 
 	it('event is not valid return error', async () => {
