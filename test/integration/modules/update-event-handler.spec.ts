@@ -20,7 +20,7 @@ describe('Test event handler to return the correct messages', () => {
 		await setupDatabase()
 	})
 
-    afterEach(async ()=> {
+    afterAll(async ()=> {
         await clearDb(hb.db.dataSource)
     })
 
