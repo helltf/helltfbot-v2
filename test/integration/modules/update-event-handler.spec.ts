@@ -9,11 +9,9 @@ import { Notification } from '../../../db/entity/notification.js'
 describe('Test event handler to return the correct messages', () => {
 	let eventHandler: UpdateEventHandler = new UpdateEventHandler()
     let streamer: string
-    let notification: Notification
 
 	beforeEach(async () => {
         streamer = `streamer`
-        notification = await getExampleNotificationEntity()
 		eventHandler = new UpdateEventHandler()
 		await clearDb(hb.db.dataSource)
 	})
@@ -37,6 +35,7 @@ describe('Test event handler to return the correct messages', () => {
 
     it('get notified user, user has notification return 1 notification', async() => {
         let type = UpdateEventType.LIVE
+        let notification = getExampleNotificationEntity()
         notification[type] = true
 
         await hb.db.userRepo.save(notification.user)
@@ -51,14 +50,19 @@ describe('Test event handler to return the correct messages', () => {
 
     it('get notified user, 2 users have notifications return 2 notification', async() => {
         let type = UpdateEventType.LIVE
-        notification[type] = true
-        await saveNotificationWithUser(notification)
-        notification.user.id = 2
-        await saveNotificationWithUser(notification)
+        let notification1 = getExampleNotificationEntity()
+        let notification2 = getExampleNotificationEntity()
+        notification1[type] = true
+        notification2[type] = true
+        notification2.user.id = 2
+        notification2.channel = 'channel2'
 
+        await saveNotificationWithUser(notification1)
+        await saveNotificationWithUser(notification2)
+        console.log(await hb.db.notificationRepo.find())
         let result = await eventHandler.getNotifiedUsers(streamer, type)
 
-        let expectedResult = 1
+        let expectedResult = 2
 
         expect(result).toHaveSize(expectedResult)
     })
