@@ -8,8 +8,8 @@ export class TwitchUser extends BaseEntity{
     @Column('varchar')
     name: string
 
-    @Column('varchar')
-    color: string
+    @Column('varchar', {nullable: true})
+    color?: string
 
     @Column('tinyint')
     permission: number
