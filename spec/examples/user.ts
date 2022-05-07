@@ -11,6 +11,10 @@ export const exampleUser: ChatUserstate = {
 	},
 }
 
+export const getExampleUserState = (): ChatUserstate => {
+	return {... exampleUser}
+}
+
 export const exampleTwitchUserEntity = {
 	id: 1,
 	name: 'user',
@@ -19,6 +23,7 @@ export const exampleTwitchUserEntity = {
 	registered_at: Date.now(),
 	display_name: 'user',
 	notifications: [],
+	suggestions: []
 }
 
 
