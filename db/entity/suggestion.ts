@@ -14,4 +14,5 @@ export class Suggestion extends BaseEntity{
 
     @Column('bigint')
     date: number
+    
 }
