@@ -1,8 +1,4 @@
 import 'dotenv/config'
-import { DataSource, Db } from 'typeorm'
-import { TwitchBot } from '../../../client/bot.js'
-import { mainClient } from '../../../client/main-bot.js'
-import { watchClient } from '../../../client/track-bot.js'
 import {
 	eventIsNotValid,
 	notify,
@@ -10,9 +6,7 @@ import {
 	updateNotification,
 	userHasNotification,
 } from '../../../commands/cmd/notify.js'
-import { DB } from '../../../db/export-repositories.js'
 import { UpdateEventType } from '../../../modules/pubsub/types.js'
-import { getOrmConf } from '../../../ormconfig.js'
 import {
 	exampleNotificationEntity,
 	exampleTwitchUserEntity,
@@ -20,17 +14,16 @@ import {
 } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { Notification } from '../../../db/export-entities.js'
+import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test notify command', () => {
-	globalThis.hb = new TwitchBot(mainClient, watchClient)
 	let channel = 'testChannel'
 	let streamer = 'streamer'
 	let user = exampleTwitchUserEntity
 	let notification = exampleNotificationEntity
 
 	beforeAll(async () => {
-		let src = new DataSource(getOrmConf())
-		hb.db = await new DB(src).initialize()
+		await setupDatabase()
 	})
 
 	beforeEach(async () => {
