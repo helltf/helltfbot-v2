@@ -1,16 +1,4 @@
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
-import {
-	Notification,
-	Ban,
-	Channel,
-	ColorHistory,
-	Timeout,
-	TwitchUser,
-	WatchChannel,
-	WordleWord,
-	CommandEntity,
-	NotificationChannel,
-} from './db/export-entities.js'
 
 const {
 	DB_HOST,
