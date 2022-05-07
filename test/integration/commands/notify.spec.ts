@@ -116,6 +116,7 @@ describe('test notify command', () => {
 		let result = await userHasNotification(notification.user.id, streamer)
 
 		expect(result).toBeTrue()
+
 	})
 })
 
