@@ -22,6 +22,10 @@ describe('Test event handler to return the correct messages', () => {
 		await setupDatabase()
 	})
 
+    afterEach(async ()=> {
+        await clearDb(hb.db.dataSource)
+    })
+
 	it('get notified user no user existing return empty array', async() => {
         let type = UpdateEventType.LIVE
 
@@ -31,7 +35,7 @@ describe('Test event handler to return the correct messages', () => {
         expect(result).toEqual(expectedResult)
     })
 
-    it('get notified user user has notification return 1 notification', async() => {
+    it('get notified user, user has notification return 1 notification', async() => {
         let type = UpdateEventType.LIVE
         notification[type] = true
 
@@ -44,4 +48,23 @@ describe('Test event handler to return the correct messages', () => {
 
         expect(result).toHaveSize(expectedResult)
     })
+
+    it('get notified user, 2 users have notifications return 2 notification', async() => {
+        let type = UpdateEventType.LIVE
+        notification[type] = true
+        await saveNotificationWithUser(notification)
+        notification.user.id = 2
+        await saveNotificationWithUser(notification)
+
+        let result = await eventHandler.getNotifiedUsers(streamer, type)
+
+        let expectedResult = 1
+
+        expect(result).toHaveSize(expectedResult)
+    })
 })
+
+async function saveNotificationWithUser(notification: Notification){
+    await hb.db.userRepo.save(notification.user)
+    await hb.db.notificationRepo.save(notification)
+}
