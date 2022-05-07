@@ -1,6 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { NotificationInfo } from '../../db/entity/notification.js'
-import { TwitchUser } from '../../db/export-entities.js'
+import { TwitchUser, Notification } from '../../db/export-entities.js'
 
 export const exampleUser: ChatUserstate = {
 	username: 'helltf',
@@ -21,7 +21,8 @@ export const exampleTwitchUserEntity = {
 	notifications: [],
 }
 
-const getTwitchUserEntity = (): TwitchUser => {
+
+export const getTwitchUserEntity = (): TwitchUser => {
 	let user = new TwitchUser()
 
 	const {
@@ -53,4 +54,20 @@ export const exampleNotificationEntity: NotificationInfo = {
 	title: false,
 	game: false,
 	user: getTwitchUserEntity(),
+}
+
+export const getExampleNotificationEntity = (): Notification => {
+	let notification = new Notification()
+
+	const {streamer, channel, live, offline, title, game, user} = exampleNotificationEntity
+	
+	notification.channel = channel
+	notification.game = game
+	notification.live = live
+	notification.title = title
+	notification.offline = offline
+	notification.user = user
+	notification.streamer = streamer
+
+	return notification
 }
