@@ -43,7 +43,7 @@ function getTestOrmConf(): MysqlConnectionOptions {
 		database: TEST_DB_DATABASE,
 		synchronize: true,
 		logging: false,
-		entities: getEntities(),
+		entities: ['dist/db/entity/**/*.js'],
 		migrations: ['db/migrations/**/*.ts'],
 		subscribers: ['db/subscriber/**/*.ts'],
 	}
@@ -65,18 +65,4 @@ function getDevOrmConf(): MysqlConnectionOptions {
 	}
 }
 
-function getEntities(): any[] {
-	return [
-		Ban,
-		Channel,
-		ColorHistory,
-		Timeout,
-		TwitchUser,
-		WatchChannel,
-		WordleWord,
-		CommandEntity,
-		Notification,
-		NotificationChannel,
-	]
-}
 export { getOrmConf }
