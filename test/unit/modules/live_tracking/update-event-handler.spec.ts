@@ -50,11 +50,11 @@ describe('test update event handler unit tests', () => {
 
     
     it('get notification message for offline event return offline message', () => {
-        let type = UpdateEventType.GAME
+        let type = UpdateEventType.OFFLINE
 
         let result = handler.getNotificationMessage(type, streamer, value)
 
-        let expectedMessage = `@${streamer} has changed the title to ${value}`
+        let expectedMessage = `@${streamer} has gone offline`
 
         expect(result).toBe(expectedMessage)
     })
