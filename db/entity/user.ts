@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Notification } from "./notification.js";
+import { Suggestion } from "./suggestion.js";
 @Entity('user')
 export class TwitchUser extends BaseEntity{
     @PrimaryColumn('int')
@@ -22,4 +23,7 @@ export class TwitchUser extends BaseEntity{
     
     @OneToMany(() => Notification, notification => notification.user)
     notifications: Notification[]
+
+    @OneToMany(() => Suggestion, suggestion => suggestion.user)
+    suggestions: Suggestion[]
 }
