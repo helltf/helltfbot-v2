@@ -1,6 +1,7 @@
 import { ChatUserstate, Client } from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
 import { handleChat } from './mainhandlers/chat.js'
+import { handleJoin } from './mainhandlers/join.js'
 import { handlePart } from './mainhandlers/part.js'
 
 const mainClient = createMainClient()
@@ -45,4 +46,9 @@ mainClient.on('part', (channel: string, username: string, self: boolean) => {
 	handlePart(channel, username)
 })
 
+mainClient.on('join', (channel: string, username: string, self: boolean) => {
+	if(!self) return 
+
+	handleJoin(channel)
+})
 export { mainClient }
