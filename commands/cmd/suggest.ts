@@ -28,8 +28,9 @@ const suggest = new Command({
 		}
 	},
 })
-function saveSuggestion(suggestion: string, user_id: number){
-    hb.db.suggestionRepo.save({
+
+async function saveSuggestion(suggestion: string, user_id: number){
+    return await hb.db.suggestionRepo.save({
         date: Date.now(),
         suggestion,
         user: {
