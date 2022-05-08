@@ -8,7 +8,7 @@ const suggest = new Command({
 	permissions: 5,
 	requiredParams: [],
 	optionalParams: [],
-	cooldown: 5000,
+	cooldown: 30000,
 	execute: async (
 		channel: string,
 		userstate: ChatUserstate,
@@ -19,7 +19,7 @@ const suggest = new Command({
             channel,
             success: false
         }
-		
+
 		let suggestionMessage = suggestion.join(' ')
 
         let id = await saveSuggestion(suggestionMessage, parseInt(userstate['user-id']))
