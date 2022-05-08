@@ -1,7 +1,39 @@
-import { LogType } from "../../logger/log-type.js"
-import { wait } from "../../utilities/timeout.js"
+import { LogType } from '../../logger/log-type.js'
+import { wait } from '../../utilities/timeout.js'
 
 const TWITCH_ERROR_MESSAGE = ['msg_channel_suspended']
+
+const incrementConnection = async (channel: string) => {
+	await hb.db.channelRepo.increment(
+		{
+			channel: channel,
+		},
+		'times_connected',
+		1
+	)
+}
+
+const saveChannel = async (channel: string) => {
+	let channelExsisting = await hb.db.channelRepo.countBy({
+		channel: channel
+	})
+
+	if(!channelExsisting) return
+
+	await hb.db.channelRepo.save({
+		channel: channel,
+		allowed: false,
+		allowed_live: true,
+		connect_timestamp: Date.now(),
+		times_connected: 1
+	})
+}
+
+export const handleJoin = async (channel: string) => {
+	channel = channel.replace('#', '')
+	await saveChannel(channel)
+	await incrementConnection(channel)
+}
 
 const mainJoinChannel = async (channel: string) => {
 	try {
@@ -35,7 +67,10 @@ const mainJoinAllChannels = async () => {
 		await wait`1s`
 	}
 
-	hb.log(LogType.TWITCHBOT, `Successfully joined ${joinedChannels.length} channels`)
+	hb.log(
+		LogType.TWITCHBOT,
+		`Successfully joined ${joinedChannels.length} channels`
+	)
 }
 
-export{mainJoinAllChannels}
+export { mainJoinAllChannels }
