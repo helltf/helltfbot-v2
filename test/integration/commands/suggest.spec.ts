@@ -75,5 +75,32 @@ describe('test suggest command', () => {
         expect(response.response).toEqual(expectedMessage)
         expect(response.success).toBeTrue()
     })
+
+    it('save two suggestions returns id 2', async() => {
+        let message = ['add', 'this', 'do', 'this']
+        await saveUserStateAsUser(user)
+
+        await hb.db.suggestionRepo.save({
+            date: 1,
+            suggestion: 'a',
+            user: {
+                id: parseInt(user["user-id"])
+            }
+        })
+
+        let response = await suggest.execute(channel, user, message)
+        let expectedId = 1
+
+        let savedEntity = await hb.db.suggestionRepo.findOneBy({
+            id: expectedId
+        })
+
+        let expectedMessage = `Succesfully saved your suggestion with id ${expectedId}` 
+        let expectedSavedSuggestion = `${message.join(' ')}`
+
+        expect(response.success).toBeTrue() 
+        expect(response.response).toBe(expectedMessage)
+        expect(savedEntity.suggestion).toBe(expectedSavedSuggestion)
+    })
 })
 
