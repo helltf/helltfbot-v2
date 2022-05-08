@@ -18,6 +18,7 @@ const saveChannel = async (channel: string) => {
 		channel: channel
 	})
 
+
 	if(!channelExsisting) return
 
 	await hb.db.channelRepo.save({
