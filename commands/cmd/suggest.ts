@@ -12,30 +12,33 @@ const suggest = new Command({
 	execute: async (
 		channel: string,
 		userstate: ChatUserstate,
-		[suggestion]: string[]
+		[...suggestion]: string[]
 	): Promise<BotResponse> => {
-        if(!suggestion) return {
+        if(!suggestion[0]) return {
             response: 'You have to specify a suggestion',
             channel,
             success: false
         }
+		
+		let suggestionMessage = suggestion.join(' ')
 
-        await saveSuggestion(suggestion, parseInt(userstate['user-id']))
+        let id = await saveSuggestion(suggestionMessage, parseInt(userstate['user-id']))
+
 		return {
-			response: '',
+			response: `Succesfully saved your suggestion with id ${id}`,
 			channel: channel,
 			success: true
 		}
 	},
 })
 
-async function saveSuggestion(suggestion: string, user_id: number){
-    return await hb.db.suggestionRepo.save({
+async function saveSuggestion(suggestion: string, user_id: number): Promise<number>{
+    return (await hb.db.suggestionRepo.save({
         date: Date.now(),
         suggestion,
         user: {
             id: user_id
         }
-    })
+    })).id
 }
 export {suggest}
