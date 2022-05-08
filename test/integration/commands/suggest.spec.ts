@@ -89,7 +89,7 @@ describe('test suggest command', () => {
         })
 
         let response = await suggest.execute(channel, user, message)
-        let expectedId = 1
+        let expectedId = 2
 
         let savedEntity = await hb.db.suggestionRepo.findOneBy({
             id: expectedId
