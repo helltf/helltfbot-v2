@@ -6,7 +6,7 @@ import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test rmsuggest command', () => {
+describe('test rmsuggest command', () => {
 	let channel: string
 	let user: ChatUserstate
 	beforeAll(async () => {
