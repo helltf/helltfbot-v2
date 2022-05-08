@@ -32,7 +32,7 @@ describe('test notify command', () => {
 		streamer = 'streamer'
 		notification = getExampleNotificationEntity()
 		user = getTwitchUserEntity()
-
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 		await clearDb(hb.db.dataSource)
 	})
 

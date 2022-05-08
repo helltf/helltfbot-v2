@@ -14,6 +14,7 @@ describe('Test event handler to return the correct messages', () => {
 	beforeEach(async () => {
         streamer = `streamer`
 		eventHandler = new UpdateEventHandler()
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 		await clearDb(hb.db.dataSource)
 	})
 

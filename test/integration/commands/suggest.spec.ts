@@ -18,11 +18,7 @@ describe('test suggest command', () => {
     
     beforeEach(async () => {
 		await clearDb(hb.db.dataSource)
-        
-	})
-
-    afterEach(()=>{
-		
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 	})
 
     afterAll(async () => {
