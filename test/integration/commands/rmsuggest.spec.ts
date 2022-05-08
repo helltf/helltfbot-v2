@@ -6,7 +6,7 @@ import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-describe('test rmsuggest command', () => {
+fdescribe('test rmsuggest command', () => {
 	let channel: string
 	let user: ChatUserstate
 	beforeAll(async () => {
@@ -17,7 +17,7 @@ describe('test rmsuggest command', () => {
 		channel = 'channel'
 		user = getExampleUserState()
 		await clearDb(hb.db.dataSource)
-		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
 	})
 
 	afterAll(async () => {
@@ -35,6 +35,15 @@ describe('test rmsuggest command', () => {
 		)
 		expect(response.channel).toBe(channel)
 	})
+
+    it('id is not an number return error', async () => {
+		let message = ['a']
+
+		let response = await rmsuggest.execute(channel, user, message)
+
+        expect(response.success).toBeFalse()
+        expect(response.response).toBe('id has to be a number')
+    })
 
 	it('id is defined but not in database return error', async () => {
 		let id = '1'
