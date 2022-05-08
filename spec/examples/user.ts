@@ -9,6 +9,7 @@ export const exampleUser: ChatUserstate = {
 	badges: {
 		broadcaster: '1',
 	},
+	"display-name": 'helltf'
 }
 
 export const getExampleUserState = (): ChatUserstate => {
