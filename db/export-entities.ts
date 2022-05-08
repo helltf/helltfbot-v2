@@ -8,6 +8,7 @@ import { WordleWord } from './entity/wordle.js'
 import { CommandEntity } from './entity/command.js'
 import { Notification } from './entity/notification.js'
 import { NotificationChannel } from './entity/notification_channel.js'
+import { Suggestion } from './entity/suggestion.js'
 
 
 export {
@@ -20,5 +21,6 @@ export {
 	WordleWord,
 	CommandEntity,
 	Notification,
-	NotificationChannel
+	NotificationChannel,
+	Suggestion
 }

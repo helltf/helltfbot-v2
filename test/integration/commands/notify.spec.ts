@@ -15,6 +15,7 @@ import {
 import { clearDb } from '../../test-utils/clear.js'
 import { Notification, TwitchUser } from '../../../db/export-entities.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
+import { disconnectDatabase } from '../../test-utils/disconnect.js'
 
 describe('test notify command', () => {
 	let channel = 'testChannel'
@@ -31,12 +32,12 @@ describe('test notify command', () => {
 		streamer = 'streamer'
 		notification = getExampleNotificationEntity()
 		user = getTwitchUserEntity()
-
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 		await clearDb(hb.db.dataSource)
 	})
 
 	afterAll(async () => {
-		await clearDb(hb.db.dataSource)
+		await disconnectDatabase()
 	})
 
 	it('event is not valid return error', async () => {
@@ -116,6 +117,7 @@ describe('test notify command', () => {
 		let result = await userHasNotification(notification.user.id, streamer)
 
 		expect(result).toBeTrue()
+
 	})
 })
 

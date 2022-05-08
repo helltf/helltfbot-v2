@@ -1,16 +1,4 @@
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
-import {
-	Notification,
-	Ban,
-	Channel,
-	ColorHistory,
-	Timeout,
-	TwitchUser,
-	WatchChannel,
-	WordleWord,
-	CommandEntity,
-	NotificationChannel,
-} from './db/export-entities.js'
 
 const {
 	DB_HOST,
@@ -43,7 +31,7 @@ function getTestOrmConf(): MysqlConnectionOptions {
 		database: TEST_DB_DATABASE,
 		synchronize: true,
 		logging: false,
-		entities: getEntities(),
+		entities: ['dist/db/entity/**/*.js'],
 		migrations: ['db/migrations/**/*.ts'],
 		subscribers: ['db/subscriber/**/*.ts'],
 	}
@@ -65,18 +53,4 @@ function getDevOrmConf(): MysqlConnectionOptions {
 	}
 }
 
-function getEntities(): any[] {
-	return [
-		Ban,
-		Channel,
-		ColorHistory,
-		Timeout,
-		TwitchUser,
-		WatchChannel,
-		WordleWord,
-		CommandEntity,
-		Notification,
-		NotificationChannel,
-	]
-}
 export { getOrmConf }

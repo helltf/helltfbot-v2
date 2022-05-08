@@ -9,6 +9,11 @@ export const exampleUser: ChatUserstate = {
 	badges: {
 		broadcaster: '1',
 	},
+	"display-name": 'helltf'
+}
+
+export const getExampleUserState = (): ChatUserstate => {
+	return {... exampleUser}
 }
 
 export const exampleTwitchUserEntity = {
@@ -19,6 +24,7 @@ export const exampleTwitchUserEntity = {
 	registered_at: Date.now(),
 	display_name: 'user',
 	notifications: [],
+	suggestions: []
 }
 
 

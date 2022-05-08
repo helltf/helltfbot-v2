@@ -3,10 +3,7 @@ import {
 	Column,
 	Entity,
 	Index,
-	JoinColumn,
 	ManyToOne,
-	OneToOne,
-	PrimaryColumn,
 	PrimaryGeneratedColumn,
 } from 'typeorm'
 import { TwitchUser } from './user.js'

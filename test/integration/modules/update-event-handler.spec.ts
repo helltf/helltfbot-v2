@@ -5,6 +5,7 @@ import { getExampleNotificationEntity } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { Notification } from '../../../db/entity/notification.js'
+import { disconnectDatabase } from '../../test-utils/disconnect.js'
 
 describe('Test event handler to return the correct messages', () => {
 	let eventHandler: UpdateEventHandler = new UpdateEventHandler()
@@ -13,6 +14,7 @@ describe('Test event handler to return the correct messages', () => {
 	beforeEach(async () => {
         streamer = `streamer`
 		eventHandler = new UpdateEventHandler()
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 		await clearDb(hb.db.dataSource)
 	})
 
@@ -20,8 +22,8 @@ describe('Test event handler to return the correct messages', () => {
 		await setupDatabase()
 	})
 
-    afterEach(async ()=> {
-        await clearDb(hb.db.dataSource)
+    afterAll(async ()=> {
+        await disconnectDatabase()
     })
 
 	it('get notified user no user existing return empty array', async() => {

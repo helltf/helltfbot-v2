@@ -10,6 +10,7 @@ import {
 	CommandEntity,
 	Notification,
 	NotificationChannel,
+	Suggestion,
 } from './export-entities.js'
 import { AppDataSource } from './export-orm.js'
 
@@ -24,6 +25,7 @@ export interface DbRepositories {
 	commandRepo: Repository<CommandEntity>
 	notificationRepo: Repository<Notification>
 	notificationChannelRepo: Repository<NotificationChannel>
+	suggestionRepo: Repository<Suggestion>
 }
 
 export class DB implements DbRepositories {
@@ -37,6 +39,7 @@ export class DB implements DbRepositories {
 	commandRepo: Repository<CommandEntity>
 	notificationRepo: Repository<Notification>
 	notificationChannelRepo: Repository<NotificationChannel>
+	suggestionRepo: Repository<Suggestion>
 	dataSource: DataSource
 
 	constructor(dataSource: DataSource = AppDataSource) {
@@ -49,6 +52,7 @@ export class DB implements DbRepositories {
 		this.timeoutRepo = dataSource.getRepository(Timeout)
 		this.commandRepo = dataSource.getRepository(CommandEntity)
 		this.notificationRepo = dataSource.getRepository(Notification)
+		this.suggestionRepo = dataSource.getRepository(Suggestion)
 		this.notificationChannelRepo =
 			dataSource.getRepository(NotificationChannel)
 
