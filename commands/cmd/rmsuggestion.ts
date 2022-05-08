@@ -15,18 +15,26 @@ const rmsuggest = new Command({
 		user: ChatUserstate,
 		[id]: string[]
 	): Promise<BotResponse> => {
-		if (!id)
-			return {
-				success: false,
-				response: 'You need to specify an id to delete your suggestion',
-				channel: channel,
-			}
-		if (await idIsNotValidForUser(user['user-id'], id))
-			return {
-				success: false,
-				response: `Id ${id} not existing or the suggestion is created by somebody else`,
-				channel: channel,
-			}
+        let response:BotResponse = {
+            channel: channel,
+            success: false,
+            response: ''
+        }
+
+		if (!id){
+            response.response = 'You need to specify an id to delete your suggestion'
+			return response
+        }
+
+        if(!parseInt(id)){
+            response.response = `id has to be a number`
+            return response
+        }
+			
+		if (await idIsNotValidForUser(user['user-id'], id)){
+            response.response = `Id ${id} not existing or the suggestion is created by somebody else`
+			return response
+        }
         
         await deleteSuggestion(id)
 
