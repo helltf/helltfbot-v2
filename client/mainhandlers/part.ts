@@ -1,4 +1,4 @@
-function handlePart(channel: string, username: string) {
+function handlePart(channel: string) {
   hb.db.channelRepo.update(
     {
       channel: channel

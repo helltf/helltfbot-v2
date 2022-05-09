@@ -33,7 +33,7 @@ export class PipelineData {
   project: Projects
   event: string
 
-  constructor({ workflow_runs, total_count }: any, project: Projects) {
+  constructor({ workflow_runs, total_count }, project: Projects) {
     const { head_branch, status, conclusion, repository, event } =
       workflow_runs[0]
 

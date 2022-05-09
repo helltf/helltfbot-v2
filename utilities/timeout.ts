@@ -16,7 +16,7 @@ const mapTime = (string: string): number => {
   return mappings[unit] * number
 }
 
-const wait = ([time]: TemplateStringsArray): Promise<any> =>
+const wait = ([time]: TemplateStringsArray): Promise<NodeJS.Timeout> =>
   new Promise((res) => setTimeout(res, mapTime(time)))
 
 export { wait, mapTime }

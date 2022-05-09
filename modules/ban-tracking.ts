@@ -1,5 +1,3 @@
-import { Module } from './export/module.js'
-
 export class BanTracking {
   name = 'Ban'
   initialize = () => {

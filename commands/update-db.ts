@@ -1,5 +1,5 @@
 const addNewCommands = () => {
-  for (const [_, command] of hb.commands) {
+  for (const [, command] of hb.commands) {
     hb.db.commandRepo.save({
       ...command
     })

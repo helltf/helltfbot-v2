@@ -1,11 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  PrimaryColumn,
-  BeforeInsert,
-  BeforeUpdate
-} from 'typeorm'
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity('color_history')
 export class ColorHistory extends BaseEntity {

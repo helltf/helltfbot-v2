@@ -4,7 +4,6 @@ import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { BotResponse } from '../response.js'
 
 const prefix = process.env.PREFIX
-const DEFAULT_ERROR = `Error while executing your command monkaS`
 
 const handleChat = async (
   channel: string,

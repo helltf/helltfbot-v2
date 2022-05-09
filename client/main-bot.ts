@@ -6,7 +6,10 @@ import { handlePart } from './mainhandlers/part.js'
 const mainClient = createMainClient()
 
 function createMainClient(): Client {
-  const identity = new IdentityOptions(process.env.TWITCH_OAUTH, 'xdforsenxdlol')
+  const identity = new IdentityOptions(
+    process.env.TWITCH_OAUTH,
+    'xdforsenxdlol'
+  )
 
   return Client({
     identity,
@@ -41,7 +44,7 @@ mainClient.on('part', (channel: string, username: string, self: boolean) => {
   if (!self) return
   channel = channel.replace('#', '')
 
-  handlePart(channel, username)
+  handlePart(channel)
 })
 
 export { mainClient }

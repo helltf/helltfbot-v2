@@ -5,7 +5,7 @@ import { getAuthorizationHeader } from './autorization.js'
 const USERS_URL = 'https://api.twitch.tv/helix/users'
 
 const getUserIdByName = async (name: string): Promise<string> => {
-  const { data: data, success, error } = await fetchUserAPI(name)
+  const { data: data } = await fetchUserAPI(name)
 
   return data.data[0]?.id
 }

@@ -1,4 +1,3 @@
-import { NotificationInfo } from '../../../../db/entity/notification.js'
 import { MessageGenerator } from '../../../../modules/pubsub/message-generator.js'
 
 describe('Testing message generator service', () => {
@@ -119,18 +118,4 @@ describe('Testing message generator service', () => {
 
     expect(result).toEqual(expectedResult)
   })
-
-  it('group two entries by channel', () => {})
 })
-
-function getNotificationInfoExample(): NotificationInfo {
-  return {
-    channel: 'test',
-    game: true,
-    live: true,
-    title: true,
-    offline: true,
-    id: 1,
-    streamer: 'test'
-  }
-}

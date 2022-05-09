@@ -8,10 +8,8 @@ export class ColorTracking implements Module {
     hb.watchclient.on(
       'chat',
       async (
-        channel: string,
-        { 'user-id': userId, color: userColor }: ChatUserstate,
-        message: string,
-        self: boolean
+        _: string,
+        { 'user-id': userId, color: userColor }: ChatUserstate
       ) => {
         const savedColors = (
           await hb.db.colorRepo.findOneBy({

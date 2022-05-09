@@ -1,7 +1,6 @@
 import { Module } from './export/module.js'
 
 export class TimeoutTracking implements Module {
-  constructor() {}
   name = 'Timeout'
   initialize = () => {
     hb.watchclient.on(

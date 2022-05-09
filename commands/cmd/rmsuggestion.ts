@@ -1,7 +1,6 @@
 import { Command } from '../export/types.js'
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/response.js'
-import { Suggestion } from '../../db/export-entities.js'
 
 const rmsuggest = new Command({
   name: 'rmsuggest',
