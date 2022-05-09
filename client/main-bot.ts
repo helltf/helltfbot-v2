@@ -6,7 +6,7 @@ import { handlePart } from './mainhandlers/part.js'
 const mainClient = createMainClient()
 
 function createMainClient(): Client {
-  let identity = new IdentityOptions(process.env.TWITCH_OAUTH, 'xdforsenxdlol')
+  const identity = new IdentityOptions(process.env.TWITCH_OAUTH, 'xdforsenxdlol')
 
   return Client({
     identity,

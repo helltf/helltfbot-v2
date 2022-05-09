@@ -10,7 +10,7 @@ const getCurrentDateString = (): string => {
 }
 
 const log = (type: LogType, ...args: any) => {
-  let typeName = getEnumKey(type)
+  const typeName = getEnumKey(type)
   console.log(
     `${chalk.green(getCurrentDateString())}: ${chalk.hex(type)(
       `[${typeName}]`

@@ -27,33 +27,33 @@ describe('Test event handler to return the correct messages', () => {
   })
 
   it('get notified user no user existing return empty array', async () => {
-    let type = UpdateEventType.LIVE
+    const type = UpdateEventType.LIVE
 
-    let result = await eventHandler.getNotifiedUsers(streamer, type)
-    let expectedResult = []
+    const result = await eventHandler.getNotifiedUsers(streamer, type)
+    const expectedResult = []
 
     expect(result).toEqual(expectedResult)
   })
 
   it('get notified user, user has notification return 1 notification', async () => {
-    let type = UpdateEventType.LIVE
-    let notification = getExampleNotificationEntity()
+    const type = UpdateEventType.LIVE
+    const notification = getExampleNotificationEntity()
     notification[type] = true
 
     await hb.db.userRepo.save(notification.user)
     await hb.db.notificationRepo.save(notification)
 
-    let result = await eventHandler.getNotifiedUsers(streamer, type)
+    const result = await eventHandler.getNotifiedUsers(streamer, type)
 
-    let expectedResult = 1
+    const expectedResult = 1
 
     expect(result).toHaveSize(expectedResult)
   })
 
   it('get notified user, 2 users have notifications return 2 notification', async () => {
-    let type = UpdateEventType.LIVE
-    let notification1 = getExampleNotificationEntity()
-    let notification2 = getExampleNotificationEntity()
+    const type = UpdateEventType.LIVE
+    const notification1 = getExampleNotificationEntity()
+    const notification2 = getExampleNotificationEntity()
     notification1[type] = true
     notification2[type] = true
     notification2.user.id = 2
@@ -61,17 +61,17 @@ describe('Test event handler to return the correct messages', () => {
 
     await saveNotificationWithUser(notification1)
     await saveNotificationWithUser(notification2)
-    let result = await eventHandler.getNotifiedUsers(streamer, type)
+    const result = await eventHandler.getNotifiedUsers(streamer, type)
 
-    let expectedResult = 2
+    const expectedResult = 2
 
     expect(result).toHaveSize(expectedResult)
   })
 
   it('get notified user, 2 users have notifications on different events return 1 notification', async () => {
-    let type = UpdateEventType.LIVE
-    let notification1 = getExampleNotificationEntity()
-    let notification2 = getExampleNotificationEntity()
+    const type = UpdateEventType.LIVE
+    const notification1 = getExampleNotificationEntity()
+    const notification2 = getExampleNotificationEntity()
 
     notification1[type] = true
     notification2[UpdateEventType.GAME] = true
@@ -81,9 +81,9 @@ describe('Test event handler to return the correct messages', () => {
     await saveNotificationWithUser(notification1)
     await saveNotificationWithUser(notification2)
 
-    let result = await eventHandler.getNotifiedUsers(streamer, type)
+    const result = await eventHandler.getNotifiedUsers(streamer, type)
 
-    let expectedResult = 1
+    const expectedResult = 1
 
     expect(result).toHaveSize(expectedResult)
   })

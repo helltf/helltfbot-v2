@@ -53,9 +53,9 @@ export class TwitchBot {
   }
 
   setCommands(commands: Command[]) {
-    let commandMap = new Map<string, Command>()
+    const commandMap = new Map<string, Command>()
 
-    for (let command of commands) {
+    for (const command of commands) {
       commandMap.set(command.name, command)
     }
 
@@ -71,7 +71,7 @@ export class TwitchBot {
   startJobs() {
     if (process.env.NODE_ENV === 'dev') return
 
-    for (let { delay, execute } of jobs) {
+    for (const { delay, execute } of jobs) {
       execute()
       setInterval(execute, delay)
     }
@@ -80,7 +80,7 @@ export class TwitchBot {
   }
 
   async initModules() {
-    for (let module of modules) {
+    for (const module of modules) {
       await module.initialize()
       this.log(LogType.MODULE, `${module.name} has been initialized`)
     }

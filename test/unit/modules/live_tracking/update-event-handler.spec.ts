@@ -12,48 +12,48 @@ describe('test update event handler unit tests', () => {
   })
 
   it('get notification message for undefined event return undefined', () => {
-    let type = undefined
+    const type = undefined
 
-    let message = handler.getNotificationMessage(type, streamer, value)
+    const message = handler.getNotificationMessage(type, streamer, value)
 
     expect(message).toBeUndefined()
   })
 
   it('get notification message for live event return live message', () => {
-    let type = UpdateEventType.LIVE
+    const type = UpdateEventType.LIVE
 
-    let result = handler.getNotificationMessage(type, streamer, value)
+    const result = handler.getNotificationMessage(type, streamer, value)
 
-    let expectedMessage = `@${streamer} has gone live`
+    const expectedMessage = `@${streamer} has gone live`
     expect(result).toBe(expectedMessage)
   })
 
   it('get notification message for title event return title message', () => {
-    let type = UpdateEventType.TITLE
+    const type = UpdateEventType.TITLE
 
-    let result = handler.getNotificationMessage(type, streamer, value)
+    const result = handler.getNotificationMessage(type, streamer, value)
 
-    let expectedMessage = `@${streamer} has changed the title to ${value}`
+    const expectedMessage = `@${streamer} has changed the title to ${value}`
 
     expect(result).toBe(expectedMessage)
   })
 
   it('get notification message for game event return game message', () => {
-    let type = UpdateEventType.GAME
+    const type = UpdateEventType.GAME
 
-    let result = handler.getNotificationMessage(type, streamer, value)
+    const result = handler.getNotificationMessage(type, streamer, value)
 
-    let expectedMessage = `@${streamer} has changed the game to ${value}`
+    const expectedMessage = `@${streamer} has changed the game to ${value}`
 
     expect(result).toBe(expectedMessage)
   })
 
   it('get notification message for offline event return offline message', () => {
-    let type = UpdateEventType.OFFLINE
+    const type = UpdateEventType.OFFLINE
 
-    let result = handler.getNotificationMessage(type, streamer, value)
+    const result = handler.getNotificationMessage(type, streamer, value)
 
-    let expectedMessage = `@${streamer} has gone offline`
+    const expectedMessage = `@${streamer} has gone offline`
 
     expect(result).toBe(expectedMessage)
   })

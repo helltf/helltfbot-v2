@@ -1,7 +1,7 @@
 import { getPipeLineData, PipelineData } from '../api/github/github-api.js'
 import { Projects } from '../api/github/github-projects.js'
 
-let counts = new Map<Projects, number>([
+const counts = new Map<Projects, number>([
   [Projects.helltfbot_v2, undefined],
   [Projects.go_discord_bot, undefined],
   [Projects.inst_mono, undefined]
@@ -12,13 +12,13 @@ const setCount = (project: Projects, value: number) => {
 }
 
 const updateGithubPipeline = async () => {
-  for (let [project, count] of counts) {
+  for (const [project, count] of counts) {
     checkForUpdate(project, count)
   }
 }
 
 const checkForUpdate = async (project: Projects, count: number) => {
-  let { success, data } = await getPipeLineData(project)
+  const { success, data } = await getPipeLineData(project)
 
   if (!success) return
 

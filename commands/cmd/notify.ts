@@ -18,10 +18,10 @@ const notify = new Command({
     [streamer, event]: string[]
   ): Promise<BotResponse> => {
     if (eventIsNotValid(event)) return getUnknownEventErrorResponse(channel)
-    let eventType = event as UpdateEventType
+    const eventType = event as UpdateEventType
 
     if (await streamerNotExisting(streamer)) {
-      let success = await createNewStreamerConnection(streamer, eventType)
+      const success = await createNewStreamerConnection(streamer, eventType)
 
       if (!success) {
         return {
@@ -46,7 +46,7 @@ async function createNewStreamerConnection(
   streamer: string,
   event: UpdateEventType
 ): Promise<boolean> {
-  let id = await getUserIdByName(streamer)
+  const id = await getUserIdByName(streamer)
   if (!id) return false
 
   await hb.db.notificationChannelRepo.save({
@@ -67,14 +67,14 @@ function mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
 }
 
 function startPubSubConnection(id: number, event: UpdateEventType) {
-  let connection = getConnection()
-  let topicType = mapUpdateEventTypeToTopic(event)
+  const connection = getConnection()
+  const topicType = mapUpdateEventTypeToTopic(event)
 
   connection.listenToTopic(id, topicType)
 }
 
 function getConnection(): PubSubConnection {
-  let openConnections = hb.pubSub.connections.filter(
+  const openConnections = hb.pubSub.connections.filter(
     (c) => c.listenedTopicsLength < 50
   )
   return openConnections.length === 0
@@ -98,8 +98,8 @@ export async function updateNotification(
   event: UpdateEventType,
   id: string
 ) {
-  let parsedId = parseInt(id)
-  let user = await hb.db.userRepo.findOneBy({ id: parsedId })
+  const parsedId = parseInt(id)
+  const user = await hb.db.userRepo.findOneBy({ id: parsedId })
 
   if (await userHasNotification(parsedId, streamer)) {
     await hb.db.notificationRepo.update(

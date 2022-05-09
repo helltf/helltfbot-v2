@@ -18,19 +18,19 @@ const handleChat = async (
 
   channel = channel.replace('#', '')
 
-  let [commandLookup, ...data] = message
+  const [commandLookup, ...data] = message
     .substring(prefix.length)
     .replace(/\s{2,}/g, ' ')
     .split(' ')
 
-  let command = hb.commands.get(commandLookup.toLowerCase())
+  const command = hb.commands.get(commandLookup.toLowerCase())
 
   if (command === undefined || userHasCooldown(command, user)) return
   if (command.permissions < (await getUserPermissions(user))) return
 
   setCooldown(command, user)
 
-  let response = await command.execute(channel, user, data)
+  const response = await command.execute(channel, user, data)
 
   sendResponse(response)
 }
@@ -61,9 +61,9 @@ function userHasCooldown(
 }
 
 async function updateUser(user: ChatUserstate) {
-  let id = parseInt(user['user-id'])
+  const id = parseInt(user['user-id'])
 
-  let userEntry = await hb.db.userRepo.findOneBy({
+  const userEntry = await hb.db.userRepo.findOneBy({
     id: id
   })
 

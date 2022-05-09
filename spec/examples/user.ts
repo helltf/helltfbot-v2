@@ -28,7 +28,7 @@ export const exampleTwitchUserEntity = {
 }
 
 export const getTwitchUserEntity = (): TwitchUser => {
-  let user = new TwitchUser()
+  const user = new TwitchUser()
 
   const {
     id,
@@ -62,7 +62,7 @@ export const exampleNotificationEntity: NotificationInfo = {
 }
 
 export const getExampleNotificationEntity = (): Notification => {
-  let notification = new Notification()
+  const notification = new Notification()
 
   const { streamer, channel, live, offline, title, game, user } =
     exampleNotificationEntity

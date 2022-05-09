@@ -7,9 +7,9 @@ const mappings = {
 }
 
 const mapTime = (string: string): number => {
-  let splitIndex = string.search(/\D+/gim)
-  let number = Number(string.substring(0, splitIndex))
-  let unit = string.substring(splitIndex, string.length)
+  const splitIndex = string.search(/\D+/gim)
+  const number = Number(string.substring(0, splitIndex))
+  const unit = string.substring(splitIndex, string.length)
 
   if (!number || !unit)
     throw new Error('Unit or number is not correct in the given input')

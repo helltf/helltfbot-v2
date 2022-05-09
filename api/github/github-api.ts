@@ -6,7 +6,7 @@ const getPipeLineData = async (
   project: Projects
 ): Promise<Resource<PipelineData>> => {
   try {
-    let data = await requestGithubApi(project)
+    const data = await requestGithubApi(project)
     return Resource.ok(new PipelineData(data, project))
   } catch (e) {
     return Resource.error(e)
@@ -34,7 +34,7 @@ export class PipelineData {
   event: string
 
   constructor({ workflow_runs, total_count }: any, project: Projects) {
-    let { head_branch, status, conclusion, repository, event } =
+    const { head_branch, status, conclusion, repository, event } =
       workflow_runs[0]
 
     this.count = total_count

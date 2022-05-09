@@ -4,7 +4,7 @@ import { Resource } from '../resource.js'
 const tokenUrl = 'https://id.twitch.tv/oauth2/token'
 
 const generateToken = async (): Promise<string | undefined> => {
-  let { data, success } = await getToken()
+  const { data, success } = await getToken()
 
   if (success) {
     return data
@@ -15,7 +15,7 @@ const generateToken = async (): Promise<string | undefined> => {
 
 const getToken = async (): Promise<Resource<string>> => {
   try {
-    let response = await requestApi()
+    const response = await requestApi()
     return Resource.ok(response.access_token)
   } catch (e) {
     return Resource.error(e)

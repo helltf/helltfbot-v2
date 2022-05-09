@@ -38,7 +38,7 @@ describe('test chunking function', () => {
   })
 
   it('array reduce should return 0 entries', () => {
-    let maxArraySize = 1
+    const maxArraySize = 1
     const channels = [
       { id: 1, name: 'user1' },
       { id: 2, name: 'user2' },
@@ -60,19 +60,19 @@ describe('test get username from topic', () => {
   })
 
   it('get id for topic', () => {
-    let topic = 'video-playback-by-id.31545223'
+    const topic = 'video-playback-by-id.31545223'
 
-    let id = module.getIdForTopic(topic)
-    let expectedId = '31545223'
+    const id = module.getIdForTopic(topic)
+    const expectedId = '31545223'
 
     expect(id).toBe(expectedId)
   })
 
   it('get id for broadcaster setting update topic', () => {
-    let topic = 'broadcast-settings-update.1'
+    const topic = 'broadcast-settings-update.1'
 
-    let id = module.getIdForTopic(topic)
-    let expectedId = '1'
+    const id = module.getIdForTopic(topic)
+    const expectedId = '1'
 
     expect(id).toBe(expectedId)
   })

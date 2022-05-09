@@ -1,5 +1,5 @@
 const addNewCommands = () => {
-  for (let [_, command] of hb.commands) {
+  for (const [_, command] of hb.commands) {
     hb.db.commandRepo.save({
       ...command
     })
@@ -13,9 +13,9 @@ const update = () => {
 }
 
 async function removeDeletedCommands() {
-  let commandNames = (await hb.db.commandRepo.find()).map((c) => c.name)
+  const commandNames = (await hb.db.commandRepo.find()).map((c) => c.name)
 
-  for (let name of commandNames) {
+  for (const name of commandNames) {
     if (!hb.commands.get(name)) {
       hb.db.commandRepo.delete({
         name: name

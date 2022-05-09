@@ -21,9 +21,9 @@ const suggest = new Command({
         success: false
       }
 
-    let suggestionMessage = suggestion.join(' ')
+    const suggestionMessage = suggestion.join(' ')
 
-    let id = await saveSuggestion(
+    const id = await saveSuggestion(
       suggestionMessage,
       parseInt(userstate['user-id'])
     )

@@ -8,7 +8,7 @@ describe('color tracking tests', () => {
     module = new ColorTracking()
   })
 
-  let examples = {
+  const examples = {
     a: '#aaaaaa',
     b: '#bbbbbb',
     c: '#cccccc',
@@ -17,40 +17,40 @@ describe('color tracking tests', () => {
     f: '#ffffff'
   }
 
-  let colorToAdd = '#zzzzzz'
+  const colorToAdd = '#zzzzzz'
 
   it('update color pushs new color', () => {
-    let initialArray = []
+    const initialArray = []
 
-    let result = module.updateCurrentColors(initialArray, colorToAdd)
-    let expected = [colorToAdd]
+    const result = module.updateCurrentColors(initialArray, colorToAdd)
+    const expected = [colorToAdd]
 
     expect(result).toEqual(expected)
   })
 
   it('update color pushs new color', () => {
-    let initialArray = [examples.a, examples.b]
+    const initialArray = [examples.a, examples.b]
 
-    let result = module.updateCurrentColors(initialArray, colorToAdd)
-    let expected = [examples.a, examples.b, colorToAdd]
+    const result = module.updateCurrentColors(initialArray, colorToAdd)
+    const expected = [examples.a, examples.b, colorToAdd]
 
     expect(result).toEqual(expected)
   })
 
   it('add new existing color, changes position', () => {
-    let initialArray = [examples.a, colorToAdd, examples.c]
+    const initialArray = [examples.a, colorToAdd, examples.c]
 
-    let result = module.updateCurrentColors(initialArray, colorToAdd)
-    let expected = [examples.a, examples.c, colorToAdd]
+    const result = module.updateCurrentColors(initialArray, colorToAdd)
+    const expected = [examples.a, examples.c, colorToAdd]
 
     expect(result).toEqual(expected)
   })
 
   it('array is full splice', () => {
-    let initialArray = [examples.a, examples.b, examples.c]
+    const initialArray = [examples.a, examples.b, examples.c]
 
-    let result = module.addNewColor(initialArray, colorToAdd, 3)
-    let expected = [examples.b, examples.c, colorToAdd]
+    const result = module.addNewColor(initialArray, colorToAdd, 3)
+    const expected = [examples.b, examples.c, colorToAdd]
 
     expect(result).toEqual(expected)
   })

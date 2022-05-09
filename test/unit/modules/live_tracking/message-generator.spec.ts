@@ -9,75 +9,75 @@ describe('Testing message generator service', () => {
   })
 
   it('add 1 message to not existing entry should add one to entry', () => {
-    let map = new Map()
-    let newMessages = ['abc']
-    let channel = 'a'
+    const map = new Map()
+    const newMessages = ['abc']
+    const channel = 'a'
 
-    let result = service.addNewEntryToMap(map, newMessages, channel)
+    const result = service.addNewEntryToMap(map, newMessages, channel)
 
-    let expectedResult = new Map()
+    const expectedResult = new Map()
     expectedResult.set(channel, [...newMessages])
 
     expect(result).toEqual(expectedResult)
   })
 
   it('add 1 message to existing entry return 2 messages for channel', () => {
-    let map = new Map()
-    let channel = 'channelname'
-    let existingMessage = 'message1'
-    let newMessages = 'message2'
+    const map = new Map()
+    const channel = 'channelname'
+    const existingMessage = 'message1'
+    const newMessages = 'message2'
 
     map.set(channel, [existingMessage])
 
-    let result = service.addNewEntryToMap(map, [newMessages], channel)
+    const result = service.addNewEntryToMap(map, [newMessages], channel)
 
-    let expectedResult = new Map()
+    const expectedResult = new Map()
     expectedResult.set(channel, [existingMessage, newMessages])
 
     expect(result).toEqual(expectedResult)
   })
 
   it('add 2 messages to non existing entry returns map with 2 messages', () => {
-    let map = new Map()
-    let newMessages = ['abc', 'bc']
-    let channel = 'a'
+    const map = new Map()
+    const newMessages = ['abc', 'bc']
+    const channel = 'a'
 
-    let result = service.addNewEntryToMap(map, newMessages, channel)
+    const result = service.addNewEntryToMap(map, newMessages, channel)
 
-    let expectedResult = new Map()
+    const expectedResult = new Map()
     expectedResult.set(channel, [...newMessages])
 
     expect(result).toEqual(expectedResult)
   })
 
   it('add 2 messages to existing entry returns map with 2 messages', () => {
-    let map = new Map()
-    let existingMessages = ['1', '2']
-    let newMessages = ['3', '4']
-    let channel = 'a'
+    const map = new Map()
+    const existingMessages = ['1', '2']
+    const newMessages = ['3', '4']
+    const channel = 'a'
 
     map.set(channel, existingMessages)
 
-    let result = service.addNewEntryToMap(map, newMessages, channel)
+    const result = service.addNewEntryToMap(map, newMessages, channel)
 
-    let expectedResult = new Map()
+    const expectedResult = new Map()
     expectedResult.set(channel, ['1', '2', '3', '4'])
 
     expect(result).toEqual(expectedResult)
   })
 
   it('add entry other channel existing returns 2 channels with messages', () => {
-    let map = new Map()
-    let channel1 = 'channel1'
-    let channel2 = 'channel2'
-    let channel1Messages = ['1', '2']
-    let channel2Messages = ['3', '4']
+    const map = new Map()
+    const channel1 = 'channel1'
+    const channel2 = 'channel2'
+    const channel1Messages = ['1', '2']
+    const channel2Messages = ['3', '4']
 
     map.set(channel1, channel1Messages)
 
-    let result = service.addNewEntryToMap(map, channel2Messages, channel2)
+    const result = service.addNewEntryToMap(map, channel2Messages, channel2)
 
-    let expectedResult = new Map()
+    const expectedResult = new Map()
     expectedResult.set(channel1, channel1Messages)
     expectedResult.set(channel2, channel2Messages)
 
@@ -85,17 +85,17 @@ describe('Testing message generator service', () => {
   })
 
   it('concat to maps result in map with both entries', () => {
-    let map1 = new Map()
-    let map2 = new Map()
-    let channel1 = 'channel1'
-    let channel2 = 'channel2'
+    const map1 = new Map()
+    const map2 = new Map()
+    const channel1 = 'channel1'
+    const channel2 = 'channel2'
 
     map1.set(channel1, ['1', '2'])
     map2.set(channel2, ['3', '4'])
 
-    let result = service.concatMaps(map1, map2)
+    const result = service.concatMaps(map1, map2)
 
-    let expectedResult = new Map()
+    const expectedResult = new Map()
 
     expectedResult.set(channel1, ['1', '2'])
     expectedResult.set(channel2, ['3', '4'])
@@ -104,16 +104,16 @@ describe('Testing message generator service', () => {
   })
 
   it('concat to maps returns 1 entry with both messages', () => {
-    let map1 = new Map()
-    let map2 = new Map()
-    let channel1 = 'channel1'
+    const map1 = new Map()
+    const map2 = new Map()
+    const channel1 = 'channel1'
 
     map1.set(channel1, ['1', '2'])
     map2.set(channel1, ['3', '4'])
 
-    let result = service.concatMaps(map1, map2)
+    const result = service.concatMaps(map1, map2)
 
-    let expectedResult = new Map()
+    const expectedResult = new Map()
 
     expectedResult.set(channel1, ['1', '2', '3', '4'])
 

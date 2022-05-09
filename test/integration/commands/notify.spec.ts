@@ -41,8 +41,8 @@ describe('test notify command', () => {
   })
 
   it('event is not valid return error', async () => {
-    let event = 'unknown'
-    let response = await notify.execute(channel, exampleUser, [streamer, event])
+    const event = 'unknown'
+    const response = await notify.execute(channel, exampleUser, [streamer, event])
 
     expect(response.channel).toBe(channel)
     expect(response.success).toBeFalse()
@@ -54,7 +54,7 @@ describe('test notify command', () => {
   })
 
   it('given streamer does exist in db return false', async () => {
-    let result = await streamerNotExisting(streamer)
+    const result = await streamerNotExisting(streamer)
 
     expect(result).toBeTrue()
   })
@@ -65,7 +65,7 @@ describe('test notify command', () => {
       id: 1
     })
 
-    let result = await streamerNotExisting(streamer)
+    const result = await streamerNotExisting(streamer)
 
     expect(result).toBeFalse()
   })
@@ -73,25 +73,25 @@ describe('test notify command', () => {
   it('events from UpdateEventType are valid', () => {
     const events = ['live', 'offline', 'title', 'game']
 
-    for (let event of events) {
-      let isNotValid = eventIsNotValid(event)
+    for (const event of events) {
+      const isNotValid = eventIsNotValid(event)
       expect(isNotValid).toBeFalse()
     }
   })
 
   it('save new db entry for notification creates new entry in db', async () => {
-    let event = UpdateEventType.LIVE
+    const event = UpdateEventType.LIVE
     await hb.db.userRepo.save(user)
 
     await updateNotification(channel, streamer, event, `${user.id}`)
 
-    let result = await findNotification(user.id, streamer)
+    const result = await findNotification(user.id, streamer)
 
     expect(result.live).toBeTruthy()
   })
 
   it('update new db entry for user updates the notification', async () => {
-    let event = UpdateEventType.LIVE
+    const event = UpdateEventType.LIVE
     await hb.db.userRepo.save(notification.user)
     await hb.db.notificationRepo.save(notification)
 
@@ -102,14 +102,14 @@ describe('test notify command', () => {
       `${notification.user.id}`
     )
 
-    let result = await findNotification(notification.user.id, streamer)
+    const result = await findNotification(notification.user.id, streamer)
 
     expect(result.live).toBeTruthy()
   })
 
   it('user has no notification for streamer return false', async () => {
-    let id = 1
-    let result = await userHasNotification(id, streamer)
+    const id = 1
+    const result = await userHasNotification(id, streamer)
 
     expect(result).toBeFalse()
   })
@@ -119,7 +119,7 @@ describe('test notify command', () => {
 
     await hb.db.notificationRepo.save(notification)
 
-    let result = await userHasNotification(notification.user.id, streamer)
+    const result = await userHasNotification(notification.user.id, streamer)
 
     expect(result).toBeTrue()
   })

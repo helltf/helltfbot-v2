@@ -46,7 +46,7 @@ export class PubSubConnection implements WebSocketConnection {
       return type
     }
 
-    let message = this.createMessageForTopic(type, id)
+    const message = this.createMessageForTopic(type, id)
 
     this.sendMessage(message)
 
@@ -72,7 +72,7 @@ export class PubSubConnection implements WebSocketConnection {
   }
 
   handleIncomingMessage({ data }: any) {
-    let parsedData = JSON.parse(data)
+    const parsedData = JSON.parse(data)
     this.logError(parsedData.error)
   }
 
@@ -110,15 +110,15 @@ export class PubSub {
     data.message = JSON.parse(data.message)
 
     if (!data.message) return
-    let type = data.message.type
-    let streamer = await this.getStreamerForTopic(data.topic)
+    const type = data.message.type
+    const streamer = await this.getStreamerForTopic(data.topic)
 
     if (
       type === 'stream-up' ||
       type === 'stream-down' ||
       type === 'broadcast_settings_update'
     ) {
-      let messages = await this.updateEventHandler.handleUpdate(
+      const messages = await this.updateEventHandler.handleUpdate(
         data,
         streamer,
         type
@@ -130,13 +130,13 @@ export class PubSub {
   connect = async () => {
     hb.log(LogType.PUBSUB, 'Connecting...')
 
-    let channels = await hb.db.notificationChannelRepo.find()
+    const channels = await hb.db.notificationChannelRepo.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
 
-    for await (let channels of chunkedChannels) {
+    for await (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
-      for await (let { id } of channels) {
+      for await (const { id } of channels) {
         await this.listenToTopics(connection, id)
       }
     }
@@ -152,7 +152,7 @@ export class PubSub {
   }
 
   handlePubSubMessage = (data: any) => {
-    let type: PubSubType = data.type
+    const type: PubSubType = data.type
 
     if (type !== 'MESSAGE') return
 
@@ -165,7 +165,7 @@ export class PubSub {
 
   chunkTopicsIntoSize = (
     arr: NotificationChannelInfo[],
-    size: number = 25
+    size = 25
   ): NotificationChannelInfo[][] => {
     return arr.reduce(
       (acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]),
@@ -174,7 +174,7 @@ export class PubSub {
   }
 
   async getStreamerForTopic(topic: string): Promise<string> {
-    let id = this.getIdForTopic(topic)
+    const id = this.getIdForTopic(topic)
 
     return (
       await hb.db.notificationChannelRepo.findOneBy({

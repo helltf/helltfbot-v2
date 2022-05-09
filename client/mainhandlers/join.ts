@@ -26,11 +26,11 @@ const mainJoinAllChannels = async () => {
     return
   }
 
-  let joinedChannels = await hb.db.channelRepo.findBy({
+  const joinedChannels = await hb.db.channelRepo.findBy({
     joined: true
   })
 
-  for await (let { channel } of joinedChannels) {
+  for await (const { channel } of joinedChannels) {
     await mainJoinChannel(channel)
     await wait`1s`
   }

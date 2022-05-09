@@ -8,9 +8,9 @@ async function watchJoinAllChannels() {
     return
   }
 
-  let channels = await hb.db.watchRepo.find()
+  const channels = await hb.db.watchRepo.find()
 
-  for await (let { channel } of channels) {
+  for await (const { channel } of channels) {
     await watchClient.join(channel)
     await wait`1s`
   }

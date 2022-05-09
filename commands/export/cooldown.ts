@@ -20,7 +20,7 @@ export class Cooldown {
   }
 
   removeCooldown(userId: string, commandName: string) {
-    let userCooldowns = this.getCooldownsForUser(userId)
+    const userCooldowns = this.getCooldownsForUser(userId)
 
     if (userCooldowns.includes(commandName)) {
       this.cooldowns.set(
@@ -31,7 +31,7 @@ export class Cooldown {
   }
 
   addCooldown(userId: string, commandName: string) {
-    let userCooldowns = this.getCooldownsForUser(userId)
+    const userCooldowns = this.getCooldownsForUser(userId)
 
     if (!userCooldowns) {
       this.cooldowns.set(userId, [commandName])

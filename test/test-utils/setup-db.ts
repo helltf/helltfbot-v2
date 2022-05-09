@@ -7,7 +7,7 @@ import { getOrmConf } from '../../ormconfig.js'
 
 const setupDatabase = async () => {
   globalThis.hb = new TwitchBot(mainClient, watchClient)
-  let src = new DataSource(getOrmConf())
+  const src = new DataSource(getOrmConf())
   hb.db = await new DB(src).initialize()
 }
 

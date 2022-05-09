@@ -8,7 +8,7 @@ export class MessageGenerator {
     message,
     notifiedUsers
   }: NotificationMessageInfo): Map<string, string[]> {
-    let channelUsersMap = this.getChannelUsersMap(notifiedUsers)
+    const channelUsersMap = this.getChannelUsersMap(notifiedUsers)
 
     return this.getMessageMap(channelUsersMap, message)
   }
@@ -17,9 +17,9 @@ export class MessageGenerator {
     map: Map<string, string[]>,
     message: string
   ): Map<string, string[]> {
-    let result = new Map()
+    const result = new Map()
 
-    for (let [channel, users] of map) {
+    for (const [channel, users] of map) {
       result.set(channel, this.getMessageWithUsers(users, message))
     }
 
@@ -59,9 +59,9 @@ export class MessageGenerator {
   }
 
   getChannelUsersMap(users: Notification[]): Map<string, string[]> {
-    let result = new Map()
+    const result = new Map()
 
-    for (let {
+    for (const {
       channel,
       user: { name }
     } of users) {
@@ -76,7 +76,7 @@ export class MessageGenerator {
     newEntry: string[],
     key: string
   ): Map<string, string[]> {
-    let entry = map.get(key)
+    const entry = map.get(key)
 
     if (entry) {
       entry.push(...newEntry)
@@ -91,7 +91,7 @@ export class MessageGenerator {
     map1: Map<string, string[]>,
     map2: Map<string, string[]>
   ): Map<string, string[]> {
-    for (let [channel, messages] of map2) {
+    for (const [channel, messages] of map2) {
       this.addNewEntryToMap(map1, messages, channel)
     }
 

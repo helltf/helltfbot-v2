@@ -2,7 +2,7 @@ import { ChatUserstate } from 'tmi.js'
 import { Module } from './export/module.js'
 
 export class ColorTracking implements Module {
-  name: string = 'Color'
+  name = 'Color'
   MAX_SAVED_COLORS = 15
   async initialize() {
     hb.watchclient.on(
@@ -13,7 +13,7 @@ export class ColorTracking implements Module {
         message: string,
         self: boolean
       ) => {
-        let savedColors = (
+        const savedColors = (
           await hb.db.colorRepo.findOneBy({
             twitch_id: Number(userId)
           })
@@ -29,10 +29,10 @@ export class ColorTracking implements Module {
           return
         }
 
-        let latestColor = savedColors[savedColors.length - 1]
+        const latestColor = savedColors[savedColors.length - 1]
 
         if (latestColor !== userColor) {
-          let updatedColors = this.updateCurrentColors(savedColors, userColor)
+          const updatedColors = this.updateCurrentColors(savedColors, userColor)
 
           hb.db.colorRepo.save({
             twitch_id: Number(userId),
@@ -44,7 +44,7 @@ export class ColorTracking implements Module {
     )
   }
   setNewPosition(colors: string[], newColor: string): string[] {
-    let index = colors.findIndex((c) => c === newColor)
+    const index = colors.findIndex((c) => c === newColor)
     colors.splice(index, 1)
     colors.push(newColor)
     return colors

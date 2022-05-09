@@ -41,7 +41,7 @@ export class UpdateEventHandler {
     let gameMessages = new Map<string, string[]>()
 
     if (message.old_status !== message.status) {
-      let notificationMessageInfo = await this.getNotificationMessageInfo(
+      const notificationMessageInfo = await this.getNotificationMessageInfo(
         UpdateEventType.TITLE,
         streamer,
         message.status
@@ -53,7 +53,7 @@ export class UpdateEventHandler {
     }
 
     if (message.old_game !== message.game) {
-      let notificationMessageInfo = await this.getNotificationMessageInfo(
+      const notificationMessageInfo = await this.getNotificationMessageInfo(
         UpdateEventType.GAME,
         streamer,
         message.game
@@ -68,7 +68,7 @@ export class UpdateEventHandler {
   }
 
   async handleLiveEvent(streamer: string): Promise<Map<string, string[]>> {
-    let notificationMessageInfo = await this.getNotificationMessageInfo(
+    const notificationMessageInfo = await this.getNotificationMessageInfo(
       UpdateEventType.LIVE,
       streamer
     )
@@ -77,7 +77,7 @@ export class UpdateEventHandler {
   }
 
   async handleOfflineEvent(streamer: string): Promise<Map<string, string[]>> {
-    let notificationMessageInfo = await this.getNotificationMessageInfo(
+    const notificationMessageInfo = await this.getNotificationMessageInfo(
       UpdateEventType.OFFLINE,
       streamer
     )
@@ -89,7 +89,7 @@ export class UpdateEventHandler {
     streamer: string,
     event: UpdateEventType
   ): Promise<Notification[]> {
-    let users = hb.db.notificationRepo.find({
+    const users = hb.db.notificationRepo.find({
       where: {
         streamer: streamer,
         [event]: true
@@ -119,8 +119,8 @@ export class UpdateEventHandler {
     streamer: string,
     value: string | undefined = undefined
   ): Promise<NotificationMessageInfo> {
-    let notifiedUsers = await this.getNotifiedUsers(streamer, type)
-    let message = this.getNotificationMessage(type, streamer, value)
+    const notifiedUsers = await this.getNotifiedUsers(streamer, type)
+    const message = this.getNotificationMessage(type, streamer, value)
 
     return {
       message: message,

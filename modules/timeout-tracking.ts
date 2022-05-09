@@ -2,7 +2,7 @@ import { Module } from './export/module.js'
 
 export class TimeoutTracking implements Module {
   constructor() {}
-  name: string = 'Timeout'
+  name = 'Timeout'
   initialize = () => {
     hb.watchclient.on(
       'timeout',

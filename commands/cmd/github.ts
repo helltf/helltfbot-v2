@@ -14,7 +14,7 @@ const github = new Command({
     userstate: ChatUserstate,
     message: string[]
   ): Promise<BotResponse> => {
-    let response =
+    const response =
       `You can find my github profile by following this link https://github.com/helltf . ` +
       `Feel free to leave a follow <3 To visit the github page for this bot go to https://github.com/helltf/helltfbot-v2`
 

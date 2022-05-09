@@ -15,7 +15,7 @@ const rmsuggest = new Command({
     user: ChatUserstate,
     [id]: string[]
   ): Promise<BotResponse> => {
-    let response: BotResponse = {
+    const response: BotResponse = {
       channel: channel,
       success: false,
       response: ''
@@ -50,10 +50,10 @@ async function idIsNotValidForUser(
   userId: string,
   suggestionId: string
 ): Promise<boolean> {
-  let parsedUserId = parseInt(userId)
-  let parsedSuggestionId = parseInt(suggestionId)
+  const parsedUserId = parseInt(userId)
+  const parsedSuggestionId = parseInt(suggestionId)
 
-  let entity = await hb.db.suggestionRepo.findOne({
+  const entity = await hb.db.suggestionRepo.findOne({
     where: {
       id: parsedSuggestionId,
       user: {
@@ -68,7 +68,7 @@ async function idIsNotValidForUser(
 }
 
 async function deleteSuggestion(suggestionId: string) {
-  let parsedSuggestionId = parseInt(suggestionId)
+  const parsedSuggestionId = parseInt(suggestionId)
 
   await hb.db.suggestionRepo.delete({
     id: parsedSuggestionId

@@ -1,7 +1,7 @@
 import { Module } from './export/module.js'
 
 export class BanTracking {
-  name: string = 'Ban'
+  name = 'Ban'
   initialize = () => {
     hb.watchclient.on('ban', (channel: string, username: string) => {
       channel = channel.replace('#', '')

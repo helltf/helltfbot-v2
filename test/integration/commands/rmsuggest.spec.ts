@@ -25,9 +25,9 @@ describe('test rmsuggest command', () => {
   })
 
   it('required id is undefined return error message', async () => {
-    let message = ['']
+    const message = ['']
 
-    let response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute(channel, user, message)
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
@@ -37,19 +37,19 @@ describe('test rmsuggest command', () => {
   })
 
   it('id is not an number return error', async () => {
-    let message = ['a']
+    const message = ['a']
 
-    let response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute(channel, user, message)
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe('id has to be a number')
   })
 
   it('id is defined but not in database return error', async () => {
-    let id = '1'
-    let message = [id]
+    const id = '1'
+    const message = [id]
 
-    let response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute(channel, user, message)
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
@@ -60,7 +60,7 @@ describe('test rmsuggest command', () => {
   it('id is defined and existing in the database, delete the entry', async () => {
     await saveUserStateAsUser(user)
 
-    let savedEntity = await hb.db.suggestionRepo.save({
+    const savedEntity = await hb.db.suggestionRepo.save({
       date: 1,
       user: {
         id: parseInt(user['user-id'])
@@ -68,12 +68,12 @@ describe('test rmsuggest command', () => {
       suggestion: 'a'
     })
 
-    let id = savedEntity.id
-    let message = [`${id}`]
+    const id = savedEntity.id
+    const message = [`${id}`]
 
-    let response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute(channel, user, message)
 
-    let entity = await hb.db.suggestionRepo.findOneBy({
+    const entity = await hb.db.suggestionRepo.findOneBy({
       id: id
     })
 
@@ -85,11 +85,11 @@ describe('test rmsuggest command', () => {
   })
 
   it('id is defined but user differs from db entry return fail', async () => {
-    let id = '1'
-    let message = [id]
+    const id = '1'
+    const message = [id]
     await saveUserStateAsUser(user)
 
-    let savedEntity = await hb.db.suggestionRepo.save({
+    const savedEntity = await hb.db.suggestionRepo.save({
       date: 1,
       user: {
         id: parseInt(user['user-id'])
@@ -99,9 +99,9 @@ describe('test rmsuggest command', () => {
 
     user['user-id'] = '5'
 
-    let response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute(channel, user, message)
 
-    let remainingEntity = await hb.db.suggestionRepo.findOneBy({
+    const remainingEntity = await hb.db.suggestionRepo.findOneBy({
       id: savedEntity.id
     })
 
