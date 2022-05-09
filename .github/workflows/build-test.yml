@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Run build script
+      - name: Run build and lint script
         run: |
           npm install typescript
           npm run lint
@@ -73,7 +73,7 @@ jobs:
           npm ci
           npm install typescript
           npm run build
-      - name: Run Tests
+      - name: Run integrations tests
         run: npm run integration-tests
 
         env:
