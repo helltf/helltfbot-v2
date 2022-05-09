@@ -1,10 +1,10 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity('wordle_words')
-export class WordleWord extends BaseEntity{
-    @PrimaryColumn('varchar')
-    word: string
+export class WordleWord extends BaseEntity {
+  @PrimaryColumn('varchar')
+  word: string
 
-    @Column('boolean')
-    is_answer: boolean
+  @Column('boolean')
+  is_answer: boolean
 }

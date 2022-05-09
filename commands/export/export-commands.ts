@@ -5,6 +5,5 @@ import { notify } from '../cmd/notify.js'
 import { suggest } from '../cmd/suggest.js'
 import { rmsuggest } from '../cmd/rmsuggestion.js'
 
-
 const commands = [ping, github, website, notify, suggest, rmsuggest]
 export default commands

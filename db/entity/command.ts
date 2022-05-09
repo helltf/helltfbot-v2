@@ -1,25 +1,25 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity('command')
-export class CommandEntity extends BaseEntity{
-    @PrimaryColumn('varchar')
-    name: string
+export class CommandEntity extends BaseEntity {
+  @PrimaryColumn('varchar')
+  name: string
 
-    @Column('int', {default: 0})
-    counter: number
+  @Column('int', { default: 0 })
+  counter: number
 
-    @Column('tinyint')
-    permissions: number
+  @Column('tinyint')
+  permissions: number
 
-    @Column('varchar')
-    description: string
+  @Column('varchar')
+  description: string
 
-    @Column('simple-array')
-    requiredParams?: string[]
+  @Column('simple-array')
+  requiredParams?: string[]
 
-    @Column('simple-array')
-    optionalParams?: string[]
+  @Column('simple-array')
+  optionalParams?: string[]
 
-    @Column('int')
-    cooldown: number 
+  @Column('int')
+  cooldown: number
 }

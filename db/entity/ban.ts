@@ -1,16 +1,22 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryColumn,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 
 @Entity('ban')
-export class Ban extends BaseEntity{
-    @PrimaryGeneratedColumn('increment')
-    id: number
-    
-    @Column('varchar')
-    user: string
+export class Ban extends BaseEntity {
+  @PrimaryGeneratedColumn('increment')
+  id: number
 
-    @Column('varchar')
-    channel: string
+  @Column('varchar')
+  user: string
 
-    @Column('bigint')
-    at: number
+  @Column('varchar')
+  channel: string
+
+  @Column('bigint')
+  at: number
 }

@@ -1,18 +1,23 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { TwitchUser } from "./user.js";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm'
+import { TwitchUser } from './user.js'
 
 @Entity('suggestion')
-export class Suggestion extends BaseEntity{
-    @PrimaryGeneratedColumn('increment')
-    id: number
+export class Suggestion extends BaseEntity {
+  @PrimaryGeneratedColumn('increment')
+  id: number
 
-    @ManyToOne(() => TwitchUser, (user) => user.notifications)
-	user: TwitchUser
+  @ManyToOne(() => TwitchUser, (user) => user.notifications)
+  user: TwitchUser
 
-    @Column('varchar')
-    suggestion: string
+  @Column('varchar')
+  suggestion: string
 
-    @Column('bigint')
-    date: number
-    
+  @Column('bigint')
+  date: number
 }

@@ -7,108 +7,108 @@ import { saveUserStateAsUser } from '../../test-utils/save-user.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test rmsuggest command', () => {
-	let channel: string
-	let user: ChatUserstate
-	beforeAll(async () => {
-		await setupDatabase()
-	})
+  let channel: string
+  let user: ChatUserstate
+  beforeAll(async () => {
+    await setupDatabase()
+  })
 
-	beforeEach(async () => {
-		channel = 'channel'
-		user = getExampleUserState()
-		await clearDb(hb.db.dataSource)
-		jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
-	})
+  beforeEach(async () => {
+    channel = 'channel'
+    user = getExampleUserState()
+    await clearDb(hb.db.dataSource)
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+  })
 
-	afterAll(async () => {
-		await disconnectDatabase()
-	})
+  afterAll(async () => {
+    await disconnectDatabase()
+  })
 
-	it('required id is undefined return error message', async () => {
-		let message = ['']
+  it('required id is undefined return error message', async () => {
+    let message = ['']
 
-		let response = await rmsuggest.execute(channel, user, message)
+    let response = await rmsuggest.execute(channel, user, message)
 
-		expect(response.success).toBeFalse()
-		expect(response.response).toBe(
-			'You need to specify an id to delete your suggestion'
-		)
-		expect(response.channel).toBe(channel)
-	})
+    expect(response.success).toBeFalse()
+    expect(response.response).toBe(
+      'You need to specify an id to delete your suggestion'
+    )
+    expect(response.channel).toBe(channel)
+  })
 
-    it('id is not an number return error', async () => {
-		let message = ['a']
+  it('id is not an number return error', async () => {
+    let message = ['a']
 
-		let response = await rmsuggest.execute(channel, user, message)
+    let response = await rmsuggest.execute(channel, user, message)
 
-        expect(response.success).toBeFalse()
-        expect(response.response).toBe('id has to be a number')
+    expect(response.success).toBeFalse()
+    expect(response.response).toBe('id has to be a number')
+  })
+
+  it('id is defined but not in database return error', async () => {
+    let id = '1'
+    let message = [id]
+
+    let response = await rmsuggest.execute(channel, user, message)
+
+    expect(response.success).toBeFalse()
+    expect(response.response).toBe(
+      `Id ${id} not existing or the suggestion is created by somebody else`
+    )
+  })
+
+  it('id is defined and existing in the database, delete the entry', async () => {
+    await saveUserStateAsUser(user)
+
+    let savedEntity = await hb.db.suggestionRepo.save({
+      date: 1,
+      user: {
+        id: parseInt(user['user-id'])
+      },
+      suggestion: 'a'
     })
 
-	it('id is defined but not in database return error', async () => {
-		let id = '1'
-		let message = [id]
+    let id = savedEntity.id
+    let message = [`${id}`]
 
-		let response = await rmsuggest.execute(channel, user, message)
+    let response = await rmsuggest.execute(channel, user, message)
 
-		expect(response.success).toBeFalse()
-		expect(response.response).toBe(
-			`Id ${id} not existing or the suggestion is created by somebody else`
-		)
-	})
+    let entity = await hb.db.suggestionRepo.findOneBy({
+      id: id
+    })
 
-	it('id is defined and existing in the database, delete the entry', async () => {
-		await saveUserStateAsUser(user)
+    expect(response.success).toBeTrue()
+    expect(response.response).toBe(
+      `Succesfully removed your suggestion with id ${id}`
+    )
+    expect(entity).toBeNull()
+  })
 
-		let savedEntity = await hb.db.suggestionRepo.save({
-			date: 1,
-			user: {
-				id: parseInt(user['user-id']),
-			},
-			suggestion: 'a',
-		})
+  it('id is defined but user differs from db entry return fail', async () => {
+    let id = '1'
+    let message = [id]
+    await saveUserStateAsUser(user)
 
-		let id = savedEntity.id
-		let message = [`${id}`]
+    let savedEntity = await hb.db.suggestionRepo.save({
+      date: 1,
+      user: {
+        id: parseInt(user['user-id'])
+      },
+      suggestion: 'a'
+    })
 
-		let response = await rmsuggest.execute(channel, user, message)
+    user['user-id'] = '5'
 
-		let entity = await hb.db.suggestionRepo.findOneBy({
-			id: id,
-		})
+    let response = await rmsuggest.execute(channel, user, message)
 
-		expect(response.success).toBeTrue()
-		expect(response.response).toBe(
-			`Succesfully removed your suggestion with id ${id}`
-		)
-		expect(entity).toBeNull()
-	})
+    let remainingEntity = await hb.db.suggestionRepo.findOneBy({
+      id: savedEntity.id
+    })
 
-	it('id is defined but user differs from db entry return fail', async () => {
-		let id = '1'
-		let message = [id]
-		await saveUserStateAsUser(user)
-
-        let savedEntity = await hb.db.suggestionRepo.save({
-            date: 1,
-            user: {
-                id: parseInt(user['user-id'])
-            },
-            suggestion: 'a'
-        })
-
-		user['user-id'] = '5'
-
-		let response = await rmsuggest.execute(channel, user, message)
-
-        let remainingEntity = await hb.db.suggestionRepo.findOneBy({
-            id: savedEntity.id
-        })
-
-		expect(response.success).toBeFalse()
-		expect(response.response).toBe(
-			`Id ${id} not existing or the suggestion is created by somebody else`
-		)
-        expect(remainingEntity).toBeDefined()
-	})
+    expect(response.success).toBeFalse()
+    expect(response.response).toBe(
+      `Id ${id} not existing or the suggestion is created by somebody else`
+    )
+    expect(remainingEntity).toBeDefined()
+  })
 })

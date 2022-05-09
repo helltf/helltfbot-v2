@@ -1,9 +1,9 @@
 export class NotificationHandler {
-	constructor() {}
+  constructor() {}
 
-	sendNotifications(notifications: Map<string, string[]>) {
-		for (let [channel, messages] of notifications) {
-			messages.forEach((m) => hb.sendMessage(channel, m))
-		}
-	}
+  sendNotifications(notifications: Map<string, string[]>) {
+    for (let [channel, messages] of notifications) {
+      messages.forEach((m) => hb.sendMessage(channel, m))
+    }
+  }
 }
