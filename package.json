@@ -10,7 +10,8 @@
     "integration-tests": "set NODE_ENV=test&&jasmine --config=spec/support/jasmine-integration.json",
     "build": "tsc",
     "deploy": "sh deploy.sh",
-    "prettier-format": "prettier --config .prettierrc ./**/*.ts --write"
+    "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,9 @@
   "devDependencies": {
     "@types/node": "^17.0.23",
     "@types/ws": "^8.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
+    "eslint": "^8.15.0",
     "jasmine": "^4.0.2",
     "prettier": "^2.6.2"
   }
