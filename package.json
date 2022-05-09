@@ -9,7 +9,8 @@
     "unit-tests": "set NODE_ENV=test&&jasmine --config=spec/support/jasmine-unit.json",
     "integration-tests": "set NODE_ENV=test&&jasmine --config=spec/support/jasmine-integration.json",
     "build": "tsc",
-    "deploy": "sh deploy.sh"
+    "deploy": "sh deploy.sh",
+    "prettier-format": "prettier --config .prettierrc ./**/*.ts --write"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@types/node": "^17.0.23",
     "@types/ws": "^8.5.3",
-    "jasmine": "^4.0.2"
+    "jasmine": "^4.0.2",
+    "prettier": "^2.6.2"
   }
 }
