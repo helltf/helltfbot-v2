@@ -5,8 +5,8 @@ import { watchClient } from './client/track-bot.js'
 
 globalThis.hb = new TwitchBot(mainClient, watchClient)
 ;(async () => {
-	await hb.init()
-	hb.joinChannels()
-	hb.startJobs()
-	hb.initModules()
+  await hb.init()
+  hb.joinChannels()
+  hb.startJobs()
+  hb.initModules()
 })()

@@ -7,78 +7,75 @@ on:
     branches: [master, feature, dev]
 
 jobs:
-  build:
+  build-lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [16.x]
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Run build script
-      run: |
-        npm install typescript
-        npm run build
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Run build and lint script
+        run: |
+          npm install typescript
+          npm run lint
+          npm run build
   unit-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [16.x]
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Run build script
-      run: |
-        npm install typescript
-        npm run build
-    - name: Run unit tests
-      env: 
-        NODE_ENV: test
-      run: npm run unit-tests
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Run build script
+        run: |
+          npm install typescript
+          npm run build
+      - name: Run unit tests
+        env:
+          NODE_ENV: test
+        run: npm run unit-tests
 
   integration-tests:
-    
     runs-on: ubuntu-latest
-    
+
     container: node:16
-    
+
     services:
-      
       mariadb:
         ports:
           - 3306:3306
         image: mariadb
-        
+
         env:
           MYSQL_DATABASE: twitch
           MYSQL_HOST: 127.0.0.1
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-        
+
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      
       - name: Check out repository code
         uses: actions/checkout@v3
-      
-      
+
       - name: Install dependencies
         run: |
           npm ci
           npm install typescript
           npm run build
-      - name: Run Tests
+      - name: Run integrations tests
         run: npm run integration-tests
-        
+
         env:
           DB_HOST: mariadb
           DB_PORT: 3306

@@ -1,15 +1,18 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity('notification_channel')
-export class NotificationChannel extends BaseEntity implements NotificationChannelInfo {
-    @PrimaryColumn('int')
-    id: number
+export class NotificationChannel
+  extends BaseEntity
+  implements NotificationChannelInfo
+{
+  @PrimaryColumn('int')
+  id: number
 
-    @Column('varchar')
-    name: string
+  @Column('varchar')
+  name: string
 }
 
-export interface NotificationChannelInfo{
-    id: number
-    name: string
+export interface NotificationChannelInfo {
+  id: number
+  name: string
 }
