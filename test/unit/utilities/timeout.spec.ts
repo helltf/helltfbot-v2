@@ -2,80 +2,80 @@ import 'jasmine'
 import { mapTime } from '../../../utilities/timeout.js'
 
 describe('test timeout mappings', () => {
-	it('1ms should return 1', () => {
-		let result = mapTime('1ms')
-		let expected = 1
+  it('1ms should return 1', () => {
+    const result = mapTime('1ms')
+    const expected = 1
 
-		expect(result).toBe(expected)
-	})
+    expect(result).toBe(expected)
+  })
 
-	it('10ms should return 10', () => {
-		let result = mapTime('10ms')
-		let expected = 10
+  it('10ms should return 10', () => {
+    const result = mapTime('10ms')
+    const expected = 10
 
-		expect(result).toBe(expected)
-	})
+    expect(result).toBe(expected)
+  })
 
-	it('100ms should return 100', () => {
-		let result = mapTime('100ms')
-		let expected = 100
+  it('100ms should return 100', () => {
+    const result = mapTime('100ms')
+    const expected = 100
 
-		expect(result).toBe(expected)
-	})
+    expect(result).toBe(expected)
+  })
 
-	it('value missing throws error', () => {
-		let fn = () => {
-			mapTime('ms')
-		}
+  it('value missing throws error', () => {
+    const fn = () => {
+      mapTime('ms')
+    }
 
-		expect(fn).toThrowError()
-	})
-	it('unit missing throws error', () => {
-		let fn = () => {
-			mapTime('1')
-		}
+    expect(fn).toThrowError()
+  })
+  it('unit missing throws error', () => {
+    const fn = () => {
+      mapTime('1')
+    }
 
-		expect(fn).toThrowError()
-	})
-	it('input missing throws error', () => {
-		let fn = () => {
-			mapTime('')
-		}
+    expect(fn).toThrowError()
+  })
+  it('input missing throws error', () => {
+    const fn = () => {
+      mapTime('')
+    }
 
-		expect(fn).toThrowError()
-	})
+    expect(fn).toThrowError()
+  })
 
-	it('1s should return 1000', () => {
-		let result = mapTime('1s')
-		let expected = 1000
+  it('1s should return 1000', () => {
+    const result = mapTime('1s')
+    const expected = 1000
 
-		expect(result).toBe(expected)
-	})
-	it('5s should return 5000', () => {
-		let result = mapTime('5s')
-		let expected = 5000
+    expect(result).toBe(expected)
+  })
+  it('5s should return 5000', () => {
+    const result = mapTime('5s')
+    const expected = 5000
 
-		expect(result).toBe(expected)
-	})
+    expect(result).toBe(expected)
+  })
 
-	it('1m should return 60000', () => {
-		let result = mapTime('1m')
-		let expected = 60000
+  it('1m should return 60000', () => {
+    const result = mapTime('1m')
+    const expected = 60000
 
-		expect(result).toBe(expected)
-	})
+    expect(result).toBe(expected)
+  })
 
-	it('1h should return 360000', () => {
-		let result = mapTime('1h')
-		let expected = 3600_000
+  it('1h should return 360000', () => {
+    const result = mapTime('1h')
+    const expected = 3600_000
 
-		expect(result).toBe(expected)
-	})
+    expect(result).toBe(expected)
+  })
 
-	it('1d should return 8640000', () => {
-		let result = mapTime('1d')
-		let expected = 86_400_000
+  it('1d should return 8640000', () => {
+    const result = mapTime('1d')
+    const expected = 86_400_000
 
-		expect(result).toBe(expected)
-	})
+    expect(result).toBe(expected)
+  })
 })

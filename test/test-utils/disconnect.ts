@@ -1,3 +1,3 @@
-export const disconnectDatabase = async() => {
-    await hb.db.dataSource.destroy()
+export const disconnectDatabase = async () => {
+  await hb.db.dataSource.destroy()
 }

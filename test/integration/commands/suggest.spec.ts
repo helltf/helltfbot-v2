@@ -1,106 +1,105 @@
-import { ChatUserstate } from "tmi.js"
-import { suggest } from "../../../commands/cmd/suggest.js"
-import { getExampleUserState } from "../../../spec/examples/user.js"
-import { clearDb } from "../../test-utils/clear.js"
-import { disconnectDatabase } from "../../test-utils/disconnect.js"
-import { saveUserStateAsUser } from "../../test-utils/save-user.js"
-import { setupDatabase } from "../../test-utils/setup-db.js"
+import { ChatUserstate } from 'tmi.js'
+import { suggest } from '../../../commands/cmd/suggest.js'
+import { getExampleUserState } from '../../../spec/examples/user.js'
+import { clearDb } from '../../test-utils/clear.js'
+import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { saveUserStateAsUser } from '../../test-utils/save-user.js'
+import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test suggest command', () => {
-    let channel: string
-    let user: ChatUserstate = getExampleUserState()
-    
-    beforeAll(async () => {
-        channel = 'channel'
-        user = getExampleUserState()
-        await setupDatabase()
-    })
-    
-    beforeEach(async () => {
-		await clearDb(hb.db.dataSource)
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
-	})
+  let channel: string
+  let user: ChatUserstate = getExampleUserState()
 
-    afterAll(async () => {
-        await disconnectDatabase()
-    })
+  beforeAll(async () => {
+    channel = 'channel'
+    user = getExampleUserState()
+    await setupDatabase()
+  })
 
-    it('suggestion is undefined return error', async() => {
-        let suggestion = ''
-        let response = await suggest.execute(channel, user, [suggestion])
+  beforeEach(async () => {
+    await clearDb(hb.db.dataSource)
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+  })
 
-        expect(response.success).toBeFalse()
-    })
+  afterAll(async () => {
+    await disconnectDatabase()
+  })
 
-    it('suggestion is defined and response is successful', async() => {
-        let message = ['add']
-        await saveUserStateAsUser(user)
+  it('suggestion is undefined return error', async () => {
+    const suggestion = ''
+    const response = await suggest.execute(channel, user, [suggestion])
 
-        let response = await suggest.execute(channel, user, message)
+    expect(response.success).toBeFalse()
+  })
 
-        expect(response.success).toBeTrue()
-    })
+  it('suggestion is defined and response is successful', async () => {
+    const message = ['add']
+    await saveUserStateAsUser(user)
 
-    it('one word suggestion is defined and saved into db', async() => {
-        let message = ['add']
-        await saveUserStateAsUser(user)
-        
-        let response = await suggest.execute(channel, user, message)
+    const response = await suggest.execute(channel, user, message)
 
-        let savedEntity = await hb.db.suggestionRepo.find()
-        let expectedLength = 1
-        let id = 1
-        let expectedMessage = `Succesfully saved your suggestion with id ${id}` 
+    expect(response.success).toBeTrue()
+  })
 
-        expect(savedEntity).toHaveSize(expectedLength)
-        expect(response.response).toEqual(expectedMessage)
-        expect(response.success).toBeTrue()
-    })
+  it('one word suggestion is defined and saved into db', async () => {
+    const message = ['add']
+    await saveUserStateAsUser(user)
 
-    it('save multiple words suggestion return succesfull response', async() => {
-        let message = ['add', 'this', 'do', 'this']
-        let id = 1
+    const response = await suggest.execute(channel, user, message)
 
-        await saveUserStateAsUser(user)
+    const savedEntity = await hb.db.suggestionRepo.find()
+    const expectedLength = 1
+    const id = 1
+    const expectedMessage = `Succesfully saved your suggestion with id ${id}`
 
-        let response = await suggest.execute(channel, user, message)
+    expect(savedEntity).toHaveSize(expectedLength)
+    expect(response.response).toEqual(expectedMessage)
+    expect(response.success).toBeTrue()
+  })
 
-        let savedEntity = await hb.db.suggestionRepo.findOneBy({
-            id: id
-        })
+  it('save multiple words suggestion return succesfull response', async () => {
+    const message = ['add', 'this', 'do', 'this']
+    const id = 1
 
-        let expectedMessage = `Succesfully saved your suggestion with id ${id}` 
+    await saveUserStateAsUser(user)
 
-        expect(savedEntity.suggestion).toBe(`${message.join(' ')}`)
-        expect(response.response).toEqual(expectedMessage)
-        expect(response.success).toBeTrue()
+    const response = await suggest.execute(channel, user, message)
+
+    const savedEntity = await hb.db.suggestionRepo.findOneBy({
+      id: id
     })
 
-    it('save two suggestions returns id 2', async() => {
-        let message = ['add', 'this', 'do', 'this']
-        await saveUserStateAsUser(user)
+    const expectedMessage = `Succesfully saved your suggestion with id ${id}`
 
-        await hb.db.suggestionRepo.save({
-            date: 1,
-            suggestion: 'a',
-            user: {
-                id: parseInt(user["user-id"])
-            }
-        })
+    expect(savedEntity.suggestion).toBe(`${message.join(' ')}`)
+    expect(response.response).toEqual(expectedMessage)
+    expect(response.success).toBeTrue()
+  })
 
-        let response = await suggest.execute(channel, user, message)
-        let expectedId = 2
+  it('save two suggestions returns id 2', async () => {
+    const message = ['add', 'this', 'do', 'this']
+    await saveUserStateAsUser(user)
 
-        let savedEntity = await hb.db.suggestionRepo.findOneBy({
-            id: expectedId
-        })
-
-        let expectedMessage = `Succesfully saved your suggestion with id ${expectedId}` 
-        let expectedSavedSuggestion = `${message.join(' ')}`
-
-        expect(response.success).toBeTrue() 
-        expect(response.response).toBe(expectedMessage)
-        expect(savedEntity.suggestion).toBe(expectedSavedSuggestion)
+    await hb.db.suggestionRepo.save({
+      date: 1,
+      suggestion: 'a',
+      user: {
+        id: parseInt(user['user-id'])
+      }
     })
+
+    const response = await suggest.execute(channel, user, message)
+    const expectedId = 2
+
+    const savedEntity = await hb.db.suggestionRepo.findOneBy({
+      id: expectedId
+    })
+
+    const expectedMessage = `Succesfully saved your suggestion with id ${expectedId}`
+    const expectedSavedSuggestion = `${message.join(' ')}`
+
+    expect(response.success).toBeTrue()
+    expect(response.response).toBe(expectedMessage)
+    expect(savedEntity.suggestion).toBe(expectedSavedSuggestion)
+  })
 })
-

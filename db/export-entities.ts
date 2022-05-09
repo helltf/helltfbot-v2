@@ -10,17 +10,16 @@ import { Notification } from './entity/notification.js'
 import { NotificationChannel } from './entity/notification_channel.js'
 import { Suggestion } from './entity/suggestion.js'
 
-
 export {
-	Ban,
-	Channel,
-	ColorHistory,
-	Timeout,
-	TwitchUser,
-	WatchChannel,
-	WordleWord,
-	CommandEntity,
-	Notification,
-	NotificationChannel,
-	Suggestion
+  Ban,
+  Channel,
+  ColorHistory,
+  Timeout,
+  TwitchUser,
+  WatchChannel,
+  WordleWord,
+  CommandEntity,
+  Notification,
+  NotificationChannel,
+  Suggestion
 }

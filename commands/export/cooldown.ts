@@ -1,46 +1,46 @@
 import { Command } from './types.js'
 
 export class Cooldown {
-	cooldowns: Map<string, string[]>
+  cooldowns: Map<string, string[]>
 
-	constructor() {
-		this.cooldowns = new Map<string, string[]>()
-	}
+  constructor() {
+    this.cooldowns = new Map<string, string[]>()
+  }
 
-	setCooldown({ name, cooldown }: Command, userId: string) {
-		this.addCooldown(userId, name)
+  setCooldown({ name, cooldown }: Command, userId: string) {
+    this.addCooldown(userId, name)
 
-		setTimeout(() => {
-			this.removeCooldown(userId, name)
-		}, cooldown)
-	}
+    setTimeout(() => {
+      this.removeCooldown(userId, name)
+    }, cooldown)
+  }
 
-	getCooldownsForUser(userId: string): string[] {
-		return this.cooldowns.get(userId)
-	}
+  getCooldownsForUser(userId: string): string[] {
+    return this.cooldowns.get(userId)
+  }
 
-	removeCooldown(userId: string, commandName: string) {
-		let userCooldowns = this.getCooldownsForUser(userId)
+  removeCooldown(userId: string, commandName: string) {
+    const userCooldowns = this.getCooldownsForUser(userId)
 
-		if (userCooldowns.includes(commandName)) {
-			this.cooldowns.set(
-				userId,
-				userCooldowns.filter((e) => e !== commandName)
-			)
-		}
-	}
+    if (userCooldowns.includes(commandName)) {
+      this.cooldowns.set(
+        userId,
+        userCooldowns.filter((e) => e !== commandName)
+      )
+    }
+  }
 
-	addCooldown(userId: string, commandName: string) {
-		let userCooldowns = this.getCooldownsForUser(userId)
+  addCooldown(userId: string, commandName: string) {
+    const userCooldowns = this.getCooldownsForUser(userId)
 
-		if (!userCooldowns) {
-			this.cooldowns.set(userId, [commandName])
-		} else {
-			userCooldowns.push(commandName)
-		}
-	}
+    if (!userCooldowns) {
+      this.cooldowns.set(userId, [commandName])
+    } else {
+      userCooldowns.push(commandName)
+    }
+  }
 
-	userHasCooldown({ name }: Command, userId: string): boolean {
-		return this.getCooldownsForUser(userId)?.includes(name)
-	}
+  userHasCooldown({ name }: Command, userId: string): boolean {
+    return this.getCooldownsForUser(userId)?.includes(name)
+  }
 }

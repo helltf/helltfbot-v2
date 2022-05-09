@@ -3,10 +3,9 @@ import { Client } from 'tmi.js'
 
 const watchClient = createWatchClient()
 
-function createWatchClient(){
-    let watchClientOptions = new IdentityOptions("sajkdkjls" ,"justinfan284")
-    return Client({identity: watchClientOptions})
+function createWatchClient() {
+  const watchClientOptions = new IdentityOptions('sajkdkjls', 'justinfan284')
+  return Client({ identity: watchClientOptions })
 }
-
 
 export { watchClient }

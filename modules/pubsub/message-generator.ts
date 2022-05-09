@@ -1,100 +1,99 @@
-import { NotificationMessageInfo, UpdateEventType } from './types.js'
+import { NotificationMessageInfo } from './types.js'
 import { Notification } from '../../db/export-entities.js'
 export class MessageGenerator {
-	maxMessageLength = 450
-	constructor() {}
+  maxMessageLength = 450
 
-	generateMessages({
-		message,
-		notifiedUsers,
-	}: NotificationMessageInfo): Map<string, string[]> {
-		let channelUsersMap = this.getChannelUsersMap(notifiedUsers)
-		
-		return this.getMessageMap(channelUsersMap, message)
-	}
+  generateMessages({
+    message,
+    notifiedUsers
+  }: NotificationMessageInfo): Map<string, string[]> {
+    const channelUsersMap = this.getChannelUsersMap(notifiedUsers)
 
-	getMessageMap(
-		map: Map<string, string[]>,
-		message: string
-	): Map<string, string[]> {
-		let result = new Map()
+    return this.getMessageMap(channelUsersMap, message)
+  }
 
-		for (let [channel, users] of map) {
-			result.set(channel, this.getMessageWithUsers(users, message))
-		}
+  getMessageMap(
+    map: Map<string, string[]>,
+    message: string
+  ): Map<string, string[]> {
+    const result = new Map()
 
-		return result
-	}
+    for (const [channel, users] of map) {
+      result.set(channel, this.getMessageWithUsers(users, message))
+    }
 
-	getMessageWithUsers(users: string[], message: string): string[] {
-		return users.reduce(
-			(messageArray, user) =>
-				this.concatUserWithMessages(messageArray, user, message),
-			[]
-		)
-	}
-	concatUserWithMessages(
-		messageArray: string[],
-		user: string,
-		message: string
-	) {
-		let index = messageArray.length - 1
+    return result
+  }
 
-		let currentMessage = messageArray[index] || message
+  getMessageWithUsers(users: string[], message: string): string[] {
+    return users.reduce(
+      (messageArray, user) =>
+        this.concatUserWithMessages(messageArray, user, message),
+      []
+    )
+  }
+  concatUserWithMessages(
+    messageArray: string[],
+    user: string,
+    message: string
+  ) {
+    let index = messageArray.length - 1
 
-		if (this.isUserFitting(currentMessage, user)) {
-			currentMessage += ` ${user}`
-		} else {
-			currentMessage = message + user
-			index += 1
-		}
+    let currentMessage = messageArray[index] || message
 
-		messageArray[index === -1 ? 0 : index] = currentMessage
+    if (this.isUserFitting(currentMessage, user)) {
+      currentMessage += ` ${user}`
+    } else {
+      currentMessage = message + user
+      index += 1
+    }
 
-		return messageArray
-	}
+    messageArray[index === -1 ? 0 : index] = currentMessage
 
-	isUserFitting(message: string, user: string): boolean {
-		return (message + user).length < this.maxMessageLength
-	}
+    return messageArray
+  }
 
-	getChannelUsersMap(users: Notification[]): Map<string, string[]> {
-		let result = new Map()
+  isUserFitting(message: string, user: string): boolean {
+    return (message + user).length < this.maxMessageLength
+  }
 
-		for (let {
-			channel,
-			user: { name },
-		} of users) {
-			this.addNewEntryToMap(result, [name], channel)
-		}
+  getChannelUsersMap(users: Notification[]): Map<string, string[]> {
+    const result = new Map()
 
-		return result
-	}
+    for (const {
+      channel,
+      user: { name }
+    } of users) {
+      this.addNewEntryToMap(result, [name], channel)
+    }
 
-	addNewEntryToMap(
-		map: Map<string, string[]>,
-		newEntry: string[],
-		key: string
-	): Map<string, string[]> {
-		let entry = map.get(key)
+    return result
+  }
 
-		if (entry) {
-			entry.push(...newEntry)
-		} else {
-			map.set(key, newEntry)
-		}
+  addNewEntryToMap(
+    map: Map<string, string[]>,
+    newEntry: string[],
+    key: string
+  ): Map<string, string[]> {
+    const entry = map.get(key)
 
-		return map
-	}
+    if (entry) {
+      entry.push(...newEntry)
+    } else {
+      map.set(key, newEntry)
+    }
 
-	concatMaps(
-		map1: Map<string, string[]>,
-		map2: Map<string, string[]>
-	): Map<string, string[]> {
-		for (let [channel, messages] of map2) {
-			this.addNewEntryToMap(map1, messages, channel)
-		}
+    return map
+  }
 
-		return map1
-	}
+  concatMaps(
+    map1: Map<string, string[]>,
+    map2: Map<string, string[]>
+  ): Map<string, string[]> {
+    for (const [channel, messages] of map2) {
+      this.addNewEntryToMap(map1, messages, channel)
+    }
+
+    return map1
+  }
 }
