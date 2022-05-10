@@ -129,17 +129,9 @@ export class PubSub {
     return !openConnections.length ? new PubSubConnection() : openConnections[0]
   }
 
-  listenToTopic(id: number, event: UpdateEventType) {
+  listenToTopic(id: number, event: TopicType) {
     const connection = this.getOpenConnection()
-    const topicType = this.mapUpdateEventTypeToTopic(event)
 
-    connection.listenToTopic(id, topicType)
-  }
-
-  mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
-    if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
-      return TopicType.SETTING
-    if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
-      return TopicType.STATUS
+    connection.listenToTopic(id, event)
   }
 }
