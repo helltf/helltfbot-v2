@@ -71,7 +71,6 @@ export class PubSub {
         }
       }
     }
-    console.log(hb.pubSub.connections.join('\n'))
     hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
   }
 
