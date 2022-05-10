@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { ChatUserstate } from 'tmi.js'
 import { suggest } from '../../../commands/cmd/suggest.js'
 import { getExampleUserState } from '../../../spec/examples/user.js'
