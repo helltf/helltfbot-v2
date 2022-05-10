@@ -91,16 +91,16 @@ fdescribe('join command tests', () => {
 
   it('connectToChannel is successful return true', async () => {
     spyOn(hb.client, 'join').and.resolveTo([channel])
-    let { success, message } = await connectToChannel(channel)
+    const { success, message } = await connectToChannel(channel)
 
     expect(success).toBeTrue()
     expect(message).toBe('Succesfully join the channel')
   })
 
   it('connectToChannel is not successful return false', async () => {
-    let errorMessage = 'Error'
+    const errorMessage = 'Error'
     spyOn(hb.client, 'join').and.rejectWith(errorMessage)
-    let { success, message } = await connectToChannel(channel)
+    const { success, message } = await connectToChannel(channel)
 
     expect(success).toBeFalse()
     expect(message).toBe(errorMessage)
