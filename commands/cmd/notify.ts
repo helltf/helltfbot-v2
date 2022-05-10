@@ -1,7 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
-import { PubSubConnection } from '../../modules/pubsub/pubsub.js'
+import { PubSubConnection } from '../../modules/pubsub/pubsub-connection.js'
 import { TopicType, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
@@ -61,9 +61,9 @@ async function createNewStreamerConnection(
 
 function mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
   if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
-    return TopicType.INFO
+    return TopicType.SETTING
   if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
-    return TopicType.LIVE
+    return TopicType.STATUS
 }
 
 function startPubSubConnection(id: number, event: UpdateEventType) {
@@ -75,7 +75,7 @@ function startPubSubConnection(id: number, event: UpdateEventType) {
 
 function getConnection(): PubSubConnection {
   const openConnections = hb.pubSub.connections.filter(
-    (c) => c.listenedTopicsLength < 50
+    (c) => c.topics.length < 50
   )
   return openConnections.length === 0
     ? new PubSubConnection()

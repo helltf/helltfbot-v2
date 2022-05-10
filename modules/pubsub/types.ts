@@ -43,7 +43,7 @@ export interface SettingMessage extends PubSubDataMessage {
 export interface WebSocketConnection {
   connection: ReconnectingWebSocket
   interval: NodeJS.Timer
-  listenedTopicsLength: number
+  topics: string[]
 }
 
 export interface PubSubChannel {
@@ -65,8 +65,8 @@ export interface TwitchNotificationMessage {
 }
 
 export enum TopicType {
-  INFO = 'broadcast-settings-update.',
-  LIVE = 'video-playback-by-id.'
+  SETTING = 'broadcast-settings-update.',
+  STATUS = 'video-playback-by-id.'
 }
 
 export enum UpdateEventType {
