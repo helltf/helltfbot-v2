@@ -1,87 +1,11 @@
-import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
-import * as WS from 'ws'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
 import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { NotificationHandler } from './notification-handler.js'
-import {
-  WebSocketConnection,
-  PubSubType,
-  PubSubMessage,
-  TopicType
-} from './types.js'
+import { PubSubConnection } from './pubsub-connection.js'
+import { PubSubType, PubSubMessage, TopicType } from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
-const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
-
-export class PubSubConnection implements WebSocketConnection {
-  connection: ReconnectingWebSocket
-  listenedTopicsLength: number
-  interval: NodeJS.Timer
-
-  constructor() {
-    this.connection = new RWS.default(PUBSUB_URL, [], {
-      WebSocket: WS.WebSocket
-    })
-
-    this.interval = this.setPingInterval()
-    this.listenedTopicsLength = 0
-
-    this.connection.addEventListener('message', (message) => {
-      this.handleIncomingMessage(message)
-    })
-  }
-
-  setPingInterval(): NodeJS.Timer {
-    return setInterval(() => {
-      this.connection.send(
-        JSON.stringify({
-          type: 'PING'
-        })
-      )
-    }, 250 * 1000)
-  }
-
-  listenToTopic(id: number, type: TopicType): TopicType {
-    if (this.listenedTopicsLength === 50) {
-      return type
-    }
-
-    const message = this.createMessageForTopic(type, id)
-
-    this.sendMessage(message)
-
-    this.listenedTopicsLength++
-  }
-
-  sendMessage(message: PubSubMessage) {
-    this.connection.send(JSON.stringify(message))
-  }
-
-  createMessageForTopic = (
-    type: TopicType,
-    channelId: number
-  ): PubSubMessage => {
-    return {
-      type: 'LISTEN',
-      nonce: '',
-      data: {
-        auth_token: process.env.TWITCH_OAUTH,
-        topics: [`${type}${channelId}`]
-      }
-    }
-  }
-
-  handleIncomingMessage({ data }: any) {
-    const parsedData = JSON.parse(data)
-    this.logError(parsedData.error)
-  }
-
-  logError(error: any) {
-    if (!error) return
-
-    hb.log(LogType.PUBSUB, 'Error occured: ' + error)
-  }
-}
 
 export class PubSub {
   updateEventHandler: UpdateEventHandler
@@ -136,19 +60,26 @@ export class PubSub {
     for await (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
-      for await (const { id } of channels) {
-        await this.listenToTopics(connection, id)
+      for await (const { id, setting, status } of channels) {
+        if (setting) {
+          this.listenToSettingsTopic(connection, id)
+          await wait`1s`
+        }
+        if (status) {
+          this.listenToStatusTopic(connection, id)
+          await wait`5s`
+        }
       }
     }
-
+    console.log(hb.pubSub.connections.join('\n'))
     hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
   }
 
-  async listenToTopics(connection: PubSubConnection, id: number) {
-    connection.listenToTopic(id, TopicType.LIVE)
-    await wait`1s`
-    connection.listenToTopic(id, TopicType.INFO)
-    await wait`5s`
+  listenToSettingsTopic(connection: PubSubConnection, id: number) {
+    connection.listenToTopic(id, TopicType.SETTING)
+  }
+  listenToStatusTopic(connection: PubSubConnection, id: number) {
+    connection.listenToTopic(id, TopicType.STATUS)
   }
 
   handlePubSubMessage = (data: any) => {
