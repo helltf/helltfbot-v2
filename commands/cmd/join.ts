@@ -30,17 +30,28 @@ export const join = new Command({
       return errorResponse
     }
 
-    const success = await connectToChannel(channel)
+    const { success, message } = await connectToChannel(channel)
   }
 })
 
-async function connectToChannel(channel: string): Promise<boolean> {
+export async function connectToChannel(channel: string): Promise<JoinResult> {
   try {
     await hb.client.join(channel)
-    return true
+    return {
+      message: 'Succesfully join the channel',
+      success: true
+    }
   } catch (e) {
-    return false
+    return {
+      success: false,
+      message: e
+    }
   }
+}
+
+interface JoinResult {
+  message?: string
+  success: boolean
 }
 
 export async function isAlreadyConnected(channel: string): Promise<number> {
