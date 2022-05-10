@@ -1,5 +1,6 @@
+import 'dotenv/config'
 import { ChatUserstate } from 'tmi.js'
-import { join } from '../../../commands/cmd/join.js'
+import { isAlreadyConnected, join } from '../../../commands/cmd/join.js'
 import { getExampleUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
@@ -54,5 +55,35 @@ describe('join command tests', () => {
     expect(channelResult).toBe(channel)
     expect(success).toBeFalse()
     expect(response).toBe(expectedResponse)
+  })
+
+  it('channel is defined but client is already connected return error response', async () => {
+    let message = [channel]
+
+    await hb.db.channelRepo.save({
+      allowed: true,
+      allowed_live: true,
+      channel: channel,
+      connect_timestamp: 1,
+      joined: true,
+      times_connected: 0
+    })
+
+    let {
+      channel: responseChannel,
+      success,
+      response
+    } = await join.execute(channel, user, message)
+    let expectedResponse = 'Already connected to that channel'
+
+    expect(responseChannel).toBe(channel)
+    expect(success).toBeFalse()
+    expect(response).toBe(expectedResponse)
+  })
+
+  it('test isAlreadyConneected is not connected return 0', async () => {
+    let isConnected = await isAlreadyConnected(channel)
+
+    expect(isConnected).toBeTrue()
   })
 })
