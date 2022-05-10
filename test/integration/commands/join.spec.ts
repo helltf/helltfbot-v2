@@ -1,15 +1,18 @@
 import 'dotenv/config'
 import { ChatUserstate } from 'tmi.js'
-import { isAlreadyConnected, join } from '../../../commands/cmd/join.js'
+import {
+  connectToChannel,
+  isAlreadyConnected,
+  join
+} from '../../../commands/cmd/join.js'
 import { getExampleUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-describe('join command tests', () => {
+fdescribe('join command tests', () => {
   let user: ChatUserstate
   let channel: string
-
   beforeAll(async () => {
     user = getExampleUserState()
     channel = 'channel'
@@ -84,6 +87,23 @@ describe('join command tests', () => {
     const isConnected = await isAlreadyConnected(channel)
 
     expect(isConnected).toBeTruthy()
+  })
+
+  it('connectToChannel is successful return true', async () => {
+    spyOn(hb.client, 'join').and.resolveTo([channel])
+    let { success, message } = await connectToChannel(channel)
+
+    expect(success).toBeTrue()
+    expect(message).toBe('Succesfully join the channel')
+  })
+
+  it('connectToChannel is not successful return false', async () => {
+    let errorMessage = 'Error'
+    spyOn(hb.client, 'join').and.rejectWith(errorMessage)
+    let { success, message } = await connectToChannel(channel)
+
+    expect(success).toBeFalse()
+    expect(message).toBe(errorMessage)
   })
 })
 
