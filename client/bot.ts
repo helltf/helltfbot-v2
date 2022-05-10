@@ -65,7 +65,9 @@ export class TwitchBot {
   async joinChannels() {
     watchJoinAllChannels()
     await mainJoinAllChannels()
-    hb.sendMessage(process.env.MAIN_USER, 'Okayge TeaTime')
+    const startUpMessage = process.env.START_UP_MESSAGE
+    if (!startUpMessage) return
+    hb.sendMessage(process.env.MAIN_USER, startUpMessage)
   }
 
   startJobs() {
