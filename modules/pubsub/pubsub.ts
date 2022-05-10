@@ -4,7 +4,12 @@ import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import { PubSubType, PubSubMessage, TopicType } from './types.js'
+import {
+  PubSubType,
+  PubSubMessage,
+  TopicType,
+  UpdateEventType
+} from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
@@ -77,6 +82,7 @@ export class PubSub {
   listenToSettingsTopic(connection: PubSubConnection, id: number) {
     connection.listenToTopic(id, TopicType.SETTING)
   }
+
   listenToStatusTopic(connection: PubSubConnection, id: number) {
     connection.listenToTopic(id, TopicType.STATUS)
   }
@@ -115,5 +121,25 @@ export class PubSub {
 
   getIdForTopic(topic: string): string {
     return topic.match(/(?<=\.)\d+/gim)[0]
+  }
+
+  getOpenConnection(): PubSubConnection {
+    const openConnections = this.connections.filter((c) => c.topics.length < 50)
+
+    return !openConnections.length ? new PubSubConnection() : openConnections[0]
+  }
+
+  listenToTopic(id: number, event: UpdateEventType) {
+    const connection = this.getOpenConnection()
+    const topicType = this.mapUpdateEventTypeToTopic(event)
+
+    connection.listenToTopic(id, topicType)
+  }
+
+  mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
+    if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
+      return TopicType.SETTING
+    if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
+      return TopicType.STATUS
   }
 }

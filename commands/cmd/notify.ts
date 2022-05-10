@@ -1,8 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
-import { PubSubConnection } from '../../modules/pubsub/pubsub-connection.js'
-import { TopicType, UpdateEventType } from '../../modules/pubsub/types.js'
+import { UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -51,35 +50,12 @@ async function createNewStreamerConnection(
 
   await hb.db.notificationChannelRepo.save({
     name: streamer,
-    id: parseInt(id)
+    id: id
   })
 
-  startPubSubConnection(parseInt(id), event)
+  hb.pubSub.listenToTopic(id, event)
 
   return true
-}
-
-function mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
-  if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
-    return TopicType.SETTING
-  if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
-    return TopicType.STATUS
-}
-
-function startPubSubConnection(id: number, event: UpdateEventType) {
-  const connection = getConnection()
-  const topicType = mapUpdateEventTypeToTopic(event)
-
-  connection.listenToTopic(id, topicType)
-}
-
-function getConnection(): PubSubConnection {
-  const openConnections = hb.pubSub.connections.filter(
-    (c) => c.topics.length < 50
-  )
-  return openConnections.length === 0
-    ? new PubSubConnection()
-    : openConnections[0]
 }
 
 export async function streamerNotExisting(streamer: string): Promise<boolean> {
