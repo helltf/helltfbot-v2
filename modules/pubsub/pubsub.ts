@@ -4,12 +4,7 @@ import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import {
-  PubSubType,
-  PubSubMessage,
-  TopicType,
-  UpdateEventType
-} from './types.js'
+import { PubSubType, PubSubMessage, TopicType } from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
