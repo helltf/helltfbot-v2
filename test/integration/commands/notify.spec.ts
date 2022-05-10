@@ -42,7 +42,10 @@ describe('test notify command', () => {
 
   it('event is not valid return error', async () => {
     const event = 'unknown'
-    const response = await notify.execute(channel, exampleUser, [streamer, event])
+    const response = await notify.execute(channel, exampleUser, [
+      streamer,
+      event
+    ])
 
     expect(response.channel).toBe(channel)
     expect(response.success).toBeFalse()
@@ -62,7 +65,9 @@ describe('test notify command', () => {
   it('given streamer does not exist in db return true', async () => {
     await hb.db.notificationChannelRepo.save({
       name: streamer,
-      id: 1
+      id: 1,
+      status: true,
+      setting: true
     })
 
     const result = await streamerNotExisting(streamer)
