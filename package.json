@@ -12,7 +12,7 @@
     "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
     "lint": "eslint . --ext .ts",
-    "lint-and-fix": "eslint . --ext .ts --fix"
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "repository": {
     "type": "git",
