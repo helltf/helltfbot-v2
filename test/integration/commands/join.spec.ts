@@ -60,14 +60,7 @@ describe('join command tests', () => {
   it('channel is defined but client is already connected return error response', async () => {
     const message = [channel]
 
-    await hb.db.channelRepo.save({
-      allowed: true,
-      allowed_live: true,
-      channel: channel,
-      connect_timestamp: 1,
-      joined: true,
-      times_connected: 0
-    })
+    await saveExampleChannel(channel)
 
     const {
       channel: responseChannel,
@@ -81,9 +74,26 @@ describe('join command tests', () => {
     expect(response).toBe(expectedResponse)
   })
 
-  it('test isAlreadyConneected is not connected return 0', async () => {
+  it('test isAlreadyConneected client is not connected return 0', async () => {
     const isConnected = await isAlreadyConnected(channel)
 
     expect(isConnected).toBeFalsy()
   })
+  it('test isAlreadyConneected client is connected return 1', async () => {
+    await saveExampleChannel(channel)
+    const isConnected = await isAlreadyConnected(channel)
+
+    expect(isConnected).toBeTruthy()
+  })
 })
+
+async function saveExampleChannel(channelName: string) {
+  await hb.db.channelRepo.save({
+    allowed: true,
+    allowed_live: true,
+    channel: channelName,
+    connect_timestamp: 1,
+    joined: true,
+    times_connected: 0
+  })
+}
