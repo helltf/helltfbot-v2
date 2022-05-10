@@ -1,7 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
-import { UpdateEventType } from '../../modules/pubsub/types.js'
+import { TopicType, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -47,15 +47,24 @@ async function createNewStreamerConnection(
 ): Promise<boolean> {
   const id = await getUserIdByName(streamer)
   if (!id) return false
+  let topicType = mapUpdateEventTypeToTopic(event)
+  await updateTopicTypeForChannel(streamer, id, topicType)
 
-  await hb.db.notificationChannelRepo.save({
-    name: streamer,
-    id: id
-  })
-
-  hb.pubSub.listenToTopic(id, event)
+  hb.pubSub.listenToTopic(id, topicType)
 
   return true
+}
+
+async function updateTopicTypeForChannel(
+  name: string,
+  id: number,
+  topicType: TopicType
+) {
+  await hb.db.notificationChannelRepo.save({
+    name: name,
+    id: id,
+    topicType: true
+  })
 }
 
 export async function streamerNotExisting(streamer: string): Promise<boolean> {
@@ -66,6 +75,13 @@ export async function streamerNotExisting(streamer: string): Promise<boolean> {
 
 export function eventIsNotValid(event: string) {
   return !Object.values(UpdateEventType).includes(event as UpdateEventType)
+}
+
+function mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
+  if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
+    return TopicType.SETTING
+  if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
+    return TopicType.STATUS
 }
 
 export async function updateNotification(
