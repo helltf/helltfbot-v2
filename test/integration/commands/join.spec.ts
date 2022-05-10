@@ -34,7 +34,7 @@ describe('join command tests', () => {
       response
     } = await join.execute(channel, user, message)
 
-    const expectedResponse = 'channel has to bee defined'
+    const expectedResponse = 'channel has to be defined'
 
     expect(channelResult).toBe(channel)
     expect(success).toBeFalse()
@@ -50,7 +50,7 @@ describe('join command tests', () => {
       response
     } = await join.execute(channel, user, message)
 
-    const expectedResponse = 'channel has to bee defined'
+    const expectedResponse = 'channel has to be defined'
 
     expect(channelResult).toBe(channel)
     expect(success).toBeFalse()
@@ -84,6 +84,6 @@ describe('join command tests', () => {
   it('test isAlreadyConneected is not connected return 0', async () => {
     let isConnected = await isAlreadyConnected(channel)
 
-    expect(isConnected).toBeTrue()
+    expect(isConnected).toBeFalsy()
   })
 })
