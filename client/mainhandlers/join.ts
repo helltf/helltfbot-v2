@@ -14,7 +14,7 @@ const incrementConnection = async (channel: string) => {
 }
 
 const saveChannel = async (channel: string) => {
-	let channelExsisting = await hb.db.channelRepo.countBy({
+	const channelExsisting = await hb.db.channelRepo.countBy({
 		channel: channel
 	})
 
