@@ -47,7 +47,7 @@ async function createNewStreamerConnection(
 ): Promise<boolean> {
   const id = await getUserIdByName(streamer)
   if (!id) return false
-  let topicType = mapUpdateEventTypeToTopic(event)
+  const topicType = mapUpdateEventTypeToTopic(event)
   await updateTopicTypeForChannel(streamer, id, topicType)
 
   hb.pubSub.listenToTopic(id, topicType)
@@ -63,7 +63,7 @@ async function updateTopicTypeForChannel(
   await hb.db.notificationChannelRepo.save({
     name: name,
     id: id,
-    topicType: true
+    [topicType]: true
   })
 }
 
