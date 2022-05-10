@@ -13,33 +13,8 @@ const incrementConnection = async (channel: string) => {
   )
 }
 
-const saveChannel = async (channel: string) => {
-  const channelExsisting = await hb.db.channelRepo.countBy({
-    channel: channel
-  })
-
-	await hb.db.channelRepo.save({
-		channel: channel,
-		allowed: false,
-		allowed_live: true,
-		connect_timestamp: Date.now(),
-		times_connected: 1
-	})
-  if (channelExsisting) return
-
-  await hb.db.channelRepo.save({
-    channel: channel,
-    allowed: false,
-    allowed_live: true,
-    connect_timestamp: Date.now(),
-    times_connected: 1,
-    joined: true
-  })
-}
-
 export const handleJoin = async (channel: string) => {
   channel = channel.replace('#', '')
-  await saveChannel(channel)
   await incrementConnection(channel)
 }
 

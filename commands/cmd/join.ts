@@ -31,6 +31,12 @@ export const join = new Command({
     }
 
     const { success, message } = await connectToChannel(channel)
+
+    return {
+      success: success,
+      response: message,
+      channel: channel
+    }
   }
 })
 
@@ -58,5 +64,22 @@ export async function isAlreadyConnected(channel: string): Promise<number> {
   return hb.db.channelRepo.countBy({
     joined: true,
     channel: channel
+  })
+}
+
+const saveChannel = async (channel: string) => {
+  const channelExsisting = await hb.db.channelRepo.countBy({
+    channel: channel
+  })
+
+  if (channelExsisting) return
+
+  await hb.db.channelRepo.save({
+    channel: channel,
+    allowed: false,
+    allowed_live: true,
+    connect_timestamp: Date.now(),
+    times_connected: 1,
+    joined: true
   })
 }
