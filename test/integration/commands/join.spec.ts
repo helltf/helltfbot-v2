@@ -58,7 +58,7 @@ describe('join command tests', () => {
   })
 
   it('channel is defined but client is already connected return error response', async () => {
-    let message = [channel]
+    const message = [channel]
 
     await hb.db.channelRepo.save({
       allowed: true,
@@ -69,12 +69,12 @@ describe('join command tests', () => {
       times_connected: 0
     })
 
-    let {
+    const {
       channel: responseChannel,
       success,
       response
     } = await join.execute(channel, user, message)
-    let expectedResponse = 'Already connected to that channel'
+    const expectedResponse = 'Already connected to that channel'
 
     expect(responseChannel).toBe(channel)
     expect(success).toBeFalse()
@@ -82,7 +82,7 @@ describe('join command tests', () => {
   })
 
   it('test isAlreadyConneected is not connected return 0', async () => {
-    let isConnected = await isAlreadyConnected(channel)
+    const isConnected = await isAlreadyConnected(channel)
 
     expect(isConnected).toBeFalsy()
   })
