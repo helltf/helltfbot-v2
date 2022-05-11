@@ -52,11 +52,9 @@ export class PubSub {
   }
 
   connect = async () => {
-    hb.log(LogType.PUBSUB, 'Connecting...')
-
     const channels = await hb.db.notificationChannelRepo.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
-
+    hb.log(LogType.PUBSUB, `Connecting to ${channels.length} ...`)
     for await (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
