@@ -57,7 +57,7 @@ async function createNewStreamerConnection(
   const id = await getUserIdByName(streamer)
   if (!id) return false
 
-  const notifyType = mapUpdateEventTypeToTopic(event)
+  const notifyType = mapEventTypeToNotifyType(event)
   await updateTopicTypeForChannel(streamer, notifyType)
 
   hb.pubSub.listenToTopic(id, notifyType)
@@ -97,7 +97,7 @@ export async function pubSubConnectedToStreamerEvent(
   streamer: string,
   eventType: UpdateEventType
 ): Promise<boolean> {
-  const event = mapUpdateEventTypeToTopic(eventType)
+  const event = mapEventTypeToNotifyType(eventType)
   return (
     (await hb.db.notificationChannelRepo.findOneBy({
       name: streamer,
@@ -110,7 +110,9 @@ export function eventIsNotValid(event: string) {
   return !Object.values(UpdateEventType).includes(event as UpdateEventType)
 }
 
-function mapUpdateEventTypeToTopic(event: UpdateEventType): NotifyEventType {
+export function mapEventTypeToNotifyType(
+  event: UpdateEventType
+): NotifyEventType {
   if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
     return NotifyEventType.SETTING
   if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
