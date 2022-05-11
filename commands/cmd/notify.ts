@@ -1,7 +1,11 @@
 import { ChatUserstate } from 'tmi.js'
 import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
-import { TopicType, UpdateEventType } from '../../modules/pubsub/types.js'
+import {
+  NotifyEventType,
+  TopicType,
+  UpdateEventType
+} from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -18,8 +22,17 @@ const notify = new Command({
   ): Promise<BotResponse> => {
     if (eventIsNotValid(event)) return getUnknownEventErrorResponse(channel)
     const eventType = event as UpdateEventType
+    const userId = parseInt(user['user-id'])
 
-    if (await streamerNotExisting(streamer)) {
+    if (await userIsAlreadyNotified(userId, eventType)) {
+      return {
+        channel: channel,
+        success: false,
+        response: 'You are already registered for this notification'
+      }
+    }
+
+    if (!(await pubSubConnectedToStreamerEvent(streamer, eventType))) {
       const success = await createNewStreamerConnection(streamer, eventType)
 
       if (!success) {
@@ -31,7 +44,7 @@ const notify = new Command({
       }
     }
 
-    await updateNotification(channel, streamer, eventType, user['user-id'])
+    await updateNotification(channel, streamer, eventType, userId)
 
     return {
       channel: channel,
@@ -47,29 +60,53 @@ async function createNewStreamerConnection(
 ): Promise<boolean> {
   const id = await getUserIdByName(streamer)
   if (!id) return false
-  const topicType = mapUpdateEventTypeToTopic(event)
-  await updateTopicTypeForChannel(streamer, id, topicType)
 
-  hb.pubSub.listenToTopic(id, topicType)
+  const notifyType = mapUpdateEventTypeToTopic(event)
+  await updateTopicTypeForChannel(streamer, notifyType)
+
+  hb.pubSub.listenToTopic(id, notifyType)
 
   return true
+}
+export async function userIsAlreadyNotified(
+  userId: number,
+  event: UpdateEventType
+): Promise<boolean> {
+  return (
+    (await hb.db.notificationRepo.findOne({
+      where: {
+        user: {
+          id: userId
+        },
+        [event]: true
+      },
+      relations: {
+        user: true
+      }
+    })) !== null
+  )
 }
 
 async function updateTopicTypeForChannel(
   name: string,
-  id: number,
-  topicType: TopicType
+  topicType: NotifyEventType
 ) {
   await hb.db.notificationChannelRepo.save({
     name: name,
-    id: id,
     [topicType]: true
   })
 }
 
-export async function streamerNotExisting(streamer: string): Promise<boolean> {
+export async function pubSubConnectedToStreamerEvent(
+  streamer: string,
+  eventType: UpdateEventType
+): Promise<boolean> {
+  let event = mapUpdateEventTypeToTopic(eventType)
   return (
-    (await hb.db.notificationChannelRepo.findOneBy({ name: streamer })) === null
+    (await hb.db.notificationChannelRepo.findOneBy({
+      name: streamer,
+      [event]: true
+    })) === null
   )
 }
 
@@ -77,27 +114,26 @@ export function eventIsNotValid(event: string) {
   return !Object.values(UpdateEventType).includes(event as UpdateEventType)
 }
 
-function mapUpdateEventTypeToTopic(event: UpdateEventType): TopicType {
+function mapUpdateEventTypeToTopic(event: UpdateEventType): NotifyEventType {
   if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
-    return TopicType.SETTING
+    return NotifyEventType.SETTING
   if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
-    return TopicType.STATUS
+    return NotifyEventType.STATUS
 }
 
 export async function updateNotification(
   channel: string,
   streamer: string,
   event: UpdateEventType,
-  id: string
+  id: number
 ) {
-  const parsedId = parseInt(id)
-  const user = await hb.db.userRepo.findOneBy({ id: parsedId })
+  const user = await hb.db.userRepo.findOneBy({ id: id })
 
-  if (await userHasNotification(parsedId, streamer)) {
+  if (await userHasNotification(id, streamer)) {
     await hb.db.notificationRepo.update(
       {
         user: {
-          id: parsedId
+          id: id
         }
       },
       {
@@ -136,6 +172,11 @@ function getUnknownEventErrorResponse(channel: string): BotResponse {
     channel: channel,
     success: false
   }
+}
+
+export enum StreamerEventType {
+  SETTING = 'setting',
+  STATUS = 'status'
 }
 
 export { notify }
