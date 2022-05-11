@@ -1,11 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
-import {
-  NotifyEventType,
-  TopicType,
-  UpdateEventType
-} from '../../modules/pubsub/types.js'
+import { NotifyEventType, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -101,7 +97,7 @@ export async function pubSubConnectedToStreamerEvent(
   streamer: string,
   eventType: UpdateEventType
 ): Promise<boolean> {
-  let event = mapUpdateEventTypeToTopic(eventType)
+  const event = mapUpdateEventTypeToTopic(eventType)
   return (
     (await hb.db.notificationChannelRepo.findOneBy({
       name: streamer,

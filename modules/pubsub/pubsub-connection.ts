@@ -57,7 +57,7 @@ export class PubSubConnection implements WebSocketConnection {
     notifyType: NotifyEventType,
     channelId: number
   ): PubSubMessage => {
-    let type = this.mapNotifyTypeToTopic(notifyType)
+    const type = this.mapNotifyTypeToTopic(notifyType)
     return {
       type: 'LISTEN',
       nonce: '',

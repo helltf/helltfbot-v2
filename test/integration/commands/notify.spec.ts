@@ -7,7 +7,7 @@ import {
   userHasNotification,
   userIsAlreadyNotified
 } from '../../../commands/cmd/notify.js'
-import { TopicType, UpdateEventType } from '../../../modules/pubsub/types.js'
+import { UpdateEventType } from '../../../modules/pubsub/types.js'
 import {
   exampleUser,
   getExampleNotificationEntity,
@@ -154,8 +154,8 @@ describe('test notify command', () => {
   })
 
   it('user already has this notification return error response', async () => {
-    let event = UpdateEventType.GAME
-    let message = [notification.channel, event]
+    const event = UpdateEventType.GAME
+    const message = [notification.channel, event]
     notification[event] = true
 
     await hb.db.userRepo.save(notification.user)
