@@ -69,6 +69,11 @@ export enum TopicType {
   STATUS = 'video-playback-by-id.'
 }
 
+export enum NotifyEventType {
+  SETTING = 'setting',
+  STATUS = 'status'
+}
+
 export enum UpdateEventType {
   LIVE = 'live',
   OFFLINE = 'offline',

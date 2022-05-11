@@ -1,6 +1,11 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import { LogType } from '../../logger/log-type.js'
-import { WebSocketConnection, TopicType, PubSubMessage } from './types.js'
+import {
+  WebSocketConnection,
+  TopicType,
+  PubSubMessage,
+  NotifyEventType
+} from './types.js'
 import * as WS from 'ws'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
@@ -32,7 +37,7 @@ export class PubSubConnection implements WebSocketConnection {
     }, 250 * 1000)
   }
 
-  listenToTopic(id: number, type: TopicType): TopicType {
+  listenToTopic(id: number, type: NotifyEventType): NotifyEventType {
     if (this.topics.length === 50) {
       return type
     }
@@ -49,9 +54,10 @@ export class PubSubConnection implements WebSocketConnection {
   }
 
   createMessageForTopic = (
-    type: TopicType,
+    notifyType: NotifyEventType,
     channelId: number
   ): PubSubMessage => {
+    let type = this.mapNotifyTypeToTopic(notifyType)
     return {
       type: 'LISTEN',
       nonce: '',
@@ -60,6 +66,11 @@ export class PubSubConnection implements WebSocketConnection {
         topics: [`${type}${channelId}`]
       }
     }
+  }
+
+  mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicType {
+    if (notifyType === NotifyEventType.SETTING) return TopicType.SETTING
+    if (notifyType === NotifyEventType.STATUS) return TopicType.STATUS
   }
 
   handleIncomingMessage({ data }: any) {

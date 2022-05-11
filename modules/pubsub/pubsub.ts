@@ -4,7 +4,12 @@ import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import { PubSubType, PubSubMessage, TopicType } from './types.js'
+import {
+  PubSubType,
+  PubSubMessage,
+  TopicType,
+  NotifyEventType
+} from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
@@ -55,6 +60,7 @@ export class PubSub {
     const channels = await hb.db.notificationChannelRepo.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
     hb.log(LogType.PUBSUB, `Connecting to ${channels.length} ...`)
+
     for await (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
@@ -73,11 +79,11 @@ export class PubSub {
   }
 
   listenToSettingsTopic(connection: PubSubConnection, id: number) {
-    connection.listenToTopic(id, TopicType.SETTING)
+    connection.listenToTopic(id, NotifyEventType.SETTING)
   }
 
   listenToStatusTopic(connection: PubSubConnection, id: number) {
-    connection.listenToTopic(id, TopicType.STATUS)
+    connection.listenToTopic(id, NotifyEventType.STATUS)
   }
 
   handlePubSubMessage = (data: any) => {
@@ -122,7 +128,7 @@ export class PubSub {
     return !openConnections.length ? new PubSubConnection() : openConnections[0]
   }
 
-  listenToTopic(id: number, event: TopicType) {
+  listenToTopic(id: number, event: NotifyEventType) {
     const connection = this.getOpenConnection()
 
     connection.listenToTopic(id, event)
