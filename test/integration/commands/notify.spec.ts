@@ -4,10 +4,15 @@ import {
   notify,
   pubSubConnectedToStreamerEvent,
   updateNotification,
+  updateTopicTypeForChannel,
   userHasNotification,
   userIsAlreadyNotified
 } from '../../../commands/cmd/notify.js'
-import { UpdateEventType } from '../../../modules/pubsub/types.js'
+import {
+  NotifyEventType,
+  TopicType,
+  UpdateEventType
+} from '../../../modules/pubsub/types.js'
 import {
   exampleUser,
   getExampleNotificationEntity,
@@ -18,7 +23,8 @@ import { Notification, TwitchUser } from '../../../db/export-entities.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 
-describe('test notify command', () => {
+describe('test notify command: ', () => {
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
   let channel = 'testChannel'
   let streamer = 'streamer'
   let user: TwitchUser
@@ -174,6 +180,54 @@ describe('test notify command', () => {
     expect(success).toBeFalse()
     expect(response).toBeDefined()
     expect(responseChannel).toBe(channel)
+  })
+  fdescribe('update topic function', () => {
+    it('should update status for status type', async () => {
+      let id = 1
+      await hb.db.notificationChannelRepo.save({
+        name: streamer,
+        id: id,
+        status: false,
+        setting: false
+      })
+
+      await updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
+
+      let updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+        name: streamer
+      })
+
+      expect(updatedEntity.status).toBeTruthy()
+    })
+
+    it('should update setting for setting type', async () => {
+      let id = 1
+      await hb.db.notificationChannelRepo.save({
+        name: streamer,
+        id: id,
+        status: false,
+        setting: false
+      })
+
+      await updateTopicTypeForChannel(streamer, id, NotifyEventType.SETTING)
+
+      let updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+        name: streamer
+      })
+
+      expect(updatedEntity.setting).toBeTruthy()
+    })
+    it('should create new entry if not existing with status type true', async () => {
+      let id = 1
+      await updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
+
+      let createdEntity = await hb.db.notificationChannelRepo.findOneBy({
+        name: streamer
+      })
+
+      expect(createdEntity).toBeDefined()
+      expect(createdEntity.status).toBeTruthy()
+    })
   })
 })
 

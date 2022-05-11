@@ -58,7 +58,7 @@ async function createNewStreamerConnection(
   if (!id) return false
 
   const notifyType = mapEventTypeToNotifyType(event)
-  await updateTopicTypeForChannel(streamer, notifyType)
+  await updateTopicTypeForChannel(streamer, id, notifyType)
 
   hb.pubSub.listenToTopic(id, notifyType)
 
@@ -83,13 +83,15 @@ export async function userIsAlreadyNotified(
   )
 }
 
-async function updateTopicTypeForChannel(
-  name: string,
+export async function updateTopicTypeForChannel(
+  channel: string,
+  id: number,
   topicType: NotifyEventType
 ) {
   await hb.db.notificationChannelRepo.save({
-    name: name,
-    [topicType]: true
+    name: channel,
+    [topicType]: true,
+    id: id
   })
 }
 
