@@ -10,7 +10,6 @@ import {
 } from '../../../commands/cmd/notify.js'
 import {
   NotifyEventType,
-  TopicType,
   UpdateEventType
 } from '../../../modules/pubsub/types.js'
 import {
@@ -183,7 +182,7 @@ describe('test notify command: ', () => {
   })
   fdescribe('update topic function', () => {
     it('should update status for status type', async () => {
-      let id = 1
+      const id = 1
       await hb.db.notificationChannelRepo.save({
         name: streamer,
         id: id,
@@ -193,7 +192,7 @@ describe('test notify command: ', () => {
 
       await updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
 
-      let updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+      const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
       })
 
@@ -201,7 +200,7 @@ describe('test notify command: ', () => {
     })
 
     it('should update setting for setting type', async () => {
-      let id = 1
+      const id = 1
       await hb.db.notificationChannelRepo.save({
         name: streamer,
         id: id,
@@ -211,17 +210,17 @@ describe('test notify command: ', () => {
 
       await updateTopicTypeForChannel(streamer, id, NotifyEventType.SETTING)
 
-      let updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+      const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
       })
 
       expect(updatedEntity.setting).toBeTruthy()
     })
     it('should create new entry if not existing with status type true', async () => {
-      let id = 1
+      const id = 1
       await updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
 
-      let createdEntity = await hb.db.notificationChannelRepo.findOneBy({
+      const createdEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
       })
 

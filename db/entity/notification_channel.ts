@@ -11,10 +11,10 @@ export class NotificationChannel
   @Column('varchar')
   name: string
 
-  @Column('tinyint')
+  @Column('tinyint', { default: false })
   status: boolean
 
-  @Column('tinyint')
+  @Column('tinyint', { default: false })
   setting: boolean
 }
 
