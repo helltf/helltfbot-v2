@@ -2,11 +2,12 @@ import 'dotenv/config'
 import {
   eventIsNotValid,
   notify,
-  streamerNotExisting,
+  pubSubConnectedToStreamerEvent,
   updateNotification,
-  userHasNotification
+  userHasNotification,
+  userIsAlreadyNotified
 } from '../../../commands/cmd/notify.js'
-import { UpdateEventType } from '../../../modules/pubsub/types.js'
+import { TopicType, UpdateEventType } from '../../../modules/pubsub/types.js'
 import {
   exampleUser,
   getExampleNotificationEntity,
@@ -57,7 +58,10 @@ describe('test notify command', () => {
   })
 
   it('given streamer does exist in db return false', async () => {
-    const result = await streamerNotExisting(streamer)
+    const result = await pubSubConnectedToStreamerEvent(
+      streamer,
+      UpdateEventType.GAME
+    )
 
     expect(result).toBeTrue()
   })
@@ -70,7 +74,10 @@ describe('test notify command', () => {
       setting: true
     })
 
-    const result = await streamerNotExisting(streamer)
+    const result = await pubSubConnectedToStreamerEvent(
+      streamer,
+      UpdateEventType.GAME
+    )
 
     expect(result).toBeFalse()
   })
@@ -88,7 +95,7 @@ describe('test notify command', () => {
     const event = UpdateEventType.LIVE
     await hb.db.userRepo.save(user)
 
-    await updateNotification(channel, streamer, event, `${user.id}`)
+    await updateNotification(channel, streamer, event, user.id)
 
     const result = await findNotification(user.id, streamer)
 
@@ -100,12 +107,7 @@ describe('test notify command', () => {
     await hb.db.userRepo.save(notification.user)
     await hb.db.notificationRepo.save(notification)
 
-    await updateNotification(
-      channel,
-      streamer,
-      event,
-      `${notification.user.id}`
-    )
+    await updateNotification(channel, streamer, event, notification.user.id)
 
     const result = await findNotification(notification.user.id, streamer)
 
@@ -127,6 +129,51 @@ describe('test notify command', () => {
     const result = await userHasNotification(notification.user.id, streamer)
 
     expect(result).toBeTrue()
+  })
+
+  it('user is already notified return true', async () => {
+    notification.game = true
+    await hb.db.userRepo.save(notification.user)
+    await hb.db.notificationRepo.save(notification)
+
+    const userIsNotified = await userIsAlreadyNotified(
+      notification.user.id,
+      UpdateEventType.GAME
+    )
+
+    expect(userIsNotified).toBeTrue()
+  })
+
+  it('user is not notified return false', async () => {
+    const userIsNotified = await userIsAlreadyNotified(
+      notification.user.id,
+      UpdateEventType.GAME
+    )
+
+    expect(userIsNotified).toBeFalse()
+  })
+
+  it('user already has this notification return error response', async () => {
+    let event = UpdateEventType.GAME
+    let message = [notification.channel, event]
+    notification[event] = true
+
+    await hb.db.userRepo.save(notification.user)
+    await hb.db.notificationRepo.save(notification)
+
+    const {
+      response,
+      success,
+      channel: responseChannel
+    } = await notify.execute(
+      channel,
+      { 'user-id': `${notification.user.id}` },
+      message
+    )
+
+    expect(success).toBeFalse()
+    expect(response).toBeDefined()
+    expect(responseChannel).toBe(channel)
   })
 })
 
