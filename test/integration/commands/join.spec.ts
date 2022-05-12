@@ -3,14 +3,15 @@ import { ChatUserstate } from 'tmi.js'
 import {
   connectToChannel,
   isAlreadyConnected,
-  join
+  join,
+  updateChannelInDb
 } from '../../../commands/cmd/join.js'
 import { getExampleUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('join command tests', () => {
+describe('join command tests', () => {
   let user: ChatUserstate
   let channel: string
   beforeAll(async () => {
@@ -104,6 +105,69 @@ fdescribe('join command tests', () => {
 
     expect(success).toBeFalse()
     expect(message).toBe(errorMessage)
+  })
+
+  it('connnect to channel is successful return success response', async () => {
+    const message = [channel]
+    spyOn(hb.client, 'join').and.resolveTo([channel])
+
+    const {
+      response,
+      channel: responseChannel,
+      success
+    } = await join.execute(channel, user, message)
+
+    expect(success).toBeTrue()
+    expect(response).toBeDefined()
+    expect(responseChannel).toBe(channel)
+  })
+
+  fit('connect to channel is succesful saves channel', async () => {
+    const message = [channel]
+    spyOn(hb.client, 'join').and.resolveTo([channel])
+
+    await join.execute(channel, user, message)
+
+    const savedChannel = await hb.db.channelRepo.findOneBy({
+      channel: channel
+    })
+
+    expect(savedChannel).not.toBeNull()
+  })
+
+  it('connnect to channel fails return error response', async () => {
+    const error = ''
+    const message = [channel]
+    spyOn(hb.client, 'join').and.rejectWith(error)
+
+    const {
+      response,
+      channel: responseChannel,
+      success
+    } = await join.execute(channel, user, message)
+
+    expect(success).toBeFalse()
+    expect(response).toBeDefined()
+    expect(responseChannel).toBe(channel)
+  })
+
+  describe('save channel function', () => {
+    it('saves new channel if not existing', async () => {
+      await updateChannelInDb(channel)
+      const savedEntitiesLength = await hb.db.channelRepo.count()
+
+      expect(savedEntitiesLength).toBe(1)
+    })
+
+    it('updates new channel if not existing', async () => {
+      await updateChannelInDb(channel)
+
+      const savedEntitiy = await hb.db.channelRepo.findOneBy({
+        channel: channel
+      })
+
+      expect(savedEntitiy.joined).toBe(1)
+    })
   })
 })
 
