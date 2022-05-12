@@ -8,6 +8,7 @@ const ping = new Command({
   requiredParams: [],
   optionalParams: [],
   cooldown: 5000,
+  alias: [],
   execute: async (channel: string): Promise<BotResponse> => {
     return {
       response: 'pong',
