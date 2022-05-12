@@ -22,7 +22,7 @@ const handleChat = async (
     .replace(/\s{2,}/g, ' ')
     .split(' ')
 
-  const command = hb.commands.get(commandLookup.toLowerCase())
+  const command = hb.getCommand(commandLookup.toLowerCase())
 
   if (command === undefined || userHasCooldown(command, user)) return
   if (command.permissions < (await getUserPermissions(user))) return
