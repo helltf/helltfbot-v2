@@ -9,5 +9,6 @@ export const exampleCommand = new Command({
   },
   optionalParams: [],
   requiredParams: [],
-  permissions: 5
+  permissions: 5,
+  alias: []
 })
