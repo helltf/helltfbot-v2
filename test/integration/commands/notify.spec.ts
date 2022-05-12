@@ -146,6 +146,7 @@ describe('test notify command: ', () => {
 
     const userIsNotified = await userIsAlreadyNotified(
       notification.user.id,
+      notification.streamer,
       UpdateEventType.GAME
     )
 
@@ -155,10 +156,33 @@ describe('test notify command: ', () => {
   it('user is not notified return false', async () => {
     const userIsNotified = await userIsAlreadyNotified(
       notification.user.id,
+      streamer,
       UpdateEventType.GAME
     )
 
     expect(userIsNotified).toBeFalse()
+  })
+
+  it('user is notified for other streamer return not notified for this streamer', async () => {
+    await hb.db.userRepo.save(user)
+
+    await hb.db.notificationRepo.save({
+      channel: channel,
+      game: true,
+      live: true,
+      title: true,
+      offline: true,
+      streamer: 'otherStreamer',
+      user: user
+    })
+
+    let isNotified = await userIsAlreadyNotified(
+      notification.user.id,
+      streamer,
+      UpdateEventType.GAME
+    )
+
+    expect(isNotified).toBeFalse()
   })
 
   it('user already has this notification return error response', async () => {

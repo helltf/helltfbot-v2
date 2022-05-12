@@ -20,7 +20,7 @@ const notify = new Command({
     const eventType = event as UpdateEventType
     const userId = parseInt(user['user-id'])
 
-    if (await userIsAlreadyNotified(userId, eventType)) {
+    if (await userIsAlreadyNotified(userId, streamer, eventType)) {
       return {
         channel: channel,
         success: false,
@@ -66,21 +66,21 @@ async function createNewStreamerConnection(
 }
 export async function userIsAlreadyNotified(
   userId: number,
+  streamer: string,
   event: UpdateEventType
 ): Promise<boolean> {
-  return (
-    (await hb.db.notificationRepo.findOne({
-      where: {
-        user: {
-          id: userId
-        },
-        [event]: true
+  return !!(await hb.db.notificationRepo.findOne({
+    where: {
+      user: {
+        id: userId
       },
-      relations: {
-        user: true
-      }
-    })) !== null
-  )
+      streamer: streamer,
+      [event]: true
+    },
+    relations: {
+      user: true
+    }
+  }))
 }
 
 export async function updateTopicTypeForChannel(
