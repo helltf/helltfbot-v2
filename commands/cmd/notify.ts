@@ -64,23 +64,26 @@ async function createNewStreamerConnection(
 
   return true
 }
+
 export async function userIsAlreadyNotified(
   userId: number,
   streamer: string,
   event: UpdateEventType
 ): Promise<boolean> {
-  return !!(await hb.db.notificationRepo.findOne({
-    where: {
-      user: {
-        id: userId
+  return (
+    (await hb.db.notificationRepo.findOne({
+      where: {
+        user: {
+          id: userId
+        },
+        streamer: streamer,
+        [event]: true
       },
-      streamer: streamer,
-      [event]: true
-    },
-    relations: {
-      user: true
-    }
-  }))
+      relations: {
+        user: true
+      }
+    })) !== null
+  )
 }
 
 export async function updateTopicTypeForChannel(
@@ -101,10 +104,10 @@ export async function pubSubConnectedToStreamerEvent(
 ): Promise<boolean> {
   const event = mapEventTypeToNotifyType(eventType)
   return (
-    (await hb.db.notificationChannelRepo.findOneBy({
+    (await hb.db.notificationChannelRepo.countBy({
       name: streamer,
       [event]: true
-    })) === null
+    })) === 1
   )
 }
 
