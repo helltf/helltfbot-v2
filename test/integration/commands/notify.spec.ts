@@ -5,7 +5,7 @@ import {
   pubSubConnectedToStreamerEvent,
   updateNotification,
   updateTopicTypeForChannel,
-  userHasNotification,
+  userNotificationIsExisting,
   userIsAlreadyNotified
 } from '../../../commands/cmd/notify.js'
 import {
@@ -121,7 +121,7 @@ describe('test notify command: ', () => {
 
   it('user has no notification for streamer return false', async () => {
     const id = 1
-    const result = await userHasNotification(id, streamer)
+    const result = await userNotificationIsExisting(id, streamer)
 
     expect(result).toBeFalse()
   })
@@ -131,7 +131,10 @@ describe('test notify command: ', () => {
 
     await hb.db.notificationRepo.save(notification)
 
-    const result = await userHasNotification(notification.user.id, streamer)
+    const result = await userNotificationIsExisting(
+      notification.user.id,
+      streamer
+    )
 
     expect(result).toBeTrue()
   })
@@ -180,7 +183,8 @@ describe('test notify command: ', () => {
     expect(response).toBeDefined()
     expect(responseChannel).toBe(channel)
   })
-  fdescribe('update topic function', () => {
+
+  describe('update topic function', () => {
     it('should update status for status type', async () => {
       const id = 1
       await hb.db.notificationChannelRepo.save({
