@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import {
-  eventIsNotValid,
   notify,
   pubSubConnectedToStreamerEvent,
   updateNotification,
@@ -272,7 +271,7 @@ describe('test notify command: ', () => {
         name: streamer
       })
 
-      expect(createdEntity).toBeDefined()
+      expect(createdEntity).not.toBeNull()
       expect(createdEntity.status).toBeTruthy()
     })
   })
