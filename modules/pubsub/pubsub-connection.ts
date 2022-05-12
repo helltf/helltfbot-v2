@@ -46,7 +46,7 @@ export class PubSubConnection implements WebSocketConnection {
 
     this.sendMessage(message)
 
-    this.topics.push(type + id)
+    this.topics.push(...message.data.topics)
   }
 
   sendMessage(message: PubSubMessage) {
@@ -76,7 +76,7 @@ export class PubSubConnection implements WebSocketConnection {
   handleIncomingMessage({ data }: any) {
     const parsedData = JSON.parse(data)
     if (parsedData.type !== 'RESPONSE' && parsedData.type !== 'MESSAGE') {
-      console.log('Other event' + parsedData.type)
+      console.log('Other event ' + parsedData.type)
     }
 
     this.logError(parsedData.error)
