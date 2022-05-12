@@ -75,8 +75,12 @@ export class PubSubConnection implements WebSocketConnection {
 
   handleIncomingMessage({ data }: any) {
     const parsedData = JSON.parse(data)
-    if (parsedData.type !== 'RESPONSE' && parsedData.type !== 'MESSAGE') {
-      console.log('Other event ' + parsedData.type)
+    if (
+      parsedData.type !== 'RESPONSE' &&
+      parsedData.type !== 'MESSAGE' &&
+      parsedData.type !== 'PONG'
+    ) {
+      hb.log(LogType.PUBSUB, 'Other event ' + parsedData.type)
     }
 
     this.logError(parsedData.error)
