@@ -122,7 +122,7 @@ describe('join command tests', () => {
     expect(responseChannel).toBe(channel)
   })
 
-  fit('connect to channel is succesful saves channel', async () => {
+  it('connect to channel is succesful saves channel', async () => {
     const message = [channel]
     spyOn(hb.client, 'join').and.resolveTo([channel])
 
