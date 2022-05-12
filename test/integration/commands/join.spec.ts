@@ -64,8 +64,7 @@ describe('join command tests', () => {
   it('channel is defined but client is already connected return error response', async () => {
     const joinChannel = 'joinChannel'
     const message = [joinChannel]
-
-    await saveExampleChannel(channel)
+    await saveExampleChannel(joinChannel)
 
     const {
       channel: responseChannel,
