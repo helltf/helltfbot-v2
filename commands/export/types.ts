@@ -7,6 +7,7 @@ export class Command {
   description: string
   requiredParams: string[]
   optionalParams: string[]
+  alias: string[]
   cooldown: number
   execute: (
     channel: string,
@@ -21,7 +22,8 @@ export class Command {
     requiredParams,
     optionalParams,
     execute,
-    cooldown
+    cooldown,
+    alias
   }: CommandInfo) {
     this.name = name
     this.permissions = permissions
@@ -30,6 +32,7 @@ export class Command {
     this.optionalParams = optionalParams
     this.execute = execute
     this.cooldown = cooldown
+    this.alias = alias
   }
 }
 
@@ -40,6 +43,7 @@ interface CommandInfo {
   requiredParams: string[]
   optionalParams: string[]
   cooldown: number
+  alias: string[]
   execute: (
     channel: string,
     userstate: ChatUserstate,

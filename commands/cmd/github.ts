@@ -8,6 +8,7 @@ const github = new Command({
   requiredParams: [],
   optionalParams: [],
   cooldown: 5000,
+  alias: [],
   execute: async (channel: string): Promise<BotResponse> => {
     const response =
       `You can find my github profile by following this link https://github.com/helltf . ` +
