@@ -32,6 +32,10 @@ export const join = new Command({
 
     const { success, message } = await connectToChannel(channel)
 
+    if (success) {
+      await updateChannelInDb(channel)
+    }
+
     return {
       success: success,
       response: message,
@@ -40,11 +44,14 @@ export const join = new Command({
   }
 })
 
-export async function connectToChannel(channel: string): Promise<JoinResult> {
+export async function connectToChannel(channel: string): Promise<{
+  message?: string
+  success: boolean
+}> {
   try {
     await hb.client.join(channel)
     return {
-      message: 'Succesfully join the channel',
+      message: 'Succesfully joined the channel',
       success: true
     }
   } catch (e) {
@@ -55,11 +62,6 @@ export async function connectToChannel(channel: string): Promise<JoinResult> {
   }
 }
 
-interface JoinResult {
-  message?: string
-  success: boolean
-}
-
 export async function isAlreadyConnected(channel: string): Promise<number> {
   return hb.db.channelRepo.countBy({
     joined: true,
@@ -67,14 +69,23 @@ export async function isAlreadyConnected(channel: string): Promise<number> {
   })
 }
 
-const saveChannel = async (channel: string) => {
+export const updateChannelInDb = async (channel: string) => {
   const channelExsisting = await hb.db.channelRepo.countBy({
     channel: channel
   })
 
-  if (channelExsisting) return
+  if (channelExsisting) {
+    await hb.db.channelRepo.update(
+      {
+        channel: channel
+      },
+      {
+        joined: true
+      }
+    )
+  }
 
-  await hb.db.channelRepo.save({
+  return await hb.db.channelRepo.save({
     channel: channel,
     allowed: false,
     allowed_live: true,
