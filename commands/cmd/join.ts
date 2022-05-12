@@ -51,7 +51,7 @@ export async function connectToChannel(channel: string): Promise<{
   try {
     await hb.client.join(channel)
     return {
-      message: 'Succesfully joined the channel',
+      message: 'Successfully joined the channel',
       success: true
     }
   } catch (e) {

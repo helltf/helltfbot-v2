@@ -95,7 +95,7 @@ describe('join command tests', () => {
     const { success, message } = await connectToChannel(channel)
 
     expect(success).toBeTrue()
-    expect(message).toBe('Succesfully join the channel')
+    expect(message).toBe('Successfully joined the channel')
   })
 
   it('connectToChannel is not successful return false', async () => {
