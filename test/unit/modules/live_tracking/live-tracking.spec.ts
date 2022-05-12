@@ -16,8 +16,10 @@ describe('test chunking function', () => {
   })
 
   it('array reduce should return 0 entries', () => {
-    const channels = [{ id: 1, name: 'user1' }]
-    const expectedResult = [[{ id: 1, name: 'user1' }]]
+    const channels = [{ id: 1, name: 'user1', setting: true, status: true }]
+    const expectedResult = [
+      [{ id: 1, name: 'user1', setting: true, status: true }]
+    ]
 
     const result = module.chunkTopicsIntoSize(channels)
 
@@ -26,9 +28,9 @@ describe('test chunking function', () => {
 
   it('array reduce should return 0 entries', () => {
     const channels = [
-      { id: 1, name: 'user1' },
-      { id: 2, name: 'user2' },
-      { id: 3, name: 'user3' }
+      { id: 1, name: 'user1', setting: true, status: true },
+      { id: 2, name: 'user2', setting: true, status: true },
+      { id: 3, name: 'user3', setting: true, status: true }
     ]
     const expectedLength = 1
 
@@ -40,9 +42,9 @@ describe('test chunking function', () => {
   it('array reduce should return 0 entries', () => {
     const maxArraySize = 1
     const channels = [
-      { id: 1, name: 'user1' },
-      { id: 2, name: 'user2' },
-      { id: 3, name: 'user3' }
+      { id: 1, name: 'user1', setting: true, status: true },
+      { id: 2, name: 'user2', setting: true, status: true },
+      { id: 3, name: 'user3', setting: true, status: true }
     ]
     const expectedLength = 3
 
