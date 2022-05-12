@@ -62,7 +62,8 @@ describe('join command tests', () => {
   })
 
   it('channel is defined but client is already connected return error response', async () => {
-    const message = [channel]
+    const joinChannel = 'joinChannel'
+    const message = [joinChannel]
 
     await saveExampleChannel(channel)
 
@@ -83,6 +84,7 @@ describe('join command tests', () => {
 
     expect(isConnected).toBeFalsy()
   })
+
   it('test isAlreadyConneected client is connected return 1', async () => {
     await saveExampleChannel(channel)
     const isConnected = await isAlreadyConnected(channel)
@@ -108,8 +110,10 @@ describe('join command tests', () => {
   })
 
   it('connnect to channel is successful return success response', async () => {
-    const message = [channel]
-    spyOn(hb.client, 'join').and.resolveTo([channel])
+    const joinChannel = 'joinChannel'
+    const message = [joinChannel]
+
+    spyOn(hb.client, 'join').and.resolveTo([joinChannel])
 
     const {
       response,
@@ -123,8 +127,10 @@ describe('join command tests', () => {
   })
 
   it('connect to channel is succesful saves channel', async () => {
-    const message = [channel]
-    spyOn(hb.client, 'join').and.resolveTo([channel])
+    const joinChannel = 'joinChannel'
+    const message = [joinChannel]
+
+    spyOn(hb.client, 'join').and.resolveTo([joinChannel])
 
     await join.execute(channel, user, message)
 
@@ -137,7 +143,8 @@ describe('join command tests', () => {
 
   it('connnect to channel fails return error response', async () => {
     const error = ''
-    const message = [channel]
+    const joinChannel = 'joinChannel'
+    const message = [joinChannel]
     spyOn(hb.client, 'join').and.rejectWith(error)
 
     const {

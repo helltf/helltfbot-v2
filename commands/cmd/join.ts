@@ -25,7 +25,7 @@ export const join = new Command({
       return errorResponse
     }
 
-    if (await isAlreadyConnected(channel)) {
+    if (await isAlreadyConnected(joinChannel)) {
       errorResponse.response = 'Already connected to that channel'
       return errorResponse
     }
