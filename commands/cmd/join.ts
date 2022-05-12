@@ -87,7 +87,7 @@ export const updateChannelInDb = async (channel: string) => {
 
   return await hb.db.channelRepo.save({
     channel: channel,
-    allowed: false,
+    allowed: true,
     allowed_live: true,
     connect_timestamp: Date.now(),
     times_connected: 1,
