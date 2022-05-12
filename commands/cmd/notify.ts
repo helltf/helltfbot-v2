@@ -127,11 +127,10 @@ export async function updateNotification(
   event: UpdateEventType,
   id: number
 ) {
-  const user = await hb.db.userRepo.findOneBy({ id: id })
-
-  if (await userHasNotification(id, streamer)) {
+  if (await userNotificationIsExisting(id, streamer)) {
     await hb.db.notificationRepo.update(
       {
+        streamer: streamer,
         user: {
           id: id
         }
@@ -145,12 +144,14 @@ export async function updateNotification(
       channel: channel,
       streamer: streamer,
       [event]: true,
-      user: user
+      user: {
+        id: id
+      }
     })
   }
 }
 
-export async function userHasNotification(
+export async function userNotificationIsExisting(
   userId: number,
   streamer: string
 ): Promise<boolean> {
