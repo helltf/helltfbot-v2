@@ -10,9 +10,17 @@ export class NotificationChannel
 
   @Column('varchar')
   name: string
+
+  @Column('tinyint', { default: false })
+  status: boolean
+
+  @Column('tinyint', { default: false })
+  setting: boolean
 }
 
 export interface NotificationChannelInfo {
   id: number
   name: string
+  status: boolean
+  setting: boolean
 }

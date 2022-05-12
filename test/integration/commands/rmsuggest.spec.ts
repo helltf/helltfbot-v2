@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { ChatUserstate } from 'tmi.js'
 import { rmsuggest } from '../../../commands/cmd/rmsuggestion.js'
 import { getExampleUserState } from '../../../spec/examples/user.js'
@@ -109,6 +110,6 @@ describe('test rmsuggest command', () => {
     expect(response.response).toBe(
       `Id ${id} not existing or the suggestion is created by somebody else`
     )
-    expect(remainingEntity).toBeDefined()
+    expect(remainingEntity).not.toBeNull()
   })
 })
