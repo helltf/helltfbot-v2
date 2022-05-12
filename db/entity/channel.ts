@@ -5,8 +5,8 @@ export class Channel extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-    @Column('varchar', {unique: true})
-    channel: string
+  @Column('varchar', { unique: true })
+  channel: string
 
   @Column('tinyint')
   allowed: boolean
