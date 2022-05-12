@@ -1,4 +1,7 @@
-import { mapEventTypeToNotifyType } from '../../../commands/cmd/notify.js'
+import {
+  eventIsNotValid,
+  mapEventTypeToNotifyType
+} from '../../../commands/cmd/notify.js'
 import {
   NotifyEventType,
   UpdateEventType
@@ -39,5 +42,14 @@ describe('unit test notify command functions', () => {
     const result = mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
+  })
+
+  it('events from UpdateEventType are valid', () => {
+    const events = ['live', 'offline', 'title', 'game']
+
+    for (const event of events) {
+      const isNotValid = eventIsNotValid(event)
+      expect(isNotValid).toBeFalse()
+    }
   })
 })
