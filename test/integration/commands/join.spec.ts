@@ -166,7 +166,7 @@ describe('join command tests', () => {
         channel: channel
       })
 
-      expect(savedEntitiy.joined).toBe(1)
+      expect(savedEntitiy.joined).toBeTruthy()
     })
   })
 })
