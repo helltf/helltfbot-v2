@@ -30,10 +30,10 @@ export const join = new Command({
       return errorResponse
     }
 
-    const { success, message } = await connectToChannel(channel)
+    const { success, message } = await connectToChannel(joinChannel)
 
     if (success) {
-      await updateChannelInDb(channel)
+      await updateChannelInDb(joinChannel)
     }
 
     return {

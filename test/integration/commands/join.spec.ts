@@ -134,7 +134,7 @@ describe('join command tests', () => {
     await join.execute(channel, user, message)
 
     const savedChannel = await hb.db.channelRepo.findOneBy({
-      channel: channel
+      channel: joinChannel
     })
 
     expect(savedChannel).not.toBeNull()
