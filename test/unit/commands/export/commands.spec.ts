@@ -1,7 +1,7 @@
 import { Commands } from '../../../../commands/export/types.js'
 import { getExampleCommand } from '../../../test-utils/example.js'
 
-fdescribe('testing commands class', () => {
+describe('testing commands class', () => {
   it('input no command should have no command', () => {
     const commands = new Commands([])
 
@@ -81,6 +81,60 @@ fdescribe('testing commands class', () => {
     const createCommands = () => {
       new Commands([command1, command2])
     }
+    expect(createCommands).toThrowError()
+  })
+
+  it('command alias is used already throw error', () => {
+    const alias = ['a']
+
+    const command1 = getExampleCommand({
+      name: 'first',
+      alias: alias
+    })
+
+    const command2 = getExampleCommand({
+      name: 'second',
+      alias: alias
+    })
+
+    const createCommands = () => {
+      new Commands([command1, command2])
+    }
+
+    expect(createCommands).toThrowError()
+  })
+
+  it('command name is already defined but given in alias throw error', () => {
+    const command1 = getExampleCommand({
+      name: 'first'
+    })
+
+    const command2 = getExampleCommand({
+      name: 'second',
+      alias: ['first']
+    })
+
+    const createCommands = () => {
+      new Commands([command1, command2])
+    }
+
+    expect(createCommands).toThrowError()
+  })
+
+  it('command alias is already defined but given in name throw error', () => {
+    const command1 = getExampleCommand({
+      name: 'first',
+      alias: ['second']
+    })
+
+    const command2 = getExampleCommand({
+      name: 'second'
+    })
+
+    const createCommands = () => {
+      new Commands([command1, command2])
+    }
+
     expect(createCommands).toThrowError()
   })
 })
