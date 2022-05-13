@@ -1,6 +1,6 @@
 import { customLogMessage } from '../logger/logger-export.js'
 import { Client } from 'tmi.js'
-import { Command } from '../commands/export/types'
+import { Command, Commands } from '../commands/export/types'
 import { Cooldown } from '../commands/export/cooldown.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
@@ -87,22 +87,5 @@ export class TwitchBot {
 
   getCommand(input: string): Command {
     return hb.commands.findCommand(input)
-  }
-}
-
-class Commands {
-  commands: { activate: string[]; command: Command }[] = []
-
-  constructor(commands: Command[]) {
-    for (const command of commands) {
-      this.commands.push({
-        activate: [command.name, ...command.alias],
-        command: command
-      })
-    }
-  }
-
-  findCommand(input: string): Command {
-    return this.commands.filter((v) => v.activate.includes(input))[0]?.command
   }
 }

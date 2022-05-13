@@ -50,3 +50,20 @@ interface CommandInfo {
     message: string[]
   ) => Promise<BotResponse>
 }
+
+export class Commands {
+  commands: { activate: string[]; command: Command }[] = []
+
+  constructor(commands: Command[]) {
+    for (const command of commands) {
+      this.commands.push({
+        activate: [command.name, ...command.alias],
+        command: command
+      })
+    }
+  }
+
+  findCommand(input: string): Command {
+    return this.commands.filter((v) => v.activate.includes(input))[0]?.command
+  }
+}
