@@ -9,6 +9,7 @@ export const join = new Command({
   requiredParams: ['channel'],
   optionalParams: [],
   cooldown: 5000,
+  alias: [],
   execute: async (
     channel: string,
     user: ChatUserstate,

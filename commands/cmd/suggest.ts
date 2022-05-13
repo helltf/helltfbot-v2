@@ -9,6 +9,7 @@ const suggest = new Command({
   requiredParams: [],
   optionalParams: [],
   cooldown: 30000,
+  alias: [],
   execute: async (
     channel: string,
     userstate: ChatUserstate,

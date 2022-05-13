@@ -8,6 +8,7 @@ const website = new Command({
   requiredParams: [],
   optionalParams: [],
   cooldown: 5000,
+  alias: [],
   execute: async (channel: string): Promise<BotResponse> => {
     const response =
       `You can inspect my website on https://helltf.github.io/bot/#/ ` +

@@ -11,6 +11,7 @@ const notify = new Command({
   requiredParams: ['streamer', 'event'],
   optionalParams: [],
   cooldown: 5000,
+  alias: [],
   execute: async (
     channel: string,
     user: ChatUserstate,
