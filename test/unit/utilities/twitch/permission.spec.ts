@@ -1,7 +1,7 @@
 import { Badges } from 'tmi.js'
 import {
   getChatPermissions,
-  returnHigherPermsissions
+  returnHigherPermissions
 } from '../../../../utilities/twitch/permission.js'
 import { PermissionLevel } from '../../../../utilities/twitch/types.js'
 
@@ -75,7 +75,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.USER
     const chatPerm = PermissionLevel.SUB
 
-    const res = returnHigherPermsissions(dbPerm, chatPerm)
+    const res = returnHigherPermissions(dbPerm, chatPerm)
 
     expect(res).toBe(chatPerm)
   })
@@ -84,7 +84,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.DEV
     const chatPerm = PermissionLevel.SUB
 
-    const res = returnHigherPermsissions(dbPerm, chatPerm)
+    const res = returnHigherPermissions(dbPerm, chatPerm)
 
     expect(res).toBe(dbPerm)
   })
@@ -92,7 +92,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.MOD
     const chatPerm = PermissionLevel.MOD
 
-    const res = returnHigherPermsissions(dbPerm, chatPerm)
+    const res = returnHigherPermissions(dbPerm, chatPerm)
 
     expect(res).toBe(chatPerm)
   })
@@ -101,7 +101,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.BLOCKED
     const chatPerm = PermissionLevel.USER
 
-    const resultingLevel = returnHigherPermsissions(dbPerm, chatPerm)
+    const resultingLevel = returnHigherPermissions(dbPerm, chatPerm)
 
     expect(resultingLevel).toBe(PermissionLevel.BLOCKED)
   })
@@ -110,7 +110,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.BLOCKED
     const chatPerm = PermissionLevel.MOD
 
-    const resultingLevel = returnHigherPermsissions(dbPerm, chatPerm)
+    const resultingLevel = returnHigherPermissions(dbPerm, chatPerm)
 
     expect(resultingLevel).toBe(PermissionLevel.BLOCKED)
   })

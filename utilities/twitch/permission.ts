@@ -10,7 +10,7 @@ export const getChatPermissions = (badges: Badges): PermissionLevel => {
   return PermissionLevel.USER
 }
 
-export const returnHigherPermsissions = (
+export const returnHigherPermissions = (
   db: PermissionLevel,
   chat: PermissionLevel
 ): PermissionLevel => {
@@ -28,5 +28,5 @@ export const getUserPermissions = async (
     })
   )?.permission
 
-  return returnHigherPermsissions(chatPermissions, dbPermissions)
+  return returnHigherPermissions(chatPermissions, dbPermissions)
 }
