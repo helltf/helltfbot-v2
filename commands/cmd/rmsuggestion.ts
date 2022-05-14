@@ -9,7 +9,7 @@ const rmsuggest = new Command({
   requiredParams: ['id'],
   optionalParams: [],
   cooldown: 30000,
-  alias: [],
+  alias: ['rms'],
   execute: async (
     channel: string,
     user: ChatUserstate,
