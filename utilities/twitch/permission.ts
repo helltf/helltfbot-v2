@@ -1,18 +1,25 @@
 import { Userstate, Badges } from 'tmi.js'
+import { PermissionLevel } from './types.js'
 
-const getChatPermissions = (badges: Badges): number => {
-  if (badges.broadcaster !== undefined) return 4
-  if (badges.moderator !== undefined) return 3
-  if (badges.vip !== undefined) return 2
-  if (badges.subscriber !== undefined || badges.founder !== undefined) return 1
-  return 0
+const getChatPermissions = (badges: Badges): PermissionLevel => {
+  if (badges.broadcaster !== undefined) return PermissionLevel.BROADCASTER
+  if (badges.moderator !== undefined) return PermissionLevel.MOD
+  if (badges.vip !== undefined) return PermissionLevel.VIP
+  if (badges.subscriber !== undefined || badges.founder !== undefined)
+    return PermissionLevel.SUB
+  return PermissionLevel.USER
 }
 
-const returnHigherPermsissions = (db: number, chat: number) => {
+const returnHigherPermsissions = (
+  db: PermissionLevel,
+  chat: PermissionLevel
+): PermissionLevel => {
   return db > chat ? db : chat
 }
 
-const getUserPermissions = async (user: Userstate): Promise<number> => {
+const getUserPermissions = async (
+  user: Userstate
+): Promise<PermissionLevel> => {
   const chatPermissions = getChatPermissions(user.badges)
   const dbPermissions = (
     await hb.db.userRepo.findOneBy({
