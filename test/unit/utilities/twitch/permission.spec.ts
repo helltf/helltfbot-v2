@@ -70,22 +70,22 @@ describe('test mapping of permissions', () => {
 })
 
 describe('return correct permission', () => {
-  it('db perm is lower returning db perm', () => {
+  it('chat perm is heigher returning chat perm', () => {
     const dbPerm = 0
     const chatPerm = 1
 
     const res = returnHigherPermsissions(dbPerm, chatPerm)
 
-    expect(res).toBe(dbPerm)
+    expect(res).toBe(chatPerm)
   })
 
-  it('db perm is heigher returning chat perm', () => {
+  it('db perm is heigher returning db perm', () => {
     const dbPerm = 5
     const chatPerm = 1
 
     const res = returnHigherPermsissions(dbPerm, chatPerm)
 
-    expect(res).toBe(chatPerm)
+    expect(res).toBe(dbPerm)
   })
   it('db perm is the same returning chat perm', () => {
     const dbPerm = 3
