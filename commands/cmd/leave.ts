@@ -21,7 +21,7 @@ export const leave = new Command({
         response: 'You need to define a channel',
         success: false
       }
-    if (await notConnectedToChannel(leaveChannel))
+    if (await isNotConnectedToChannel(leaveChannel))
       return {
         channel,
         response: 'Not connected to channel',
@@ -30,7 +30,7 @@ export const leave = new Command({
   }
 })
 
-async function notConnectedToChannel(channel: string): Promise<boolean> {
+async function isNotConnectedToChannel(channel: string): Promise<boolean> {
   return (
     (await hb.db.channelRepo.countBy({
       channel: channel,
