@@ -4,7 +4,7 @@ import { BotResponse } from '../../client/response.js'
 const github = new Command({
   name: 'github',
   description: 'Link to my repo and my github profile',
-  permissions: 5,
+  permissions: 0,
   requiredParams: [],
   optionalParams: [],
   cooldown: 5000,

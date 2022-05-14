@@ -25,7 +25,7 @@ const handleChat = async (
   const command = hb.getCommand(commandLookup.toLowerCase())
 
   if (command === undefined || userHasCooldown(command, user)) return
-  if (command.permissions < (await getUserPermissions(user))) return
+  if (command.permissions > (await getUserPermissions(user))) return
 
   setCooldown(command, user)
 

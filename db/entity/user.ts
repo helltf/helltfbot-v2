@@ -1,6 +1,8 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
+import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Notification } from './notification.js'
 import { Suggestion } from './suggestion.js'
+
 @Entity('user')
 export class TwitchUser extends BaseEntity {
   @PrimaryColumn('int')
@@ -12,8 +14,8 @@ export class TwitchUser extends BaseEntity {
   @Column('varchar', { nullable: true })
   color?: string
 
-  @Column('tinyint')
-  permission: number
+  @Column('tinyint', { default: PermissionLevel.USER })
+  permission: PermissionLevel
 
   @Column('bigint')
   registered_at: number

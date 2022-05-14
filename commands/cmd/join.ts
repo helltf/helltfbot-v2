@@ -5,7 +5,7 @@ import { Command } from '../export/types.js'
 export const join = new Command({
   name: 'join',
   description: 'join a new channel with main client',
-  permissions: 5,
+  permissions: 100,
   requiredParams: ['channel'],
   optionalParams: [],
   cooldown: 5000,

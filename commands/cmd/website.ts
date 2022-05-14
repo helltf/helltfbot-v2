@@ -4,7 +4,7 @@ import { BotResponse } from '../../client/response.js'
 const website = new Command({
   name: 'website',
   description: 'link to my website',
-  permissions: 5,
+  permissions: 0,
   requiredParams: [],
   optionalParams: [],
   cooldown: 5000,

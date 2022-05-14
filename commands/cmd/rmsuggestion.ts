@@ -5,7 +5,7 @@ import { BotResponse } from '../../client/response.js'
 const rmsuggest = new Command({
   name: 'rmsuggest',
   description: 'rmsuggest a feature you want to see',
-  permissions: 5,
+  permissions: 0,
   requiredParams: ['id'],
   optionalParams: [],
   cooldown: 30000,
