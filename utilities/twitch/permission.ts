@@ -1,7 +1,7 @@
 import { Userstate, Badges } from 'tmi.js'
 import { PermissionLevel } from './types.js'
 
-const getChatPermissions = (badges: Badges): PermissionLevel => {
+export const getChatPermissions = (badges: Badges): PermissionLevel => {
   if (badges.broadcaster !== undefined) return PermissionLevel.BROADCASTER
   if (badges.moderator !== undefined) return PermissionLevel.MOD
   if (badges.vip !== undefined) return PermissionLevel.VIP
@@ -10,7 +10,7 @@ const getChatPermissions = (badges: Badges): PermissionLevel => {
   return PermissionLevel.USER
 }
 
-const returnHigherPermsissions = (
+export const returnHigherPermsissions = (
   db: PermissionLevel,
   chat: PermissionLevel
 ): PermissionLevel => {
@@ -18,7 +18,7 @@ const returnHigherPermsissions = (
   return db > chat ? db : chat
 }
 
-const getUserPermissions = async (
+export const getUserPermissions = async (
   user: Userstate
 ): Promise<PermissionLevel> => {
   const chatPermissions = getChatPermissions(user.badges)
@@ -30,5 +30,3 @@ const getUserPermissions = async (
 
   return returnHigherPermsissions(chatPermissions, dbPermissions)
 }
-
-export { getChatPermissions, returnHigherPermsissions, getUserPermissions }
