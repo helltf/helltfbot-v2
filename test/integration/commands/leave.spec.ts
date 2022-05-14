@@ -3,6 +3,7 @@ import { leave } from '../../../commands/cmd/leave.js'
 import { getExampleUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 fdescribe('test leave command', () => {
@@ -40,6 +41,25 @@ fdescribe('test leave command', () => {
 
   it('client is not connected to channel, channel is not in db return error response', async () => {
     let message = ['leaveChannel']
+
+    let {
+      channel: responseChannel,
+      response,
+      success
+    } = await leave.execute(messageChannel, user, message)
+
+    expect(responseChannel).toBe(messageChannel)
+    expect(response).toBe('Not connected to channel')
+    expect(success).toBeFalse()
+  })
+
+  it('client is not connected to channel, channel is in db return error response', async () => {
+    let leaveChannel = 'leaveChannel'
+    let message = [leaveChannel]
+    let channelEntity = getExampleChannel(leaveChannel)
+    channelEntity.joined = false
+
+    await hb.db.channelRepo.save(channelEntity)
 
     let {
       channel: responseChannel,
