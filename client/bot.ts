@@ -41,7 +41,7 @@ export class TwitchBot {
     await this.watchclient.connect()
     await this.db.initialize()
     this.startPubSub()
-    this.log(LogType.TWITCHBOT, 'Successfully initialize ')
+    this.log(LogType.TWITCHBOT, 'Successfully initialized')
     updateCommandsInDb()
   }
 
