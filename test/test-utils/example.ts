@@ -1,5 +1,6 @@
 import { BotResponse } from '../../client/response.js'
 import { Command } from '../../commands/export/types.js'
+import { Channel } from '../../db/export-entities.js'
 
 export function getExampleCommand({
   alias = [],
@@ -34,4 +35,15 @@ interface ExampleCommand {
   optionalParams?: string[]
   permissions?: number
   requiredParams?: string[]
+}
+
+export function getExampleChannel(channel: string): Partial<Channel> {
+  return {
+    allowed: true,
+    allowed_live: true,
+    channel: channel,
+    connect_timestamp: 1,
+    joined: true,
+    times_connected: 0
+  }
 }
