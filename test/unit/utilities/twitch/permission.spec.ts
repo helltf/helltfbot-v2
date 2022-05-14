@@ -1,7 +1,7 @@
 import { Badges } from 'tmi.js'
 import {
   getChatPermissions,
-  returnCorrectPermissions
+  returnLowerPermsissions
 } from '../../../../utilities/twitch/permission.js'
 
 describe('test mapping of permissions', () => {
@@ -74,7 +74,7 @@ describe('return correct permission', () => {
     const dbPerm = 0
     const chatPerm = 1
 
-    const res = returnCorrectPermissions(dbPerm, chatPerm)
+    const res = returnLowerPermsissions(dbPerm, chatPerm)
 
     expect(res).toBe(dbPerm)
   })
@@ -83,7 +83,7 @@ describe('return correct permission', () => {
     const dbPerm = 5
     const chatPerm = 1
 
-    const res = returnCorrectPermissions(dbPerm, chatPerm)
+    const res = returnLowerPermsissions(dbPerm, chatPerm)
 
     expect(res).toBe(chatPerm)
   })
@@ -91,7 +91,7 @@ describe('return correct permission', () => {
     const dbPerm = 3
     const chatPerm = 3
 
-    const res = returnCorrectPermissions(dbPerm, chatPerm)
+    const res = returnLowerPermsissions(dbPerm, chatPerm)
 
     expect(res).toBe(chatPerm)
   })

@@ -8,7 +8,7 @@ const getChatPermissions = (badges: Badges): number => {
   return 5
 }
 
-const returnCorrectPermissions = (db: number, chat: number) => {
+const returnLowerPermsissions = (db: number, chat: number) => {
   return db < chat ? db : chat
 }
 
@@ -20,7 +20,7 @@ const getUserPermissions = async (user: Userstate): Promise<number> => {
     })
   )?.permission
 
-  return returnCorrectPermissions(chatPermissions, dbPermissions)
+  return returnLowerPermsissions(chatPermissions, dbPermissions)
 }
 
-export { getChatPermissions, returnCorrectPermissions, getUserPermissions }
+export { getChatPermissions, returnLowerPermsissions, getUserPermissions }
