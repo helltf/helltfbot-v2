@@ -72,8 +72,8 @@ describe('test mapping of permissions', () => {
 
 describe('return correct permission', () => {
   it('chat perm is heigher returning chat perm', () => {
-    const dbPerm = 0
-    const chatPerm = 1
+    const dbPerm = PermissionLevel.USER
+    const chatPerm = PermissionLevel.SUB
 
     const res = returnHigherPermsissions(dbPerm, chatPerm)
 
@@ -81,23 +81,23 @@ describe('return correct permission', () => {
   })
 
   it('db perm is heigher returning db perm', () => {
-    const dbPerm = 5
-    const chatPerm = 1
+    const dbPerm = PermissionLevel.DEV
+    const chatPerm = PermissionLevel.SUB
 
     const res = returnHigherPermsissions(dbPerm, chatPerm)
 
     expect(res).toBe(dbPerm)
   })
   it('db perm is the same returning chat perm', () => {
-    const dbPerm = 3
-    const chatPerm = 3
+    const dbPerm = PermissionLevel.MOD
+    const chatPerm = PermissionLevel.MOD
 
     const res = returnHigherPermsissions(dbPerm, chatPerm)
 
     expect(res).toBe(chatPerm)
   })
 
-  it('user is user but blocked return -1 as permissions', () => {
+  it('user is user but blocked return -PermissionLevel.SUB as permissions', () => {
     const dbPerm = PermissionLevel.BLOCKED
     const chatPerm = PermissionLevel.USER
 
@@ -106,7 +106,7 @@ describe('return correct permission', () => {
     expect(resultingLevel).toBe(PermissionLevel.BLOCKED)
   })
 
-  it('user is mod but blocked return -1 as permissions', () => {
+  it('user is mod but blocked return -PermissionLevel.SUB as permissions', () => {
     const dbPerm = PermissionLevel.BLOCKED
     const chatPerm = PermissionLevel.MOD
 
