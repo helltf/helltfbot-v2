@@ -15,6 +15,26 @@ export const leave = new Command({
     user: ChatUserstate,
     [leaveChannel]: string[]
   ): Promise<BotResponse> => {
-    return
+    if (!leaveChannel)
+      return {
+        channel,
+        response: 'You need to define a channel',
+        success: false
+      }
+    if (await notConnectedToChannel(leaveChannel))
+      return {
+        channel,
+        response: 'Not connected to channel',
+        success: false
+      }
   }
 })
+
+async function notConnectedToChannel(channel: string): Promise<boolean> {
+  return (
+    (await hb.db.channelRepo.countBy({
+      channel: channel,
+      joined: true
+    })) === 0
+  )
+}
