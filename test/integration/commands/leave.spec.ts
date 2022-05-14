@@ -25,7 +25,7 @@ fdescribe('test leave command', () => {
   })
 
   it('no input is given return erorr response', async () => {
-    let message = []
+    let message = ['']
 
     let {
       channel: responseChannel,
@@ -35,6 +35,20 @@ fdescribe('test leave command', () => {
 
     expect(responseChannel).toBe(messageChannel)
     expect(response).toBe('You need to define a channel')
+    expect(success).toBeFalse()
+  })
+
+  it('client is not connected to channel, channel is not in db return error response', async () => {
+    let message = ['leaveChannel']
+
+    let {
+      channel: responseChannel,
+      response,
+      success
+    } = await leave.execute(messageChannel, user, message)
+
+    expect(responseChannel).toBe(messageChannel)
+    expect(response).toBe('Not connected to channel')
     expect(success).toBeFalse()
   })
 })
