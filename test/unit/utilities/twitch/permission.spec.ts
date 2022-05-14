@@ -96,4 +96,22 @@ describe('return correct permission', () => {
 
     expect(res).toBe(chatPerm)
   })
+
+  it('user is user but blocked return -1 as permissions', () => {
+    const dbPerm = PermissionLevel.BLOCKED
+    const chatPerm = PermissionLevel.USER
+
+    const resultingLevel = returnHigherPermsissions(dbPerm, chatPerm)
+
+    expect(resultingLevel).toBe(PermissionLevel.BLOCKED)
+  })
+
+  it('user is mod but blocked return -1 as permissions', () => {
+    const dbPerm = PermissionLevel.BLOCKED
+    const chatPerm = PermissionLevel.MOD
+
+    const resultingLevel = returnHigherPermsissions(dbPerm, chatPerm)
+
+    expect(resultingLevel).toBe(PermissionLevel.BLOCKED)
+  })
 })

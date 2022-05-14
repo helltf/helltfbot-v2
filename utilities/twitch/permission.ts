@@ -14,6 +14,7 @@ const returnHigherPermsissions = (
   db: PermissionLevel,
   chat: PermissionLevel
 ): PermissionLevel => {
+  if (db === PermissionLevel.BLOCKED) return db
   return db > chat ? db : chat
 }
 
