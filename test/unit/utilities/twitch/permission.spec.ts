@@ -3,13 +3,14 @@ import {
   getChatPermissions,
   returnHigherPermsissions
 } from '../../../../utilities/twitch/permission.js'
+import { PermissionLevel } from '../../../../utilities/twitch/types.js'
 
 describe('test mapping of permissions', () => {
   it('normal user has permissions of 0', () => {
     const badges: Badges = {}
     const result = getChatPermissions(badges)
 
-    expect(result).toBe(0)
+    expect(result).toBe(PermissionLevel.USER)
   })
 
   it('subscriber user has permissions of 1', () => {
@@ -18,7 +19,7 @@ describe('test mapping of permissions', () => {
     }
     const result = getChatPermissions(badges)
 
-    expect(result).toBe(1)
+    expect(result).toBe(PermissionLevel.SUB)
   })
 
   it('founder user has permissions of 1', () => {
@@ -27,7 +28,7 @@ describe('test mapping of permissions', () => {
     }
     const result = getChatPermissions(badges)
 
-    expect(result).toBe(1)
+    expect(result).toBe(PermissionLevel.SUB)
   })
 
   it('vip user has permissions of 2', () => {
@@ -36,7 +37,7 @@ describe('test mapping of permissions', () => {
     }
     const result = getChatPermissions(badges)
 
-    expect(result).toBe(2)
+    expect(result).toBe(PermissionLevel.VIP)
   })
 
   it('moderator user has permissions of 3', () => {
@@ -45,7 +46,7 @@ describe('test mapping of permissions', () => {
     }
     const result = getChatPermissions(badges)
 
-    expect(result).toBe(3)
+    expect(result).toBe(PermissionLevel.MOD)
   })
 
   it('broadcaster user has permissions of 4', () => {
@@ -54,7 +55,7 @@ describe('test mapping of permissions', () => {
     }
     const result = getChatPermissions(badges)
 
-    expect(result).toBe(4)
+    expect(result).toBe(PermissionLevel.BROADCASTER)
   })
 
   it('broadcaster user has permissions of 4', () => {
@@ -65,7 +66,7 @@ describe('test mapping of permissions', () => {
     }
     const result = getChatPermissions(badges)
 
-    expect(result).toBe(4)
+    expect(result).toBe(PermissionLevel.BROADCASTER)
   })
 })
 
