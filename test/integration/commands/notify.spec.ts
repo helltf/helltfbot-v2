@@ -21,7 +21,7 @@ import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 
 describe('test notify command: ', () => {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
   let channel = 'testChannel'
   let streamer = 'streamer'
   let user: TwitchUser
@@ -36,7 +36,7 @@ describe('test notify command: ', () => {
     streamer = 'streamer'
     notification = getExampleNotificationEntity()
     user = getTwitchUserEntity()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })
 

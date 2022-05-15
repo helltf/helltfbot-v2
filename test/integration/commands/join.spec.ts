@@ -8,6 +8,7 @@ import {
 import { getExampleUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('join command tests', () => {
@@ -20,7 +21,7 @@ describe('join command tests', () => {
   })
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })
 
@@ -154,6 +155,23 @@ describe('join command tests', () => {
     expect(success).toBeFalse()
     expect(response).toBeDefined()
     expect(responseChannel).toBe(channel)
+  })
+
+  it('connect to channel sets joined to true', async () => {
+    const channelToJoin = 'joinChannel'
+    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({ joined: false, channel: channelToJoin })
+    )
+
+    await join.execute(channel, user, [channelToJoin])
+
+    const updatedEntity = await hb.db.channelRepo.findOneBy({
+      channel: channelToJoin
+    })
+
+    expect(updatedEntity.joined).toBeTruthy()
   })
 
   describe('save channel function', () => {
