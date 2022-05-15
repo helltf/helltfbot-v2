@@ -1,5 +1,9 @@
 import { ChatUserstate } from 'tmi.js'
-import { leave } from '../../../commands/cmd/leave.js'
+import {
+  leave,
+  leaveChannel,
+  updateChannelProperty
+} from '../../../commands/cmd/leave.js'
 import { getExampleUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
@@ -72,5 +76,105 @@ fdescribe('test leave command', () => {
     expect(responseChannel).toBe(messageChannel)
     expect(response).toBe('Not connected to channel')
     expect(success).toBeFalse()
+  })
+
+  it('client leaves channel return success true', async () => {
+    let channelToLeave = 'leaveChannel'
+    spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
+
+    let { success, message } = await leaveChannel(channelToLeave)
+
+    expect(success).toBeTrue()
+    expect(message).toBe('Successfully left the channel')
+  })
+
+  it('error occurs return success false', async () => {
+    let channelToLeave = 'leaveChannel'
+    spyOn(hb.client, 'join').and.rejectWith('Error')
+
+    let { success, message } = await leaveChannel(channelToLeave)
+
+    expect(success).toBeFalse()
+    expect(message).toBe('Could not join the channel')
+  })
+
+  it('client leaves given channel return success response', async () => {
+    let channelToLeave = 'leaveChannel'
+    let message = [channelToLeave]
+    spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({ joined: true, channel: channelToLeave })
+    )
+
+    let {
+      channel: responseChannel,
+      response,
+      success
+    } = await leave.execute(messageChannel, user, message)
+
+    expect(responseChannel).toBe(messageChannel)
+    expect(success).toBeTrue()
+    expect(response).toBe('Successfully left the channel')
+  })
+
+  it('client leaves given channel and updates join to falsee', async () => {
+    let channelToLeave = 'leaveChannel'
+    let message = [channelToLeave]
+    spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({ joined: true, channel: channelToLeave })
+    )
+
+    await leave.execute(messageChannel, user, message)
+
+    let savedEntity = await hb.db.channelRepo.findOneBy({
+      channel: channelToLeave
+    })
+
+    expect(savedEntity.joined).toBeFalsy()
+  })
+
+  it('update channel property sets joined to false', async () => {
+    let channelToLeave = 'leaveChannel'
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({ joined: true, channel: channelToLeave })
+    )
+
+    await updateChannelProperty(channelToLeave)
+
+    let savedEntity = await hb.db.channelRepo.findOneBy({
+      channel: channelToLeave
+    })
+
+    expect(savedEntity.joined).toBeFalsy()
+  })
+
+  it('update channel property updates 1 entity not both in database', async () => {
+    let channelToLeave = 'leaveChannel'
+    let otherChannel = 'otherChannel'
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({ joined: true, channel: channelToLeave })
+    )
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({ joined: true, channel: otherChannel })
+    )
+
+    await updateChannelProperty(channelToLeave)
+
+    let updatedEntity = await hb.db.channelRepo.findOneBy({
+      channel: channelToLeave
+    })
+
+    let otherEntity = await hb.db.channelRepo.findOneBy({
+      channel: otherChannel
+    })
+
+    expect(updatedEntity.joined).toBeFalsy()
+    expect(otherEntity.joined).toBeTruthy()
   })
 })
