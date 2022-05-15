@@ -15,6 +15,8 @@ export const join = new Command({
     user: ChatUserstate,
     [joinChannel]: string[]
   ): Promise<BotResponse> => {
+    joinChannel = joinChannel === 'me' ? user['display-name'] : joinChannel
+
     const errorResponse: BotResponse = {
       channel: channel,
       response: '',
