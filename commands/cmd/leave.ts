@@ -15,18 +15,16 @@ export const leave = new Command({
     user: ChatUserstate,
     [leaveChannel]: string[]
   ): Promise<BotResponse> => {
-    if (!leaveChannel)
-      return {
-        channel,
-        response: 'You need to define a channel',
-        success: false
-      }
-    if (await isNotConnectedToChannel(leaveChannel))
-      return {
-        channel,
-        response: 'Not connected to channel',
-        success: false
-      }
+    const errorMessage: BotResponse = { channel, success: false, response: '' }
+    if (!leaveChannel) {
+      errorMessage.response = 'You need to define a channel'
+      return errorMessage
+    }
+
+    if (await isNotConnectedToChannel(leaveChannel)) {
+      errorMessage.response = 'Not connected to channel'
+      return errorMessage
+    }
   }
 })
 

@@ -7,7 +7,6 @@ import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 fdescribe('test leave command', () => {
-  console.log(process.env)
   let user: ChatUserstate
   let messageChannel: string
 
@@ -27,9 +26,9 @@ fdescribe('test leave command', () => {
   })
 
   it('no input is given return erorr response', async () => {
-    let message = ['']
+    const message = ['']
 
-    let {
+    const {
       channel: responseChannel,
       response,
       success
@@ -41,9 +40,9 @@ fdescribe('test leave command', () => {
   })
 
   it('client is not connected to channel, channel is not in db return error response', async () => {
-    let message = ['leaveChannel']
+    const message = ['leaveChannel']
 
-    let {
+    const {
       channel: responseChannel,
       response,
       success
@@ -55,16 +54,16 @@ fdescribe('test leave command', () => {
   })
 
   it('client is not connected to channel, channel is in db return error response', async () => {
-    let leaveChannel = 'leaveChannel'
-    let message = [leaveChannel]
-    let channelEntity = getExampleChannel({
+    const leaveChannel = 'leaveChannel'
+    const message = [leaveChannel]
+    const channelEntity = getExampleChannel({
       joined: false,
       channel: leaveChannel
     })
 
     await hb.db.channelRepo.save(channelEntity)
 
-    let {
+    const {
       channel: responseChannel,
       response,
       success
