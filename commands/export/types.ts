@@ -1,4 +1,3 @@
-import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/response.js'
 import { TwitchUserState } from '../../client/types.js'
 
