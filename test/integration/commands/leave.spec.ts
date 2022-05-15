@@ -79,35 +79,35 @@ fdescribe('test leave command', () => {
   })
 
   it('client leaves channel return success true', async () => {
-    let channelToLeave = 'leaveChannel'
+    const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
 
-    let { success, message } = await leaveChannel(channelToLeave)
+    const { success, message } = await leaveChannel(channelToLeave)
 
     expect(success).toBeTrue()
     expect(message).toBe('Successfully left the channel')
   })
 
   it('error occurs return success false', async () => {
-    let channelToLeave = 'leaveChannel'
+    const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'join').and.rejectWith('Error')
 
-    let { success, message } = await leaveChannel(channelToLeave)
+    const { success, message } = await leaveChannel(channelToLeave)
 
     expect(success).toBeFalse()
     expect(message).toBe('Could not join the channel')
   })
 
   it('client leaves given channel return success response', async () => {
-    let channelToLeave = 'leaveChannel'
-    let message = [channelToLeave]
+    const channelToLeave = 'leaveChannel'
+    const message = [channelToLeave]
     spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
 
     await hb.db.channelRepo.save(
       getExampleChannel({ joined: true, channel: channelToLeave })
     )
 
-    let {
+    const {
       channel: responseChannel,
       response,
       success
@@ -119,8 +119,8 @@ fdescribe('test leave command', () => {
   })
 
   it('client leaves given channel and updates join to falsee', async () => {
-    let channelToLeave = 'leaveChannel'
-    let message = [channelToLeave]
+    const channelToLeave = 'leaveChannel'
+    const message = [channelToLeave]
     spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
 
     await hb.db.channelRepo.save(
@@ -129,7 +129,7 @@ fdescribe('test leave command', () => {
 
     await leave.execute(messageChannel, user, message)
 
-    let savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave
     })
 
@@ -137,7 +137,7 @@ fdescribe('test leave command', () => {
   })
 
   it('update channel property sets joined to false', async () => {
-    let channelToLeave = 'leaveChannel'
+    const channelToLeave = 'leaveChannel'
 
     await hb.db.channelRepo.save(
       getExampleChannel({ joined: true, channel: channelToLeave })
@@ -145,7 +145,7 @@ fdescribe('test leave command', () => {
 
     await updateChannelProperty(channelToLeave)
 
-    let savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave
     })
 
@@ -153,8 +153,8 @@ fdescribe('test leave command', () => {
   })
 
   it('update channel property updates 1 entity not both in database', async () => {
-    let channelToLeave = 'leaveChannel'
-    let otherChannel = 'otherChannel'
+    const channelToLeave = 'leaveChannel'
+    const otherChannel = 'otherChannel'
 
     await hb.db.channelRepo.save(
       getExampleChannel({ joined: true, channel: channelToLeave })
@@ -166,11 +166,11 @@ fdescribe('test leave command', () => {
 
     await updateChannelProperty(channelToLeave)
 
-    let updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave
     })
 
-    let otherEntity = await hb.db.channelRepo.findOneBy({
+    const otherEntity = await hb.db.channelRepo.findOneBy({
       channel: otherChannel
     })
 

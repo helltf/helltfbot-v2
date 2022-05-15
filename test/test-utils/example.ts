@@ -1,4 +1,3 @@
-import { BotResponse } from '../../client/response.js'
 import { Command } from '../../commands/export/types.js'
 import { Channel } from '../../db/export-entities.js'
 
