@@ -1,4 +1,3 @@
-import { ChatUserstate } from 'tmi.js'
 import { TwitchUserState } from '../../../client/types.js'
 import { suggest } from '../../../commands/cmd/suggest.js'
 import { getExampleTwitchUserState } from '../../../spec/examples/user.js'

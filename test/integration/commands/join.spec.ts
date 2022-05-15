@@ -15,7 +15,7 @@ describe('join command tests', () => {
   let user: TwitchUserState
   let channel: string
   beforeAll(async () => {
-    user = getExampleTwitchUserState({})
+    user = getExampleTwitchUserState({ permission: 100 })
     channel = 'channel'
     await setupDatabase()
   })
