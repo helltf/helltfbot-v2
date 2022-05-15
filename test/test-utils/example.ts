@@ -1,5 +1,5 @@
-import { BotResponse } from '../../client/response.js'
 import { Command } from '../../commands/export/types.js'
+import { Channel } from '../../db/export-entities.js'
 
 export function getExampleCommand({
   alias = [],
@@ -12,7 +12,7 @@ export function getExampleCommand({
   optionalParams = [],
   requiredParams = [],
   permissions = 0
-}: ExampleCommand): Command {
+}: Partial<Command>): Command {
   return {
     alias,
     cooldown,
@@ -25,13 +25,20 @@ export function getExampleCommand({
   }
 }
 
-interface ExampleCommand {
-  alias?: string[]
-  cooldown?: number
-  description?: string
-  execute?: () => Promise<BotResponse>
-  name?: string
-  optionalParams?: string[]
-  permissions?: number
-  requiredParams?: string[]
+export function getExampleChannel({
+  allowed = true,
+  allowed_live = true,
+  channel = 'channel',
+  connect_timestamp = 1,
+  times_connected = 0,
+  joined = true
+}: Partial<Channel>): Partial<Channel> {
+  return {
+    allowed,
+    allowed_live,
+    channel,
+    connect_timestamp,
+    joined,
+    times_connected
+  }
 }
