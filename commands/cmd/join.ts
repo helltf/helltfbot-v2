@@ -31,7 +31,7 @@ export const join = new Command({
       return errorResponse
     }
 
-    joinChannel = joinChannel === 'me' ? user['display-name'] : joinChannel
+    joinChannel = joinChannel === 'me' ? user.username : joinChannel
 
     if (await isAlreadyConnected(joinChannel)) {
       errorResponse.response = 'Already connected to that channel'
