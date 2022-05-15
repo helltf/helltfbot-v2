@@ -158,7 +158,7 @@ describe('join command tests', () => {
   })
 
   it('connect to channel sets joined to true', async () => {
-    let channelToJoin = 'joinChannel'
+    const channelToJoin = 'joinChannel'
     spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
 
     await hb.db.channelRepo.save(
@@ -167,7 +167,7 @@ describe('join command tests', () => {
 
     await join.execute(channel, user, [channelToJoin])
 
-    let updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToJoin
     })
 
