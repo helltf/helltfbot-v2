@@ -1,4 +1,4 @@
-import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../../client/types.js'
 import {
   connectToChannel,
   isAlreadyConnected,
@@ -11,8 +11,8 @@ import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-describe('join command tests', () => {
-  let user: ChatUserstate
+fdescribe('join command tests', () => {
+  let user: TwitchUserState
   let channel: string
   beforeAll(async () => {
     user = getExampleUserState()
@@ -175,13 +175,13 @@ describe('join command tests', () => {
   })
 
   it('use me as param join the users channel and save to db', async () => {
-    let channelToJoin = 'me'
-    let message = [channelToJoin]
+    const channelToJoin = 'me'
+    const message = [channelToJoin]
     spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
 
     await join.execute(channel, user, message)
 
-    let savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
     })
 
@@ -189,8 +189,8 @@ describe('join command tests', () => {
   })
 
   it('use me as param join the users channel and update it in db', async () => {
-    let channelToJoin = 'me'
-    let message = [channelToJoin]
+    const channelToJoin = 'me'
+    const message = [channelToJoin]
     spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
 
     await hb.db.channelRepo.save(
@@ -202,11 +202,23 @@ describe('join command tests', () => {
 
     await join.execute(channel, user, message)
 
-    let savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
     })
 
     expect(savedEntity.joined).toBeTruthy()
+  })
+
+  it('user permissions are not admin return error if joining other channel', async () => {
+    const channelToJoin = 'channelToJoin'
+    const message = [channelToJoin]
+
+    user.permission = 0
+
+    const { success, response } = await join.execute(channel, user, message)
+
+    expect(success).toBeFalse()
+    expect(response).toBe('You are not permitted to issue this command')
   })
 
   describe('save channel function', () => {
