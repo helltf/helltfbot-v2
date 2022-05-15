@@ -6,7 +6,16 @@ import { suggest } from '../cmd/suggest.js'
 import { rmsuggest } from '../cmd/rmsuggestion.js'
 import { join } from '../cmd/join.js'
 import { Command } from './types.js'
+import { leave } from '../cmd/leave.js'
 
-
-const commands: Command[] = [ping, github, website, notify, suggest, rmsuggest, join]
+const commands: Command[] = [
+  ping,
+  github,
+  website,
+  notify,
+  suggest,
+  rmsuggest,
+  join,
+  leave
+]
 export default commands

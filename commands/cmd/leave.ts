@@ -9,7 +9,7 @@ export const leave = new Command({
   requiredParams: ['channel'],
   optionalParams: [],
   cooldown: 5000,
-  alias: [],
+  alias: ['l'],
   execute: async (
     channel: string,
     user: ChatUserstate,
