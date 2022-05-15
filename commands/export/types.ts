@@ -1,5 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/response.js'
+import { TwitchUserState } from '../../client/types.js'
 
 export class Command {
   name: string
@@ -11,7 +12,7 @@ export class Command {
   cooldown: number
   execute: (
     channel: string,
-    userstate: ChatUserstate,
+    userstate: TwitchUserState,
     message: string[]
   ) => Promise<BotResponse>
 
@@ -46,7 +47,7 @@ interface CommandInfo {
   alias: string[]
   execute: (
     channel: string,
-    userstate: ChatUserstate,
+    userstate: TwitchUserState,
     message: string[]
   ) => Promise<BotResponse>
 }
