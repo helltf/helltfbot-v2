@@ -6,7 +6,7 @@ export const getExampleTwitchUserState = ({
   username = 'user',
   'user-id': userId = '1',
   color = '#FFFFFF',
-  'display-name': displayName = 'helltf',
+  'display-name': displayName = 'user',
   permission = 0
 }: Partial<TwitchUserState>): TwitchUserState => {
   return {
