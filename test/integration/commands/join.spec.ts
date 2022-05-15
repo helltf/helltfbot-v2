@@ -5,17 +5,17 @@ import {
   join,
   updateChannelInDb
 } from '../../../commands/cmd/join.js'
-import { getExampleUserState } from '../../../spec/examples/user.js'
+import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('join command tests', () => {
+describe('join command tests', () => {
   let user: TwitchUserState
   let channel: string
   beforeAll(async () => {
-    user = getExampleUserState()
+    user = getExampleTwitchUserState({})
     channel = 'channel'
     await setupDatabase()
   })

@@ -11,8 +11,8 @@ import {
   UpdateEventType
 } from '../../../modules/pubsub/types.js'
 import {
-  exampleUser,
   getExampleNotificationEntity,
+  getExampleTwitchUserState,
   getTwitchUserEntity
 } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
@@ -46,10 +46,8 @@ describe('test notify command: ', () => {
 
   it('event is not valid return error', async () => {
     const event = 'unknown'
-    const response = await notify.execute(channel, exampleUser, [
-      streamer,
-      event
-    ])
+    let user = getExampleTwitchUserState({})
+    const response = await notify.execute(channel, user, [streamer, event])
 
     expect(response.channel).toBe(channel)
     expect(response.success).toBeFalse()

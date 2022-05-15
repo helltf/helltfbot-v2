@@ -1,6 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../../client/types.js'
 import { suggest } from '../../../commands/cmd/suggest.js'
-import { getExampleUserState } from '../../../spec/examples/user.js'
+import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
@@ -8,11 +9,11 @@ import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test suggest command', () => {
   let channel: string
-  let user: ChatUserstate = getExampleUserState()
+  let user: TwitchUserState = getExampleTwitchUserState({})
 
   beforeAll(async () => {
     channel = 'channel'
-    user = getExampleUserState()
+    user = getExampleTwitchUserState({})
     await setupDatabase()
   })
 
