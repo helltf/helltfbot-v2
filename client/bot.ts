@@ -1,6 +1,5 @@
 import { customLogMessage } from '../logger/logger-export.js'
 import { Client } from 'tmi.js'
-import { Command } from '../commands/export/types'
 import { Cooldown } from '../commands/export/cooldown.js'
 import jobs from '../jobs/jobs-export.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
@@ -12,11 +11,12 @@ import { PubSub } from '../modules/pubsub/pubsub.js'
 import { watchJoinAllChannels } from './watchhandlers/join.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
+import { Command, Commands } from '../commands/export/types.js'
 
 export class TwitchBot {
   client: Client
   watchclient: Client
-  commands: Map<string, Command>
+  commands: Commands
   cooldown: Cooldown
   db: DB
   twitchAT: string
@@ -32,34 +32,22 @@ export class TwitchBot {
     this.cooldown = new Cooldown()
     this.pubSub = new PubSub()
     this.db = new DB()
-    this.setCommands(commands)
+    this.commands = new Commands(commands)
   }
 
-  async init(): Promise<TwitchBot> {
+  async init() {
     this.twitchAT = await generateToken()
     await this.client.connect()
     await this.watchclient.connect()
     await this.db.initialize()
     this.startPubSub()
-    this.log(LogType.TWITCHBOT, 'Successfully logged in')
+    this.log(LogType.TWITCHBOT, 'Successfully initialized')
     updateCommandsInDb()
-
-    return this
   }
 
   startPubSub() {
     if (hb.NODE_ENV === 'dev') return
     this.pubSub.connect()
-  }
-
-  setCommands(commands: Command[]) {
-    const commandMap = new Map<string, Command>()
-
-    for (const command of commands) {
-      commandMap.set(command.name, command)
-    }
-
-    this.commands = commandMap
   }
 
   async joinChannels() {
@@ -95,5 +83,9 @@ export class TwitchBot {
 
   sendMessage(channel: string, message: string) {
     this.client.say(channel, message)
+  }
+
+  getCommand(input: string): Command {
+    return hb.commands.findCommand(input)
   }
 }

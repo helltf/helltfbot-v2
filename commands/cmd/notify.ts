@@ -7,10 +7,11 @@ import { Command } from '../export/types.js'
 const notify = new Command({
   name: 'notify',
   description: 'notify for events',
-  permissions: 5,
+  permissions: 0,
   requiredParams: ['streamer', 'event'],
   optionalParams: [],
   cooldown: 5000,
+  alias: [],
   execute: async (
     channel: string,
     user: ChatUserstate,

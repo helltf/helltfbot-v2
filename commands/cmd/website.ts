@@ -4,10 +4,11 @@ import { BotResponse } from '../../client/response.js'
 const website = new Command({
   name: 'website',
   description: 'link to my website',
-  permissions: 5,
+  permissions: 0,
   requiredParams: [],
   optionalParams: [],
   cooldown: 5000,
+  alias: [],
   execute: async (channel: string): Promise<BotResponse> => {
     const response =
       `You can inspect my website on https://helltf.github.io/bot/#/ ` +

@@ -1,5 +1,7 @@
+import commands from './export/export-commands.js'
+
 const addNewCommands = () => {
-  for (const [, command] of hb.commands) {
+  for (const command of commands) {
     hb.db.commandRepo.save({
       ...command
     })
@@ -16,7 +18,7 @@ async function removeDeletedCommands() {
   const commandNames = (await hb.db.commandRepo.find()).map((c) => c.name)
 
   for (const name of commandNames) {
-    if (!hb.commands.get(name)) {
+    if (!hb.commands.findCommand(name)) {
       hb.db.commandRepo.delete({
         name: name
       })

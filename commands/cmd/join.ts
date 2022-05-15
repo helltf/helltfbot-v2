@@ -5,10 +5,11 @@ import { Command } from '../export/types.js'
 export const join = new Command({
   name: 'join',
   description: 'join a new channel with main client',
-  permissions: 5,
+  permissions: 100,
   requiredParams: ['channel'],
   optionalParams: [],
   cooldown: 5000,
+  alias: ['j'],
   execute: async (
     channel: string,
     user: ChatUserstate,
@@ -87,7 +88,7 @@ export const updateChannelInDb = async (channel: string) => {
 
   return await hb.db.channelRepo.save({
     channel: channel,
-    allowed: false,
+    allowed: true,
     allowed_live: true,
     connect_timestamp: Date.now(),
     times_connected: 1,

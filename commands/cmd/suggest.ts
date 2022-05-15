@@ -5,10 +5,11 @@ import { BotResponse } from '../../client/response.js'
 const suggest = new Command({
   name: 'suggest',
   description: 'suggest a feature you want to see',
-  permissions: 5,
+  permissions: 0,
   requiredParams: [],
   optionalParams: [],
   cooldown: 30000,
+  alias: [],
   execute: async (
     channel: string,
     userstate: ChatUserstate,

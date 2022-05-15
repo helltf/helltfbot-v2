@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { DataSource } from 'typeorm'
 import { TwitchBot } from '../../client/bot.js'
 import { mainClient } from '../../client/main-bot.js'
