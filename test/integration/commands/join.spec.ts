@@ -174,6 +174,41 @@ describe('join command tests', () => {
     expect(updatedEntity.joined).toBeTruthy()
   })
 
+  it('use me as param join the users channel and save to db', async () => {
+    let channelToJoin = 'me'
+    let message = [channelToJoin]
+    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+
+    await join.execute(channel, user, message)
+
+    let savedEntity = await hb.db.channelRepo.findOneBy({
+      channel: user.username
+    })
+
+    expect(savedEntity).not.toBeNull()
+  })
+
+  it('use me as param join the users channel and update it in db', async () => {
+    let channelToJoin = 'me'
+    let message = [channelToJoin]
+    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        channel: channelToJoin,
+        joined: false
+      })
+    )
+
+    await join.execute(channel, user, message)
+
+    let savedEntity = await hb.db.channelRepo.findOneBy({
+      channel: user.username
+    })
+
+    expect(savedEntity.joined).toBeTruthy()
+  })
+
   describe('save channel function', () => {
     it('saves new channel if not existing', async () => {
       await updateChannelInDb(channel)
