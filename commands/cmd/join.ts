@@ -76,7 +76,7 @@ export const updateChannelInDb = async (channel: string) => {
   })
 
   if (channelExsisting) {
-    await hb.db.channelRepo.update(
+    return await hb.db.channelRepo.update(
       {
         channel: channel
       },
