@@ -85,7 +85,6 @@ export const updateChannelInDb = async (channel: string) => {
       }
     )
   }
-
   return await hb.db.channelRepo.save({
     channel: channel,
     allowed: true,
