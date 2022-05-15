@@ -1,5 +1,6 @@
 import { BotResponse } from '../../client/response.js'
 import { TwitchUserState } from '../../client/types.js'
+import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
 
 export const join = new Command({
@@ -25,7 +26,7 @@ export const join = new Command({
       return errorResponse
     }
 
-    if (joinChannel !== 'me' && user.permission < 100) {
+    if (joinChannel !== 'me' && user.permission < PermissionLevel.ADMIN) {
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }
