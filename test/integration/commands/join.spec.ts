@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { ChatUserstate } from 'tmi.js'
 import {
   connectToChannel,

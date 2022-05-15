@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { UpdateEventType } from '../../../modules/pubsub/types.js'
 import { UpdateEventHandler } from '../../../modules/pubsub/update-event-handler.js'
 import { getExampleNotificationEntity } from '../../../spec/examples/user.js'
