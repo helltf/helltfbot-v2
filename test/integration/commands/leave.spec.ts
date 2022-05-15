@@ -10,7 +10,7 @@ import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test leave command', () => {
+describe('test leave command', () => {
   let user: ChatUserstate
   let messageChannel: string
 
