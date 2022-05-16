@@ -3,6 +3,7 @@ import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { PermissionLevel } from '../../../utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 fdescribe('test allow command', () => {
@@ -40,7 +41,6 @@ fdescribe('test allow command', () => {
     } = await allow.execute(messageChannel, user, message)
 
     expect(response).toBe('You are not permitted to execute this command')
-
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeFalse()
   })
@@ -54,7 +54,6 @@ fdescribe('test allow command', () => {
     } = await allow.execute(messageChannel, user, [])
 
     expect(response).toBe('You are not permitted to execute this command')
-
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeFalse()
   })
@@ -68,8 +67,46 @@ fdescribe('test allow command', () => {
     } = await allow.execute(messageChannel, user, [])
 
     expect(response).toBe('Successfully updated setttngs')
-
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
+  })
+
+  it('user is admin and provides no params return successfull response', async () => {
+    let {
+      response,
+      success,
+      channel: responseChannel
+    } = await allow.execute(messageChannel, user, [])
+
+    expect(response).toBe('Successfully updated setttngs')
+    expect(responseChannel).toBe(messageChannel)
+    expect(success).toBeTrue()
+  })
+
+  it('user is admin and provides a channel return successfull response', async () => {
+    const allowChannel = 'allowChannel'
+    let message = [allowChannel]
+
+    let {
+      response,
+      success,
+      channel: responseChannel
+    } = await allow.execute(messageChannel, user, message)
+
+    expect(response).toBe('Successfully updated setttngs')
+    expect(responseChannel).toBe(messageChannel)
+    expect(success).toBeTrue()
+  })
+
+  it('no params provided updates users channel in database', async () => {
+    const allowChannel = 'allowChannel'
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        channel: allowChannel,
+        allowed: false
+      })
+    )
+
+    let resoponse = await allow.execute(messageChannel, user, [])
   })
 })
