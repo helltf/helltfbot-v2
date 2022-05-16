@@ -1,5 +1,6 @@
 import { BotResponse } from '../../client/response.js'
 import { TwitchUserState } from '../../client/types.js'
+import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
 
 const allow = new Command({
@@ -15,10 +16,20 @@ const allow = new Command({
     user: TwitchUserState,
     [updateChannel]
   ): Promise<BotResponse> => {
-    return {
+    const errorResponse = {
       channel: channel,
       response: 'You are not permitted to execute this command',
       success: false
+    }
+
+    if (user.permission < PermissionLevel.BROADCASTER) return errorResponse
+    if (user.permission === PermissionLevel.BROADCASTER && updateChannel)
+      return errorResponse
+
+    return {
+      response: 'Successfully updated setttngs',
+      channel: channel,
+      success: true
     }
   }
 })
