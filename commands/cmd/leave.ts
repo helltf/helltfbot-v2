@@ -5,7 +5,7 @@ import { Command } from '../export/types.js'
 export const leave = new Command({
   name: 'leave',
   description: 'leave a new channel with main client',
-  permissions: 100,
+  permissions: 0,
   requiredParams: ['channel'],
   optionalParams: [],
   cooldown: 5000,
@@ -16,6 +16,8 @@ export const leave = new Command({
     [channeltoLeave]: string[]
   ): Promise<BotResponse> => {
     const errorMessage: BotResponse = { channel, success: false, response: '' }
+    channeltoLeave = channeltoLeave === 'me' ? user.username : channeltoLeave
+
     if (!channeltoLeave) {
       errorMessage.response = 'You need to define a channel'
       return errorMessage
@@ -61,7 +63,7 @@ export async function leaveChannel(channel: string): Promise<{
   message: string
 }> {
   try {
-    await hb.client.join(channel)
+    await hb.client.part(channel)
     return {
       success: true,
       message: 'Successfully left the channel'
@@ -69,7 +71,7 @@ export async function leaveChannel(channel: string): Promise<{
   } catch (e) {
     return {
       success: false,
-      message: 'Could not join the channel'
+      message: 'Could not leave the channel'
     }
   }
 }

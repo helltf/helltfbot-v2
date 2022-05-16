@@ -195,7 +195,7 @@ describe('join command tests', () => {
 
     await hb.db.channelRepo.save(
       getExampleChannel({
-        channel: channelToJoin,
+        channel: user.username,
         joined: false
       })
     )
