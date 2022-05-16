@@ -1,6 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { rmsuggest } from '../../../commands/cmd/rmsuggestion.js'
-import { getExampleUserState } from '../../../spec/examples/user.js'
+import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
@@ -15,7 +15,7 @@ describe('test rmsuggest command', () => {
 
   beforeEach(async () => {
     channel = 'channel'
-    user = getExampleUserState()
+    user = getExampleTwitchUserState({})
     await clearDb(hb.db.dataSource)
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
   })

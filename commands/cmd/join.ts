@@ -1,18 +1,19 @@
-import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/response.js'
+import { TwitchUserState } from '../../client/types.js'
+import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
 
 export const join = new Command({
   name: 'join',
   description: 'join a new channel with main client',
-  permissions: 100,
+  permissions: 0,
   requiredParams: ['channel'],
   optionalParams: [],
   cooldown: 5000,
   alias: ['j'],
   execute: async (
     channel: string,
-    user: ChatUserstate,
+    user: TwitchUserState,
     [joinChannel]: string[]
   ): Promise<BotResponse> => {
     const errorResponse: BotResponse = {
@@ -20,11 +21,17 @@ export const join = new Command({
       response: '',
       success: false
     }
-
     if (!joinChannel) {
       errorResponse.response = 'channel has to be defined'
       return errorResponse
     }
+
+    if (joinChannel !== 'me' && user.permission < PermissionLevel.ADMIN) {
+      errorResponse.response = 'You are not permitted to issue this command'
+      return errorResponse
+    }
+
+    joinChannel = joinChannel === 'me' ? user.username : joinChannel
 
     if (await isAlreadyConnected(joinChannel)) {
       errorResponse.response = 'Already connected to that channel'

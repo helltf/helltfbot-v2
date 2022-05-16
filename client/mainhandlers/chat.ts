@@ -2,12 +2,13 @@ import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/export/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { BotResponse } from '../response.js'
+import { TwitchUserState } from '../types.js'
 
 const prefix = process.env.PREFIX
 
 const handleChat = async (
   channel: string,
-  user: ChatUserstate,
+  user: TwitchUserState,
   message: string,
   self: boolean
 ) => {
@@ -25,7 +26,10 @@ const handleChat = async (
   const command = hb.getCommand(commandLookup.toLowerCase())
 
   if (command === undefined || userHasCooldown(command, user)) return
-  if (command.permissions > (await getUserPermissions(user))) return
+
+  user.permission = await getUserPermissions(user)
+
+  if (command.permissions > user.permission) return
 
   setCooldown(command, user)
 

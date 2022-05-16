@@ -1,18 +1,18 @@
-import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../../../client/types.js'
 import { Cooldown } from '../../../../commands/export/cooldown.js'
 import { Command } from '../../../../commands/export/types.js'
 import { exampleCommand } from '../../../../spec/examples/command.js'
-import { exampleUser } from '../../../../spec/examples/user.js'
+import { getExampleTwitchUserState } from '../../../../spec/examples/user.js'
 
 describe('testing cooldown class', () => {
   let cooldown: Cooldown
   let command: Command
-  let user: ChatUserstate
+  let user: TwitchUserState
 
   beforeEach(() => {
     cooldown = new Cooldown()
     command = exampleCommand
-    user = exampleUser
+    user = getExampleTwitchUserState({})
   })
 
   it('cooldowns should be empty by default', () => {

@@ -4,7 +4,7 @@ import {
   leaveChannel,
   updateChannelProperty
 } from '../../../commands/cmd/leave.js'
-import { getExampleUserState } from '../../../spec/examples/user.js'
+import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
@@ -15,7 +15,7 @@ describe('test leave command', () => {
   let messageChannel: string
 
   beforeAll(async () => {
-    user = getExampleUserState()
+    user = getExampleTwitchUserState({})
     messageChannel = 'messageChannel'
     await setupDatabase()
   })
