@@ -55,6 +55,7 @@ export async function updateChannelAllowSettings(channel: string) {
   )
   return true
 }
+
 export async function IsChannelExisting(channel: string) {
   return (
     (await hb.db.channelRepo.countBy({

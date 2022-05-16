@@ -31,10 +31,10 @@ fdescribe('test allow command', () => {
 
   it('user has broadcaster permissions but provides channel return error response', async () => {
     const allowChannel = 'allowChannel'
-    let message = [allowChannel]
+    const message = [allowChannel]
     user.permission = PermissionLevel.BROADCASTER
 
-    let {
+    const {
       response,
       success,
       channel: responseChannel
@@ -47,7 +47,7 @@ fdescribe('test allow command', () => {
 
   it('user has user permissions return error', async () => {
     user.permission = PermissionLevel.USER
-    let {
+    const {
       response,
       success,
       channel: responseChannel
@@ -68,7 +68,7 @@ fdescribe('test allow command', () => {
       })
     )
 
-    let {
+    const {
       response,
       success,
       channel: responseChannel
@@ -86,7 +86,7 @@ fdescribe('test allow command', () => {
         allowed: false
       })
     )
-    let {
+    const {
       response,
       success,
       channel: responseChannel
@@ -99,7 +99,7 @@ fdescribe('test allow command', () => {
 
   it('user is admin and provides a channel return successfull response', async () => {
     const allowChannel = 'allowChannel'
-    let message = [allowChannel]
+    const message = [allowChannel]
 
     await hb.db.channelRepo.save(
       getExampleChannel({
@@ -108,7 +108,7 @@ fdescribe('test allow command', () => {
       })
     )
 
-    let {
+    const {
       response,
       success,
       channel: responseChannel
@@ -123,7 +123,7 @@ fdescribe('test allow command', () => {
     const allowChannel = 'allowChannel'
     const message = [allowChannel]
 
-    let {
+    const {
       response,
       success,
       channel: responseChannel
@@ -144,7 +144,7 @@ fdescribe('test allow command', () => {
 
     await allow.execute(messageChannel, user, [])
 
-    let updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
     })
 
@@ -164,7 +164,7 @@ fdescribe('test allow command', () => {
 
     await allow.execute(messageChannel, user, message)
 
-    let updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: allowChannel
     })
 
