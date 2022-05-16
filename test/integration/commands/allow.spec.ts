@@ -101,6 +101,13 @@ fdescribe('test allow command', () => {
     const allowChannel = 'allowChannel'
     let message = [allowChannel]
 
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        channel: allowChannel,
+        allowed: false
+      })
+    )
+
     let {
       response,
       success,
@@ -111,6 +118,7 @@ fdescribe('test allow command', () => {
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })
+
   it('given channel param does not exist in database return error response', async () => {
     const allowChannel = 'allowChannel'
     const message = [allowChannel]
@@ -138,6 +146,26 @@ fdescribe('test allow command', () => {
 
     let updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
+    })
+
+    expect(updatedEntity.allowed).toBeTruthy()
+  })
+
+  it('params provided updates given channel in database', async () => {
+    const allowChannel = 'allowChannel'
+    const message = [allowChannel]
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        channel: allowChannel,
+        allowed: false
+      })
+    )
+
+    await allow.execute(messageChannel, user, message)
+
+    let updatedEntity = await hb.db.channelRepo.findOneBy({
+      channel: allowChannel
     })
 
     expect(updatedEntity.allowed).toBeTruthy()
