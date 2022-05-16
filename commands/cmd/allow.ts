@@ -26,6 +26,15 @@ const allow = new Command({
     if (user.permission === PermissionLevel.BROADCASTER && updateChannel)
       return errorResponse
 
+    updateChannel = updateChannel || user.username
+
+    const success = await updateChannelAllowSettings(updateChannel)
+
+    if (!success) {
+      errorResponse.response = 'This channel is not registered'
+      return errorResponse
+    }
+
     return {
       response: 'Successfully updated setttngs',
       channel: channel,
@@ -34,4 +43,23 @@ const allow = new Command({
   }
 })
 
+export async function updateChannelAllowSettings(channel: string) {
+  if (!(await IsChannelExisting(channel))) return false
+  await hb.db.channelRepo.update(
+    {
+      channel: channel
+    },
+    {
+      allowed: true
+    }
+  )
+  return true
+}
+export async function IsChannelExisting(channel: string) {
+  return (
+    (await hb.db.channelRepo.countBy({
+      channel: channel
+    })) !== 0
+  )
+}
 export { allow }
