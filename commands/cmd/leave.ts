@@ -1,5 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/response.js'
+import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
 
 export const leave = new Command({
@@ -15,17 +16,22 @@ export const leave = new Command({
     user: ChatUserstate,
     [channeltoLeave]: string[]
   ): Promise<BotResponse> => {
-    const errorMessage: BotResponse = { channel, success: false, response: '' }
-    channeltoLeave = channeltoLeave === 'me' ? user.username : channeltoLeave
+    const errorResponse: BotResponse = { channel, success: false, response: '' }
 
     if (!channeltoLeave) {
-      errorMessage.response = 'You need to define a channel'
-      return errorMessage
+      errorResponse.response = 'You need to define a channel'
+      return errorResponse
     }
 
+    if (channeltoLeave !== 'me' && user.permission < PermissionLevel.ADMIN) {
+      errorResponse.response = 'You are not permitted to issue this command'
+      return errorResponse
+    }
+    channeltoLeave = channeltoLeave === 'me' ? user.username : channeltoLeave
+
     if (await isNotConnectedToChannel(channeltoLeave)) {
-      errorMessage.response = 'Not connected to channel'
-      return errorMessage
+      errorResponse.response = 'Not connected to channel'
+      return errorResponse
     }
     const { success, message } = await leaveChannel(channeltoLeave)
 
