@@ -60,6 +60,14 @@ fdescribe('test allow command', () => {
 
   it('user has broadcaster permissions but provides no params return successfull resoponse', async () => {
     user.permission = PermissionLevel.BROADCASTER
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        channel: user.username,
+        allowed: false
+      })
+    )
+
     let {
       response,
       success,
@@ -72,6 +80,12 @@ fdescribe('test allow command', () => {
   })
 
   it('user is admin and provides no params return successfull response', async () => {
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        channel: user.username,
+        allowed: false
+      })
+    )
     let {
       response,
       success,
@@ -97,16 +111,35 @@ fdescribe('test allow command', () => {
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })
+  it('given channel param does not exist in database return error response', async () => {
+    const allowChannel = 'allowChannel'
+    const message = [allowChannel]
+
+    let {
+      response,
+      success,
+      channel: responseChannel
+    } = await allow.execute(messageChannel, user, message)
+
+    expect(response).toBe('This channel is not registered')
+    expect(success).toBeFalse()
+    expect(responseChannel).toBe(messageChannel)
+  })
 
   it('no params provided updates users channel in database', async () => {
-    const allowChannel = 'allowChannel'
     await hb.db.channelRepo.save(
       getExampleChannel({
-        channel: allowChannel,
+        channel: user.username,
         allowed: false
       })
     )
 
-    let resoponse = await allow.execute(messageChannel, user, [])
+    await allow.execute(messageChannel, user, [])
+
+    let updatedEntity = await hb.db.channelRepo.findOneBy({
+      channel: user.username
+    })
+
+    expect(updatedEntity.allowed).toBeTruthy()
   })
 })
