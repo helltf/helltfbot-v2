@@ -1,21 +1,25 @@
-import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../../client/types.js'
 import {
   leave,
   leaveChannel,
   updateChannelProperty
 } from '../../../commands/cmd/leave.js'
 import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
+import { PermissionLevel } from '../../../utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test leave command', () => {
-  let user: ChatUserstate
+  let user: TwitchUserState
   let messageChannel: string
 
   beforeAll(async () => {
-    user = getExampleTwitchUserState({})
+    user = getExampleTwitchUserState({
+      permission: 100
+    })
+
     messageChannel = 'messageChannel'
     await setupDatabase()
   })
@@ -80,7 +84,7 @@ describe('test leave command', () => {
 
   it('client leaves channel return success true', async () => {
     const channelToLeave = 'leaveChannel'
-    spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
+    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
     const { success, message } = await leaveChannel(channelToLeave)
 
@@ -90,18 +94,18 @@ describe('test leave command', () => {
 
   it('error occurs return success false', async () => {
     const channelToLeave = 'leaveChannel'
-    spyOn(hb.client, 'join').and.rejectWith('Error')
+    spyOn(hb.client, 'part').and.rejectWith('Error')
 
     const { success, message } = await leaveChannel(channelToLeave)
 
     expect(success).toBeFalse()
-    expect(message).toBe('Could not join the channel')
+    expect(message).toBe('Could not leave the channel')
   })
 
   it('client leaves given channel return success response', async () => {
     const channelToLeave = 'leaveChannel'
     const message = [channelToLeave]
-    spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
+    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
     await hb.db.channelRepo.save(
       getExampleChannel({ joined: true, channel: channelToLeave })
@@ -118,10 +122,10 @@ describe('test leave command', () => {
     expect(response).toBe('Successfully left the channel')
   })
 
-  it('client leaves given channel and updates join to falsee', async () => {
+  it('client leaves given channel and updates joined to falsee', async () => {
     const channelToLeave = 'leaveChannel'
     const message = [channelToLeave]
-    spyOn(hb.client, 'join').and.resolveTo([channelToLeave])
+    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
     await hb.db.channelRepo.save(
       getExampleChannel({ joined: true, channel: channelToLeave })
@@ -176,5 +180,41 @@ describe('test leave command', () => {
 
     expect(updatedEntity.joined).toBeFalsy()
     expect(otherEntity.joined).toBeTruthy()
+  })
+
+  it('leave channel me sets the channel to joined false', async () => {
+    const channelToLeave = 'me'
+    const message = [channelToLeave]
+
+    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        joined: true,
+        channel: user.username
+      })
+    )
+
+    await leave.execute(messageChannel, user, message)
+
+    const updatedEntity = await hb.db.channelRepo.findOneBy({
+      channel: user.username
+    })
+
+    expect(updatedEntity.joined).toBeFalsy()
+    expect(hb.client.part).toHaveBeenCalledWith(user.username)
+  })
+
+  it('user has no permissions but uses not me as param channel return error', async () => {
+    const channelToLeave = 'channelToLeave'
+
+    const message = [channelToLeave]
+    user.permission = PermissionLevel.USER
+    const response = await leave.execute(messageChannel, user, message)
+
+    expect(response.success).toBeFalse()
+    expect(response.response).toBe(
+      'You are not permitted to issue this command'
+    )
   })
 })
