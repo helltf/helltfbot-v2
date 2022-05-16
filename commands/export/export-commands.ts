@@ -7,6 +7,7 @@ import { rmsuggest } from '../cmd/rmsuggestion.js'
 import { join } from '../cmd/join.js'
 import { Command } from './types.js'
 import { leave } from '../cmd/leave.js'
+import { allow } from '../cmd/allow.js'
 
 const commands: Command[] = [
   ping,
@@ -16,6 +17,7 @@ const commands: Command[] = [
   suggest,
   rmsuggest,
   join,
-  leave
+  leave,
+  allow
 ]
 export default commands
