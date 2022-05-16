@@ -6,7 +6,7 @@ import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test allow command', () => {
+describe('test allow command', () => {
   let messageChannel = 'messageChannel'
   let user = getExampleTwitchUserState({
     permission: PermissionLevel.ADMIN
