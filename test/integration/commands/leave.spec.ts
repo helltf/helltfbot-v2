@@ -1,17 +1,18 @@
-import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../../client/types.js'
 import {
   leave,
   leaveChannel,
   updateChannelProperty
 } from '../../../commands/cmd/leave.js'
 import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
+import { PermissionLevel } from '../../../utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test leave command', () => {
-  let user: ChatUserstate
+describe('test leave command', () => {
+  let user: TwitchUserState
   let messageChannel: string
 
   beforeAll(async () => {
@@ -182,7 +183,7 @@ fdescribe('test leave command', () => {
   })
 
   it('leave channel me sets the channel to joined false', async () => {
-    let channelToLeave = 'me'
+    const channelToLeave = 'me'
     const message = [channelToLeave]
 
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
@@ -194,13 +195,26 @@ fdescribe('test leave command', () => {
       })
     )
 
-    console.log(await leave.execute(messageChannel, user, message))
+    await leave.execute(messageChannel, user, message)
 
-    let updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
     })
 
-    expect(updatedEntity.joined).toBeTruthy()
-    expect(hb.client.part).toHaveBeenCalled()
+    expect(updatedEntity.joined).toBeFalsy()
+    expect(hb.client.part).toHaveBeenCalledWith(user.username)
+  })
+
+  it('user has no permissions but uses not me as param channel return error', async () => {
+    const channelToLeave = 'channelToLeave'
+
+    const message = [channelToLeave]
+    user.permission = PermissionLevel.USER
+    const response = await leave.execute(messageChannel, user, message)
+
+    expect(response.success).toBeFalse()
+    expect(response.response).toBe(
+      'You are not permitted to issue this command'
+    )
   })
 })
