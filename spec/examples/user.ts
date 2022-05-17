@@ -1,6 +1,6 @@
 import { TwitchUserState } from '../../client/types.js'
-import { NotificationInfo } from '../../db/entity/notification.js'
-import { TwitchUser, Notification } from '../../db/export-entities.js'
+import { Notification } from '../../db/export-entities.js'
+import { getExampleTwitchUserEntity } from '../../test/test-utils/example.js'
 
 export const getExampleTwitchUserState = ({
   username = 'user',
@@ -18,49 +18,14 @@ export const getExampleTwitchUserState = ({
   }
 }
 
-export const exampleTwitchUserEntity = {
-  id: 1,
-  name: 'user',
-  color: '#ffffff',
-  permission: 0,
-  registered_at: Date.now(),
-  display_name: 'user',
-  notifications: [],
-  suggestions: []
-}
-
-export const getTwitchUserEntity = (): TwitchUser => {
-  const user = new TwitchUser()
-
-  const {
-    id,
-    name,
-    color,
-    permission,
-    registered_at,
-    display_name,
-    notifications
-  } = exampleTwitchUserEntity
-
-  user.id = id
-  user.name = name
-  user.color = color
-  user.permission = permission
-  user.display_name = display_name
-  user.registered_at = registered_at
-  user.notifications = notifications
-
-  return user
-}
-
-export const exampleNotificationEntity: NotificationInfo = {
+export const exampleNotificationEntity: Partial<Notification> = {
   streamer: 'streamer',
   channel: 'channel',
   live: false,
   offline: false,
   title: false,
   game: false,
-  user: getTwitchUserEntity()
+  user: getExampleTwitchUserEntity({})
 }
 
 export const getExampleNotificationEntity = (): Notification => {
