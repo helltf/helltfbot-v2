@@ -1,5 +1,5 @@
 import { Command } from '../../commands/export/types.js'
-import { Channel } from '../../db/export-entities.js'
+import { Channel, TwitchUser } from '../../db/export-entities.js'
 
 export function getExampleCommand({
   alias = [],
@@ -41,4 +41,27 @@ export function getExampleChannel({
     joined,
     times_connected
   }
+}
+
+export function getExampleTwitchUserEntity({
+  id = 1,
+  name = 'user',
+  color = '#ffffff',
+  permission = 0,
+  registered_at = Date.now(),
+  display_name = 'user',
+  notifications = [],
+  suggestions = []
+}): TwitchUser {
+  const user = new TwitchUser()
+  user.id = id
+  user.name = name
+  user.color = color
+  user.permission = permission
+  user.display_name = display_name
+  user.registered_at = registered_at
+  user.notifications = notifications
+  user.suggestions = suggestions
+
+  return user
 }
