@@ -1,8 +1,8 @@
 import { TwitchUserState } from '../../../../client/types.js'
 import { Cooldown } from '../../../../commands/export/cooldown.js'
 import { Command } from '../../../../commands/export/types.js'
-import { exampleCommand } from '../../../../spec/examples/command.js'
 import { getExampleTwitchUserState } from '../../../../spec/examples/user.js'
+import { getExampleCommand } from '../../../test-utils/example.js'
 
 describe('testing cooldown class', () => {
   let cooldown: Cooldown
@@ -11,7 +11,9 @@ describe('testing cooldown class', () => {
 
   beforeEach(() => {
     cooldown = new Cooldown()
-    command = exampleCommand
+    command = getExampleCommand({
+      cooldown: 5000
+    })
     user = getExampleTwitchUserState({})
   })
 
@@ -56,7 +58,7 @@ describe('testing cooldown class', () => {
 
   it('user has cooldown on different command, no cooldown expected', () => {
     const userId = user['user-id']
-    const otherCommand = createOtherCommand('other')
+    const otherCommand = getExampleCommand({ name: 'other' })
 
     cooldown.setCooldown(command, userId)
 
@@ -83,7 +85,7 @@ describe('testing cooldown class', () => {
 
   it('get cooldowns array should be 2 after creating 2 entries', () => {
     const userId = user['user-id']
-    const otherCommand = createOtherCommand('other')
+    const otherCommand = getExampleCommand({ name: 'other' })
 
     cooldown.setCooldown(command, userId)
     cooldown.setCooldown(otherCommand, userId)
@@ -121,10 +123,4 @@ describe('testing cooldown class', () => {
 
 function getCooldownMapSize(cooldown: Cooldown) {
   return cooldown.cooldowns.size
-}
-
-function createOtherCommand(name: string): Command {
-  const obj = Object.assign({}, exampleCommand)
-  obj.name = name
-  return obj
 }
