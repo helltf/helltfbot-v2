@@ -41,7 +41,7 @@ If the bot is still not responding to your meessage, you can ask for help via [T
 
 ## Features
 
-### How to interact
+### How to interact with the bot
 As you may have seen above, the bot will listen to every chat message starting with the prefix **~**.
 Only in rare occurrences the bot will do something when sending messages without the prefix.
 The bot will not respond to your message if it's not allowed to send message in the specific channel
@@ -75,7 +75,7 @@ The permissionlevel of sub, vip, mod and broadcaster differ between the channels
 Users with the dev or admin rule are allowed to almost execute every command anywhere.
 Negative permissions are reserved for blocked users, to block anyone from interacting with the bot.
 
-### Testing and Testability
+### Testing (TDD)
 In this project I try to test as much of code as possible, because of missing tests in my Version 1 of my bot I can no longer maintain it.
 Therefore I aim towards building a well maintained and developed project with this bot.
 At the current state only unit- and integrationtests are implemented, which might be changed in the future.
@@ -83,17 +83,29 @@ Details about the tests can be found in the section [unit-tests](#unit-tests) an
 
 ### Database
 
+The current database is a mariadb mysql database, which stores the information gathered by the bot.
+In the future there might be an implementation of redis to store in memory data.
+
 ### CI-CD
+
+Each pull request on the master or feature branch will run through 4 different jobs, to ensure the bot is working properly.
+The complete pipeline consists of linting, building, unit-testing and integration-testing.
+In case one of the job fails, the pipeline will conclude as failed.
+Pull Request to the feature or master branch are required to pass all checks before merging.
+
 
 ## Important libraries
 
+### tmi.js
+
 ### typeorm
+
+[Typeorm](https://www.npmjs.com/package/typeorm) is used to interact with the database. 
 
 ### typescript
 
 ### eslint
 
-### tmi.js
 
 ### jasmine
 
@@ -102,6 +114,8 @@ Details about the tests can be found in the section [unit-tests](#unit-tests) an
 ### Unit-Tests
 
 ### Integration-Tests
+
+## Install the bot yourself
 
 ## Associated repositories
 
