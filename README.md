@@ -94,26 +94,31 @@ In case one of the job fails, the pipeline will conclude as failed.
 Pull Request to the feature or master branch are required to pass all checks before merging.
 
 
-## Important libraries
-
-### tmi.js
-
-### typeorm
-
-[Typeorm](https://www.npmjs.com/package/typeorm) is used to interact with the database. 
-
-### typescript
-
-### eslint
-
-
-### jasmine
 
 ## Testing with jasmine
 
 ### Unit-Tests
 
 ### Integration-Tests
+
+## Important libraries
+
+These are some of the important libraries, which are changing the way this application is created.
+
+### tmi.js
+
+[tmi.js](https://www.npmjs.com/package/tmi.js) is used to communicate with the twitch irc.
+
+### typescript
+[Typescript](https://www.npmjs.com/package/typescript) is used for strong typing and better scaling Javascript apps.
+
+### typeorm
+
+[Typeorm](https://www.npmjs.com/package/typeorm) is used to interact with the database. 
+
+### jasmine
+
+[Jasmine](https://www.npmjs.com/package/jasmine) as mentioned above jasmine is the test framework for this project.
 
 ## Install the bot yourself
 
