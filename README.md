@@ -37,9 +37,65 @@ In case the bot is not responding to your messages, try to allow the messages wi
 ~allow
 ```
 
-If the bot is still not responding to your meessage, you can ask for help via [Twitch](https://twitch.tv/helltf) chat or [Discord](https://discord.com/channels/@me/296688575704072192) (hell#9902).
+If the bot is still not responding to your messages, you can ask for help via [Twitch](https://twitch.tv/helltf) or [Discord](https://discord.com/channels/@me/296688575704072192) (hell#9902).
 
 ## Install the bot yourself
+To install the bot on your system start of with cloning the repository
+
+```
+git clone git@github.com:helltf/helltfbot-v2.git
+```
+
+Afterwards create an .env file, which contains your secrets.
+You can copy the following content into that file and fill in your secrets.
+
+```
+NODE_ENV=<env>
+MAIN_USER=<your_username>
+DEBUG=false
+PREFIX=<bot_prefix>
+START_UP_MESSAGE=[message]
+DB_PORT=<db_port>
+DB_HOST=<db_host>
+DB_USERNAME=<db_username>
+DB_PASSWORD=<db_password>
+DB_DATABASE=<db_table>
+TEST_DB_PORT=<test_db_port>
+TEST_DB_HOST=<test_db_host>
+TEST_DB_USERNAME=<test_db_username>
+TEST_DB_PASSWORD=<test_db_password>
+TEST_DB_DATABASE=<test_db_database>
+CLIENT_ID=<twitch_client_id>
+CLIENT_SECRET=<twitch_client_secret>
+TWITCH_OAUTH=<twitch_client_oauth>
+BEARERTOKEN_STREAMELEMENTS=<streamelements_api_key>
+GITHUB_TOKEN=<github_api_key>
+```
+
+Next up install the dependencies for the project with 
+
+```
+npm install
+```
+
+If you don't have typescript globally installed, you can install it via
+
+```
+npm install -g typescript
+```
+
+And build the project with 
+
+```
+npm run build
+```
+
+If everything has gone right you can bootup the project with 
+
+```
+node .
+```
+You might get an error while requesting the github API, because you are not allowed to see the workflow of my other project.
 
 ## Features
 
