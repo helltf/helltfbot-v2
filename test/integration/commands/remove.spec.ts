@@ -1,15 +1,20 @@
-import { Notification, TwitchUser } from '../../../db/export-entities.js'
-import { getExampleNotificationEntity } from '../../../spec/examples/user.js'
+import { TwitchUserState } from '../../../client/types.js'
+import { remove } from '../../../commands/cmd/remove.js'
+import { Notification } from '../../../db/export-entities.js'
+import { UpdateEventType } from '../../../modules/pubsub/types.js'
+import {
+  getExampleNotificationEntity,
+  getExampleTwitchUserState
+} from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleTwitchUserEntity } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-describe('test notify command', () => {
+fdescribe('test notify command', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
-  let channel = 'testChannel'
+  let messageChannel = 'testmessageChannel'
   let streamer = 'streamer'
-  let user: TwitchUser
+  let user: TwitchUserState
   let notification: Notification
 
   beforeAll(async () => {
@@ -17,10 +22,10 @@ describe('test notify command', () => {
   })
 
   beforeEach(async () => {
-    channel = 'testChannel'
+    messageChannel = 'testmessageChannel'
     streamer = 'streamer'
     notification = getExampleNotificationEntity()
-    user = getExampleTwitchUserEntity({})
+    user = getExampleTwitchUserState({})
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })
@@ -28,5 +33,21 @@ describe('test notify command', () => {
   afterAll(async () => {
     await disconnectDatabase()
   })
-  it('', () => {})
+  it('event does not match existing events return error response', async () => {
+    const message = [streamer, 'a']
+
+    let {
+      response,
+      channel: responseChannel,
+      success
+    } = await remove.execute(messageChannel, user, message)
+
+    expect(success).toBeFalse()
+    expect(response).toBe(
+      `Event unknown. Valid events are ${Object.values(UpdateEventType).join(
+        ' '
+      )}`
+    )
+    expect(responseChannel).toBe(messageChannel)
+  })
 })
