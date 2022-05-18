@@ -1,8 +1,9 @@
 import { BotResponse } from '../../client/response.js'
 import { TwitchUserState } from '../../client/types.js'
+import { UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
-const remove = new Command({
+export const remove = new Command({
   name: 'remove',
   alias: ['rmn', 'removenotify', 'removeme'],
   cooldown: 5000,
@@ -13,8 +14,14 @@ const remove = new Command({
   execute: async (
     channel: string,
     user: TwitchUserState,
-    messages: string[]
+    [streamer, event]: string[]
   ): Promise<BotResponse> => {
-    return
+    return {
+      success: false,
+      channel: channel,
+      response: `Event unknown. Valid events are ${Object.values(
+        UpdateEventType
+      ).join(' ')}`
+    }
   }
 })
