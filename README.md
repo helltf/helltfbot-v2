@@ -39,6 +39,8 @@ In case the bot is not responding to your messages, try to allow the messages wi
 
 If the bot is still not responding to your meessage, you can ask for help via [Twitch](https://twitch.tv/helltf) chat or [Discord](https://discord.com/channels/@me/296688575704072192) (hell#9902).
 
+## Install the bot yourself
+
 ## Features
 
 ### How to interact with the bot
@@ -93,13 +95,19 @@ The complete pipeline consists of linting, building, unit-testing and integratio
 In case one of the job fails, the pipeline will conclude as failed.
 Pull Request to the feature or master branch are required to pass all checks before merging.
 
-
-
 ## Testing with jasmine
 
 ### Unit-Tests
 
+Unit-tests are created inside the ./test/unit directory which contains all unit-tests for the entire project.
+These tests are supposed to test small features or functions fairly quick and without any connection to other services.
+Unit-tests are prefered if possible.
+
 ### Integration-Tests
+
+Integration-tests are aiming towards testing components in combination with other services, e.g. the database.
+These tests are created inside the ./test/integration dirctory.
+To test the database properly I've a mariadb docker container running, which fullfills the purpose of being the test database
 
 ## Important libraries
 
@@ -119,8 +127,6 @@ These are some of the important libraries, which are changing the way this appli
 ### jasmine
 
 [Jasmine](https://www.npmjs.com/package/jasmine) as mentioned above jasmine is the test framework for this project.
-
-## Install the bot yourself
 
 ## Associated repositories
 
