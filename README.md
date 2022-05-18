@@ -2,19 +2,26 @@
 		<img src="https://github.com/helltf/helltfbot-v2/actions/workflows/build-test.yml/badge.svg">
 </div>
 <h1 align=center>Version 2 of my Twitchbot 🤖</h1>
+
 # Tables of Content
 
-- [Version 2 of my Twitchbot 🤖](#version-2-of-my-twitchbot---)
-  * [How to get the bot](#how-to-get-the-bot)
-  * [Features](#features)
-    + [How to interact](#how-to-interact)
-    + [Commands](#commands)
-  * [Testing](#testing)
-  * [Important libraries](#important-libraries)
-- [typeorm](#typeorm)
-- [typescript](#typescript)
-- [eslint](#eslint)
-- [tmi.js](#tmijs)
+- [How to get the bot](#how-to-get-the-bot)
+- [Features](#features)
+  * [How to interact](#how-to-interact)
+  * [Commands](#commands)
+- [Important libraries](#important-libraries)
+  * [typeorm](#typeorm)
+  * [typescript](#typescript)
+  * [eslint](#eslint)
+  * [tmi.js](#tmijs)
+  * [jasmine](#jasmine)
+- [Testing with jasmine](#testing-with-jasmine)
+  * [Unit-Tests](#unit-tests)
+  * [Integration-Tests](#integration-tests)
+- [Associated repositories](#associated-repositories)
+  * [[Website for the bot](https://github.com/helltf/bot-v2-website)](#-website-for-the-bot--https---githubcom-helltf-bot-v2-website-)
+  * [[Backend API to access data from the bot](https://github.com/helltf/bot-v2-backend)](#-backend-api-to-access-data-from-the-bot--https---githubcom-helltf-bot-v2-backend-)
+
 
 ## How to get the bot
 
@@ -41,11 +48,27 @@ The bot will not respond to your message if it's not allowed to send message in 
 
 ### Commands
 
+At the moment there is no way to lookup the existing commands other than inspecting the source code.
+In the future you can see all existing commands on the website which will be linked in the [Associated repositories](#associated-repositories) part.
+Each command existing has different attributes and can be issued either with the name or a registered alias.
+After executing the command the bot will send a response including the status and the response message.
+
+### Testing and Testability
+
+### Database
+
+### CI-CD
+
 ## Important libraries
+
 ### typeorm
+
 ### typescript
+
 ### eslint
+
 ### tmi.js
+
 ### jasmine
 
 ## Testing with jasmine
@@ -56,10 +79,11 @@ The bot will not respond to your message if it's not allowed to send message in 
 
 ## Associated repositories
 
-### [Website for the bot](https://github.com/helltf/bot-v2-website)
+### Website for the bot
 
-Framework for the website is not set yet.
+The link to the repository is this one https://github.com/helltf/bot-v2-website and the page can be visited via following this link.
+The framework for the website has not set yet.
 
-### [Backend API to access data from the bot](https://github.com/helltf/bot-v2-backend)
-
+### Backend API to access data from the bot
+The source code of the API can be find [here](https://github.com/helltf/bot-v2-backend).
 Language for the backend is not set yet.
