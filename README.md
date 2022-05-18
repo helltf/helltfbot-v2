@@ -52,8 +52,34 @@ At the moment there is no way to lookup the existing commands other than inspect
 In the future you can see all existing commands on the website which will be linked in the [Associated repositories](#associated-repositories) part.
 Each command existing has different attributes and can be issued either with the name or a registered alias.
 After executing the command the bot will send a response including the status and the response message.
+As a normal user you cannot access every command because of permissions which will be explained in the [permissions](###Permissions) section.
+
+### Permissions
+Each user has two different permissions assigned, which are **database permissions** and **chat permissions**.
+Each level of permissions is associated with a numeric value, therefore the heigher the number, the heigher the level of permission is.
+At the moment the Levels are structured as following
+
+```
+BLOCKED = -1
+USER = 0
+SUB = 1
+VIP = 2
+MOD = 3
+BROADCASTER = 4
+DEV = 5
+ADMIN = 100
+```
+
+The permissions for a user inside the database defaults to 0, which corresponds to a normal user in twitch chat.
+The permissionlevel of sub, vip, mod and broadcaster differ between the channels, therefore allowing specific user to execute commands only in specific channels.
+Users with the dev or admin rule are allowed to almost execute every command anywhere.
+Negative permissions are reserved for blocked users, to block anyone from interacting with the bot.
 
 ### Testing and Testability
+In this project I try to test as much of code as possible, because of missing tests in my Version 1 of my bot I can no longer maintain it.
+Therefore I aim towards building a well maintained and developed project with this bot.
+At the current state only unit- and integrationtests are implemented, which might be changed in the future.
+Details about the tests can be found in the section [unit-tests](#unit-tests) and [integration-tests](#integration-tests)
 
 ### Database
 
