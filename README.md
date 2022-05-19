@@ -1,5 +1,8 @@
 <div align="center">
 		<img src="https://github.com/helltf/helltfbot-v2/actions/workflows/build-test.yml/badge.svg">
+    <img src="https://badgen.net/npm/node/express">
+    <img src= "https://img.shields.io/github/stars/helltf/helltfbot-v2.svg?style=social&label=Star&maxAge=2592000">
+    <img src= "https://badgen.net/github/contributors/helltf/helltfbot-v2">
 </div>
 <h1 align=center>Version 2 of my Twitchbot 🤖</h1>
 
