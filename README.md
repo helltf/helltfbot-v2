@@ -3,6 +3,7 @@
     <img src="https://badgen.net/npm/node/express">
     <img src= "https://img.shields.io/github/stars/helltf/helltfbot-v2.svg?style=social&label=Star&maxAge=2592000">
     <img src= "https://badgen.net/github/contributors/helltf/helltfbot-v2">
+    <img src= "https://img.shields.io/badge/--3178C6?logo=typescript&logoColor=ffffff">
 </div>
 <h1 align=center>Version 2 of my Twitchbot 🤖</h1>
 
