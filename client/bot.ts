@@ -14,6 +14,7 @@ import { DB } from '../db/export-repositories.js'
 import { Command, Commands } from '../commands/export/types.js'
 import { APIs } from './types.js'
 import { TwitchApi } from '../api/twitch/export-api.js'
+import { GithubApi } from '../api/github/export-github-api.js'
 
 export class TwitchBot {
   client: Client
@@ -41,7 +42,7 @@ export class TwitchBot {
     await this.client.connect()
     await this.watchclient.connect()
     await this.db.initialize()
-    this.api.twitch = await TwitchApi.init()
+    await this.initApiModule()
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     updateCommandsInDb()
@@ -50,6 +51,13 @@ export class TwitchBot {
   startPubSub() {
     if (hb.NODE_ENV === 'dev') return
     this.pubSub.connect()
+  }
+
+  async initApiModule() {
+    const apis: APIs = {}
+    apis.twitch = await TwitchApi.init()
+    apis.github = new GithubApi()
+    this.api = apis
   }
 
   async joinChannels() {
