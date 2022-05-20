@@ -1,4 +1,4 @@
-import { getPipeLineData, PipelineData } from '../api/github/github-api.js'
+import { PipelineData } from '../api/github/github-api.js'
 import { Projects } from '../api/github/github-projects.js'
 
 const counts = new Map<Projects, number>([
@@ -18,7 +18,7 @@ const updateGithubPipeline = async () => {
 }
 
 const checkForUpdate = async (project: Projects, count: number) => {
-  const { success, data } = await getPipeLineData(project)
+  const { success, data } = await hb.api.github.getPipeLineData(project)
 
   if (!success) return
 
