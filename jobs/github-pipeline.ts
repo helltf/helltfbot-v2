@@ -3,8 +3,7 @@ import { Projects } from '../api/github/github-projects.js'
 
 const counts = new Map<Projects, number>([
   [Projects.helltfbot_v2, undefined],
-  [Projects.go_discord_bot, undefined],
-  [Projects.inst_mono, undefined]
+  [Projects.bot_v1_fullstack, undefined]
 ])
 
 const setCount = (project: Projects, value: number) => {
