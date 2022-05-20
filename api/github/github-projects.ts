@@ -1,5 +1,4 @@
 export enum Projects {
-  helltfbot_v2 = 'https://api.github.com/repos/helltf/helltfbot-v2/actions/workflows/build-test.yml/runs',
-  inst_mono = 'https://api.github.com/repos/helltf/inst_mono/actions/workflows/main.yml/runs',
-  go_discord_bot = 'https://api.github.com/repos/helltf/go-discord-bot/actions/workflows/go.yml/runs'
+  helltfbot_v2 = 'https://api.github.com/repos/helltf/helltfbot-v2/actions/runs',
+  bot_v1_fullstack = 'https://api.github.com/repos/helltf/bot-v1-fullstack/actions/runs'
 }
