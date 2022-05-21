@@ -12,10 +12,13 @@ export class ColorTracking implements Module {
         { 'user-id': userId, color: userColor }: ChatUserstate
       ) => {
         const savedColors = (
-          await hb.db.colorRepo.findOneBy({
-            twitch_id: Number(userId)
+          await hb.db.userRepo.findOne({
+            where: { id: Number(userId) },
+            relations: {
+              colors: true
+            }
           })
-        )?.history
+        )?.colors?.history
 
         if (!savedColors) {
           hb.db.colorRepo.save({
