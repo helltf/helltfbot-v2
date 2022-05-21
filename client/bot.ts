@@ -12,6 +12,7 @@ import { watchJoinAllChannels } from './watchhandlers/join.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
 import { Command, Commands } from '../commands/export/types.js'
+import { ApiService } from './types.js'
 
 export class TwitchBot {
   client: Client
@@ -19,7 +20,7 @@ export class TwitchBot {
   commands: Commands
   cooldown: Cooldown
   db: DB
-  twitchAT: string
+  api: ApiService
   log: (type: LogType, ...args: any) => void
   pubSub: PubSub
   NODE_ENV: 'prod' | 'dev' | 'test'
@@ -33,13 +34,14 @@ export class TwitchBot {
     this.pubSub = new PubSub()
     this.db = new DB()
     this.commands = new Commands(commands)
+    this.api = new ApiService()
   }
 
   async init() {
-    this.twitchAT = await generateToken()
     await this.client.connect()
     await this.watchclient.connect()
     await this.db.initialize()
+    await this.api.init()
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     updateCommandsInDb()

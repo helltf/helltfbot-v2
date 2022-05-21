@@ -1,5 +1,4 @@
 import { ChatUserstate } from 'tmi.js'
-import { getUserIdByName } from '../../api/twitch/user-info.js'
 import { BotResponse } from '../../client/response.js'
 import { NotifyEventType, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
@@ -55,7 +54,7 @@ async function createNewStreamerConnection(
   streamer: string,
   event: UpdateEventType
 ): Promise<boolean> {
-  const id = await getUserIdByName(streamer)
+  const id = await hb.api.twitch.getUserIdByName(streamer)
   if (!id) return false
 
   const notifyType = mapEventTypeToNotifyType(event)
