@@ -54,16 +54,14 @@ jobs:
       mariadb:
         ports:
           - 3306:3306
-        image: mariadb
+        image: postgres
 
         env:
-          MYSQL_DATABASE: twitch
-          MYSQL_HOST: 127.0.0.1
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          POSTGRES_DB: twitch
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_USER: ${{ secrets.MYSQL_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -77,8 +75,8 @@ jobs:
         run: npm run integration-tests
 
         env:
-          DB_HOST: mariadb
-          DB_PORT: 3306
-          DB_USERNAME: ${{ secrets.MYSQL_USER }}
-          DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          DB_DATABASE: twitch
+          TEST_DB_HOST: mariadb
+          TEST_DB_PORT: 3306
+          TEST_DB_USERNAME: ${{ secrets.MYSQL_USER }}
+          TEST_DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          TEST_DB_DATABASE: twitch
