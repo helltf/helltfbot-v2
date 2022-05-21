@@ -1,4 +1,4 @@
-import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions'
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 
 const {
   DB_HOST,
@@ -13,16 +13,16 @@ const {
   TEST_DB_DATABASE
 } = process.env
 
-const getOrmConf = (): MysqlConnectionOptions => {
+const getOrmConf = (): PostgresConnectionOptions => {
   if (process.env.NODE_ENV == 'test') {
     return getTestOrmConf()
   }
 
   return getDevOrmConf()
 }
-function getTestOrmConf(): MysqlConnectionOptions {
+function getTestOrmConf(): PostgresConnectionOptions {
   return {
-    type: 'mariadb',
+    type: 'postgres',
     host: TEST_DB_HOST,
     port: parseInt(TEST_DB_PORT),
     username: TEST_DB_USERNAME,
@@ -36,9 +36,9 @@ function getTestOrmConf(): MysqlConnectionOptions {
   }
 }
 
-function getDevOrmConf(): MysqlConnectionOptions {
+function getDevOrmConf(): PostgresConnectionOptions {
   return {
-    type: 'mariadb',
+    type: 'postgres',
     host: DB_HOST,
     port: Number(DB_PORT),
     username: DB_USERNAME,

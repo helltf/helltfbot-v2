@@ -8,16 +8,16 @@ export class CommandEntity extends BaseEntity {
   @Column('int', { default: 0 })
   counter: number
 
-  @Column('tinyint')
+  @Column('int')
   permissions: number
 
   @Column('varchar')
   description: string
 
-  @Column('simple-array')
+  @Column('varchar', { array: true })
   requiredParams?: string[]
 
-  @Column('simple-array')
+  @Column('varchar', { array: true })
   optionalParams?: string[]
 
   @Column('int')
