@@ -51,9 +51,9 @@ jobs:
     container: node:16
 
     services:
-      mariadb:
+      postgres:
         ports:
-          - 3306:3306
+          - 5432:5432
         image: postgres
 
         env:
@@ -61,7 +61,11 @@ jobs:
           POSTGRES_HOST: 127.0.0.1
           POSTGRES_USER: ${{ secrets.MYSQL_USER }}
           POSTGRES_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -75,8 +79,8 @@ jobs:
         run: npm run integration-tests
 
         env:
-          TEST_DB_HOST: mariadb
-          TEST_DB_PORT: 3306
+          TEST_DB_HOST: postgres
+          TEST_DB_PORT: 5432
           TEST_DB_USERNAME: ${{ secrets.MYSQL_USER }}
           TEST_DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           TEST_DB_DATABASE: twitch
