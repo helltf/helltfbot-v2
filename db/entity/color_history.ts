@@ -5,7 +5,7 @@ export class ColorHistory extends BaseEntity {
   @PrimaryColumn('int')
   twitch_id: number
 
-  @Column('simple-array')
+  @Column('varchar', { array: true })
   history: string[]
 
   @Column('bigint')
