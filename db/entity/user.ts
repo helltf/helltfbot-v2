@@ -14,7 +14,7 @@ export class TwitchUser extends BaseEntity {
   @Column('varchar', { nullable: true })
   color?: string
 
-  @Column('tinyint', { default: PermissionLevel.USER })
+  @Column('int', { default: PermissionLevel.USER })
   permission: PermissionLevel
 
   @Column('bigint')
