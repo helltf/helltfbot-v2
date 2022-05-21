@@ -78,6 +78,7 @@ jobs:
         run: npm run integration-tests
 
         env:
+          NODE_ENV: test
           TEST_DB_HOST: postgres
           TEST_DB_PORT: 5432
           TEST_DB_USERNAME: ${{ secrets.MYSQL_USER }}
