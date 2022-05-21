@@ -6,7 +6,14 @@ import { PermissionLevel } from '../utilities/twitch/types.js'
 export interface TwitchUserState extends ChatUserstate {
   permission?: PermissionLevel
 }
-export interface APIs {
+export class ApiService {
   twitch?: TwitchApi
   github?: GithubApi
+  initialized = false
+
+  async init() {
+    this.initialized = true
+    this.github = new GithubApi()
+    this.twitch = await TwitchApi.init()
+  }
 }
