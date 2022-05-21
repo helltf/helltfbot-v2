@@ -13,8 +13,6 @@ import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
 import { Command, Commands } from '../commands/export/types.js'
 import { ApiService } from './types.js'
-import { TwitchApi } from '../api/twitch/export-api.js'
-import { GithubApi } from '../api/github/export-github-api.js'
 
 export class TwitchBot {
   client: Client

@@ -7,9 +7,8 @@ export class TwitchApi {
   getUserIdByName = getUserIdByName
   generateToken = generateToken
 
-  static async init() {
-    const apiInstance = new TwitchApi()
-    apiInstance.accessToken = await apiInstance.generateToken()
-    return apiInstance
+  async init() {
+    this.accessToken = await this.generateToken()
+    return this
   }
 }

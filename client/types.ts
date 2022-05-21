@@ -14,6 +14,6 @@ export class ApiService {
   async init() {
     this.initialized = true
     this.github = new GithubApi()
-    this.twitch = await TwitchApi.init()
+    this.twitch = await new TwitchApi().init()
   }
 }
