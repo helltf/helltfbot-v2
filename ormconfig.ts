@@ -45,7 +45,7 @@ function getDevOrmConf(): PostgresConnectionOptions {
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_DATABASE,
-    synchronize: true,
+    synchronize: false,
     logging: false,
     entities: ['dist/db/entity/**/*.js'],
     migrations: ['db/migrations/**/*.ts'],
