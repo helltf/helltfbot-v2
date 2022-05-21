@@ -20,16 +20,16 @@ export class Notification extends BaseEntity implements NotificationInfo {
   @Column('varchar')
   channel: string
 
-  @Column('tinyint', { default: false })
+  @Column('boolean', { default: false })
   live: boolean
 
-  @Column('tinyint', { default: false })
+  @Column('boolean', { default: false })
   offline: boolean
 
-  @Column('tinyint', { default: false })
+  @Column('boolean', { default: false })
   title: boolean
 
-  @Column('tinyint', { default: false })
+  @Column('boolean', { default: false })
   game: boolean
 
   @ManyToOne(() => TwitchUser, (user) => user.notifications)

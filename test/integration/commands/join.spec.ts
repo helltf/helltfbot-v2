@@ -1,21 +1,21 @@
-import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../../client/types.js'
 import {
   connectToChannel,
   isAlreadyConnected,
   join,
   updateChannelInDb
 } from '../../../commands/cmd/join.js'
-import { getExampleUserState } from '../../../spec/examples/user.js'
+import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('join command tests', () => {
-  let user: ChatUserstate
+  let user: TwitchUserState
   let channel: string
   beforeAll(async () => {
-    user = getExampleUserState()
+    user = getExampleTwitchUserState({ permission: 100 })
     channel = 'channel'
     await setupDatabase()
   })
@@ -172,6 +172,53 @@ describe('join command tests', () => {
     })
 
     expect(updatedEntity.joined).toBeTruthy()
+  })
+
+  it('use me as param join the users channel and save to db', async () => {
+    const channelToJoin = 'me'
+    const message = [channelToJoin]
+    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+
+    await join.execute(channel, user, message)
+
+    const savedEntity = await hb.db.channelRepo.findOneBy({
+      channel: user.username
+    })
+
+    expect(savedEntity).not.toBeNull()
+  })
+
+  it('use me as param join the users channel and update it in db', async () => {
+    const channelToJoin = 'me'
+    const message = [channelToJoin]
+    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+
+    await hb.db.channelRepo.save(
+      getExampleChannel({
+        channel: user.username,
+        joined: false
+      })
+    )
+
+    await join.execute(channel, user, message)
+
+    const savedEntity = await hb.db.channelRepo.findOneBy({
+      channel: user.username
+    })
+
+    expect(savedEntity.joined).toBeTruthy()
+  })
+
+  it('user permissions are not admin return error if joining other channel', async () => {
+    const channelToJoin = 'channelToJoin'
+    const message = [channelToJoin]
+
+    user.permission = 0
+
+    const { success, response } = await join.execute(channel, user, message)
+
+    expect(success).toBeFalse()
+    expect(response).toBe('You are not permitted to issue this command')
   })
 
   describe('save channel function', () => {

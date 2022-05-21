@@ -1,19 +1,21 @@
-import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../client/types.js'
 import { NotificationInfo } from '../../db/entity/notification.js'
 import { TwitchUser, Notification } from '../../db/export-entities.js'
 
-export const exampleUser: ChatUserstate = {
-  username: 'helltf',
-  'user-id': '109035947',
-  color: '#FFFFFF',
-  badges: {
-    broadcaster: '1'
-  },
-  'display-name': 'helltf'
-}
-
-export const getExampleUserState = (): ChatUserstate => {
-  return { ...exampleUser }
+export const getExampleTwitchUserState = ({
+  username = 'user',
+  'user-id': userId = '1',
+  color = '#FFFFFF',
+  'display-name': displayName = 'user',
+  permission = 0
+}: Partial<TwitchUserState>): TwitchUserState => {
+  return {
+    username: username,
+    'user-id': userId,
+    color: color,
+    'display-name': displayName,
+    permission: permission
+  }
 }
 
 export const exampleTwitchUserEntity = {

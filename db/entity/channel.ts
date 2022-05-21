@@ -8,13 +8,13 @@ export class Channel extends BaseEntity {
   @Column('varchar', { unique: true })
   channel: string
 
-  @Column('tinyint')
+  @Column('boolean')
   allowed: boolean
 
-  @Column('tinyint')
+  @Column('boolean')
   allowed_live: boolean
 
-  @Column('tinyint')
+  @Column('boolean')
   joined: boolean
 
   @Column('int')

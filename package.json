@@ -34,6 +34,7 @@
     "mysql": "^2.18.1",
     "node-fetch": "^3.2.3",
     "npm": "^8.6.0",
+    "pg": "^8.7.3",
     "reconnecting-websocket": "^4.4.0",
     "strict-event-emitter-types": "^2.0.0",
     "tmi.js": "^1.8.5",

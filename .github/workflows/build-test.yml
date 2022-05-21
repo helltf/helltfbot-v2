@@ -1,4 +1,4 @@
-name: CI
+name: CI-build-and-test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [master, feature, dev]
 
 jobs:
-  build-lint:
+  lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,6 +23,22 @@ jobs:
         run: |
           npm install typescript
           npm run lint
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Run build and lint script
+        run: |
+          npm install typescript
           npm run build
   unit-tests:
     runs-on: ubuntu-latest
@@ -51,19 +67,20 @@ jobs:
     container: node:16
 
     services:
-      mariadb:
+      postgres:
         ports:
-          - 3306:3306
-        image: mariadb
+          - 5432:5432
+        image: postgres
 
         env:
-          MYSQL_DATABASE: twitch
-          MYSQL_HOST: 127.0.0.1
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          POSTGRES_DB: twitch
+          POSTGRES_USER: ${{ secrets.MYSQL_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -77,8 +94,9 @@ jobs:
         run: npm run integration-tests
 
         env:
-          DB_HOST: mariadb
-          DB_PORT: 3306
-          DB_USERNAME: ${{ secrets.MYSQL_USER }}
-          DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          DB_DATABASE: twitch
+          NODE_ENV: test
+          TEST_DB_HOST: postgres
+          TEST_DB_PORT: 5432
+          TEST_DB_USERNAME: ${{ secrets.MYSQL_USER }}
+          TEST_DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          TEST_DB_DATABASE: twitch

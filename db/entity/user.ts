@@ -1,5 +1,14 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn
+} from 'typeorm'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
+import { ColorHistory } from './color_history.js'
 import { Notification } from './notification.js'
 import { Suggestion } from './suggestion.js'
 
@@ -14,7 +23,7 @@ export class TwitchUser extends BaseEntity {
   @Column('varchar', { nullable: true })
   color?: string
 
-  @Column('tinyint', { default: PermissionLevel.USER })
+  @Column('int', { default: PermissionLevel.USER })
   permission: PermissionLevel
 
   @Column('bigint')
@@ -28,4 +37,8 @@ export class TwitchUser extends BaseEntity {
 
   @OneToMany(() => Suggestion, (suggestion) => suggestion.user)
   suggestions: Suggestion[]
+
+  @OneToOne(() => ColorHistory, (history) => history.user)
+  @JoinColumn()
+  colors: ColorHistory
 }
