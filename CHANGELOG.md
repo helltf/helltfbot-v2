@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- join own channel 
+- leave own channel
+- allow command
+
+### Changed
+
+- go from mysql to postgres
+- new ApiModule to bundle Apis
+
 ## [1.0.0] 2022-05-21
 
 ### Added
