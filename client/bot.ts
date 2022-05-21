@@ -12,7 +12,7 @@ import { watchJoinAllChannels } from './watchhandlers/join.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
 import { Command, Commands } from '../commands/export/types.js'
-import { APIs } from './types.js'
+import { ApiService } from './types.js'
 import { TwitchApi } from '../api/twitch/export-api.js'
 import { GithubApi } from '../api/github/export-github-api.js'
 
@@ -22,7 +22,7 @@ export class TwitchBot {
   commands: Commands
   cooldown: Cooldown
   db: DB
-  api: APIs
+  api: ApiService
   log: (type: LogType, ...args: any) => void
   pubSub: PubSub
   NODE_ENV: 'prod' | 'dev' | 'test'
@@ -36,13 +36,14 @@ export class TwitchBot {
     this.pubSub = new PubSub()
     this.db = new DB()
     this.commands = new Commands(commands)
+    this.api = new ApiService()
   }
 
   async init() {
     await this.client.connect()
     await this.watchclient.connect()
     await this.db.initialize()
-    await this.initApiModule()
+    await this.api.init()
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     updateCommandsInDb()
@@ -51,13 +52,6 @@ export class TwitchBot {
   startPubSub() {
     if (hb.NODE_ENV === 'dev') return
     this.pubSub.connect()
-  }
-
-  async initApiModule() {
-    const apis: APIs = {}
-    apis.twitch = await TwitchApi.init()
-    apis.github = new GithubApi()
-    this.api = apis
   }
 
   async joinChannels() {
