@@ -21,6 +21,6 @@ export class ColorHistory extends BaseEntity {
   @Column('bigint')
   register_timestamp: number
 
-  @OneToOne(() => TwitchUser, (user) => user.colors) // specify inverse side as a second parameter
+  @OneToOne(() => TwitchUser, (user) => user.colors)
   user: TwitchUser
 }
