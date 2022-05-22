@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed 
 
-- updated databasee info text in readme 
+- updated database info text in readme 
 
 ## [1.1.0](https://github.com/helltf/helltfbot-v2/releases/tag/v1.0.0) - 2022-05-21
 
