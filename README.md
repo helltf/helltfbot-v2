@@ -149,7 +149,8 @@ Details about the tests can be found in the section [unit-tests](#unit-tests) an
 
 ### Database
 
-Mariadb serves as a mysql database to store the information gathered by the bot.
+Mariadb was the initial database for this project but has been changed to postgres.
+Thus allowing to work with the diesel library in rust for the backend.
 In the future there might be an implementation of redis to store in memory data.
 
 ### CI-CD
