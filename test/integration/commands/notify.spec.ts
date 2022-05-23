@@ -272,6 +272,25 @@ describe('test notify command: ', () => {
       expect(createdEntity).not.toBeNull()
       expect(createdEntity.status).toBeTruthy()
     })
+
+    fit('creating new connection and invoking listen to topic function', async () => {
+      const message = [streamer, UpdateEventType.LIVE]
+      const userState = getExampleTwitchUserState({})
+      const returnedStreamerId = 1
+      await hb.db.userRepo.save(user)
+
+      spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(returnedStreamerId)
+      spyOn(hb.pubSub, 'listenToTopic')
+
+      await notify.execute(channel, userState, message)
+      const expectedStreamerId = returnedStreamerId
+      const expectedNotifyType = NotifyEventType.STATUS
+
+      expect(hb.pubSub.listenToTopic).toHaveBeenCalledWith(
+        expectedStreamerId,
+        expectedNotifyType
+      )
+    })
   })
 })
 
