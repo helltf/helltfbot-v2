@@ -1,4 +1,4 @@
-import { Commands } from '../../../../commands/export/types.js'
+import { Commands } from '../../../../src/commands/export/types.js'
 import { getExampleCommand } from '../../../test-utils/example.js'
 
 describe('testing commands class', () => {

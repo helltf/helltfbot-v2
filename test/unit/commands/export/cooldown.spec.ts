@@ -1,8 +1,8 @@
-import { TwitchUserState } from '../../../../client/types.js'
-import { Cooldown } from '../../../../commands/export/cooldown.js'
-import { Command } from '../../../../commands/export/types.js'
 import { exampleCommand } from '../../../../spec/examples/command.js'
 import { getExampleTwitchUserState } from '../../../../spec/examples/user.js'
+import { TwitchUserState } from '../../../../src/client/types.js'
+import { Cooldown } from '../../../../src/commands/export/cooldown.js'
+import { Command } from '../../../../src/commands/export/types.js'
 
 describe('testing cooldown class', () => {
   let cooldown: Cooldown

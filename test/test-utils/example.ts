@@ -1,5 +1,5 @@
-import { Command } from '../../commands/export/types.js'
-import { Channel } from '../../db/export-entities.js'
+import { Command } from '../../src/commands/export/types.js'
+import { Channel } from '../../src/db/export-entities.js'
 
 export function getExampleCommand({
   alias = [],

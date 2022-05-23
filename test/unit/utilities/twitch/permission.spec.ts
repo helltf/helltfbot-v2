@@ -2,8 +2,8 @@ import { Badges } from 'tmi.js'
 import {
   getChatPermissions,
   returnHigherPermissions
-} from '../../../../utilities/twitch/permission.js'
-import { PermissionLevel } from '../../../../utilities/twitch/types.js'
+} from '../../../../src/utilities/twitch/permission.js'
+import { PermissionLevel } from '../../../../src/utilities/twitch/types.js'
 
 describe('test mapping of permissions', () => {
   it('normal user has permissions of 0', () => {
