@@ -5,7 +5,7 @@ import {
 import {
   NotifyEventType,
   UpdateEventType
-} from '../../../modules/pubsub/types.js'
+} from '../../../src/modules/pubsub/types.js'
 
 describe('unit test notify command functions', () => {
   it('Update event is offline map to status', () => {

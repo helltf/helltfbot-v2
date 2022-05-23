@@ -1,5 +1,5 @@
-import { UpdateEventType } from '../../../modules/pubsub/types.js'
-import { UpdateEventHandler } from '../../../modules/pubsub/update-event-handler.js'
+import { UpdateEventType } from '../../../src/modules/pubsub/types.js'
+import { UpdateEventHandler } from '../../../src/modules/pubsub/update-event-handler.js'
 import { getExampleNotificationEntity } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'

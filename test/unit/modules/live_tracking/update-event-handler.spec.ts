@@ -1,5 +1,5 @@
-import { UpdateEventType } from '../../../../modules/pubsub/types.js'
-import { UpdateEventHandler } from '../../../../modules/pubsub/update-event-handler.js'
+import { UpdateEventType } from '../../../../src/modules/pubsub/types.js'
+import { UpdateEventHandler } from '../../../../src/modules/pubsub/update-event-handler.js'
 
 describe('test update event handler unit tests', () => {
   let handler: UpdateEventHandler = new UpdateEventHandler()

@@ -9,7 +9,7 @@ import {
 import {
   NotifyEventType,
   UpdateEventType
-} from '../../../modules/pubsub/types.js'
+} from '../../../src/modules/pubsub/types.js'
 import {
   getExampleNotificationEntity,
   getExampleTwitchUserState,
