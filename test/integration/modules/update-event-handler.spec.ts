@@ -3,8 +3,8 @@ import { UpdateEventHandler } from '../../../src/modules/pubsub/update-event-han
 import { getExampleNotificationEntity } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
-import { Notification } from '../../../db/entity/notification.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { Notification } from '../../../src/db/export-entities.js'
 
 describe('Test event handler to return the correct messages', () => {
   let eventHandler: UpdateEventHandler = new UpdateEventHandler()

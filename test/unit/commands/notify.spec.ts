@@ -1,7 +1,7 @@
 import {
-  eventIsNotValid,
-  mapEventTypeToNotifyType
-} from '../../../commands/cmd/notify.js'
+  mapEventTypeToNotifyType,
+  eventIsNotValid
+} from '../../../src/commands/cmd/notify.js'
 import {
   NotifyEventType,
   UpdateEventType

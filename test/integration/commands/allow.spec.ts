@@ -1,5 +1,5 @@
-import { allow } from '../../../commands/cmd/allow.js'
 import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
+import { allow } from '../../../src/commands/cmd/allow.js'
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'

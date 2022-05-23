@@ -1,4 +1,4 @@
-import { Command } from '../../commands/export/types.js'
+import { Command } from '../../src/commands/export/types.js'
 
 export const exampleCommand = new Command({
   name: 'example',
