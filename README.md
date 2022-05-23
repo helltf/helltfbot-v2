@@ -1,63 +1,58 @@
 <div align="center">
-		<img src="https://github.com/helltf/helltfbot-v2/actions/workflows/build-test.yml/badge.svg">
+    <img src="https://github.com/helltf/helltfbot-v2/actions/workflows/build-test.yml/badge.svg">
     <img src="https://badgen.net/npm/node/express">
     <img src= "https://img.shields.io/github/stars/helltf/helltfbot-v2.svg?style=social&label=Star&maxAge=2592000">
     <img src= "https://badgen.net/github/contributors/helltf/helltfbot-v2">
     <img src= "https://img.shields.io/badge/--3178C6?logo=typescript&logoColor=ffffff">
 </div>
-<h1 align=center>Version 2 of my Twitchbot 🤖</h1>
+<h1 align=center>2nd version of my Twitchbot 🤖</h1>
 
 # Tables of Content
 
-- [How to get the bot](#how-to-get-the-bot)
-- [Install the bot yourself](#install-the-bot-yourself)
-- [Features](#features)
-  * [How to interact with the bot](#how-to-interact-with-the-bot)
+- [Add the bot to your channel](#add-the-bot-to-your-channel)
+- [Run the bot yourself](#run-the-bot-yourself)
+- [About the bot](#about-the-bot)
+  * [Chat Interaction](#chat-interaction)
   * [Commands](#commands)
   * [Permissions](#permissions)
-  * [Testing (TDD)](#testing--tdd-)
+- [Development](#development)
   * [Database](#database)
   * [CI-CD](#ci-cd)
-- [Testing with jasmine](#testing-with-jasmine)
-  * [Unit-Tests](#unit-tests)
-  * [Integration-Tests](#integration-tests)
+  * [Testing](#testing-\(tdd\))
 - [Important libraries](#important-libraries)
-  * [tmi.js](#tmijs)
-  * [typescript](#typescript)
-  * [typeorm](#typeorm)
-  * [jasmine](#jasmine)
-- [Associated repositories](#associated-repositories)
-  * [Website for the bot](#website-for-the-bot)
-  * [Backend API to access data from the bot](#backend-api-to-access-data-from-the-bot)
+- [Related repositories](#related-repositories)
+  * [Website](#website)
+  * [Backend API](#backend-api)
 
 
-## How to get the bot
+## Add the bot to your channel
 
-If you want the bot, use the command
+To add the bot to your channel, use the command
 ```
 ~join me
 ```
 in any of the connected channels.
-Afterwards you should be able interact with the bot in your channel.
-In case the bot is not responding to your messages, you need to allow messages with the following command
+
+The bot should now trigger on sending commands in your own chat. If there is no response to your messages, you may need to allow sending messages by using another command in your own chat:
 
 ```
 ~allow
 ```
 
-If the bot is still not responding to your messages, you can ask for help via [Twitch](https://twitch.tv/helltf) or [Discord](https://discord.com/channels/@me/296688575704072192) (hell#9902).
+If the bot is still not responding, ask for help via [Twitch](https://twitch.tv/helltf) or [Discord](https://discord.com/channels/@me/296688575704072192) (hell#9902).
 
-## Install the bot yourself
-To install the bot on your system start of with cloning the repository
-
-```
-git clone git@github.com:helltf/helltfbot-v2.git
-```
-
-Afterwards create an .env file, which will contain your secrets.
-You can copy the following content into that file and fill in your secrets.
+## Run the bot yourself
+Clone the repository to your own local system:
 
 ```
+git clone git@github.com:helltf/helltfbot-v2.git && cd helltfbot-v2
+```
+
+Create a .env file at the root of the newly created directory, which will be used to store sensitive and environment specific configuration options.
+
+Copy the following snippet into that file and fill in your own values:
+
+``` sh
 NODE_ENV=<env>
 MAIN_USER=<your_username>
 DEBUG=false
@@ -80,49 +75,27 @@ BEARERTOKEN_STREAMELEMENTS=<streamelements_api_key>
 GITHUB_TOKEN=<github_api_key>
 ```
 
-Next up install the dependencies for the project with 
-
-```
-npm install
-```
-
-If you don't have typescript globally installed, you can install it via
-
-```
-npm install -g typescript
-```
-
-And build the project with 
-
-```
-npm run build
-```
-
-If everything has gone right you can bootup the project with 
+Install all dependencies using ```npm install``` and build the project with ```npm run build```, then if nothing went wrong, you can now run the bot:
 
 ```
 node .
 ```
-You might get an error while requesting the github API, because you are not permitted to see the workflows of my other projects.
+You might encounter an error while querying the GitHub API, since you are not permitted to see details of GitHub Actions on my other projects.
 
-## Features
+## About the bot
 
-### How to interact with the bot
-As you may have seen above, the bot will listen to every chat message starting with the prefix **~**.
-Only in rare occurrences the bot will do something, when sending messages without the prefix.
-No Responses will be send if the bot is not allowed to send messages.
+### Chat Interaction
+The bot will listen to every chat message starting with the prefix ```~```, there are rare exceptions where the bot might react to messages without that prefix. No response will be sent if the bot is not allowed to send messages.
 
 ### Commands
 
-At the moment there is no possibility, to lookup all existing commands other than inspecting the source code.
-In the future you can review the commands on the website which will be linked in the [Associated repositories](#associated-repositories) part.
-Each command existing is configured differently and can be issued either with the name or a registered alias.
-As a normal user you cannot access every command because due to permissions which will be explained in the [permissions](###Permissions) section.
+Right now there is no list containing all available commands.
+In the future there will be a documented list of commands on the [associated website](#website).
+
+Every existing command has its own separate configuration and can be called either by its name or a registered alias. Some commands are exclusive to roles with higher [permission levels](#permissions).
 
 ### Permissions
-Every user is assigned two different permissions, which are consisting of **database permissions** and **chat permissions**.
-Each level of permissions is associated with a numeric value, therefore the heigher the number is, the heigher the level of permission is.
-In the current state of the project the levels of permissions are structured as following
+Each user has two different permission levels, of which one regulates the users **database permissions** and the other one his **chat permissions**. The level of access is indicated by a numeric value, the higher the number, the more access any given user has. Possible values at the moment are the following:
 
 ```
 BLOCKED = -1
@@ -135,70 +108,55 @@ DEV = 5
 ADMIN = 100
 ```
 
-The permissions for a user inside the database defaults to 0, which corresponds to a normal user in twitch chat.
-The permissionlevel of sub, vip, mod and broadcaster differs between channels, therefore allowing a specific user to execute commands only in specific channels.
-Users with the dev or admin rule are allowed to almost execute every command anywhere.
-Devs and admins are able to execute almost every command everywhere
-Negative permissions are reserved for blocked users, to block anyone from interacting with the bot.
+Access level for any user inside of the database always defaults to 0, while the chat permissions of a user are automatically set to either USER, SUB, VIP, MOD or BROADCASTER depending on his role in a given twitch chat. Therefore permissions of a single user can vary between different chats.  
+Users with the DEV or ADMIN role are permitted to execute most/all commands in any chat, while negative permissions are reserved for blocked users, preventing someone from interacting with the bot at all.
 
-### Testing (TDD)
-I aim towards building a well maintained and developed project with this bot.
-AS a conclusion I try to test as much of the code as possible.
-At the moment only unit- and integrationtests are implemented, which might be changed in the future.
-Details about the tests can be found in the section [unit-tests](#unit-tests) and [integration-tests](#integration-tests)
+## Development
 
 ### Database
 
-Mariadb serves as a mysql database to store the information gathered by the bot.
-In the future there might be an implementation of redis to store in memory data.
+MariaDB is used as a database to store any information gathered by the bot. In the future there might be an additional Redis layer to store very frequently accessed data in-memory.
 
 ### CI-CD
 
-Each pull request on the master or feature branch will run through 4 different jobs.
-The intire pipeline consists of linting, building, unit-testing and integration-testing.
-In case one of the job fails, the pipeline will conclude as failed.
-Pull Request on the feature or master branch are required to pass all checks before merging.
+Every push to the ```feature``` or ```master``` branches, as well as any pull request will trigger a workflow of 4 jobs, consisting of linting, building, unit-testing and integration-testing. Pull requests on ```feature``` or ```master``` are required to pass all checks before merging.
 
-## Testing with jasmine
+### Testing (TDD)
+My aim for this is towards building a maintainable and well-developed project, which is why I have chosen to try following test-driven development using [Jasmine](https://www.npmjs.com/package/jasmine) and cover as much of the code as possible with tests. At this point there are only unit and integration tests implemented, something that might change in the future.
 
-### Unit-Tests
+#### Unit Tests
 
-Unit-tests are created inside the ./test/unit directory which contains all unit-tests for the entire project.
-These tests are supposed to test small features or functions fairly quick and without any connection to other services.
-Unit-tests should be prefered if possible.
+All unit tests for this project are stored inside of ```./test/unit```. They are supposed to test small features/functions fairly quickly and without any connection to outside services and should be the preferred method for testing if possible.
 
-### Integration-Tests
+#### Integration Tests
 
-Integration-tests are aiming towards testing components in combination with other services, e.g. databases.
-Those tests are created inside the ./test/integration dirctory.
-To test the database properly I've a mariadb docker container running, which fullfills the purpose of being the test database.
+Integration tests are testing components and their connection to other services, e.g. a database. They are stored inside of ```./test/integration```. To test properly against a database I am running a MariaDB docker container, containing a suitable test database.
 
 ## Important libraries
 
-These are some of the important libraries, which are changing the way this application is created.
+These are some of the important libraries used, changing how this project is developed or making it possible in the first place.
 
 ### tmi.js
 
-[tmi.js](https://www.npmjs.com/package/tmi.js) is used to communicate with the twitch irc.
+[tmi.js](https://www.npmjs.com/package/tmi.js) is used to communicate with the twitch IRC server.
 
 ### typescript
-[Typescript](https://www.npmjs.com/package/typescript) is used for strong typing and better scaling Javascript apps.
+[TypeScript](https://www.npmjs.com/package/typescript) provides strong typing for scalable JavaScript apps.
 
 ### typeorm
 
-[Typeorm](https://www.npmjs.com/package/typeorm) is used to interact with the database and to avoid writing queries manually. 
+[TypeORM](https://www.npmjs.com/package/typeorm) acts as an abstraction layer between the application and the database, to avoid writing manual SQL queries.
 
 ### jasmine
 
-[Jasmine](https://www.npmjs.com/package/jasmine) as mentioned [above](#testing-with-jasmine) jasmine is the test framework for this project.
+[Jasmine](https://www.npmjs.com/package/jasmine) is, [as mentioned above](#testing-with-jasmine), the test framework used for this project.
 
-## Associated repositories
+## Related repositories
 
-### Website for the bot
+### Website
 
-You can find the repository for the website [here](https://github.com/helltf/bot-v2-website) and the link to the deployed page [here].
-The framework for the website has not set yet.
+The bot will have an associated website used for things like a command list. There is a [repository](https://github.com/helltf/bot-v2-website) created for it already, but the entire project is still being planned.
 
-### Backend API to access data from the bot
-The source code of the API can be found [here](https://github.com/helltf/bot-v2-backend).
-Language for the backend is not set yet.
+### Backend API
+
+I am also working on a [rust backend](https://github.com/helltf/bot-v2-backend) to provide an API for querying data collected by the bot.
