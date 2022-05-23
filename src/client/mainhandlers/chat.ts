@@ -1,6 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/export/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
+import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { BotResponse } from '../response.js'
 import { TwitchUserState } from '../types.js'
 
@@ -89,7 +90,7 @@ async function updateUser(user: ChatUserstate) {
     name: user.username,
     id: id,
     notifications: [],
-    permission: 5,
+    permission: PermissionLevel.USER,
     registered_at: Date.now()
   })
 }
