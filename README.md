@@ -115,7 +115,9 @@ Users with the DEV or ADMIN role are permitted to execute most/all commands in a
 
 ### Database
 
-MariaDB is used as a database to store any information gathered by the bot. In the future there might be an additional Redis layer to store very frequently accessed data in-memory.
+Mariadb was the initial database for this project but has been changed to postgres.
+Thus allowing to work with the diesel library in rust for the backend.
+In the future there might be an additional Redis layer to store very frequently accessed data in-memory.
 
 ### CI-CD
 

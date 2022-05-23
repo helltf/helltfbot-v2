@@ -1,24 +1,25 @@
 import {
-  notify,
-  pubSubConnectedToStreamerEvent,
-  updateNotification,
-  updateTopicTypeForChannel,
-  userNotificationIsExisting,
-  userIsAlreadyNotified
-} from '../../../commands/cmd/notify.js'
-import {
   NotifyEventType,
   UpdateEventType
-} from '../../../modules/pubsub/types.js'
+} from '../../../src/modules/pubsub/types.js'
 import {
   getExampleNotificationEntity,
   getExampleTwitchUserState,
   getTwitchUserEntity
 } from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
-import { Notification, TwitchUser } from '../../../db/export-entities.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import {
+  notify,
+  pubSubConnectedToStreamerEvent,
+  updateNotification,
+  userNotificationIsExisting,
+  userIsAlreadyNotified,
+  updateTopicTypeForChannel
+} from '../../../src/commands/cmd/notify.js'
+import { TwitchUser } from '../../../src/db/export-entities.js'
+import { Notification } from '../../../src/db/export-entities.js'
 
 describe('test notify command: ', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000

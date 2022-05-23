@@ -1,4 +1,4 @@
-import { getTokenBody } from '../../../../api/twitch/token.js'
+import { getTokenBody } from '../../../../src/api/twitch/token.js'
 
 describe('test token api ', () => {
   it('body should have a client id', () => {

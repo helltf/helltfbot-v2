@@ -1,11 +1,11 @@
-import { TwitchUserState } from '../../../client/types.js'
-import {
-  connectToChannel,
-  isAlreadyConnected,
-  join,
-  updateChannelInDb
-} from '../../../commands/cmd/join.js'
 import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
+import { TwitchUserState } from '../../../src/client/types.js'
+import {
+  join,
+  isAlreadyConnected,
+  connectToChannel,
+  updateChannelInDb
+} from '../../../src/commands/cmd/join.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleChannel } from '../../test-utils/example.js'

@@ -1,6 +1,7 @@
-import { TwitchUserState } from '../../client/types.js'
-import { NotificationInfo } from '../../db/entity/notification.js'
-import { TwitchUser, Notification } from '../../db/export-entities.js'
+import { TwitchUserState } from '../../src/client/types.js'
+import { NotificationInfo } from '../../src/db/entity/notification.js'
+import { Notification } from '../../src/db/export-entities.js'
+import { TwitchUser } from '../../src/db/export-entities.js'
 
 export const getExampleTwitchUserState = ({
   username = 'user',

@@ -1,10 +1,10 @@
 import 'dotenv/config'
 import { DataSource } from 'typeorm'
-import { TwitchBot } from '../../client/bot.js'
-import { mainClient } from '../../client/main-bot.js'
-import { watchClient } from '../../client/track-bot.js'
-import { DB } from '../../db/export-repositories.js'
 import { getOrmConf } from '../../ormconfig.js'
+import { TwitchBot } from '../../src/client/bot.js'
+import { mainClient } from '../../src/client/main-bot.js'
+import { watchClient } from '../../src/client/track-bot.js'
+import { DB } from '../../src/db/export-repositories.js'
 
 const setupDatabase = async () => {
   globalThis.hb = new TwitchBot(mainClient, watchClient)
