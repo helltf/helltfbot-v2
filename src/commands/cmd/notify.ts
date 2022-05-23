@@ -1,5 +1,5 @@
-import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/response.js'
+import { TwitchUserState } from '../../client/types.js'
 import { NotifyEventType, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
@@ -13,7 +13,7 @@ const notify = new Command({
   alias: [],
   execute: async (
     channel: string,
-    user: ChatUserstate,
+    user: TwitchUserState,
     [streamer, event]: string[]
   ): Promise<BotResponse> => {
     if (eventIsNotValid(event)) return getUnknownEventErrorResponse(channel)
