@@ -15,7 +15,6 @@ services:
       - db:/var/lib/postgresql/data
 
   bot:
-    image: node:current-alpine3.14
     build:
       context: .
       dockerfile: Dockerfile
