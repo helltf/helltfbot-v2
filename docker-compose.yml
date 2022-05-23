@@ -16,7 +16,9 @@ services:
 
   bot:
     image: node:16
-    build: ./Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - db
 
