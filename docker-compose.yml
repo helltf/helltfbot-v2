@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - db
-
+    restart: always
     environment:
       - NODE_ENV=prod
       - DB_HOST=db
