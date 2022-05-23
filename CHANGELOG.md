@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added 
+
+- Typescript as devDependency
+
 ### Changed 
 
+- Moved source files into src directory
 - updated database info text in readme 
 
 ## [1.1.0](https://github.com/helltf/helltfbot-v2/releases/tag/v1.1.0) - 2022-05-21
