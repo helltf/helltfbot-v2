@@ -89,7 +89,7 @@ export class PubSubConnection implements WebSocketConnection {
   handleIncomingMessage({ data }: { data: string }) {
     const parsedData: ParsedPubSubData = JSON.parse(data)
 
-    if (parsedData.type !== 'RECONNECT') {
+    if (parsedData.type === 'RECONNECT') {
       this.reconnect()
     }
 
@@ -100,13 +100,10 @@ export class PubSubConnection implements WebSocketConnection {
     this.connection.reconnect()
     hb.log(
       LogType.PUBSUB,
-      'A Pubsub connection has been closes and will restart'
+      'A Pubsub connection has been closed and will restart'
     )
-    for await (const topic of this.topics) {
-      const message = this.getListenMessageForTopic([topic])
-      this.sendMessage(message)
-      wait`5s`
-    }
+
+    this.listenToTopics(this.topics)
 
     hb.log(LogType.PUBSUB, 'Connection successfully restartet')
   }
