@@ -1,7 +1,6 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
 import { LogType } from '../../logger/log-type.js'
-import { wait } from '../../utilities/timeout.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
 import {
@@ -64,17 +63,8 @@ export class PubSub {
     for await (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
-      const topics = channels.filter()
-      for await (const { id, setting, status } of channels) {
-        if (setting) {
-          this.listenToSettingsTopic(connection, id)
-          await wait`1s`
-        }
-        if (status) {
-          this.listenToStatusTopic(connection, id)
-          await wait`5s`
-        }
-      }
+      const topics = this.getTopics(channels)
+      connection.listenToTopics(topics)
     }
     hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
   }

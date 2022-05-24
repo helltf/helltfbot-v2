@@ -51,6 +51,12 @@ export class PubSubConnection implements WebSocketConnection {
     this.topics.push(...message.data.topics)
   }
 
+  listenToTopics(topics: string[]) {
+    const message = this.getListenMessageForTopic(topics)
+
+    this.sendMessage(message)
+  }
+
   sendMessage(message: PubSubMessage) {
     this.connection.send(JSON.stringify(message))
   }
@@ -61,16 +67,16 @@ export class PubSubConnection implements WebSocketConnection {
   ): PubSubMessage => {
     const type = this.mapNotifyTypeToTopic(notifyType)
 
-    return this.getListenMessageForTopic(`${type}${channelId}`)
+    return this.getListenMessageForTopic([`${type}${channelId}`])
   }
 
-  getListenMessageForTopic(topic: string): PubSubMessage {
+  getListenMessageForTopic(topic: string[]): PubSubMessage {
     return {
       type: 'LISTEN',
       nonce: '',
       data: {
         auth_token: process.env.TWITCH_OAUTH,
-        topics: [`${topic}`]
+        topics: topic
       }
     }
   }
@@ -97,7 +103,7 @@ export class PubSubConnection implements WebSocketConnection {
       'A Pubsub connection has been closes and will restart'
     )
     for await (const topic of this.topics) {
-      const message = this.getListenMessageForTopic(topic)
+      const message = this.getListenMessageForTopic([topic])
       this.sendMessage(message)
       wait`5s`
     }
