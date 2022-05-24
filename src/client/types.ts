@@ -10,10 +10,12 @@ export class ApiService {
   twitch?: TwitchApi
   github?: GithubApi
   initialized = false
-
+  constructor() {
+    this.github = new GithubApi()
+    this.twitch = new TwitchApi()
+  }
   async init() {
     this.initialized = true
-    this.github = new GithubApi()
-    this.twitch = await new TwitchApi().init()
+    await this.twitch.init()
   }
 }

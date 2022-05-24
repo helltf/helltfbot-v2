@@ -47,7 +47,6 @@ export class TwitchBot {
   }
 
   startPubSub() {
-    if (hb.NODE_ENV === 'dev') return
     this.pubSub.connect()
   }
 

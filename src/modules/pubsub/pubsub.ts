@@ -1,10 +1,14 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
 import { LogType } from '../../logger/log-type.js'
-import { wait } from '../../utilities/timeout.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import { PubSubType, PubSubMessage, NotifyEventType } from './types.js'
+import {
+  PubSubType,
+  PubSubMessage,
+  NotifyEventType,
+  TopicType
+} from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
@@ -59,26 +63,21 @@ export class PubSub {
     for await (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
-      for await (const { id, setting, status } of channels) {
-        if (setting) {
-          this.listenToSettingsTopic(connection, id)
-          await wait`1s`
-        }
-        if (status) {
-          this.listenToStatusTopic(connection, id)
-          await wait`5s`
-        }
-      }
+      const topics = this.getTopics(channels)
+      connection.listenToTopics(topics)
     }
     hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
   }
 
-  listenToSettingsTopic(connection: PubSubConnection, id: number) {
-    connection.listenToTopic(id, NotifyEventType.SETTING)
-  }
+  getTopics(channels: NotificationChannelInfo[]): string[] {
+    return channels.reduce((acc, { setting, status, id }) => {
+      const topics = []
 
-  listenToStatusTopic(connection: PubSubConnection, id: number) {
-    connection.listenToTopic(id, NotifyEventType.STATUS)
+      if (setting) topics.push(TopicType.SETTING + id)
+      if (status) topics.push(TopicType.STATUS + id)
+
+      return acc.concat(topics)
+    }, [])
   }
 
   handlePubSubMessage = (data: any) => {
@@ -87,10 +86,6 @@ export class PubSub {
     if (type !== 'MESSAGE') return
 
     this.handleIncomingMessage(data)
-  }
-
-  sendMessage = (con: ReconnectingWebSocket, message: PubSubMessage) => {
-    con.send(JSON.stringify(message))
   }
 
   chunkTopicsIntoSize = (
@@ -125,7 +120,6 @@ export class PubSub {
 
   listenToTopic(id: number, event: NotifyEventType) {
     const connection = this.getOpenConnection()
-
     connection.listenToTopic(id, event)
   }
 }
