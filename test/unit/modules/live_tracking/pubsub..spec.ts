@@ -81,7 +81,7 @@ describe('test get username from topic', () => {
     expect(id).toBe(expectedId)
   })
 
-  fdescribe('get topics', () => {
+  describe('get topics', () => {
     it('array is empty return empty array', () => {
       const channels = []
       const result = module.getTopics(channels)
