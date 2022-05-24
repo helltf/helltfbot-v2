@@ -4,9 +4,11 @@ import {
   WebSocketConnection,
   TopicType,
   PubSubMessage,
-  NotifyEventType
+  NotifyEventType,
+  ParsedPubSubData
 } from './types.js'
 import * as WS from 'ws'
+import { wait } from '../../utilities/timeout.js'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
@@ -58,12 +60,17 @@ export class PubSubConnection implements WebSocketConnection {
     channelId: number
   ): PubSubMessage => {
     const type = this.mapNotifyTypeToTopic(notifyType)
+
+    return this.getListenMessageForTopic(`${type}${channelId}`)
+  }
+
+  getListenMessageForTopic(topic: string): PubSubMessage {
     return {
       type: 'LISTEN',
       nonce: '',
       data: {
         auth_token: process.env.TWITCH_OAUTH,
-        topics: [`${type}${channelId}`]
+        topics: [`${topic}`]
       }
     }
   }
@@ -73,17 +80,29 @@ export class PubSubConnection implements WebSocketConnection {
     if (notifyType === NotifyEventType.STATUS) return TopicType.STATUS
   }
 
-  handleIncomingMessage({ data }: any) {
-    const parsedData = JSON.parse(data)
-    if (
-      parsedData.type !== 'RESPONSE' &&
-      parsedData.type !== 'MESSAGE' &&
-      parsedData.type !== 'PONG'
-    ) {
-      hb.log(LogType.PUBSUB, 'Other event ' + parsedData.type)
+  handleIncomingMessage({ data }: { data: string }) {
+    const parsedData: ParsedPubSubData = JSON.parse(data)
+
+    if (parsedData.type !== 'RECONNECT') {
+      this.reconnect()
     }
 
     this.logError(parsedData.error)
+  }
+
+  async reconnect() {
+    this.connection.reconnect()
+    hb.log(
+      LogType.PUBSUB,
+      'A Pubsub connection has been closes and will restart'
+    )
+    for await (const topic of this.topics) {
+      const message = this.getListenMessageForTopic(topic)
+      this.sendMessage(message)
+      wait`5s`
+    }
+
+    hb.log(LogType.PUBSUB, 'Connection successfully restartet')
   }
 
   logError(error: any) {
