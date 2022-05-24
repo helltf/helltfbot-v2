@@ -140,5 +140,32 @@ describe('test get username from topic', () => {
 
       expect(result).toEqual(expectedResult)
     })
+
+    it('array contains two channels with setting return both topics', () => {
+      const exampleChannelInfo1 = {
+        id: 1,
+        name: 'name',
+        setting: true,
+        status: true
+      }
+
+      const exampleChannelInfo2 = {
+        id: 1,
+        name: 'name',
+        setting: true,
+        status: true
+      }
+      const channels = [exampleChannelInfo1, exampleChannelInfo2]
+      const result = module.getTopics(channels)
+
+      const expectedResult = [
+        TopicType.SETTING + exampleChannelInfo1.id,
+        TopicType.STATUS + exampleChannelInfo1.id,
+        TopicType.SETTING + exampleChannelInfo2.id,
+        TopicType.STATUS + exampleChannelInfo2.id
+      ]
+
+      expect(result).toEqual(expectedResult)
+    })
   })
 })
