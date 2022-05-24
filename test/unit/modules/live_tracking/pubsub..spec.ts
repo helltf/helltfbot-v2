@@ -1,4 +1,6 @@
+import { NotificationChannelInfo } from '../../../../src/db/entity/notification_channel.js'
 import { PubSub } from '../../../../src/modules/pubsub/pubsub.js'
+import { TopicType } from '../../../../src/modules/pubsub/types.js'
 
 describe('test chunking function', () => {
   let module: PubSub
@@ -77,5 +79,66 @@ describe('test get username from topic', () => {
     const expectedId = '1'
 
     expect(id).toBe(expectedId)
+  })
+
+  fdescribe('get topics', () => {
+    it('array is empty return empty array', () => {
+      const channels = []
+      const result = module.getTopics(channels)
+      const expectedResult = []
+
+      expect(result).toEqual(expectedResult)
+    })
+
+    it('array contains 1 channel with status return status topic', () => {
+      const exampleChannelInfo = {
+        id: 1,
+        name: 'name',
+        setting: false,
+        status: true
+      }
+      const channels: NotificationChannelInfo[] = [exampleChannelInfo]
+
+      const result = module.getTopics(channels)
+
+      const expectedResult = [TopicType.STATUS + exampleChannelInfo.id]
+
+      expect(result).toEqual(expectedResult)
+    })
+
+    it('array contains 1 channel with setting return setting topic', () => {
+      const exampleChannelInfo = {
+        id: 1,
+        name: 'name',
+        setting: true,
+        status: false
+      }
+      const channels: NotificationChannelInfo[] = [exampleChannelInfo]
+
+      const result = module.getTopics(channels)
+
+      const expectedResult = [TopicType.SETTING + exampleChannelInfo.id]
+
+      expect(result).toEqual(expectedResult)
+    })
+
+    it('array contains 1 channel with setting and status return setting and status topic', () => {
+      const exampleChannelInfo = {
+        id: 1,
+        name: 'name',
+        setting: true,
+        status: true
+      }
+      const channels: NotificationChannelInfo[] = [exampleChannelInfo]
+
+      const result = module.getTopics(channels)
+
+      const expectedResult = [
+        TopicType.SETTING + exampleChannelInfo.id,
+        TopicType.STATUS + exampleChannelInfo.id
+      ]
+
+      expect(result).toEqual(expectedResult)
+    })
   })
 })
