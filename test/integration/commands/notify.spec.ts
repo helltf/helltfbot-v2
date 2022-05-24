@@ -273,7 +273,7 @@ describe('test notify command: ', () => {
       expect(createdEntity.status).toBeTruthy()
     })
 
-    fit('creating new connection and invoking listen to topic function', async () => {
+    it('creating new connection and invoking listen to topic function', async () => {
       const message = [streamer, UpdateEventType.LIVE]
       const userState = getExampleTwitchUserState({})
       const returnedStreamerId = 1
