@@ -80,24 +80,12 @@ export class PubSub {
     }, [])
   }
 
-  listenToSettingsTopic(connection: PubSubConnection, id: number) {
-    connection.listenToTopic(id, NotifyEventType.SETTING)
-  }
-
-  listenToStatusTopic(connection: PubSubConnection, id: number) {
-    connection.listenToTopic(id, NotifyEventType.STATUS)
-  }
-
   handlePubSubMessage = (data: any) => {
     const type: PubSubType = data.type
 
     if (type !== 'MESSAGE') return
 
     this.handleIncomingMessage(data)
-  }
-
-  sendMessage = (con: ReconnectingWebSocket, message: PubSubMessage) => {
-    con.send(JSON.stringify(message))
   }
 
   chunkTopicsIntoSize = (

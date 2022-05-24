@@ -8,7 +8,6 @@ import {
   ParsedPubSubData
 } from './types.js'
 import * as WS from 'ws'
-import { wait } from '../../utilities/timeout.js'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
