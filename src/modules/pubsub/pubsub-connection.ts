@@ -54,6 +54,8 @@ export class PubSubConnection implements WebSocketConnection {
     const message = this.getListenMessageForTopic(topics)
 
     this.sendMessage(message)
+
+    this.topics.push(...topics)
   }
 
   sendMessage(message: PubSubMessage) {
