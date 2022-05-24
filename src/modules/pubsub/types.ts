@@ -1,12 +1,24 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { Notification } from '../../db/export-entities.js'
 
+export interface ParsedPubSubData {
+  type: PubSubType
+  error?: string
+  data?: any
+  nonce?: string
+}
+
 export type PubSubMessageEventType =
   | 'stream-up'
   | 'stream-down'
   | 'broadcast_settings_update'
 
-export type PubSubType = 'RESPONSE' | 'MESSAGE' | 'PONG' | 'LISTEN'
+export type PubSubType =
+  | 'RESPONSE'
+  | 'MESSAGE'
+  | 'PONG'
+  | 'LISTEN'
+  | 'RECONNECT'
 
 export interface PubSubData<T extends PubSubDataMessage> {
   topic: string
