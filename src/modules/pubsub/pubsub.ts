@@ -4,7 +4,12 @@ import { LogType } from '../../logger/log-type.js'
 import { wait } from '../../utilities/timeout.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import { PubSubType, PubSubMessage, NotifyEventType } from './types.js'
+import {
+  PubSubType,
+  PubSubMessage,
+  NotifyEventType,
+  TopicType
+} from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
@@ -59,6 +64,7 @@ export class PubSub {
     for await (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
+      const topics = channels.filter()
       for await (const { id, setting, status } of channels) {
         if (setting) {
           this.listenToSettingsTopic(connection, id)
@@ -71,6 +77,17 @@ export class PubSub {
       }
     }
     hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
+  }
+
+  getTopics(channels: NotificationChannelInfo[]): string[] {
+    return channels.reduce((acc, { setting, status, id }) => {
+      const topics = []
+
+      if (setting) topics.push(TopicType.SETTING + id)
+      if (status) topics.push(TopicType.STATUS + id)
+
+      return acc.concat(topics)
+    }, [])
   }
 
   listenToSettingsTopic(connection: PubSubConnection, id: number) {
@@ -125,7 +142,6 @@ export class PubSub {
 
   listenToTopic(id: number, event: NotifyEventType) {
     const connection = this.getOpenConnection()
-
     connection.listenToTopic(id, event)
   }
 }
