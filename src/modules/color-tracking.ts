@@ -44,6 +44,8 @@ export class ColorTracking implements Module {
       }
     )
   }
+
+  async handleColorChanges() {}
   setNewPosition(colors: string[], newColor: string): string[] {
     const index = colors.findIndex((c) => c === newColor)
     colors.splice(index, 1)
