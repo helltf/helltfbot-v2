@@ -2,7 +2,6 @@ import { Client } from 'tmi.js'
 import { Cooldown } from '../commands/export/cooldown.js'
 import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
-import { watchJoinAllChannels } from './watchhandlers/join.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
 import { Command, Commands } from '../commands/export/types.js'
@@ -15,7 +14,6 @@ import { PubSub } from '../modules/pubsub/pubsub.js'
 
 export class TwitchBot {
   client: Client
-  watchclient: Client
   commands: Commands
   cooldown: Cooldown
   db: DB
@@ -24,11 +22,10 @@ export class TwitchBot {
   pubSub: PubSub
   NODE_ENV: 'prod' | 'dev' | 'test'
 
-  constructor(client: Client, watchclient: Client) {
+  constructor(client: Client) {
     this.NODE_ENV = process.env.NODE_ENV
     this.log = customLogMessage
     this.client = client
-    this.watchclient = watchclient
     this.cooldown = new Cooldown()
     this.pubSub = new PubSub()
     this.db = new DB()
@@ -38,7 +35,6 @@ export class TwitchBot {
 
   async init() {
     await this.client.connect()
-    await this.watchclient.connect()
     await this.db.initialize()
     await this.api.init()
     this.startPubSub()
@@ -51,7 +47,6 @@ export class TwitchBot {
   }
 
   async joinChannels() {
-    watchJoinAllChannels()
     await mainJoinAllChannels()
     const startUpMessage = process.env.START_UP_MESSAGE
     if (!startUpMessage) return

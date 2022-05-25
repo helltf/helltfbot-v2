@@ -3,7 +3,6 @@ import {
   WordleWord,
   ColorHistory,
   Channel,
-  WatchChannel,
   TwitchUser,
   Ban,
   Timeout,
@@ -18,7 +17,6 @@ export interface DbRepositories {
   wordleRepo: Repository<WordleWord>
   colorRepo: Repository<ColorHistory>
   channelRepo: Repository<Channel>
-  watchRepo: Repository<WatchChannel>
   userRepo: Repository<TwitchUser>
   banRepo: Repository<Ban>
   timeoutRepo: Repository<Timeout>
@@ -32,7 +30,6 @@ export class DB implements DbRepositories {
   wordleRepo: Repository<WordleWord>
   colorRepo: Repository<ColorHistory>
   channelRepo: Repository<Channel>
-  watchRepo: Repository<WatchChannel>
   userRepo: Repository<TwitchUser>
   banRepo: Repository<Ban>
   timeoutRepo: Repository<Timeout>
@@ -46,7 +43,6 @@ export class DB implements DbRepositories {
     this.wordleRepo = dataSource.getRepository(WordleWord)
     this.colorRepo = dataSource.getRepository(ColorHistory)
     this.channelRepo = dataSource.getRepository(Channel)
-    this.watchRepo = dataSource.getRepository(WatchChannel)
     this.userRepo = dataSource.getRepository(TwitchUser)
     this.banRepo = dataSource.getRepository(Ban)
     this.timeoutRepo = dataSource.getRepository(Timeout)
