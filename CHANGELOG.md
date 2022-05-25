@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved source files into src directory
 - updated database info text in readme 
 - join all pubsub topics at once
+- removed watchclient
 
 ### Fixed 
 
