@@ -1,12 +1,13 @@
 import { ChatUserstate, Client } from 'tmi.js'
 import { IdentityOptions } from '../config/config.js'
 import { handleChat } from './mainhandlers/chat.js'
+import { handleConnect } from './mainhandlers/connect.js'
 import { handleJoin } from './mainhandlers/join.js'
 import { handlePart } from './mainhandlers/part.js'
 
-const mainClient = createMainClient()
+const client = createclient()
 
-function createMainClient(): Client {
+function createclient(): Client {
   const identity = new IdentityOptions(
     process.env.TWITCH_OAUTH,
     'xdforsenxdlol'
@@ -29,7 +30,7 @@ function createMainClient(): Client {
   })
 }
 
-mainClient.on(
+client.on(
   'chat',
   async (
     channel: string,
@@ -41,16 +42,20 @@ mainClient.on(
   }
 )
 
-mainClient.on('part', (channel: string, username: string, self: boolean) => {
+client.on('part', (channel: string, username: string, self: boolean) => {
   if (!self) return
   channel = channel.replace('#', '')
 
   handlePart(channel)
 })
 
-mainClient.on('join', (channel: string, username: string, self: boolean) => {
-	if(!self) return 
+client.on('join', (channel: string, username: string, self: boolean) => {
+  if (!self) return
 
-	handleJoin(channel)
+  handleJoin(channel)
 })
-export { mainClient }
+
+client.on('connected', () => {
+  handleConnect()
+})
+export { client }

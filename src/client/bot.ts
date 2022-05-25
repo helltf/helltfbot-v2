@@ -1,6 +1,5 @@
 import { Client } from 'tmi.js'
 import { Cooldown } from '../commands/export/cooldown.js'
-import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
@@ -44,13 +43,6 @@ export class TwitchBot {
 
   startPubSub() {
     this.pubSub.connect()
-  }
-
-  async joinChannels() {
-    await mainJoinAllChannels()
-    const startUpMessage = process.env.START_UP_MESSAGE
-    if (!startUpMessage) return
-    hb.sendMessage(process.env.MAIN_USER, startUpMessage)
   }
 
   startJobs() {
