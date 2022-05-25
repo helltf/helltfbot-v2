@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed 
 
+- join channels upon connecting
 - Moved source files into src directory
 - updated database info text in readme 
 - join all pubsub topics at once
