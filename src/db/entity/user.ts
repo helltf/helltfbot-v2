@@ -39,6 +39,5 @@ export class TwitchUser extends BaseEntity {
   suggestions: Suggestion[]
 
   @OneToOne(() => ColorHistory, (history) => history.user)
-  @JoinColumn()
   colors: ColorHistory
 }
