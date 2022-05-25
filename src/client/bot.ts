@@ -46,13 +46,6 @@ export class TwitchBot {
     this.pubSub.connect()
   }
 
-  async joinChannels() {
-    await mainJoinAllChannels()
-    const startUpMessage = process.env.START_UP_MESSAGE
-    if (!startUpMessage) return
-    hb.sendMessage(process.env.MAIN_USER, startUpMessage)
-  }
-
   startJobs() {
     if (process.env.NODE_ENV === 'dev') return
 
