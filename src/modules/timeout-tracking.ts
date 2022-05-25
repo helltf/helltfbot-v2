@@ -3,7 +3,7 @@ import { Module } from './export/module.js'
 export class TimeoutTracking implements Module {
   name = 'Timeout'
   initialize = () => {
-    hb.watchclient.on(
+    hb.client.on(
       'timeout',
       (channel: string, username: string, _, duration: number) => {
         channel = channel.replace('#', '')

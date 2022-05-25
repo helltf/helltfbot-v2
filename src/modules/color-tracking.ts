@@ -5,7 +5,7 @@ export class ColorTracking implements Module {
   name = 'Color'
   MAX_SAVED_COLORS = 15
   async initialize() {
-    hb.watchclient.on(
+    hb.client.on(
       'chat',
       async (
         _: string,
