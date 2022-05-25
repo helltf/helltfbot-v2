@@ -1,14 +1,8 @@
-import ReconnectingWebSocket from 'reconnecting-websocket'
 import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
 import { LogType } from '../../logger/log-type.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import {
-  PubSubType,
-  PubSubMessage,
-  NotifyEventType,
-  TopicType
-} from './types.js'
+import { PubSubType, NotifyEventType, TopicType } from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
