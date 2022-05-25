@@ -2,8 +2,8 @@ import { ChatUserstate } from 'tmi.js'
 import { Module } from './export/module.js'
 
 export class ColorTracking implements Module {
-  name: string = 'Color'
-  MAX_SAVED_COLORS: number = 15
+  name = 'Color'
+  MAX_SAVED_COLORS = 15
 
   async initialize() {
     hb.client.on('chat', (c: string, u: ChatUserstate) => {
@@ -28,15 +28,7 @@ export class ColorTracking implements Module {
     )?.colors?.history
 
     if (!savedColors) {
-      hb.db.colorRepo.save({
-        user: {
-          id: id
-        },
-        history: [userColor],
-        change_timestamp: Date.now(),
-        register_timestamp: Date.now()
-      })
-      return
+      return this.saveNewHistory(id, userColor)
     }
 
     const latestColor = savedColors[savedColors.length - 1]
@@ -44,18 +36,33 @@ export class ColorTracking implements Module {
     if (latestColor !== userColor) {
       const updatedColors = this.updateCurrentColors(savedColors, userColor)
 
-      hb.db.colorRepo.update(
-        {
-          user: {
-            id: id
-          }
-        },
-        {
-          history: updatedColors,
-          change_timestamp: Date.now()
-        }
-      )
+      this.updateDatabaseColors(id, updatedColors)
     }
+  }
+
+  updateDatabaseColors(userId: number, colors: string[]) {
+    hb.db.colorRepo.update(
+      {
+        user: {
+          id: userId
+        }
+      },
+      {
+        history: colors,
+        change_timestamp: Date.now()
+      }
+    )
+  }
+
+  async saveNewHistory(userId: number, color: string) {
+    await hb.db.colorRepo.save({
+      user: {
+        id: userId
+      },
+      history: [color],
+      change_timestamp: Date.now(),
+      register_timestamp: Date.now()
+    })
   }
 
   setNewPosition(colors: string[], newColor: string): string[] {
