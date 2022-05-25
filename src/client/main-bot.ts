@@ -55,7 +55,7 @@ client.on('join', (channel: string, username: string, self: boolean) => {
   handleJoin(channel)
 })
 
-client.on('connected', (a: string, p: number) => {
+client.on('connected', () => {
   handleConnect()
 })
 export { client }

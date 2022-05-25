@@ -1,6 +1,5 @@
 import { Client } from 'tmi.js'
 import { Cooldown } from '../commands/export/cooldown.js'
-import { mainJoinAllChannels } from './mainhandlers/join.js'
 import { updateCommandsInDb } from '../commands/update-db.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
