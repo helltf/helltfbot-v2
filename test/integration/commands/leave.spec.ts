@@ -1,4 +1,3 @@
-import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { TwitchUserState } from '../../../src/client/types.js'
 import {
   leave,
@@ -8,7 +7,7 @@ import {
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleChannel } from '../../test-utils/example.js'
+import { getExampleChannel, getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test leave command', () => {

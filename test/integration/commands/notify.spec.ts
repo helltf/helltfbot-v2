@@ -2,11 +2,6 @@ import {
   NotifyEventType,
   UpdateEventType
 } from '../../../src/modules/pubsub/types.js'
-import {
-  getExampleNotificationEntity,
-  getExampleTwitchUserState,
-  getTwitchUserEntity
-} from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
@@ -20,13 +15,14 @@ import {
 } from '../../../src/commands/cmd/notify.js'
 import { TwitchUser } from '../../../src/db/export-entities.js'
 import { Notification } from '../../../src/db/export-entities.js'
+import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
 
 describe('test notify command: ', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
   let channel = 'testChannel'
   let streamer = 'streamer'
-  let user: TwitchUser
-  let notification: Notification
+  let user: Partial<TwitchUser>
+  let notification: Partial<Notification>
 
   beforeAll(async () => {
     await setupDatabase()
@@ -35,8 +31,8 @@ describe('test notify command: ', () => {
   beforeEach(async () => {
     channel = 'testChannel'
     streamer = 'streamer'
-    notification = getExampleNotificationEntity()
-    user = getTwitchUserEntity()
+    notification = getExampleNotificationEntity({})
+    user = getExampleTwitchUserEntity({})
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })

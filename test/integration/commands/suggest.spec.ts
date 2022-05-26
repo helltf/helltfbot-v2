@@ -1,8 +1,8 @@
-import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { TwitchUserState } from '../../../src/client/types.js'
 import { suggest } from '../../../src/commands/cmd/suggest.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 

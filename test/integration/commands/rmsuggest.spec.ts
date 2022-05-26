@@ -1,8 +1,8 @@
 import { ChatUserstate } from 'tmi.js'
-import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { rmsuggest } from '../../../src/commands/cmd/rmsuggestion.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
