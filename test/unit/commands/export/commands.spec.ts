@@ -137,4 +137,40 @@ describe('testing commands class', () => {
 
     expect(createCommands).toThrowError()
   })
+
+  it('commands contains 0 commands getAll returns empty array', () => {
+    const commands = new Commands([])
+
+    const allCommands = commands.getAll()
+
+    expect(allCommands).toHaveSize(0)
+  })
+
+  it('commands contains one command get all returns this command', () => {
+    const exampleCommand = getExampleCommand({})
+    const commands = new Commands([exampleCommand])
+    const allCommands = commands.getAll()
+
+
+    const givenCommand = allCommands[0]
+
+    expect(allCommands).toHaveSize(1)
+
+    expect(givenCommand).toEqual(exampleCommand)
+  })
+
+
+  it('commands contains two commands get all returns both commands', () => {
+    const command1 = getExampleCommand({ name: 'command1' })
+    const command2 = getExampleCommand({ name: 'command2' })
+
+    const commands = new Commands([command1, command2])
+    const allCommands = commands.getAll()
+
+    expect(allCommands).toHaveSize(2)
+
+    expect(allCommands).toContain(command1)
+    expect(allCommands).toContain(command2)
+  })
+
 })
