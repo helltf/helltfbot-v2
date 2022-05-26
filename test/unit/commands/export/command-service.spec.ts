@@ -1,4 +1,4 @@
-import { CommandService } from "../../../../src/commands/export/commands-service"
+import { CommandService } from '../../../../src/commands/export/commands-service.js'
 import { getExampleCommand } from '../../../test-utils/example.js'
 
 describe('testing commands class', () => {

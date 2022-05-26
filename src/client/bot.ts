@@ -1,16 +1,15 @@
 import { Client } from 'tmi.js'
 import { Cooldown } from '../commands/export/cooldown.js'
-import { updateCommandsInDb } from '../commands/update-commands.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
 import { Command } from '../commands/export/types.js'
-import { CommandService } from "../commands/export/commands-service"
 import { ApiService } from './types.js'
 import jobs from '../jobs/jobs-export.js'
 import { LogType } from '../logger/log-type.js'
 import { customLogMessage } from '../logger/logger-export.js'
 import { modules } from '../modules/export/export-modules.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
+import { CommandService } from '../commands/export/commands-service.js'
 
 export class TwitchBot {
   client: Client

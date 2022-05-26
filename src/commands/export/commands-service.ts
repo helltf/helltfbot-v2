@@ -1,8 +1,6 @@
-import { Command } from './types';
-
+import { Command } from "./types.js";
 
 export class CommandService {
-
     commands: { activate: string[]; command: Command; }[] = [];
 
     constructor(commands: Command[]) {
@@ -40,11 +38,11 @@ export class CommandService {
 
     async updateDb() {
         if (!hb.isProd()) return
-        await this.addNewCommands()
-        await this.removeDeletedCommands()
+        await this.addCommandsToDb()
+        await this.updateDeletedCommands()
     }
 
-    async removeDeletedCommands() {
+    async updateDeletedCommands() {
         const commandNames = await hb.db.commandRepo.find()
 
         for await (const { name } of commandNames) {
@@ -58,10 +56,11 @@ export class CommandService {
         }
     }
 
-    async addNewCommands() {
+    async addCommandsToDb() {
         for await (const command of this.getAll()) {
             await hb.db.commandRepo.save({
-                ...command
+                ...command,
+                deleted: false
             })
         }
     }
