@@ -19,8 +19,10 @@ async function removeDeletedCommands() {
 
   for (const name of commandNames) {
     if (!hb.commands.findCommand(name)) {
-      hb.db.commandRepo.delete({
+      hb.db.commandRepo.update({
         name: name
+      }, {
+        deleted: true
       })
     }
   }

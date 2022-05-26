@@ -22,4 +22,10 @@ export class CommandEntity extends BaseEntity {
 
   @Column('int')
   cooldown: number
+
+  @Column('boolean', { default: false })
+  deleted: boolean
+
+  @Column('varchar', { array: true, nullable: true })
+  alias: string[]
 }
