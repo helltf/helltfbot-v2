@@ -5,7 +5,7 @@ import { disconnectDatabase } from "../test-utils/disconnect.js"
 import { getExampleCommand } from "../test-utils/example.js"
 import { setupDatabase } from "../test-utils/setup-db.js"
 
-fdescribe('test updating commands', () => {
+describe('test updating commands', () => {
     beforeAll(async () => {
         await setupDatabase()
     })

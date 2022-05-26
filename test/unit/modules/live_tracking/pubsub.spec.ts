@@ -1,6 +1,6 @@
-import { PubSub } from '@modules/pubsub/pubsub.js'
-import { TopicType } from '@modules/pubsub/types.js'
-import { NotificationChannelInfo } from '@db/entity/notification_channel'
+import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel.js"
+import { PubSub } from "../../../../src/modules/pubsub/pubsub.js"
+import { TopicType } from "../../../../src/modules/pubsub/types.js"
 
 describe('test chunking function', () => {
   let module: PubSub

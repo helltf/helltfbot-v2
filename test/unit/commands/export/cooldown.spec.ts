@@ -104,18 +104,6 @@ describe('testing cooldown class', () => {
       done()
     }, command.cooldown)
   })
-
-  it('entry should not be gone after cooldown is not fully over', (done) => {
-    const userId = user['user-id']!
-
-    cooldown.setCooldown(command, userId)
-
-    setTimeout(() => {
-      const entries = cooldown.userHasCooldown(command, userId)
-      expect(entries).toBeTrue()
-      done()
-    }, command.cooldown - command.cooldown / 2)
-  })
 })
 
 function getCooldownMapSize(cooldown: Cooldown) {
