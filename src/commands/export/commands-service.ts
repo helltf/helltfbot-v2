@@ -1,7 +1,7 @@
 import { Command } from './types';
 
 
-export class CommandsService {
+export class CommandService {
 
     commands: { activate: string[]; command: Command; }[] = [];
 

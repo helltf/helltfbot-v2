@@ -3,7 +3,8 @@ import { Cooldown } from '../commands/export/cooldown.js'
 import { updateCommandsInDb } from '../commands/update-commands.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
-import { Command, Commands } from '../commands/export/types.js'
+import { Command } from '../commands/export/types.js'
+import { CommandService } from "../commands/export/commands-service"
 import { ApiService } from './types.js'
 import jobs from '../jobs/jobs-export.js'
 import { LogType } from '../logger/log-type.js'
@@ -13,7 +14,7 @@ import { PubSub } from '../modules/pubsub/pubsub.js'
 
 export class TwitchBot {
   client: Client
-  commands: Commands
+  commands: CommandService
   cooldown: Cooldown
   db: DB
   api: ApiService
@@ -26,7 +27,7 @@ export class TwitchBot {
     this.cooldown = new Cooldown()
     this.pubSub = new PubSub()
     this.db = new DB()
-    this.commands = new Commands(commands)
+    this.commands = new CommandService(commands)
     this.api = new ApiService()
   }
 
@@ -36,7 +37,7 @@ export class TwitchBot {
     await this.api.init()
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
-    updateCommandsInDb()
+    this.commands.updateDb()
   }
 
   startPubSub() {
