@@ -1,25 +1,25 @@
 import commands from './export/export-commands.js'
 
-const addNewCommands = () => {
-  for (const command of commands) {
-    hb.db.commandRepo.save({
+const addNewCommands = async () => {
+  for await (const command of commands) {
+    await hb.db.commandRepo.save({
       ...command
     })
   }
 }
 
-const update = () => {
+export const updateCommandsInDb = async () => {
   if (process.env.NODE_ENV !== 'prod') return
-  addNewCommands()
-  removeDeletedCommands()
+  await addNewCommands()
+  await removeDeletedCommands()
 }
 
 async function removeDeletedCommands() {
-  const commandNames = (await hb.db.commandRepo.find()).map((c) => c.name)
+  const commandNames = await hb.db.commandRepo.find()
 
-  for (const name of commandNames) {
+  for await (const { name } of commandNames) {
     if (!hb.commands.findCommand(name)) {
-      hb.db.commandRepo.update({
+      await hb.db.commandRepo.update({
         name: name
       }, {
         deleted: true
@@ -27,4 +27,3 @@ async function removeDeletedCommands() {
     }
   }
 }
-export { update as updateCommandsInDb }
