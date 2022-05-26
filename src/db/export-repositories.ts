@@ -1,4 +1,6 @@
 import { DataSource, Repository } from 'typeorm'
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
+import { getOrmConf } from '../../ormconfig.js'
 import {
   WordleWord,
   ColorHistory,
@@ -11,7 +13,6 @@ import {
   NotificationChannel,
   Suggestion
 } from './export-entities.js'
-import { AppDataSource } from './export-orm.js'
 
 export interface DbRepositories {
   wordleRepo: Repository<WordleWord>
@@ -39,7 +40,8 @@ export class DB implements DbRepositories {
   suggestionRepo: Repository<Suggestion>
   dataSource: DataSource
 
-  constructor(dataSource: DataSource = AppDataSource) {
+  constructor(config: PostgresConnectionOptions = getOrmConf()) {
+    const dataSource = new DataSource(config)
     this.wordleRepo = dataSource.getRepository(WordleWord)
     this.colorRepo = dataSource.getRepository(ColorHistory)
     this.channelRepo = dataSource.getRepository(Channel)

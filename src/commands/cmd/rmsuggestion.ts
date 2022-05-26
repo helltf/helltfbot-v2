@@ -1,10 +1,10 @@
 import { Command } from '../export/types.js'
 import { ChatUserstate } from 'tmi.js'
-import { BotResponse } from '../../client/response.js'
+import { BotResponse } from '../../client/types.js'
 
 const rmsuggest = new Command({
   name: 'rmsuggest',
-  description: 'rmsuggest a feature you want to see',
+  description: 'remove your given suggestion',
   permissions: 0,
   requiredParams: ['id'],
   optionalParams: [],

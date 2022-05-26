@@ -1,4 +1,5 @@
-import { BotResponse } from '../../client/response.js'
+import { BotResponse } from '../../client/types.js'
+
 import { TwitchUserState } from '../../client/types.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'

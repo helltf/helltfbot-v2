@@ -17,12 +17,10 @@ export class TwitchBot {
   cooldown: Cooldown
   db: DB
   api: ApiService
-  log: (type: LogType, ...args: any) => void
   pubSub: PubSub
-  NODE_ENV: 'prod' | 'dev' | 'test'
+  log: (type: LogType, ...args: any) => void
 
   constructor(client: Client) {
-    this.NODE_ENV = process.env.NODE_ENV
     this.log = customLogMessage
     this.client = client
     this.cooldown = new Cooldown()

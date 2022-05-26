@@ -1,5 +1,6 @@
 import { Command } from '../export/types.js'
-import { BotResponse } from '../../client/response.js'
+import { BotResponse } from '../../client/types.js'
+
 
 const github = new Command({
   name: 'github',
