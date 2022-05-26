@@ -31,8 +31,8 @@ export class TwitchBot {
   }
 
   async init() {
-    await this.client.connect()
     await this.db.initialize()
+    await this.client.connect()
     await this.api.init()
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
