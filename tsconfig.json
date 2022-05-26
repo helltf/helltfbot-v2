@@ -3,12 +3,22 @@
         "module": "ESNext",
         "target": "ESNext",
         "outDir": "./dist",
-        "baseUrl" : "./",
+        "baseUrl" : ".",
         "types" : [ "node" ],
         "skipLibCheck": true,
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "esModuleInterop": true,
+        "strict": true,
+        "paths": {
+            "@db/*": ["src/db/*"],
+            "@modules/*": ["src/modules/*"],
+            "@api/": ["src/api/*"]
+        },
+        "removeComments": true,
+        "strictPropertyInitialization": false,
+        "importHelpers": true,
+        "sourceMap": true,
     },
     "exclude": [
         "node_modules",
