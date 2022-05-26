@@ -83,4 +83,8 @@ export class Commands {
         throw new Error('alias is already in usage')
     }
   }
+
+  getAll(): Command[] {
+    return this.commands.map(c => c.command)
+  }
 }

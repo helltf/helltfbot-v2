@@ -1,20 +1,13 @@
-import commands from './export/export-commands.js'
-
 const addNewCommands = async () => {
-  for await (const command of commands) {
+  for await (const command of hb.commands.getAll()) {
     await hb.db.commandRepo.save({
       ...command
     })
   }
 }
 
-export const updateCommandsInDb = async () => {
-  if (!hb.isProd()) return
-  await addNewCommands()
-  await removeDeletedCommands()
-}
 
-async function removeDeletedCommands() {
+const removeDeletedCommands = async () => {
   const commandNames = await hb.db.commandRepo.find()
 
   for await (const { name } of commandNames) {
@@ -26,4 +19,10 @@ async function removeDeletedCommands() {
       })
     }
   }
+}
+
+export const updateCommandsInDb = async () => {
+  if (!hb.isProd()) return
+  await addNewCommands()
+  await removeDeletedCommands()
 }
