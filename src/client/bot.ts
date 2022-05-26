@@ -73,4 +73,16 @@ export class TwitchBot {
   getCommand(input: string): Command {
     return hb.commands.findCommand(input)
   }
+
+  isProd() {
+    return process.env.NODE_ENV === 'prod'
+  }
+
+  isDev() {
+    return process.env.NODE_ENV === 'dev'
+  }
+
+  isTest() {
+    return process.env.NODE_ENV === 'test'
+  }
 }

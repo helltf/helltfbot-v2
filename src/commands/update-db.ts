@@ -9,7 +9,7 @@ const addNewCommands = async () => {
 }
 
 export const updateCommandsInDb = async () => {
-  if (process.env.NODE_ENV !== 'prod') return
+  if (!hb.isProd()) return
   await addNewCommands()
   await removeDeletedCommands()
 }
