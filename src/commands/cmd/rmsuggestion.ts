@@ -31,7 +31,7 @@ const rmsuggest = new Command({
       return response
     }
 
-    if (await idIsNotValidForUser(user['user-id'], id)) {
+    if (await idIsNotValidForUser(user['user-id']!, id)) {
       response.response = `Id ${id} not existing or the suggestion is created by somebody else`
       return response
     }

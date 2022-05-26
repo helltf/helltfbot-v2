@@ -1,7 +1,7 @@
 import { PipelineData } from '../api/github/github-api.js'
 import { Projects } from '../api/github/github-projects.js'
 
-const counts = new Map<Projects, number>([
+const counts = new Map<Projects, number | undefined>([
   [Projects.helltfbot_v2, undefined],
   [Projects.bot_v1_fullstack, undefined]
 ])
@@ -16,13 +16,13 @@ const updateGithubPipeline = async () => {
   }
 }
 
-const checkForUpdate = async (project: Projects, count: number) => {
+const checkForUpdate = async (project: Projects, count: number | undefined) => {
   const { success, data } = await hb.api.github.getPipeLineData(project)
 
   if (!success) return
 
   if (count === undefined) {
-    setCount(project, data?.count)
+    setCount(project, data?.count!)
     return
   }
 

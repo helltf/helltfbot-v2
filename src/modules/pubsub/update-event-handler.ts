@@ -31,6 +31,7 @@ export class UpdateEventHandler {
     if (type === 'broadcast_settings_update') {
       return this.handleSettingUpdateEvent(data, streamer)
     }
+    return new Map()
   }
 
   async handleSettingUpdateEvent(
@@ -112,6 +113,7 @@ export class UpdateEventHandler {
       return `@${streamer} has changed the game to ${value}`
     if (type === UpdateEventType.TITLE)
       return `@${streamer} has changed the title to ${value}`
+    return ``
   }
 
   async getNotificationMessageInfo(

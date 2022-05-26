@@ -38,11 +38,7 @@ export class PubSubConnection implements WebSocketConnection {
     }, 250 * 1000)
   }
 
-  listenToTopic(id: number, type: NotifyEventType): NotifyEventType {
-    if (this.topics.length === 50) {
-      return type
-    }
-
+  listenToTopic(id: number, type: NotifyEventType) {
     const message = this.createMessageForTopic(type, id)
 
     this.sendMessage(message)
@@ -84,7 +80,7 @@ export class PubSubConnection implements WebSocketConnection {
 
   mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicType {
     if (notifyType === NotifyEventType.SETTING) return TopicType.SETTING
-    if (notifyType === NotifyEventType.STATUS) return TopicType.STATUS
+    return TopicType.STATUS
   }
 
   handleIncomingMessage({ data }: { data: string }) {

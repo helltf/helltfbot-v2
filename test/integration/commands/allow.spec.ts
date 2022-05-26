@@ -147,7 +147,7 @@ describe('test allow command', () => {
       channel: user.username
     })
 
-    expect(updatedEntity.allowed).toBeTruthy()
+    expect(updatedEntity!.allowed).toBeTruthy()
   })
 
   it('params provided updates given channel in database', async () => {
@@ -167,6 +167,6 @@ describe('test allow command', () => {
       channel: allowChannel
     })
 
-    expect(updatedEntity.allowed).toBeTruthy()
+    expect(updatedEntity!.allowed).toBeTruthy()
   })
 })

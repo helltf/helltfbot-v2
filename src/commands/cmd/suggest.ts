@@ -27,7 +27,7 @@ const suggest = new Command({
 
     const id = await saveSuggestion(
       suggestionMessage,
-      parseInt(userstate['user-id'])
+      parseInt(userstate['user-id']!)
     )
 
     return {

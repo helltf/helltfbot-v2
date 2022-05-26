@@ -14,6 +14,7 @@ export class Resource<T> {
   }
 
   static error<U>(error: string): Resource<U> {
+    //@ts-ignore
     return new Resource(true, undefined, error)
   }
 }

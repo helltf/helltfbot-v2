@@ -28,13 +28,13 @@ export class ColorTracking implements Module {
     )?.colors?.history
 
     if (!savedColors) {
-      return this.saveNewHistory(id, userColor)
+      return this.saveNewHistory(id, userColor!)
     }
 
     const latestColor = savedColors[savedColors.length - 1]
 
     if (latestColor !== userColor) {
-      const updatedColors = this.updateCurrentColors(savedColors, userColor)
+      const updatedColors = this.updateCurrentColors(savedColors, userColor!)
 
       this.updateDatabaseColors(id, updatedColors)
     }

@@ -1,13 +1,16 @@
 import fetch from 'node-fetch'
 import { Resource } from '../resource.js'
 import { getAuthorizationHeader } from './autorization.js'
+import { TwitchUserInfo } from './types.js'
 
 const USERS_URL = 'https://api.twitch.tv/helix/users'
 
-const getUserIdByName = async (name: string): Promise<number> => {
-  const { data: data } = await fetchUserAPI(name)
+const getUserIdByName = async (name: string): Promise<number | undefined> => {
+  const { data } = await fetchUserAPI(name)
 
-  return parseInt(data.data[0]?.id)
+  const id = Number(data?.data[0]?.id)
+
+  return id
 }
 
 const fetchUserAPI = async (
@@ -18,26 +21,14 @@ const fetchUserAPI = async (
       await fetch(`${USERS_URL}?login=${name}`, {
         headers: getAuthorizationHeader()
       })
-    ).json()
+    ).json() as any
     return Resource.ok(result)
   } catch (e) {
-    return Resource.error(e)
+    return Resource.error(e as any)
   }
 }
 
-export interface TwitchUserInfo {
-  data?: {
-    id?: string
-    login?: string
-    display_name?: string
-    type?: string
-    broadcaster_type?: string
-    description?: string
-    profile_image_url?: string
-    offline_image_url?: string
-    email?: string
-    created_at?: string
-  }[]
-}
+
+
 
 export { getUserIdByName }

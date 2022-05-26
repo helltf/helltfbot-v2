@@ -17,7 +17,7 @@ const getToken = async (): Promise<Resource<string>> => {
   try {
     const response = await requestApi()
     return Resource.ok(response.access_token)
-  } catch (e) {
+  } catch (e: any) {
     return Resource.error(e)
   }
 }

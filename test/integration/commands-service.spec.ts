@@ -1,4 +1,5 @@
 import { CommandService } from "../../src/commands/export/commands-service.js"
+import { Command } from "../../src/commands/export/types.js"
 import { clearDb } from "../test-utils/clear.js"
 import { disconnectDatabase } from "../test-utils/disconnect.js"
 import { getExampleCommand } from "../test-utils/example.js"
@@ -20,7 +21,7 @@ fdescribe('test updating commands', () => {
 
     describe('add commands to db', () => {
         it('commands are empty add new commands doesn\'t update database', async () => {
-            const commands = []
+            const commands: Command[] = []
             const commandsService = new CommandService(commands)
 
             await commandsService.addCommandsToDb()
@@ -66,9 +67,9 @@ fdescribe('test updating commands', () => {
 
             await commandService.addCommandsToDb()
 
-            const { deleted } = await hb.db.commandRepo.findOneBy({
+            const { deleted } = (await hb.db.commandRepo.findOneBy({
                 name: exampleCommand.name
-            })
+            }))!
 
             expect(deleted).toBeFalse()
         })
@@ -84,9 +85,9 @@ fdescribe('test updating commands', () => {
 
             await commandsService.addCommandsToDb()
 
-            const { deleted } = await hb.db.commandRepo.findOneBy({
+            const { deleted } = (await hb.db.commandRepo.findOneBy({
                 name: exampleCommand.name
-            })
+            }))!
 
             expect(deleted).toBeFalse()
         })
@@ -99,9 +100,9 @@ fdescribe('test updating commands', () => {
 
             await commandsService.updateDeletedCommands()
 
-            const { deleted } = await hb.db.commandRepo.findOneBy({
+            const { deleted } = (await hb.db.commandRepo.findOneBy({
                 name: exampleCommand.name
-            })
+            }))!
 
             expect(deleted).toBeTrue()
         })

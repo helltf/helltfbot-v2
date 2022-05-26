@@ -136,7 +136,7 @@ describe('test leave command', () => {
       channel: channelToLeave
     })
 
-    expect(savedEntity.joined).toBeFalsy()
+    expect(savedEntity!.joined).toBeFalsy()
   })
 
   it('update channel property sets joined to false', async () => {
@@ -152,7 +152,7 @@ describe('test leave command', () => {
       channel: channelToLeave
     })
 
-    expect(savedEntity.joined).toBeFalsy()
+    expect(savedEntity!.joined).toBeFalsy()
   })
 
   it('update channel property updates 1 entity not both in database', async () => {
@@ -177,8 +177,8 @@ describe('test leave command', () => {
       channel: otherChannel
     })
 
-    expect(updatedEntity.joined).toBeFalsy()
-    expect(otherEntity.joined).toBeTruthy()
+    expect(updatedEntity!.joined).toBeFalsy()
+    expect(otherEntity!.joined).toBeTruthy()
   })
 
   it('leave channel me sets the channel to joined false', async () => {
@@ -199,9 +199,8 @@ describe('test leave command', () => {
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
     })
-
-    expect(updatedEntity.joined).toBeFalsy()
-    expect(hb.client.part).toHaveBeenCalledWith(user.username)
+    expect(updatedEntity!.joined).toBeFalsy()
+    expect(hb.client.part).toHaveBeenCalledWith(user.username!)
   })
 
   it('user has no permissions but uses not me as param channel return error', async () => {

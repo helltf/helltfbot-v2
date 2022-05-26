@@ -21,8 +21,8 @@ describe('test notify command: ', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
   let channel = 'testChannel'
   let streamer = 'streamer'
-  let user: Partial<TwitchUser>
-  let notification: Partial<Notification>
+  let user: TwitchUser
+  let notification: Notification
 
   beforeAll(async () => {
     await setupDatabase()
@@ -136,7 +136,7 @@ describe('test notify command: ', () => {
 
       const result = await findNotification(user.id, streamer)
 
-      expect(result.live).toBeTruthy()
+      expect(result!.live).toBeTruthy()
     })
 
     it('update new db entry for user updates the notification', async () => {
@@ -148,7 +148,7 @@ describe('test notify command: ', () => {
 
       const result = await findNotification(notification.user.id, streamer)
 
-      expect(result.live).toBeTruthy()
+      expect(result!.live).toBeTruthy()
     })
   })
 
@@ -237,7 +237,7 @@ describe('test notify command: ', () => {
         name: streamer
       })
 
-      expect(updatedEntity.status).toBeTruthy()
+      expect(updatedEntity!.status).toBeTruthy()
     })
 
     it('should update setting for setting type', async () => {
@@ -255,7 +255,7 @@ describe('test notify command: ', () => {
         name: streamer
       })
 
-      expect(updatedEntity.setting).toBeTruthy()
+      expect(updatedEntity!.setting).toBeTruthy()
     })
     it('should create new entry if not existing with status type true', async () => {
       const id = 1
@@ -266,7 +266,7 @@ describe('test notify command: ', () => {
       })
 
       expect(createdEntity).not.toBeNull()
-      expect(createdEntity.status).toBeTruthy()
+      expect(createdEntity!.status).toBeTruthy()
     })
 
     it('creating new connection and invoking listen to topic function', async () => {
@@ -293,7 +293,7 @@ describe('test notify command: ', () => {
 async function findNotification(
   userId: number,
   streamer: string
-): Promise<Notification> {
+): Promise<Notification | null> {
   return hb.db.notificationRepo.findOne({
     where: {
       user: {

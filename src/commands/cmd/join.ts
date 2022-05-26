@@ -27,12 +27,12 @@ export const join = new Command({
       return errorResponse
     }
 
-    if (joinChannel !== 'me' && user.permission < PermissionLevel.ADMIN) {
+    if (joinChannel !== 'me' && user.permission! < PermissionLevel.ADMIN) {
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }
 
-    joinChannel = joinChannel === 'me' ? user.username : joinChannel
+    joinChannel = joinChannel === 'me' ? user.username! : joinChannel
 
     if (await isAlreadyConnected(joinChannel)) {
       errorResponse.response = 'Already connected to that channel'
@@ -54,7 +54,7 @@ export const join = new Command({
 })
 
 export async function connectToChannel(channel: string): Promise<{
-  message?: string
+  message: string
   success: boolean
 }> {
   try {
@@ -63,7 +63,7 @@ export async function connectToChannel(channel: string): Promise<{
       message: 'Successfully joined the channel',
       success: true
     }
-  } catch (e) {
+  } catch (e: any) {
     return {
       success: false,
       message: e

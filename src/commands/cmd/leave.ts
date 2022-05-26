@@ -28,7 +28,7 @@ export const leave = new Command({
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }
-    channeltoLeave = channeltoLeave === 'me' ? user.username : channeltoLeave
+    channeltoLeave = channeltoLeave === 'me' ? user.username! : channeltoLeave
 
     if (await isNotConnectedToChannel(channeltoLeave)) {
       errorResponse.response = 'Not connected to channel'

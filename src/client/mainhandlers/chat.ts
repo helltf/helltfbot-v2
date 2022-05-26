@@ -51,18 +51,18 @@ function sendResponse({ success, response, channel }: BotResponse) {
 }
 
 function setCooldown(command: Command, { 'user-id': id }: ChatUserstate) {
-  hb.cooldown.setCooldown(command, id)
+  hb.cooldown.setCooldown(command, id!)
 }
 
 function userHasCooldown(
   command: Command,
   { 'user-id': id }: ChatUserstate
-): boolean {
-  return hb.cooldown.userHasCooldown(command, id)
+): boolean | undefined {
+  return hb.cooldown.userHasCooldown(command, id!)
 }
 
 async function updateUser(user: ChatUserstate) {
-  const id = parseInt(user['user-id'])
+  const id = parseInt(user['user-id']!)
 
   const userEntry = await hb.db.userRepo.findOneBy({
     id: id

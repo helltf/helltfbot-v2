@@ -71,7 +71,7 @@ describe('test suggest command', () => {
 
     const expectedMessage = `Succesfully saved your suggestion with id ${id}`
 
-    expect(savedEntity.suggestion).toBe(`${message.join(' ')}`)
+    expect(savedEntity!.suggestion).toBe(`${message.join(' ')}`)
     expect(response.response).toEqual(expectedMessage)
     expect(response.success).toBeTrue()
   })
@@ -84,7 +84,7 @@ describe('test suggest command', () => {
       date: 1,
       suggestion: 'a',
       user: {
-        id: parseInt(user['user-id'])
+        id: parseInt(user['user-id']!)
       }
     })
 
@@ -100,6 +100,6 @@ describe('test suggest command', () => {
 
     expect(response.success).toBeTrue()
     expect(response.response).toBe(expectedMessage)
-    expect(savedEntity.suggestion).toBe(expectedSavedSuggestion)
+    expect(savedEntity!.suggestion).toBe(expectedSavedSuggestion)
   })
 })

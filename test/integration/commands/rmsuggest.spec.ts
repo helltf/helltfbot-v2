@@ -63,7 +63,7 @@ describe('test rmsuggest command', () => {
     const savedEntity = await hb.db.suggestionRepo.save({
       date: 1,
       user: {
-        id: parseInt(user['user-id'])
+        id: parseInt(user['user-id']!)
       },
       suggestion: 'a'
     })
@@ -92,7 +92,7 @@ describe('test rmsuggest command', () => {
     const savedEntity = await hb.db.suggestionRepo.save({
       date: 1,
       user: {
-        id: parseInt(user['user-id'])
+        id: parseInt(user['user-id']!)
       },
       suggestion: 'a'
     })

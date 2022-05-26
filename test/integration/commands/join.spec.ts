@@ -29,7 +29,7 @@ describe('join command tests', () => {
   })
 
   it('channel is undefined return error', async () => {
-    const message = []
+    const message: string[] = []
 
     const {
       channel: channelResult,
@@ -170,7 +170,7 @@ describe('join command tests', () => {
       channel: channelToJoin
     })
 
-    expect(updatedEntity.joined).toBeTruthy()
+    expect(updatedEntity!.joined).toBeTruthy()
   })
 
   it('use me as param join the users channel and save to db', async () => {
@@ -205,7 +205,7 @@ describe('join command tests', () => {
       channel: user.username
     })
 
-    expect(savedEntity.joined).toBeTruthy()
+    expect(savedEntity!.joined).toBeTruthy()
   })
 
   it('user permissions are not admin return error if joining other channel', async () => {
@@ -235,7 +235,7 @@ describe('join command tests', () => {
         channel: channel
       })
 
-      expect(savedEntitiy.joined).toBeTruthy()
+      expect(savedEntitiy!.joined).toBeTruthy()
     })
   })
 })

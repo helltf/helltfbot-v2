@@ -1,7 +1,9 @@
+import { off } from 'process'
 import { TwitchUserState } from '../../src/client/types.js'
 import { Command } from '../../src/commands/export/types.js'
 import { Channel, TwitchUser } from '../../src/db/export-entities.js'
 import { Notification } from '../../src/db/export-entities.js'
+import { returnHigherPermissions } from '../../src/utilities/twitch/permission.js'
 
 export function getExampleCommand({
   alias = [],
@@ -91,6 +93,15 @@ export const getExampleNotificationEntity = ({ streamer = 'streamer',
   offline = false,
   title = false,
   game = false,
-  user = getExampleTwitchUserEntity({}) }: Partial<Notification>): Partial<Notification> => {
-  return { streamer, channel, live, offline, title, game, user }
+  user = getExampleTwitchUserEntity({}) }: Partial<Notification>): Notification => {
+
+  const notification = new Notification()
+
+  notification.channel = channel
+  notification.streamer = streamer
+  notification.live = live
+  notification.title = title
+  notification.offline = offline
+  notification.user = user
+  return notification
 }

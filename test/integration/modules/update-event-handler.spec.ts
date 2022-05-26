@@ -29,7 +29,7 @@ describe('Test event handler to return the correct messages', () => {
     const type = UpdateEventType.LIVE
 
     const result = await eventHandler.getNotifiedUsers(streamer, type)
-    const expectedResult = []
+    const expectedResult: Notification[] = []
 
     expect(result).toEqual(expectedResult)
   })
@@ -55,7 +55,7 @@ describe('Test event handler to return the correct messages', () => {
     const notification2 = getExampleNotificationEntity({})
     notification1[type] = true
     notification2[type] = true
-    notification2.user.id = 2
+    notification2.user!.id = 2
     notification2.channel = 'channel2'
 
     await saveNotificationWithUser(notification1)
@@ -74,7 +74,7 @@ describe('Test event handler to return the correct messages', () => {
 
     notification1[type] = true
     notification2[UpdateEventType.GAME] = true
-    notification2.user.id = 2
+    notification2.user!.id = 2
     notification2.channel = 'channel2'
 
     await saveNotificationWithUser(notification1)
@@ -89,6 +89,6 @@ describe('Test event handler to return the correct messages', () => {
 })
 
 async function saveNotificationWithUser(notification: Partial<Notification>) {
-  await hb.db.userRepo.save(notification.user)
+  await hb.db.userRepo.save(notification.user!)
   await hb.db.notificationRepo.save(notification)
 }

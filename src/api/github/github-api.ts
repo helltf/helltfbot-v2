@@ -8,7 +8,7 @@ const getPipeLineData = async (
   try {
     const data = await requestGithubApi(project)
     return Resource.ok(new PipelineData(data, project))
-  } catch (e) {
+  } catch (e: any) {
     return Resource.error(e)
   }
 }
@@ -33,7 +33,7 @@ export class PipelineData {
   project: Projects
   event: string
 
-  constructor({ workflow_runs, total_count }, project: Projects) {
+  constructor({ workflow_runs, total_count }: any, project: Projects) {
     const { head_branch, status, conclusion, repository, event } =
       workflow_runs[0]
 

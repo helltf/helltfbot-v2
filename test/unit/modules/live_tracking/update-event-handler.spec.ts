@@ -11,14 +11,6 @@ describe('test update event handler unit tests', () => {
     value = 'example'
   })
 
-  it('get notification message for undefined event return undefined', () => {
-    const type = undefined
-
-    const message = handler.getNotificationMessage(type, streamer, value)
-
-    expect(message).toBeUndefined()
-  })
-
   it('get notification message for live event return live message', () => {
     const type = UpdateEventType.LIVE
 

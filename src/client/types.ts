@@ -7,8 +7,8 @@ export interface TwitchUserState extends ChatUserstate {
   permission?: PermissionLevel
 }
 export class ApiService {
-  twitch?: TwitchApi
-  github?: GithubApi
+  twitch: TwitchApi
+  github: GithubApi
   initialized = false
   constructor() {
     this.github = new GithubApi()
