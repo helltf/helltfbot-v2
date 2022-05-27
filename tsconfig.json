@@ -3,7 +3,7 @@
         "module": "ESNext",
         "target": "ESNext",
         "outDir": "./dist",
-        "baseUrl" : ".",
+        "baseUrl" : "./src",
         "types" : [ "node" ],
         "skipLibCheck": true,
         "moduleResolution": "node",
@@ -11,9 +11,10 @@
         "esModuleInterop": true,
         "strict": true,
         "paths": {
-            "@db/*": ["src/db/*"],
-            "@modules/*": ["src/modules/*"],
-            "@api/": ["src/api/*"]
+            "@db/entities/*": ["db/index.ts"],
+            "@modules/*": ["modules/*"],
+            "@api/*": ["api/*"],
+            "@src/*": ["./*"],
         },
         "removeComments": true,
         "strictPropertyInitialization": false,
