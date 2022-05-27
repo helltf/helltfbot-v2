@@ -3,7 +3,7 @@ import { remove, userNotificationIsNotExisting } from '../../../src/commands/cmd
 import { UpdateEventType } from '../../../src/modules/pubsub/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleNotificationEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
+import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { Notification } from '../../../src/db/export-entities.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
@@ -13,7 +13,7 @@ fdescribe('test remove command', () => {
   let messageChannel = 'testmessageChannel'
   let streamer = 'streamer'
   let user: TwitchUserState
-  let notification: Notification
+
 
   beforeAll(async () => {
     await setupDatabase()
@@ -22,10 +22,6 @@ fdescribe('test remove command', () => {
   beforeEach(async () => {
     messageChannel = 'testmessageChannel'
     streamer = 'streamer'
-    notification = getExampleNotificationEntity({
-      streamer: streamer,
-      channel: messageChannel
-    })
     user = getExampleTwitchUserState({})
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
@@ -108,6 +104,11 @@ fdescribe('test remove command', () => {
     })
 
     it('entity is existing return false', async () => {
+      const notification = getExampleNotificationEntity({
+        streamer: streamer,
+        channel: messageChannel
+      })
+
       const userId = notification.user.id
       const event = UpdateEventType.GAME
       notification[event] = true
@@ -120,12 +121,36 @@ fdescribe('test remove command', () => {
 
       expect(result).toBeFalse()
     })
+
+    it('entity is existing but event is false return true', async () => {
+      const notification = getExampleNotificationEntity({
+        streamer: streamer,
+        channel: messageChannel
+      })
+
+      const userId = notification.user.id
+      const event = UpdateEventType.GAME
+
+      await hb.db.userRepo.save(notification.user)
+
+      await hb.db.notificationRepo.save(notification)
+
+      const result = await userNotificationIsNotExisting(userId, streamer, event)
+
+      expect(result).toBeTrue()
+    })
   })
 
   it('notification existing and updated return success response', async () => {
     const event = UpdateEventType.GAME
     const message = [streamer, event]
 
+    const notification = getExampleNotificationEntity({
+      user: getExampleTwitchUserEntity({ id: Number(user['user-id']) }),
+      streamer: streamer,
+      channel: messageChannel,
+      [event]: true
+    })
     await hb.db.userRepo.save(notification.user)
 
     await hb.db.notificationRepo.save(notification)
