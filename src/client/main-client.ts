@@ -1,8 +1,8 @@
 import { ChatUserstate, Client } from 'tmi.js'
-import { handleChat } from './mainhandlers/chat.js'
-import { handleConnect } from './mainhandlers/connect.js'
-import { handleJoin } from './mainhandlers/join.js'
-import { handlePart } from './mainhandlers/part.js'
+import { handleChat } from './handlers/chat.js'
+import { handleConnect } from './handlers/connect.js'
+import { handleJoin } from './handlers/join.js'
+import { handlePart } from './handlers/part.js'
 
 const client = createclient()
 
