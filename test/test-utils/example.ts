@@ -5,7 +5,7 @@ import { Notification } from '../../src/db/export-entities.js'
 
 export function getExampleCommand({
   alias = [],
-  cooldown = 1,
+  cooldown = 500,
   description = '',
   execute = async () => {
     return { channel: 'channel', response: '', success: true }
