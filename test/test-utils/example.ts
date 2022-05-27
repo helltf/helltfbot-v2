@@ -104,4 +104,3 @@ export const getExampleNotificationEntity = ({ streamer = 'streamer',
   notification.game = game
   return notification
 }
-}
