@@ -15,14 +15,14 @@ export class Cooldown {
     }, cooldown)
   }
 
-  getCooldownsForUser(userId: string): string[] {
+  getCooldownsForUser(userId: string): string[] | undefined {
     return this.cooldowns.get(userId)
   }
 
   removeCooldown(userId: string, commandName: string) {
     const userCooldowns = this.getCooldownsForUser(userId)
 
-    if (userCooldowns.includes(commandName)) {
+    if (userCooldowns?.includes(commandName)) {
       this.cooldowns.set(
         userId,
         userCooldowns.filter((e) => e !== commandName)
@@ -40,7 +40,7 @@ export class Cooldown {
     }
   }
 
-  userHasCooldown({ name }: Command, userId: string): boolean {
+  userHasCooldown({ name }: Command, userId: string): boolean | undefined {
     return this.getCooldownsForUser(userId)?.includes(name)
   }
 }

@@ -1,9 +1,8 @@
-import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
 import { allow } from '../../../src/commands/cmd/allow.js'
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleChannel } from '../../test-utils/example.js'
+import { getExampleChannel, getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test allow command', () => {
@@ -148,7 +147,7 @@ describe('test allow command', () => {
       channel: user.username
     })
 
-    expect(updatedEntity.allowed).toBeTruthy()
+    expect(updatedEntity!.allowed).toBeTruthy()
   })
 
   it('params provided updates given channel in database', async () => {
@@ -168,6 +167,6 @@ describe('test allow command', () => {
       channel: allowChannel
     })
 
-    expect(updatedEntity.allowed).toBeTruthy()
+    expect(updatedEntity!.allowed).toBeTruthy()
   })
 })

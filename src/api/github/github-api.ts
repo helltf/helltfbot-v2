@@ -1,4 +1,4 @@
-import { Resource } from '../resource.js'
+import { Resource, ResourceError, ResourceSuccess } from '../resource.js'
 import fetch from 'node-fetch'
 import { Projects } from './github-projects.js'
 
@@ -7,9 +7,9 @@ const getPipeLineData = async (
 ): Promise<Resource<PipelineData>> => {
   try {
     const data = await requestGithubApi(project)
-    return Resource.ok(new PipelineData(data, project))
-  } catch (e) {
-    return Resource.error(e)
+    return new ResourceSuccess(new PipelineData(data, project))
+  } catch (e: any) {
+    return new ResourceError(e)
   }
 }
 
@@ -33,7 +33,7 @@ export class PipelineData {
   project: Projects
   event: string
 
-  constructor({ workflow_runs, total_count }, project: Projects) {
+  constructor({ workflow_runs, total_count }: any, project: Projects) {
     const { head_branch, status, conclusion, repository, event } =
       workflow_runs[0]
 

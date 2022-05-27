@@ -1,4 +1,5 @@
-import { BotResponse } from '../../client/response.js'
+import { BotResponse } from '../../client/types.js'
+
 import { TwitchUserState } from '../../client/types.js'
 import { NotifyEventType, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
@@ -18,7 +19,7 @@ const notify = new Command({
   ): Promise<BotResponse> => {
     if (eventIsNotValid(event)) return getUnknownEventErrorResponse(channel)
     const eventType = event as UpdateEventType
-    const userId = parseInt(user['user-id'])
+    const userId = parseInt(user['user-id']!)
 
     if (await userIsAlreadyNotified(userId, streamer, eventType)) {
       return {
@@ -120,8 +121,7 @@ export function mapEventTypeToNotifyType(
 ): NotifyEventType {
   if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
     return NotifyEventType.SETTING
-  if (event === UpdateEventType.LIVE || event === UpdateEventType.OFFLINE)
-    return NotifyEventType.STATUS
+  return NotifyEventType.STATUS
 }
 
 export async function updateNotification(

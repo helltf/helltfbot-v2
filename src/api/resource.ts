@@ -1,19 +1,15 @@
-export class Resource<T> {
-  data: T | undefined
-  success: boolean
-  error: string | undefined
+export type Resource<T> = ResourceError | ResourceSuccess<T>
 
-  constructor(success: boolean, data?: T, error?: string) {
+export class ResourceSuccess<T>{
+  data: T;
+  constructor(data: T) {
     this.data = data
+  }
+}
+
+export class ResourceError {
+  error: string;
+  constructor(error: string) {
     this.error = error
-    this.success = success
-  }
-
-  static ok<U>(data: U): Resource<U> {
-    return new Resource(true, data, undefined)
-  }
-
-  static error<U>(error: string): Resource<U> {
-    return new Resource(true, undefined, error)
   }
 }

@@ -8,7 +8,10 @@ export class TwitchApi {
   generateToken = generateToken
 
   async init() {
-    this.accessToken = await this.generateToken()
+    const generatedToken = await this.generateToken()
+    if (!generatedToken) throw new Error("Could not generate Twitch API token")
+
+    this.accessToken = generatedToken
     return this
   }
 }

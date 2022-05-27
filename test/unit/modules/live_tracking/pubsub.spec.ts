@@ -1,6 +1,6 @@
-import { NotificationChannelInfo } from '../../../../src/db/entity/notification_channel.js'
-import { PubSub } from '../../../../src/modules/pubsub/pubsub.js'
-import { TopicType } from '../../../../src/modules/pubsub/types.js'
+import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel.js"
+import { PubSub } from "../../../../src/modules/pubsub/pubsub.js"
+import { TopicType } from "../../../../src/modules/pubsub/types.js"
 
 describe('test chunking function', () => {
   let module: PubSub
@@ -10,7 +10,7 @@ describe('test chunking function', () => {
   })
 
   it('array reduce should return 0 entries', () => {
-    const channels = []
+    const channels: NotificationChannelInfo[] = []
     const result = module.chunkTopicsIntoSize(channels)
     const expectedSize = 0
 
@@ -83,9 +83,9 @@ describe('test get username from topic', () => {
 
   describe('get topics', () => {
     it('array is empty return empty array', () => {
-      const channels = []
+      const channels: NotificationChannelInfo[] = []
       const result = module.getTopics(channels)
-      const expectedResult = []
+      const expectedResult: string[] = []
 
       expect(result).toEqual(expectedResult)
     })

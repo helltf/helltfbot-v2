@@ -21,7 +21,7 @@ export const handleJoin = async (channel: string) => {
 const mainJoinChannel = async (channel: string) => {
   try {
     await hb.client.join(channel)
-  } catch (e) {
+  } catch (e: any) {
     if (TWITCH_ERROR_MESSAGE.includes(e)) {
       hb.db.channelRepo.update(
         {

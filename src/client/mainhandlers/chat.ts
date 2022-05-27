@@ -2,8 +2,7 @@ import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/export/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
-import { BotResponse } from '../response.js'
-import { TwitchUserState } from '../types.js'
+import { BotResponse, TwitchUserState } from '../types.js'
 
 const prefix = process.env.PREFIX
 
@@ -16,8 +15,6 @@ const handleChat = async (
   if (self) return
   updateUser(user)
   if (!message?.toLowerCase()?.startsWith(prefix)) return
-
-  channel = channel.replace('#', '')
 
   const [commandLookup, ...data] = message
     .substring(prefix.length)
@@ -54,18 +51,18 @@ function sendResponse({ success, response, channel }: BotResponse) {
 }
 
 function setCooldown(command: Command, { 'user-id': id }: ChatUserstate) {
-  hb.cooldown.setCooldown(command, id)
+  hb.cooldown.setCooldown(command, id!)
 }
 
 function userHasCooldown(
   command: Command,
   { 'user-id': id }: ChatUserstate
-): boolean {
-  return hb.cooldown.userHasCooldown(command, id)
+): boolean | undefined {
+  return hb.cooldown.userHasCooldown(command, id!)
 }
 
 async function updateUser(user: ChatUserstate) {
-  const id = parseInt(user['user-id'])
+  const id = parseInt(user['user-id']!)
 
   const userEntry = await hb.db.userRepo.findOneBy({
     id: id

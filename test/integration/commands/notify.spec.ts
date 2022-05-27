@@ -2,11 +2,6 @@ import {
   NotifyEventType,
   UpdateEventType
 } from '../../../src/modules/pubsub/types.js'
-import {
-  getExampleNotificationEntity,
-  getExampleTwitchUserState,
-  getTwitchUserEntity
-} from '../../../spec/examples/user.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
@@ -20,6 +15,7 @@ import {
 } from '../../../src/commands/cmd/notify.js'
 import { TwitchUser } from '../../../src/db/export-entities.js'
 import { Notification } from '../../../src/db/export-entities.js'
+import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
 
 describe('test notify command: ', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
@@ -35,8 +31,8 @@ describe('test notify command: ', () => {
   beforeEach(async () => {
     channel = 'testChannel'
     streamer = 'streamer'
-    notification = getExampleNotificationEntity()
-    user = getTwitchUserEntity()
+    notification = getExampleNotificationEntity({})
+    user = getExampleTwitchUserEntity({})
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })
@@ -140,7 +136,7 @@ describe('test notify command: ', () => {
 
       const result = await findNotification(user.id, streamer)
 
-      expect(result.live).toBeTruthy()
+      expect(result!.live).toBeTruthy()
     })
 
     it('update new db entry for user updates the notification', async () => {
@@ -152,7 +148,7 @@ describe('test notify command: ', () => {
 
       const result = await findNotification(notification.user.id, streamer)
 
-      expect(result.live).toBeTruthy()
+      expect(result!.live).toBeTruthy()
     })
   })
 
@@ -241,7 +237,7 @@ describe('test notify command: ', () => {
         name: streamer
       })
 
-      expect(updatedEntity.status).toBeTruthy()
+      expect(updatedEntity!.status).toBeTruthy()
     })
 
     it('should update setting for setting type', async () => {
@@ -259,7 +255,7 @@ describe('test notify command: ', () => {
         name: streamer
       })
 
-      expect(updatedEntity.setting).toBeTruthy()
+      expect(updatedEntity!.setting).toBeTruthy()
     })
     it('should create new entry if not existing with status type true', async () => {
       const id = 1
@@ -270,7 +266,7 @@ describe('test notify command: ', () => {
       })
 
       expect(createdEntity).not.toBeNull()
-      expect(createdEntity.status).toBeTruthy()
+      expect(createdEntity!.status).toBeTruthy()
     })
 
     it('creating new connection and invoking listen to topic function', async () => {
@@ -297,7 +293,7 @@ describe('test notify command: ', () => {
 async function findNotification(
   userId: number,
   streamer: string
-): Promise<Notification> {
+): Promise<Notification | null> {
   return hb.db.notificationRepo.findOne({
     where: {
       user: {

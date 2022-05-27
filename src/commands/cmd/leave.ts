@@ -1,5 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
-import { BotResponse } from '../../client/response.js'
+import { BotResponse } from '../../client/types.js'
+
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
 
@@ -27,7 +28,7 @@ export const leave = new Command({
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }
-    channeltoLeave = channeltoLeave === 'me' ? user.username : channeltoLeave
+    channeltoLeave = channeltoLeave === 'me' ? user.username! : channeltoLeave
 
     if (await isNotConnectedToChannel(channeltoLeave)) {
       errorResponse.response = 'Not connected to channel'

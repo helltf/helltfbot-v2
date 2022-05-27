@@ -1,4 +1,5 @@
-import { BotResponse } from '../../client/response.js'
+import { BotResponse } from '../../client/types.js'
+
 import { TwitchUserState } from '../../client/types.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
@@ -22,11 +23,11 @@ const allow = new Command({
       success: false
     }
 
-    if (user.permission < PermissionLevel.BROADCASTER) return errorResponse
-    if (user.permission === PermissionLevel.BROADCASTER && updateChannel)
+    if (user.permission! < PermissionLevel.BROADCASTER) return errorResponse
+    if (user.permission! === PermissionLevel.BROADCASTER && updateChannel)
       return errorResponse
 
-    updateChannel = updateChannel || user.username
+    updateChannel = updateChannel || user.username!
 
     const success = await updateChannelAllowSettings(updateChannel)
 

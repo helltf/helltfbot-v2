@@ -27,7 +27,7 @@ export class MessageGenerator {
 
   getMessageWithUsers(users: string[], message: string): string[] {
     return users.reduce(
-      (messageArray, user) =>
+      (messageArray: string[], user) =>
         this.concatUserWithMessages(messageArray, user, message),
       []
     )

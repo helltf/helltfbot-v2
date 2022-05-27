@@ -64,8 +64,8 @@ export class PubSub {
   }
 
   getTopics(channels: NotificationChannelInfo[]): string[] {
-    return channels.reduce((acc, { setting, status, id }) => {
-      const topics = []
+    return channels.reduce((acc: string[], { setting, status, id }) => {
+      const topics: string[] = []
 
       if (setting) topics.push(TopicType.SETTING + id)
       if (status) topics.push(TopicType.STATUS + id)
@@ -86,10 +86,17 @@ export class PubSub {
     arr: NotificationChannelInfo[],
     size = 25
   ): NotificationChannelInfo[][] => {
-    return arr.reduce(
-      (acc, _, i) => (i % size ? acc : [...acc, arr.slice(i, i + size)]),
-      []
-    )
+    return arr.reduce((resultArray: NotificationChannelInfo[][], item, index) => {
+      const chunkIndex = Math.floor(index / size)
+
+      if (!resultArray[chunkIndex]) {
+        resultArray[chunkIndex] = []
+      }
+
+      resultArray[chunkIndex].push(item)
+
+      return resultArray
+    }, [])
   }
 
   async getStreamerForTopic(topic: string): Promise<string> {
@@ -99,11 +106,11 @@ export class PubSub {
       await hb.db.notificationChannelRepo.findOneBy({
         id: parseInt(id)
       })
-    ).name
+    )!.name
   }
 
   getIdForTopic(topic: string): string {
-    return topic.match(/(?<=\.)\d+/gim)[0]
+    return topic.match(/(?<=\.)\d+/gim)![0]
   }
 
   getOpenConnection(): PubSubConnection {

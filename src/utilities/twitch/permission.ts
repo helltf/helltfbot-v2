@@ -21,12 +21,12 @@ export const returnHigherPermissions = (
 export const getUserPermissions = async (
   user: Userstate
 ): Promise<PermissionLevel> => {
-  const chatPermissions = getChatPermissions(user.badges)
-  const dbPermissions = (
+  const chatPermissions = getChatPermissions(user.badges!)
+  const { permission: dbPermissions } = (
     await hb.db.userRepo.findOneBy({
       id: Number(user['user-id'])
     })
-  )?.permission
+  )!
 
   return returnHigherPermissions(chatPermissions, dbPermissions)
 }

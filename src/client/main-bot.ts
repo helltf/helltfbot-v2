@@ -1,5 +1,4 @@
 import { ChatUserstate, Client } from 'tmi.js'
-import { IdentityOptions } from '../config/config.js'
 import { handleChat } from './mainhandlers/chat.js'
 import { handleConnect } from './mainhandlers/connect.js'
 import { handleJoin } from './mainhandlers/join.js'
@@ -8,13 +7,12 @@ import { handlePart } from './mainhandlers/part.js'
 const client = createclient()
 
 function createclient(): Client {
-  const identity = new IdentityOptions(
-    process.env.TWITCH_OAUTH,
-    'xdforsenxdlol'
-  )
 
   return Client({
-    identity,
+    identity: {
+      password: "oauth:" + process.env.TWITCH_OAUTH,
+      username: 'xdforsenxdlol'
+    },
     connection: { reconnect: true },
     logger: {
       info: (msg) => {
@@ -38,6 +36,8 @@ client.on(
     message: string,
     self: boolean
   ) => {
+    channel = channel.replace('#', '')
+
     handleChat(channel, user, message, self)
   }
 )

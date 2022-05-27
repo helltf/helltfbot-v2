@@ -1,13 +1,13 @@
 import fetch from 'node-fetch'
-import { Resource } from '../resource.js'
+import { Resource, ResourceError, ResourceSuccess } from '../resource.js'
 
 const tokenUrl = 'https://id.twitch.tv/oauth2/token'
 
 const generateToken = async (): Promise<string | undefined> => {
-  const { data, success } = await getToken()
+  const token = await getToken()
 
-  if (success) {
-    return data
+  if (token instanceof ResourceSuccess) {
+    return token.data
   }
 
   return undefined
@@ -16,9 +16,9 @@ const generateToken = async (): Promise<string | undefined> => {
 const getToken = async (): Promise<Resource<string>> => {
   try {
     const response = await requestApi()
-    return Resource.ok(response.access_token)
-  } catch (e) {
-    return Resource.error(e)
+    return new ResourceSuccess(response.access_token)
+  } catch (e: any) {
+    return new ResourceError(e)
   }
 }
 
