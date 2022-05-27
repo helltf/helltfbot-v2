@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USERNAME?err}
+      - POSTGRES_PASSWORD=${DB_PASSWORD?err}
+      - POSTGRES_DB=${DB_DATABASE?err}
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    restart: always
+    environment:
+      - NODE_ENV=prod
+      - DB_HOST=db
+      - DB_USERNAME=${DB_USERNAME?err}
+      - DB_PASSWORD=${DB_PASSWORD?err}
+      - DB_DATABASE=${DB_DATABASE?err}
+volumes:
+  db:

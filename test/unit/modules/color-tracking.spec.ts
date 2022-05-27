@@ -1,5 +1,5 @@
 import 'jasmine'
-import { ColorTracking } from '../../../modules/color-tracking.js'
+import { ColorTracking } from '../../../src/modules/color-tracking.js'
 
 describe('color tracking tests', () => {
   let module: ColorTracking
@@ -20,7 +20,7 @@ describe('color tracking tests', () => {
   const colorToAdd = '#zzzzzz'
 
   it('update color pushs new color', () => {
-    const initialArray = []
+    const initialArray: string[] = []
 
     const result = module.updateCurrentColors(initialArray, colorToAdd)
     const expected = [colorToAdd]

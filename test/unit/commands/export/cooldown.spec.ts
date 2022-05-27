@@ -1,20 +1,25 @@
-import { TwitchUserState } from '../../../../client/types.js'
-import { Cooldown } from '../../../../commands/export/cooldown.js'
-import { Command } from '../../../../commands/export/types.js'
-import { getExampleTwitchUserState } from '../../../../spec/examples/user.js'
-import { getExampleCommand } from '../../../test-utils/example.js'
+import { TwitchUserState } from '../../../../src/client/types.js'
+import { Cooldown } from '../../../../src/commands/export/cooldown.js'
+import { Command } from '../../../../src/commands/export/types.js'
+import { getExampleCommand, getExampleTwitchUserState } from '../../../test-utils/example.js'
 
 describe('testing cooldown class', () => {
   let cooldown: Cooldown
   let command: Command
   let user: TwitchUserState
+  let timerCallback;
+
+  afterEach(function () {
+    jasmine.clock().uninstall();
+  });
+
 
   beforeEach(() => {
     cooldown = new Cooldown()
-    command = getExampleCommand({
-      cooldown: 5000
-    })
+    command = getExampleCommand({})
     user = getExampleTwitchUserState({})
+    timerCallback = jasmine.createSpy("timerCallback");
+    jasmine.clock().install();
   })
 
   it('cooldowns should be empty by default', () => {
@@ -24,7 +29,7 @@ describe('testing cooldown class', () => {
   })
 
   it('setting cooldown should add an entry in map', () => {
-    cooldown.setCooldown(command, user['user-id'])
+    cooldown.setCooldown(command, user['user-id']!)
 
     const cooldownSize = getCooldownMapSize(cooldown)
 
@@ -32,7 +37,7 @@ describe('testing cooldown class', () => {
   })
 
   it('setting cooldown should add an entry for user', () => {
-    const userId = user['user-id']
+    const userId = user['user-id']!
 
     cooldown.setCooldown(command, userId)
 
@@ -43,12 +48,12 @@ describe('testing cooldown class', () => {
   })
 
   it('user has no cooldown no entry', () => {
-    const hasCooldown = cooldown.userHasCooldown(command, user['user-id'])
+    const hasCooldown = cooldown.userHasCooldown(command, user['user-id']!)
     expect(hasCooldown).toBeFalsy()
   })
 
   it('user has cooldown on command entry', () => {
-    const userId = user['user-id']
+    const userId = user['user-id']!
     cooldown.setCooldown(command, userId)
 
     const hasCooldown = cooldown.userHasCooldown(command, userId)
@@ -57,25 +62,25 @@ describe('testing cooldown class', () => {
   })
 
   it('user has cooldown on different command, no cooldown expected', () => {
-    const userId = user['user-id']
-    const otherCommand = getExampleCommand({ name: 'other' })
+    const userId = user['user-id']!
+    const otherCommand = createOtherCommand('other')
 
-    cooldown.setCooldown(command, userId)
+    cooldown.setCooldown(command, userId!)
 
-    const hasCooldown = cooldown.userHasCooldown(otherCommand, userId)
+    const hasCooldown = cooldown.userHasCooldown(otherCommand, userId!)
 
     expect(hasCooldown).toBeFalse()
   })
 
   it('get cooldowns array should be empty be default', () => {
-    const userId = user['user-id']
-    const result = cooldown.getCooldownsForUser(userId)
+    const userId = user['user-id']!
+    const result = cooldown.getCooldownsForUser(userId!)
 
     expect(result).toBeUndefined()
   })
 
   it('get cooldowns array should be 1 after creating entry', () => {
-    const userId = user['user-id']
+    const userId = user['user-id']!
     cooldown.setCooldown(command, userId)
     const result = cooldown.getCooldownsForUser(userId)
     const expectedSize = 1
@@ -84,8 +89,8 @@ describe('testing cooldown class', () => {
   })
 
   it('get cooldowns array should be 2 after creating 2 entries', () => {
-    const userId = user['user-id']
-    const otherCommand = getExampleCommand({ name: 'other' })
+    const userId = user['user-id']!
+    const otherCommand = createOtherCommand('other')
 
     cooldown.setCooldown(command, userId)
     cooldown.setCooldown(otherCommand, userId)
@@ -96,31 +101,39 @@ describe('testing cooldown class', () => {
     expect(result).toHaveSize(expectedSize)
   })
 
-  it('entry should be gone after cooldown is over', (done) => {
-    const userId = user['user-id']
+  it('entry should be gone after cooldown is over', () => {
+    const userId = user['user-id']!
 
     cooldown.setCooldown(command, userId)
 
-    setTimeout(() => {
-      const entries = cooldown.userHasCooldown(command, userId)
-      expect(entries).toBeFalse()
-      done()
-    }, command.cooldown)
+    let userCooldown = cooldown.userHasCooldown(command, userId)
+
+    expect(userCooldown).toBeTrue()
+
+    jasmine.clock().tick(command.cooldown)
+
+    userCooldown = cooldown.userHasCooldown(command, userId)
+
+    expect(userCooldown).toBeFalse()
   })
 
-  it('entry should not be gone after cooldown is not fully over', (done) => {
-    const userId = user['user-id']
+  it('entry should not be gone after cooldown is not fully over', () => {
+    const userId = user['user-id']!
 
     cooldown.setCooldown(command, userId)
 
-    setTimeout(() => {
-      const entries = cooldown.userHasCooldown(command, userId)
-      expect(entries).toBeTrue()
-      done()
-    }, command.cooldown - command.cooldown / 2)
+    jasmine.clock().tick(command.cooldown - command.cooldown / 2)
+
+    const userCooldown = cooldown.userHasCooldown(command, userId)
+
+    expect(userCooldown).toBeTrue()
   })
 })
 
 function getCooldownMapSize(cooldown: Cooldown) {
   return cooldown.cooldowns.size
+}
+
+function createOtherCommand(name: string): Command {
+  return getExampleCommand({ name })
 }

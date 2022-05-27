@@ -1,14 +1,13 @@
-import { TwitchUserState } from '../../../client/types.js'
+import { TwitchUserState } from '../../../src/client/types.js'
 import {
   leave,
   leaveChannel,
   updateChannelProperty
-} from '../../../commands/cmd/leave.js'
-import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
-import { PermissionLevel } from '../../../utilities/twitch/types.js'
+} from '../../../src/commands/cmd/leave.js'
+import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleChannel } from '../../test-utils/example.js'
+import { getExampleChannel, getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test leave command', () => {
@@ -137,7 +136,7 @@ describe('test leave command', () => {
       channel: channelToLeave
     })
 
-    expect(savedEntity.joined).toBeFalsy()
+    expect(savedEntity!.joined).toBeFalsy()
   })
 
   it('update channel property sets joined to false', async () => {
@@ -153,7 +152,7 @@ describe('test leave command', () => {
       channel: channelToLeave
     })
 
-    expect(savedEntity.joined).toBeFalsy()
+    expect(savedEntity!.joined).toBeFalsy()
   })
 
   it('update channel property updates 1 entity not both in database', async () => {
@@ -178,8 +177,8 @@ describe('test leave command', () => {
       channel: otherChannel
     })
 
-    expect(updatedEntity.joined).toBeFalsy()
-    expect(otherEntity.joined).toBeTruthy()
+    expect(updatedEntity!.joined).toBeFalsy()
+    expect(otherEntity!.joined).toBeTruthy()
   })
 
   it('leave channel me sets the channel to joined false', async () => {
@@ -200,9 +199,8 @@ describe('test leave command', () => {
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
     })
-
-    expect(updatedEntity.joined).toBeFalsy()
-    expect(hb.client.part).toHaveBeenCalledWith(user.username)
+    expect(updatedEntity!.joined).toBeFalsy()
+    expect(hb.client.part).toHaveBeenCalledWith(user.username!)
   })
 
   it('user has no permissions but uses not me as param channel return error', async () => {

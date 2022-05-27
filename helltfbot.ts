@@ -1,12 +1,10 @@
 import 'dotenv/config'
-import { TwitchBot } from './client/bot.js'
-import { mainClient } from './client/main-bot.js'
-import { watchClient } from './client/track-bot.js'
+import { TwitchBot } from './src/client/bot.js'
+import { client } from './src/client/main-client.js'
 
-globalThis.hb = new TwitchBot(mainClient, watchClient)
-;(async () => {
-  await hb.init()
-  hb.joinChannels()
-  hb.startJobs()
-  hb.initModules()
-})()
+globalThis.hb = new TwitchBot(client)
+  ; (async () => {
+    await hb.init()
+    hb.startJobs()
+    hb.initModules()
+  })()
