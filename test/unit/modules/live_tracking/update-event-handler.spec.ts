@@ -1,5 +1,5 @@
-import { UpdateEventType } from '../../../../modules/pubsub/types.js'
-import { UpdateEventHandler } from '../../../../modules/pubsub/update-event-handler.js'
+import { UpdateEventType } from '../../../../src/modules/pubsub/types.js'
+import { UpdateEventHandler } from '../../../../src/modules/pubsub/update-event-handler.js'
 
 describe('test update event handler unit tests', () => {
   let handler: UpdateEventHandler = new UpdateEventHandler()
@@ -9,14 +9,6 @@ describe('test update event handler unit tests', () => {
     handler = new UpdateEventHandler()
     streamer = 'streamer'
     value = 'example'
-  })
-
-  it('get notification message for undefined event return undefined', () => {
-    const type = undefined
-
-    const message = handler.getNotificationMessage(type, streamer, value)
-
-    expect(message).toBeUndefined()
   })
 
   it('get notification message for live event return live message', () => {

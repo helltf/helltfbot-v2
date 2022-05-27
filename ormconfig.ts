@@ -30,7 +30,7 @@ function getTestOrmConf(): PostgresConnectionOptions {
     database: TEST_DB_DATABASE,
     synchronize: true,
     logging: false,
-    entities: ['dist/db/entity/**/*.js'],
+    entities: ['dist/src/db/entity/**/*.js'],
     migrations: ['db/migrations/**/*.ts'],
     subscribers: ['db/subscriber/**/*.ts']
   }
@@ -46,7 +46,7 @@ function getDevOrmConf(): PostgresConnectionOptions {
     database: DB_DATABASE,
     synchronize: false,
     logging: false,
-    entities: ['dist/db/entity/**/*.js'],
+    entities: ['dist/src/db/entity/**/*.js'],
     migrations: ['db/migrations/**/*.ts'],
     subscribers: ['db/subscriber/**/*.ts']
   }

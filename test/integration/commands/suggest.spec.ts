@@ -1,8 +1,8 @@
-import { TwitchUserState } from '../../../client/types.js'
-import { suggest } from '../../../commands/cmd/suggest.js'
-import { getExampleTwitchUserState } from '../../../spec/examples/user.js'
+import { TwitchUserState } from '../../../src/client/types.js'
+import { suggest } from '../../../src/commands/cmd/suggest.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { saveUserStateAsUser } from '../../test-utils/save-user.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
@@ -71,7 +71,7 @@ describe('test suggest command', () => {
 
     const expectedMessage = `Succesfully saved your suggestion with id ${id}`
 
-    expect(savedEntity.suggestion).toBe(`${message.join(' ')}`)
+    expect(savedEntity!.suggestion).toBe(`${message.join(' ')}`)
     expect(response.response).toEqual(expectedMessage)
     expect(response.success).toBeTrue()
   })
@@ -84,7 +84,7 @@ describe('test suggest command', () => {
       date: 1,
       suggestion: 'a',
       user: {
-        id: parseInt(user['user-id'])
+        id: parseInt(user['user-id']!)
       }
     })
 
@@ -100,6 +100,6 @@ describe('test suggest command', () => {
 
     expect(response.success).toBeTrue()
     expect(response.response).toBe(expectedMessage)
-    expect(savedEntity.suggestion).toBe(expectedSavedSuggestion)
+    expect(savedEntity!.suggestion).toBe(expectedSavedSuggestion)
   })
 })

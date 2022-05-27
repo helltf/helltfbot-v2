@@ -1,11 +1,11 @@
 import {
-  eventIsNotValid,
-  mapEventTypeToNotifyType
-} from '../../../commands/cmd/notify.js'
+  mapEventTypeToNotifyType,
+  eventIsNotValid
+} from '../../../src/commands/cmd/notify.js'
 import {
   NotifyEventType,
   UpdateEventType
-} from '../../../modules/pubsub/types.js'
+} from '../../../src/modules/pubsub/types.js'
 
 describe('unit test notify command functions', () => {
   it('Update event is offline map to status', () => {

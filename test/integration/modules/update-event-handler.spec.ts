@@ -1,10 +1,10 @@
-import { UpdateEventType } from '../../../modules/pubsub/types.js'
-import { UpdateEventHandler } from '../../../modules/pubsub/update-event-handler.js'
-import { getExampleNotificationEntity } from '../../../spec/examples/user.js'
+import { UpdateEventType } from '../../../src/modules/pubsub/types.js'
+import { UpdateEventHandler } from '../../../src/modules/pubsub/update-event-handler.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
-import { Notification } from '../../../db/entity/notification.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { Notification } from '../../../src/db/export-entities.js'
+import { getExampleNotificationEntity } from '../../test-utils/example.js'
 
 describe('Test event handler to return the correct messages', () => {
   let eventHandler: UpdateEventHandler = new UpdateEventHandler()
@@ -29,14 +29,14 @@ describe('Test event handler to return the correct messages', () => {
     const type = UpdateEventType.LIVE
 
     const result = await eventHandler.getNotifiedUsers(streamer, type)
-    const expectedResult = []
+    const expectedResult: Notification[] = []
 
     expect(result).toEqual(expectedResult)
   })
 
   it('get notified user, user has notification return 1 notification', async () => {
     const type = UpdateEventType.LIVE
-    const notification = getExampleNotificationEntity()
+    const notification = getExampleNotificationEntity({})
     notification[type] = true
 
     await hb.db.userRepo.save(notification.user)
@@ -51,11 +51,11 @@ describe('Test event handler to return the correct messages', () => {
 
   it('get notified user, 2 users have notifications return 2 notification', async () => {
     const type = UpdateEventType.LIVE
-    const notification1 = getExampleNotificationEntity()
-    const notification2 = getExampleNotificationEntity()
+    const notification1 = getExampleNotificationEntity({})
+    const notification2 = getExampleNotificationEntity({})
     notification1[type] = true
     notification2[type] = true
-    notification2.user.id = 2
+    notification2.user!.id = 2
     notification2.channel = 'channel2'
 
     await saveNotificationWithUser(notification1)
@@ -69,12 +69,12 @@ describe('Test event handler to return the correct messages', () => {
 
   it('get notified user, 2 users have notifications on different events return 1 notification', async () => {
     const type = UpdateEventType.LIVE
-    const notification1 = getExampleNotificationEntity()
-    const notification2 = getExampleNotificationEntity()
+    const notification1 = getExampleNotificationEntity({})
+    const notification2 = getExampleNotificationEntity({})
 
     notification1[type] = true
     notification2[UpdateEventType.GAME] = true
-    notification2.user.id = 2
+    notification2.user!.id = 2
     notification2.channel = 'channel2'
 
     await saveNotificationWithUser(notification1)
@@ -88,7 +88,7 @@ describe('Test event handler to return the correct messages', () => {
   })
 })
 
-async function saveNotificationWithUser(notification: Notification) {
-  await hb.db.userRepo.save(notification.user)
+async function saveNotificationWithUser(notification: Partial<Notification>) {
+  await hb.db.userRepo.save(notification.user!)
   await hb.db.notificationRepo.save(notification)
 }
