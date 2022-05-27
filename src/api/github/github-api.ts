@@ -1,15 +1,15 @@
-import { Resource, ResourceState } from '../resource.js'
+import { ResourceError, ResourceSuccess } from '../resource.js'
 import fetch from 'node-fetch'
 import { Projects } from './github-projects.js'
 
 const getPipeLineData = async (
   project: Projects
-): Promise<ResourceState<PipelineData>> => {
+): Promise<Resource<PipelineData>> => {
   try {
     const data = await requestGithubApi(project)
-    return Resource.ok(new PipelineData(data, project))
+    return new ResourceSuccess(new PipelineData(data, project))
   } catch (e: any) {
-    return Resource.error(e)
+    return new ResourceError(e)
   }
 }
 

@@ -1,14 +1,4 @@
-export type ResourceState<T> = ResourceError | ResourceSuccess<T>
-
-export class Resource {
-  static ok<U>(data: U): ResourceSuccess<U> {
-    return new ResourceSuccess(data)
-  }
-
-  static error(error: string): ResourceError {
-    return new ResourceError(error)
-  }
-}
+export type Resource<T> = ResourceError | ResourceSuccess<T>
 
 export class ResourceSuccess<T>{
   data: T;
