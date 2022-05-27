@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "set NODE_ENV=test&&npx jasmine",
-    "unit-tests": "set NODE_ENV=test&&npxjasmine --config=spec/support/jasmine-unit.json",
+    "unit-tests": "set NODE_ENV=test&&npx jasmine --config=spec/support/jasmine-unit.json",
     "integration-tests": "set NODE_ENV=test&&npx jasmine --config=spec/support/jasmine-integration.json",
     "build": "tsc",
     "deploy": "sh deploy.sh",

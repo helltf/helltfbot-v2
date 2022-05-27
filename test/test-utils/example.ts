@@ -1,9 +1,7 @@
-import { off } from 'process'
 import { TwitchUserState } from '../../src/client/types.js'
 import { Command } from '../../src/commands/export/types.js'
 import { Channel, TwitchUser } from '../../src/db/export-entities.js'
 import { Notification } from '../../src/db/export-entities.js'
-import { returnHigherPermissions } from '../../src/utilities/twitch/permission.js'
 
 export function getExampleCommand({
   alias = [],

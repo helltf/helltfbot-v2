@@ -1,5 +1,6 @@
 import { PipelineData } from '../api/github/github-api.js'
 import { Projects } from '../api/github/github-projects.js'
+import { ResourceError, ResourceSuccess } from '../api/resource.js'
 
 const counts = new Map<Projects, number | undefined>([
   [Projects.helltfbot_v2, undefined],
@@ -17,9 +18,11 @@ const updateGithubPipeline = async () => {
 }
 
 const checkForUpdate = async (project: Projects, count: number | undefined) => {
-  const { success, data } = await hb.api.github.getPipeLineData(project)
+  const pipelineData = await hb.api.github.getPipeLineData(project)
 
-  if (!success) return
+  if (pipelineData instanceof ResourceError) return
+
+  const { data } = pipelineData
 
   if (count === undefined) {
     setCount(project, data?.count!)
