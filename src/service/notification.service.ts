@@ -5,30 +5,30 @@ export class NotificationService {
     async cleanAllNotifications() {
         const notificationChannels = await hb.db.notificationChannelRepo.find()
 
-        for (const { name, status, setting } of notificationChannels) {
-            if (setting) this.cleanNotificationsForStreamer(name, StreamerEventType.SETTING)
-            if (status) this.cleanNotificationsForStreamer(name, StreamerEventType.STATUS)
+        for (const { id, name, status, setting } of notificationChannels) {
+            if (setting) this.cleanNotificationsForStreamer(id, name, StreamerEventType.SETTING)
+            if (status) this.cleanNotificationsForStreamer(id, name, StreamerEventType.STATUS)
         }
     }
 
-    async clean(streamer: string, event: StreamerEventType) {
+    async clean(id: number, event: StreamerEventType) {
         await hb.db.notificationChannelRepo.update({
-            name: streamer
+            id: id
         }, {
             [event]: false
         })
 
-        // hb.pubSub.unlistenStreamerTopic(streamer, event)
+        hb.pubSub.unlistenStreamerTopic(id, event)
     }
 
-    async cleanNotificationsForStreamer(streamer: string, event: StreamerEventType) {
+    async cleanNotificationsForStreamer(id: number, name: string, event: StreamerEventType) {
         const updateEvents = this.mapEventTypeToUpdateType(event)
 
-        const existingNotification = await this.isNotificationExisting(streamer, updateEvents)
+        const existingNotification = await this.isNotificationExisting(name, updateEvents)
 
         if (existingNotification) return
 
-        await this.clean(streamer, event)
+        await this.clean(id, event)
 
     }
 
