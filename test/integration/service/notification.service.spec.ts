@@ -50,8 +50,8 @@ fdescribe('test notificatin service', () => {
 
         expect(isExisting).toBeFalse()
     })
-    it('notification exists return true', async () => {
 
+    it('notification exists return true', async () => {
         const updateEvents = service.mapEventTypeToUpdateType(StreamerEventType.STATUS)
 
         const notification = getExampleNotificationEntity({
@@ -63,6 +63,24 @@ fdescribe('test notificatin service', () => {
         const isExisting = await service.isNotificationExisting(notification.streamer, updateEvents)
 
         expect(isExisting).toBeTrue()
+    })
+    it('clean function sets streamer notification for status to false', async () => {
+        const event = StreamerEventType.STATUS
+        const streamer = 'exampleStreamer'
 
+        await hb.db.notificationChannelRepo.save({
+            setting: true,
+            status: true,
+            name: streamer,
+            id: 1
+        })
+
+        await service.clean(streamer, event)
+
+        const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+            name: streamer
+        })
+
+        expect(updatedEntity![event]).toBeFalse()
     })
 })
