@@ -1,5 +1,4 @@
-import { NotifyEventType } from "../../../src/commands/cmd/notify.js"
-import { UpdateEventType } from "../../../src/modules/pubsub/types.js"
+import { NotifyEventType, UpdateEventType } from "../../../src/modules/pubsub/types.js"
 import { NotificationService } from "../../../src/service/notification.service.js"
 import { clearDb } from "../../test-utils/clear.js"
 import { disconnectDatabase } from "../../test-utils/disconnect.js"

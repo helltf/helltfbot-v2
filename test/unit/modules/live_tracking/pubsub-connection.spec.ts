@@ -1,6 +1,6 @@
 import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection.js"
 
-fdescribe('test pubsub connection class', () => {
+describe('test pubsub connection class', () => {
     let connection: PubSubConnection
 
     beforeEach(() => {
