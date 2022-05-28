@@ -1,5 +1,5 @@
 export class NotificationService {
-    async clearNotifications() {
+    async cleanNotifications() {
 
     }
 }

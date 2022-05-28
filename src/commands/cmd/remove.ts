@@ -1,6 +1,7 @@
 import { UpdateResult } from "typeorm"
 import { TwitchUserState, BotResponse } from "../../client/types.js"
 import { UpdateEventType } from "../../modules/pubsub/types.js"
+import { NotificationService } from "../../service/notification.service.js"
 import { Command } from "../export/types.js"
 import { eventIsNotValid } from "./notify.js"
 
@@ -46,6 +47,8 @@ export const remove = new Command({
             errorResponse.response = 'No matching notification found'
             return errorResponse
         }
+
+        new NotificationService().cleanNotifications()
 
         return {
             success: true,
