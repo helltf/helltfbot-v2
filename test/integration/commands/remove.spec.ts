@@ -5,7 +5,6 @@ import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
-import { Notification } from '../../../src/db/export-entities.js'
 import { saveNotificationWithUser } from '../../test-utils/save-notification.js'
 
 describe('test remove command', () => {
@@ -66,7 +65,7 @@ describe('test remove command', () => {
   it('event does not match existing events return error response', async () => {
     const message = [streamer, 'a']
 
-    let {
+    const {
       response,
       channel: responseChannel,
       success
@@ -84,7 +83,7 @@ describe('test remove command', () => {
   it('notification does not exist return error response', async () => {
     const message = [streamer, UpdateEventType.GAME]
 
-    let {
+    const {
       response,
       channel: responseChannel,
       success
@@ -108,7 +107,7 @@ describe('test remove command', () => {
 
     await saveNotificationWithUser(notification)
 
-    let {
+    const {
       response,
       channel: responseChannel,
       success
@@ -171,6 +170,7 @@ describe('test remove command', () => {
         expect(updatedEntity![event]).toBeFalse()
       })
     })
+
     it('notification does not exist no row affected', async () => {
       const notification = getExampleNotificationEntity({})
       const { affected } = await removeEventNotification(notification.user.id, streamer, UpdateEventType.GAME)

@@ -7,7 +7,6 @@ describe('testing cooldown class', () => {
   let cooldown: Cooldown
   let command: Command
   let user: TwitchUserState
-  let timerCallback;
 
   afterEach(function () {
     jasmine.clock().uninstall();
@@ -18,7 +17,6 @@ describe('testing cooldown class', () => {
     cooldown = new Cooldown()
     command = getExampleCommand({})
     user = getExampleTwitchUserState({})
-    timerCallback = jasmine.createSpy("timerCallback");
     jasmine.clock().install();
   })
 
