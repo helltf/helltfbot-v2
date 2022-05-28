@@ -1,7 +1,7 @@
 import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel.js"
 import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection.js"
 import { PubSub } from "../../../../src/modules/pubsub/pubsub.js"
-import { NotifyEventType, TopicType, UpdateEventType } from "../../../../src/modules/pubsub/types.js"
+import { NotifyEventType, TopicType } from "../../../../src/modules/pubsub/types.js"
 
 describe('test chunking function', () => {
   let module: PubSub
