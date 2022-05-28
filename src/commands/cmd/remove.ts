@@ -48,7 +48,7 @@ export const remove = new Command({
             return errorResponse
         }
 
-        new NotificationService().cleanNotifications()
+        new NotificationService().cleanAllNotifications()
 
         return {
             success: true,

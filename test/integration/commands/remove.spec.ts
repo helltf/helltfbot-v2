@@ -6,8 +6,9 @@ import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { Notification } from '../../../src/db/export-entities.js'
+import { saveNotificationWithUser } from '../../test-utils/save-notification.js'
 
-fdescribe('test remove command', () => {
+describe('test remove command', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
   let messageChannel = 'testmessageChannel'
   let streamer = 'streamer'
@@ -178,10 +179,3 @@ fdescribe('test remove command', () => {
     })
   })
 })
-
-
-async function saveNotificationWithUser(notification: Notification) {
-  await hb.db.userRepo.save(notification.user)
-
-  await hb.db.notificationRepo.save(notification)
-}
