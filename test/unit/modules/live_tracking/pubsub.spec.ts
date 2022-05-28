@@ -1,6 +1,7 @@
 import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel.js"
+import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection.js"
 import { PubSub } from "../../../../src/modules/pubsub/pubsub.js"
-import { TopicType } from "../../../../src/modules/pubsub/types.js"
+import { NotifyEventType, TopicType } from "../../../../src/modules/pubsub/types.js"
 
 describe('test chunking function', () => {
   let module: PubSub
@@ -166,6 +167,30 @@ describe('test get username from topic', () => {
       ]
 
       expect(result).toEqual(expectedResult)
+    })
+  })
+
+  describe('find connection function', () => {
+    it('no connection for topic returns no connection', () => {
+      const id = 1
+      const event = NotifyEventType.SETTING
+
+      const connection = module.findConnectionForTopic(id, event)
+
+      expect(connection).toBeUndefined()
+    })
+
+    it('connection exists with topic return connection', () => {
+      const id = 1
+      const event = 'SETTING'
+      const connection = new PubSubConnection()
+
+      connection.topics.push(TopicType[event] + id)
+      module.connections.push(connection)
+
+      const foundConnection = module.findConnectionForTopic(id, NotifyEventType[event])
+
+      expect(foundConnection).toBeDefined()
     })
   })
 })

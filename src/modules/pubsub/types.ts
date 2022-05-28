@@ -18,7 +18,7 @@ export type PubSubType =
   | 'MESSAGE'
   | 'PONG'
   | 'LISTEN'
-  | 'RECONNECT'
+  | 'RECONNECT' | 'UNLISTEN'
 
 export interface PubSubData<T extends PubSubDataMessage> {
   topic: string

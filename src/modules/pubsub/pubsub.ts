@@ -123,4 +123,32 @@ export class PubSub {
     const connection = this.getOpenConnection()
     connection.listenToTopic(id, event)
   }
+
+  findConnectionForTopic(id: number, event: NotifyEventType): PubSubConnection | undefined {
+    for (const connection of this.connections) {
+      const topic = this.createTopic(id, event)
+
+      if (connection.containsTopic(topic)) {
+        return connection
+      }
+    }
+    return
+  }
+
+  createTopic(id: number, event: NotifyEventType): string {
+    return `${this.mapNotifyTypeToTopicType(event)}${id}`
+  }
+
+  mapNotifyTypeToTopicType(event: NotifyEventType): TopicType {
+    if (event === NotifyEventType.STATUS) return TopicType.STATUS
+    return TopicType.SETTING
+  }
+
+  unlistenStreamerTopic(id: number, event: NotifyEventType) {
+    const connection = this.findConnectionForTopic(id, event)
+
+    if (!connection) return
+    const topicType = this.mapNotifyTypeToTopicType(event)
+    connection.unlisten(id, topicType)
+  }
 }

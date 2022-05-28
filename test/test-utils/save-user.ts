@@ -1,6 +1,6 @@
-import { ChatUserstate } from 'tmi.js'
+import { TwitchUserState } from '../../src/client/types.js'
 
-export async function saveUserStateAsUser(user: ChatUserstate) {
+export async function saveUserStateAsUser(user: TwitchUserState) {
   await hb.db.userRepo.save({
     color: user.color,
     display_name: user['display-name'],
@@ -8,7 +8,7 @@ export async function saveUserStateAsUser(user: ChatUserstate) {
     name: user.username,
     notifications: [],
     suggestions: [],
-    permission: 0,
+    permission: user.permission,
     registered_at: 1
   })
 }

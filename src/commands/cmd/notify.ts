@@ -178,9 +178,4 @@ function getUnknownEventErrorResponse(channel: string): BotResponse {
   }
 }
 
-export enum StreamerEventType {
-  SETTING = 'setting',
-  STATUS = 'status'
-}
-
 export { notify }
