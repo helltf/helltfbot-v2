@@ -78,6 +78,17 @@ export class PubSubConnection implements WebSocketConnection {
     }
   }
 
+  getUnlistenMessageForTopic(topic: string[]): PubSubMessage {
+    return {
+      type: 'UNLISTEN',
+      nonce: '',
+      data: {
+        auth_token: process.env.TWITCH_OAUTH,
+        topics: topic
+      }
+    }
+  }
+
   mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicType {
     if (notifyType === NotifyEventType.SETTING) return TopicType.SETTING
     return TopicType.STATUS
@@ -113,5 +124,23 @@ export class PubSubConnection implements WebSocketConnection {
 
   containsTopic(topic: string): boolean {
     return this.topics.some(t => t === topic)
+  }
+
+  unlisten(id: number, event: TopicType) {
+    const topic = event + id
+
+    const message = this.getUnlistenMessageForTopic([topic])
+
+    this.sendMessage(message)
+
+    this.removeTopic(topic)
+  }
+
+  removeTopic(topic: string) {
+    const index = this.topics.indexOf(topic);
+
+    if (index > -1) {
+      this.topics.splice(index, 1)
+    }
   }
 }
