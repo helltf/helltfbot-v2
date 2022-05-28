@@ -61,12 +61,12 @@ async function createNewStreamerConnection(
   const notifyType = mapEventTypeToNotifyType(event)
 
   await updateTopicTypeForChannel(streamer, id, notifyType)
+
   const topic: Topic = {
     id: id,
-    prefix: TopicPrefix.SETTING
+    prefix: hb.pubSub.mapNotifyTypeToTopicPrefix(notifyType)
   }
 
-  // FIX IT
   hb.pubSub.listenToTopic(topic)
 
   return true
