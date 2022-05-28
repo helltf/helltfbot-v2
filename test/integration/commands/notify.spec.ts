@@ -1,6 +1,6 @@
 import {
   NotifyEventType,
-  TopicString,
+  TopicPrefix,
   UpdateEventType
 } from '../../../src/modules/pubsub/types.js'
 import { clearDb } from '../../test-utils/clear.js'
@@ -283,7 +283,7 @@ describe('test notify command: ', () => {
 
       const expectedTopic = {
         id: returnedStreamerId,
-        type: TopicString.STATUS
+        prefix: TopicPrefix.STATUS
 
       }
       expect(hb.pubSub.listenToTopic).toHaveBeenCalledWith(

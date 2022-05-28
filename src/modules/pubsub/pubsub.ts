@@ -2,7 +2,7 @@ import { NotificationChannelInfo } from '../../db/entity/notification_channel.js
 import { LogType } from '../../logger/log-type.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import { MessageType, NotifyEventType, TopicString, Topic } from './types.js'
+import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
@@ -71,8 +71,8 @@ export class PubSub {
     return channels.reduce((acc: Topic[], { setting, status, id }) => {
       const topics: Topic[] = []
 
-      if (setting) topics.push({ type: TopicString.SETTING, id })
-      if (status) topics.push({ type: TopicString.STATUS, id })
+      if (setting) topics.push({ prefix: TopicPrefix.SETTING, id })
+      if (status) topics.push({ prefix: TopicPrefix.STATUS, id })
 
       return acc.concat(topics)
     }, [])
@@ -133,15 +133,15 @@ export class PubSub {
     return this.connections.find(con => con.containsTopic(topic))
   }
 
-  mapNotifyTypeToTopicString(event: NotifyEventType): TopicString {
-    if (event === NotifyEventType.STATUS) return TopicString.STATUS
-    return TopicString.SETTING
+  mapNotifyTypeToTopicPrefix(event: NotifyEventType): TopicPrefix {
+    if (event === NotifyEventType.STATUS) return TopicPrefix.STATUS
+    return TopicPrefix.SETTING
   }
 
   unlistenStreamerTopic(id: number, event: NotifyEventType) {
     const topic: Topic = {
       id: id,
-      type: this.mapNotifyTypeToTopicString(event)
+      prefix: this.mapNotifyTypeToTopicPrefix(event)
     }
 
     const connection = this.findConnectionForTopic(topic)

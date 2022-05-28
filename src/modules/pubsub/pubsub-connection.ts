@@ -1,7 +1,7 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import { LogType } from '../../logger/log-type.js'
 import {
-  TopicString,
+  TopicPrefix,
   OutgoingMessage,
   NotifyEventType,
   ParsedPubSubData,
@@ -57,14 +57,14 @@ export class PubSubConnection {
       nonce: '',
       data: {
         auth_token: process.env.TWITCH_OAUTH,
-        topics: topics.map(t => t.type + t.id)
+        topics: topics.map(t => t.prefix + t.id)
       }
     }
   }
 
-  mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicString {
-    if (notifyType === NotifyEventType.SETTING) return TopicString.SETTING
-    return TopicString.STATUS
+  mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicPrefix {
+    if (notifyType === NotifyEventType.SETTING) return TopicPrefix.SETTING
+    return TopicPrefix.STATUS
   }
 
   handleIncomingMessage({ data }: { data: string }) {
@@ -97,7 +97,7 @@ export class PubSubConnection {
   }
 
   containsTopic(topic: Topic): boolean {
-    return this.topics.some(t => t.id === topic.id && t.type === topic.type)
+    return this.topics.some(t => t.id === topic.id && t.prefix === topic.prefix)
   }
 
   unlisten(topic: Topic) {

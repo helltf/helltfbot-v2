@@ -1,7 +1,7 @@
 import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel.js"
 import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection.js"
 import { PubSub } from "../../../../src/modules/pubsub/pubsub.js"
-import { Topic, TopicString } from "../../../../src/modules/pubsub/types.js"
+import { Topic, TopicPrefix } from "../../../../src/modules/pubsub/types.js"
 
 describe('test chunking function', () => {
   let module: PubSub
@@ -102,7 +102,7 @@ describe('test get username from topic', () => {
 
       const result = module.getTopics(channels)
 
-      const expectedResult = [{ type: TopicString.STATUS, id: exampleChannelInfo.id }]
+      const expectedResult = [{ prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }]
 
       expect(result).toEqual(expectedResult)
     })
@@ -118,7 +118,7 @@ describe('test get username from topic', () => {
 
       const result = module.getTopics(channels)
 
-      const expectedResult = [{ type: TopicString.SETTING, id: exampleChannelInfo.id }]
+      const expectedResult = [{ prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id }]
 
       expect(result).toEqual(expectedResult)
     })
@@ -135,8 +135,8 @@ describe('test get username from topic', () => {
       const result = module.getTopics(channels)
 
       const expectedResult = [
-        { type: TopicString.SETTING, id: exampleChannelInfo.id },
-        { type: TopicString.STATUS, id: exampleChannelInfo.id }
+        { prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id },
+        { prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }
       ]
 
       expect(result).toEqual(expectedResult)
@@ -160,10 +160,10 @@ describe('test get username from topic', () => {
       const result = module.getTopics(channels)
 
       const expectedResult = [
-        { type: TopicString.SETTING, id: exampleChannelInfo1.id },
-        { type: TopicString.STATUS, id: exampleChannelInfo1.id },
-        { type: TopicString.SETTING, id: exampleChannelInfo2.id },
-        { type: TopicString.STATUS, id: exampleChannelInfo2.id }
+        { prefix: TopicPrefix.SETTING, id: exampleChannelInfo1.id },
+        { prefix: TopicPrefix.STATUS, id: exampleChannelInfo1.id },
+        { prefix: TopicPrefix.SETTING, id: exampleChannelInfo2.id },
+        { prefix: TopicPrefix.STATUS, id: exampleChannelInfo2.id }
       ]
 
       expect(result).toEqual(expectedResult)
@@ -174,7 +174,7 @@ describe('test get username from topic', () => {
     it('no connection for topic returns no connection', () => {
       const topic = {
         id: 1,
-        type: TopicString.SETTING
+        prefix: TopicPrefix.SETTING
 
       }
       const connection = module.findConnectionForTopic(topic)
@@ -184,7 +184,7 @@ describe('test get username from topic', () => {
 
     it('connection exists with topic return connection', () => {
       const topic = {
-        type: TopicString.SETTING,
+        prefix: TopicPrefix.SETTING,
         id: 1
       }
       const connection = new PubSubConnection()

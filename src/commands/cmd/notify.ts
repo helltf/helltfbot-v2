@@ -1,7 +1,7 @@
 import { BotResponse } from '../../client/types.js'
 
 import { TwitchUserState } from '../../client/types.js'
-import { NotifyEventType, Topic, TopicString, UpdateEventType } from '../../modules/pubsub/types.js'
+import { NotifyEventType, Topic, TopicPrefix, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -63,7 +63,7 @@ async function createNewStreamerConnection(
   await updateTopicTypeForChannel(streamer, id, notifyType)
   const topic: Topic = {
     id: id,
-    type: TopicString.SETTING
+    prefix: TopicPrefix.SETTING
   }
 
   // FIX IT

@@ -17,12 +17,13 @@ export type MessageType =
   | 'MESSAGE'
   | 'PONG'
   | 'LISTEN'
-  | 'RECONNECT' | 'UNLISTEN'
+  | 'RECONNECT'
+  | 'UNLISTEN'
 
 
 export interface Topic {
   id: number,
-  type: TopicString
+  prefix: TopicPrefix
 }
 
 export interface PubSubData<T extends IncomingMessage> {
@@ -70,7 +71,7 @@ export interface TwitchNotificationMessage {
   notifications: Map<string, string>
 }
 
-export enum TopicString {
+export enum TopicPrefix {
   SETTING = 'broadcast-settings-update.',
   STATUS = 'video-playback-by-id.'
 }
