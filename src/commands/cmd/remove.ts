@@ -1,6 +1,6 @@
 import { UpdateResult } from "typeorm"
 import { TwitchUserState, BotResponse } from "../../client/types.js"
-import { UpdateEventType } from "../../modules/pubsub/types.js"
+import { UserNotificationType } from "../../modules/pubsub/types.js"
 import { NotificationService } from "../../service/notification.service.js"
 import { Command } from "../export/types.js"
 import { eventIsNotValid } from "./notify.js"
@@ -20,7 +20,7 @@ export const remove = new Command({
         [streamer, event]: string[]
     ): Promise<BotResponse> => {
         const userId = Number(unparsedUserId)
-        const eventType = event as UpdateEventType
+        const eventType = event as UserNotificationType
 
         const errorResponse = {
             success: false,
@@ -35,7 +35,7 @@ export const remove = new Command({
 
         if (eventIsNotValid(eventType)) {
             errorResponse.response = `Event unknown. Valid events are ${Object.values(
-                UpdateEventType
+                UserNotificationType
             ).join(' ')}`
 
             return errorResponse
@@ -58,7 +58,7 @@ export const remove = new Command({
     }
 })
 
-export async function removeEventNotification(userId: number, streamer: string, event: UpdateEventType): Promise<UpdateResult> {
+export async function removeEventNotification(userId: number, streamer: string, event: UserNotificationType): Promise<UpdateResult> {
     return await hb.db.notificationRepo.update({
         user: { id: userId },
         streamer: streamer

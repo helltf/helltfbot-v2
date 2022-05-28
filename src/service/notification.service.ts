@@ -1,4 +1,4 @@
-import { NotifyEventType, UpdateEventType } from "../modules/pubsub/types.js"
+import { NotifyEventType, UserNotificationType } from "../modules/pubsub/types.js"
 
 export class NotificationService {
     async cleanAllNotifications() {
@@ -31,7 +31,7 @@ export class NotificationService {
 
     }
 
-    async isNotificationExisting(streamer: string, updateEvents: UpdateEventType[]): Promise<boolean> {
+    async isNotificationExisting(streamer: string, updateEvents: UserNotificationType[]): Promise<boolean> {
         const queryParams = updateEvents.map(e => { return { streamer, [e]: true } })
 
         return (await hb.db.notificationRepo.find({
@@ -40,8 +40,8 @@ export class NotificationService {
     }
 
 
-    mapEventTypeToUpdateType(event: NotifyEventType): UpdateEventType[] {
-        if (event === NotifyEventType.SETTING) return [UpdateEventType.GAME, UpdateEventType.TITLE]
-        return [UpdateEventType.OFFLINE, UpdateEventType.LIVE]
+    mapEventTypeToUpdateType(event: NotifyEventType): UserNotificationType[] {
+        if (event === NotifyEventType.SETTING) return [UserNotificationType.GAME, UserNotificationType.TITLE]
+        return [UserNotificationType.OFFLINE, UserNotificationType.LIVE]
     }
 }

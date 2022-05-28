@@ -1,4 +1,4 @@
-import { NotifyEventType, UpdateEventType } from "../../../src/modules/pubsub/types.js"
+import { NotifyEventType, UserNotificationType } from "../../../src/modules/pubsub/types.js"
 import { NotificationService } from "../../../src/service/notification.service.js"
 import { clearDb } from "../../test-utils/clear.js"
 import { disconnectDatabase } from "../../test-utils/disconnect.js"
@@ -29,8 +29,8 @@ describe('test notificatin service', () => {
 
         const updateEventTypes = service.mapEventTypeToUpdateType(streamerEvent)
 
-        expect(updateEventTypes).toContain(UpdateEventType.GAME)
-        expect(updateEventTypes).toContain(UpdateEventType.TITLE)
+        expect(updateEventTypes).toContain(UserNotificationType.GAME)
+        expect(updateEventTypes).toContain(UserNotificationType.TITLE)
     })
 
     it('map status event return live and offline', () => {
@@ -38,8 +38,8 @@ describe('test notificatin service', () => {
 
         const updateEventTypes = service.mapEventTypeToUpdateType(streamerEvent)
 
-        expect(updateEventTypes).toContain(UpdateEventType.LIVE)
-        expect(updateEventTypes).toContain(UpdateEventType.OFFLINE)
+        expect(updateEventTypes).toContain(UserNotificationType.LIVE)
+        expect(updateEventTypes).toContain(UserNotificationType.OFFLINE)
     })
 
     it('no notification existing return false', async () => {

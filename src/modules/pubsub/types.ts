@@ -36,7 +36,7 @@ interface IncomingMessage {
 }
 
 export interface NotificationMessageInfo {
-  type: UpdateEventType
+  type: UserNotificationType
   message: string
   streamer: string
   notifiedUsers: Notification[]
@@ -81,7 +81,7 @@ export enum NotifyEventType {
   STATUS = 'status'
 }
 
-export enum UpdateEventType {
+export enum UserNotificationType {
   LIVE = 'live',
   OFFLINE = 'offline',
   TITLE = 'title',

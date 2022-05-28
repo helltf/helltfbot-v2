@@ -1,4 +1,4 @@
-import { UpdateEventType } from '../../../src/modules/pubsub/types.js'
+import { UserNotificationType } from '../../../src/modules/pubsub/types.js'
 import { UpdateEventHandler } from '../../../src/modules/pubsub/update-event-handler.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
@@ -26,7 +26,7 @@ describe('Test event handler to return the correct messages', () => {
   })
 
   it('get notified user no user existing return empty array', async () => {
-    const type = UpdateEventType.LIVE
+    const type = UserNotificationType.LIVE
 
     const result = await eventHandler.getNotifiedUsers(streamer, type)
     const expectedResult: Notification[] = []
@@ -35,7 +35,7 @@ describe('Test event handler to return the correct messages', () => {
   })
 
   it('get notified user, user has notification return 1 notification', async () => {
-    const type = UpdateEventType.LIVE
+    const type = UserNotificationType.LIVE
     const notification = getExampleNotificationEntity({})
     notification[type] = true
 
@@ -50,7 +50,7 @@ describe('Test event handler to return the correct messages', () => {
   })
 
   it('get notified user, 2 users have notifications return 2 notification', async () => {
-    const type = UpdateEventType.LIVE
+    const type = UserNotificationType.LIVE
     const notification1 = getExampleNotificationEntity({})
     const notification2 = getExampleNotificationEntity({})
     notification1[type] = true
@@ -68,12 +68,12 @@ describe('Test event handler to return the correct messages', () => {
   })
 
   it('get notified user, 2 users have notifications on different events return 1 notification', async () => {
-    const type = UpdateEventType.LIVE
+    const type = UserNotificationType.LIVE
     const notification1 = getExampleNotificationEntity({})
     const notification2 = getExampleNotificationEntity({})
 
     notification1[type] = true
-    notification2[UpdateEventType.GAME] = true
+    notification2[UserNotificationType.GAME] = true
     notification2.user!.id = 2
     notification2.channel = 'channel2'
 
