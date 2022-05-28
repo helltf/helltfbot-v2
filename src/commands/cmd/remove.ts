@@ -1,4 +1,4 @@
-import { start } from "repl"
+import { UpdateResult } from "typeorm"
 import { TwitchUserState, BotResponse } from "../../client/types.js"
 import { UpdateEventType } from "../../modules/pubsub/types.js"
 import { Command } from "../export/types.js"
@@ -19,6 +19,7 @@ export const remove = new Command({
         [streamer, event]: string[]
     ): Promise<BotResponse> => {
         const userId = Number(unparsedUserId)
+        const eventType = event as UpdateEventType
 
         const errorResponse = {
             success: false,
@@ -31,7 +32,7 @@ export const remove = new Command({
             return errorResponse
         }
 
-        if (eventIsNotValid(event)) {
+        if (eventIsNotValid(eventType)) {
             errorResponse.response = `Event unknown. Valid events are ${Object.values(
                 UpdateEventType
             ).join(' ')}`
@@ -39,13 +40,12 @@ export const remove = new Command({
             return errorResponse
         }
 
-        const eventType = event as UpdateEventType
+        const { affected } = await removeEventNotification(userId, streamer, eventType)
 
-        if (await userNotificationIsNotExisting(userId, streamer, eventType)) {
+        if (!affected) {
             errorResponse.response = 'No matching notification found'
             return errorResponse
         }
-
 
         return {
             success: true,
@@ -55,12 +55,11 @@ export const remove = new Command({
     }
 })
 
-export async function userNotificationIsNotExisting(userId: number, streamer: string, event: UpdateEventType): Promise<boolean> {
-    return !(await hb.db.notificationRepo.findOneBy({
-        user: {
-            id: userId
-        },
-        streamer: streamer,
-        [event]: true
-    }))
+export async function removeEventNotification(userId: number, streamer: string, event: UpdateEventType): Promise<UpdateResult> {
+    return await hb.db.notificationRepo.update({
+        user: { id: userId },
+        streamer: streamer
+    }, {
+        [event]: false
+    })
 }

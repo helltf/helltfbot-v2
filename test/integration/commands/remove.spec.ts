@@ -95,52 +95,6 @@ fdescribe('test remove command', () => {
     expect(response).toBe('No matching notification found')
   })
 
-  describe('user notification not existing', () => {
-    it('entity is not existing return true', async () => {
-      const userId = Number(user['user-id'])
-      const result = await userNotificationIsNotExisting(userId, streamer, UpdateEventType.GAME)
-
-      expect(result).toBeTrue()
-    })
-
-    it('entity is existing return false', async () => {
-      const notification = getExampleNotificationEntity({
-        streamer: streamer,
-        channel: messageChannel
-      })
-
-      const userId = notification.user.id
-      const event = UpdateEventType.GAME
-      notification[event] = true
-
-      await hb.db.userRepo.save(notification.user)
-
-      await hb.db.notificationRepo.save(notification)
-
-      const result = await userNotificationIsNotExisting(userId, streamer, event)
-
-      expect(result).toBeFalse()
-    })
-
-    it('entity is existing but event is false return true', async () => {
-      const notification = getExampleNotificationEntity({
-        streamer: streamer,
-        channel: messageChannel
-      })
-
-      const userId = notification.user.id
-      const event = UpdateEventType.GAME
-
-      await hb.db.userRepo.save(notification.user)
-
-      await hb.db.notificationRepo.save(notification)
-
-      const result = await userNotificationIsNotExisting(userId, streamer, event)
-
-      expect(result).toBeTrue()
-    })
-  })
-
   it('notification existing and updated return success response', async () => {
     const event = UpdateEventType.GAME
     const message = [streamer, event]
