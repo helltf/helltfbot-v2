@@ -11,10 +11,24 @@ export class NotificationService {
         }
     }
 
+    async clean(streamer: string, event: StreamerEventType) {
+        await hb.db.notificationChannelRepo.update({
+            name: streamer
+        }, {
+            [event]: false
+        })
+
+        // hb.pubSub.unlistenStreamerTopic(streamer, event)
+    }
+
     async cleanNotificationsForStreamer(streamer: string, event: StreamerEventType) {
         const updateEvents = this.mapEventTypeToUpdateType(event)
 
-        const efxistingNotification = await this.isNotificationExisting(streamer, updateEvents)
+        const existingNotification = await this.isNotificationExisting(streamer, updateEvents)
+
+        if (existingNotification) return
+
+        await this.clean(streamer, event)
 
     }
 
@@ -30,6 +44,5 @@ export class NotificationService {
     mapEventTypeToUpdateType(event: StreamerEventType): UpdateEventType[] {
         if (event === StreamerEventType.SETTING) return [UpdateEventType.GAME, UpdateEventType.TITLE]
         return [UpdateEventType.OFFLINE, UpdateEventType.LIVE]
-
     }
 }
