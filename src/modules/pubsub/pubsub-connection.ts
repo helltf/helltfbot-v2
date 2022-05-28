@@ -110,4 +110,8 @@ export class PubSubConnection implements WebSocketConnection {
 
     hb.log(LogType.PUBSUB, 'Error occured: ' + error)
   }
+
+  containsTopic(topic: string): boolean {
+    return this.topics.some(t => t === topic)
+  }
 }
