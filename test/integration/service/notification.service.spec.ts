@@ -66,21 +66,45 @@ fdescribe('test notificatin service', () => {
     })
     it('clean function sets streamer notification for status to false', async () => {
         const event = StreamerEventType.STATUS
-        const streamer = 'exampleStreamer'
+        const id = 1
+        spyOn(hb.pubSub, 'unlistenStreamerTopic')
 
         await hb.db.notificationChannelRepo.save({
             setting: true,
             status: true,
-            name: streamer,
+            name: 'exampleStreamer',
             id: 1
         })
 
-        await service.clean(streamer, event)
+        await service.clean(id, event)
 
         const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
-            name: streamer
+            id: id
         })
 
+        expect(hb.pubSub.unlistenStreamerTopic).toHaveBeenCalledWith(id, event)
+        expect(updatedEntity![event]).toBeFalse()
+    })
+
+    it('clean function sets streamer notification for setting to false', async () => {
+        const event = StreamerEventType.SETTING
+        const id = 1
+        spyOn(hb.pubSub, 'unlistenStreamerTopic')
+
+        await hb.db.notificationChannelRepo.save({
+            setting: true,
+            status: true,
+            name: 'streamer',
+            id: id
+        })
+
+        await service.clean(id, event)
+
+        const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+            id: id
+        })
+
+        expect(hb.pubSub.unlistenStreamerTopic).toHaveBeenCalledWith(id, event)
         expect(updatedEntity![event]).toBeFalse()
     })
 })
