@@ -2,7 +2,7 @@ import ReconnectingWebSocket from 'reconnecting-websocket'
 import { Notification } from '../../db/export-entities.js'
 
 export interface ParsedPubSubData {
-  type: PubSubType
+  type: MessageType
   error?: string
   data?: any
   nonce?: string
@@ -13,19 +13,25 @@ export type PubSubMessageEventType =
   | 'stream-down'
   | 'broadcast_settings_update'
 
-export type PubSubType =
+export type MessageType =
   | 'RESPONSE'
   | 'MESSAGE'
   | 'PONG'
   | 'LISTEN'
   | 'RECONNECT' | 'UNLISTEN'
 
-export interface PubSubData<T extends PubSubDataMessage> {
+
+export interface Topic {
+  id: number,
+  type: TopicString
+}
+
+export interface PubSubData<T extends IncomingMessage> {
   topic: string
   message: T
 }
 
-interface PubSubDataMessage {
+interface IncomingMessage {
   type: PubSubMessageEventType
 }
 
@@ -36,12 +42,12 @@ export interface NotificationMessageInfo {
   notifiedUsers: Notification[]
 }
 
-export interface StatusMessage extends PubSubDataMessage {
+export interface StatusMessage extends IncomingMessage {
   server_time: number
   play_delay: number
 }
 
-export interface SettingMessage extends PubSubDataMessage {
+export interface SettingMessage extends IncomingMessage {
   channel?: string
   channel_id?: string
   old_status?: string
@@ -52,19 +58,8 @@ export interface SettingMessage extends PubSubDataMessage {
   game_id?: number
 }
 
-export interface WebSocketConnection {
-  connection: ReconnectingWebSocket
-  interval: NodeJS.Timer
-  topics: string[]
-}
-
-export interface PubSubChannel {
-  name: string
-  id: number
-}
-
-export interface PubSubMessage {
-  type: PubSubType
+export interface OutgoingMessage {
+  type: MessageType
   nonce: string
   data: {
     topics: string[]
@@ -76,7 +71,7 @@ export interface TwitchNotificationMessage {
   notifications: Map<string, string>
 }
 
-export enum TopicType {
+export enum TopicString {
   SETTING = 'broadcast-settings-update.',
   STATUS = 'video-playback-by-id.'
 }
