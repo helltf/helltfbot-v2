@@ -1,7 +1,7 @@
 import { BotResponse } from '../../client/types.js'
 
 import { TwitchUserState } from '../../client/types.js'
-import { NotifyEventType, UpdateEventType } from '../../modules/pubsub/types.js'
+import { NotifyEventType, TopicString, UpdateEventType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -59,6 +59,7 @@ async function createNewStreamerConnection(
   if (!id) return false
 
   const notifyType = mapEventTypeToNotifyType(event)
+
   await updateTopicTypeForChannel(streamer, id, notifyType)
 
   hb.pubSub.listenToTopic(id, notifyType)

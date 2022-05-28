@@ -2,7 +2,7 @@ import { NotificationChannelInfo } from '../../db/entity/notification_channel.js
 import { LogType } from '../../logger/log-type.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import { PubSubType, NotifyEventType, TopicType } from './types.js'
+import { MessageType, NotifyEventType, TopicString, Topic } from './types.js'
 import { UpdateEventHandler } from './update-event-handler.js'
 
 export class PubSub {
@@ -15,17 +15,6 @@ export class PubSub {
     this.notificationHandler = new NotificationHandler()
   }
 
-  createNewPubSubConnection(): PubSubConnection {
-    const connection = new PubSubConnection()
-
-    connection.connection.addEventListener('message', ({ data }) => {
-      this.handlePubSubMessage(JSON.parse(data))
-    })
-
-    this.connections.push(connection)
-
-    return connection
-  }
 
   async handleIncomingMessage({ data }: any) {
     if (!data?.message) return
@@ -49,33 +38,48 @@ export class PubSub {
     }
   }
 
+
   connect = async () => {
     const channels = await hb.db.notificationChannelRepo.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
     hb.log(LogType.PUBSUB, `Connecting to ${channels.length} topics ...`)
 
-    for await (const channels of chunkedChannels) {
+    for (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
       const topics = this.getTopics(channels)
+
       connection.listenToTopics(topics)
     }
+
     hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
   }
 
-  getTopics(channels: NotificationChannelInfo[]): string[] {
-    return channels.reduce((acc: string[], { setting, status, id }) => {
-      const topics: string[] = []
+  createNewPubSubConnection(): PubSubConnection {
+    const connection = new PubSubConnection()
 
-      if (setting) topics.push(TopicType.SETTING + id)
-      if (status) topics.push(TopicType.STATUS + id)
+    connection.connection.addEventListener('message', ({ data }) => {
+      this.handlePubSubMessage(JSON.parse(data))
+    })
+
+    this.connections.push(connection)
+
+    return connection
+  }
+
+  getTopics(channels: NotificationChannelInfo[]): Topic[] {
+    return channels.reduce((acc: Topic[], { setting, status, id }) => {
+      const topics: Topic[] = []
+
+      if (setting) topics.push({ type: TopicString.SETTING, id })
+      if (status) topics.push({ type: TopicString.STATUS, id })
 
       return acc.concat(topics)
     }, [])
   }
 
   handlePubSubMessage = (data: any) => {
-    const type: PubSubType = data.type
+    const type: MessageType = data.type
 
     if (type !== 'MESSAGE') return
 
@@ -116,39 +120,34 @@ export class PubSub {
   getOpenConnection(): PubSubConnection {
     const openConnections = this.connections.filter((c) => c.topics.length < 50)
 
-    return !openConnections.length ? new PubSubConnection() : openConnections[0]
+    return !openConnections.length ? this.createNewPubSubConnection() : openConnections[0]
   }
 
-  listenToTopic(id: number, event: NotifyEventType) {
+  listenToTopic(topic: Topic) {
     const connection = this.getOpenConnection()
-    connection.listenToTopic(id, event)
+
+    connection.listenToTopics([topic])
   }
 
-  findConnectionForTopic(id: number, event: NotifyEventType): PubSubConnection | undefined {
-    for (const connection of this.connections) {
-      const topic = this.createTopic(id, event)
-
-      if (connection.containsTopic(topic)) {
-        return connection
-      }
-    }
-    return
+  findConnectionForTopic(topic: Topic): PubSubConnection | undefined {
+    return this.connections.find(con => con.containsTopic(topic))
   }
 
-  createTopic(id: number, event: NotifyEventType): string {
-    return `${this.mapNotifyTypeToTopicType(event)}${id}`
-  }
-
-  mapNotifyTypeToTopicType(event: NotifyEventType): TopicType {
-    if (event === NotifyEventType.STATUS) return TopicType.STATUS
-    return TopicType.SETTING
+  mapNotifyTypeToTopicString(event: NotifyEventType): TopicString {
+    if (event === NotifyEventType.STATUS) return TopicString.STATUS
+    return TopicString.SETTING
   }
 
   unlistenStreamerTopic(id: number, event: NotifyEventType) {
-    const connection = this.findConnectionForTopic(id, event)
+    const topic: Topic = {
+      id: id,
+      type: this.mapNotifyTypeToTopicString(event)
+    }
+
+    const connection = this.findConnectionForTopic(topic)
 
     if (!connection) return
-    const topicType = this.mapNotifyTypeToTopicType(event)
-    connection.unlisten(id, topicType)
+
+    connection.unlisten(topic)
   }
 }

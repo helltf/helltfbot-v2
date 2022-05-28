@@ -1,19 +1,20 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import { LogType } from '../../logger/log-type.js'
 import {
-  WebSocketConnection,
-  TopicType,
-  PubSubMessage,
+  TopicString,
+  OutgoingMessage,
   NotifyEventType,
-  ParsedPubSubData
+  ParsedPubSubData,
+  Topic,
+  MessageType
 } from './types.js'
 import * as WS from 'ws'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
-export class PubSubConnection implements WebSocketConnection {
+export class PubSubConnection {
   connection: ReconnectingWebSocket
-  topics: string[] = []
+  topics: Topic[] = []
   interval: NodeJS.Timer
 
   constructor() {
@@ -38,60 +39,32 @@ export class PubSubConnection implements WebSocketConnection {
     }, 250 * 1000)
   }
 
-  listenToTopic(id: number, type: NotifyEventType) {
-    const message = this.createMessageForTopic(type, id)
-
-    this.sendMessage(message)
-
-    this.topics.push(...message.data.topics)
-  }
-
-  listenToTopics(topics: string[]) {
-    const message = this.getListenMessageForTopic(topics)
+  listenToTopics(topics: Topic[]) {
+    const message = this.getMessage(topics, 'LISTEN')
 
     this.sendMessage(message)
 
     this.topics.push(...topics)
   }
 
-  sendMessage(message: PubSubMessage) {
+  sendMessage(message: OutgoingMessage) {
     this.connection.send(JSON.stringify(message))
   }
 
-  createMessageForTopic = (
-    notifyType: NotifyEventType,
-    channelId: number
-  ): PubSubMessage => {
-    const type = this.mapNotifyTypeToTopic(notifyType)
-
-    return this.getListenMessageForTopic([`${type}${channelId}`])
-  }
-
-  getListenMessageForTopic(topic: string[]): PubSubMessage {
+  getMessage(topics: Topic[], type: MessageType) {
     return {
-      type: 'LISTEN',
+      type: type,
       nonce: '',
       data: {
         auth_token: process.env.TWITCH_OAUTH,
-        topics: topic
+        topics: topics.map(t => t.type + t.id)
       }
     }
   }
 
-  getUnlistenMessageForTopic(topic: string[]): PubSubMessage {
-    return {
-      type: 'UNLISTEN',
-      nonce: '',
-      data: {
-        auth_token: process.env.TWITCH_OAUTH,
-        topics: topic
-      }
-    }
-  }
-
-  mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicType {
-    if (notifyType === NotifyEventType.SETTING) return TopicType.SETTING
-    return TopicType.STATUS
+  mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicString {
+    if (notifyType === NotifyEventType.SETTING) return TopicString.SETTING
+    return TopicString.STATUS
   }
 
   handleIncomingMessage({ data }: { data: string }) {
@@ -105,11 +78,12 @@ export class PubSubConnection implements WebSocketConnection {
   }
 
   async reconnect() {
-    this.connection.reconnect()
     hb.log(
       LogType.PUBSUB,
       'A Pubsub connection has been closed and will restart'
     )
+
+    this.connection.reconnect()
 
     this.listenToTopics(this.topics)
 
@@ -122,21 +96,19 @@ export class PubSubConnection implements WebSocketConnection {
     hb.log(LogType.PUBSUB, 'Error occured: ' + error)
   }
 
-  containsTopic(topic: string): boolean {
-    return this.topics.some(t => t === topic)
+  containsTopic(topic: Topic): boolean {
+    return this.topics.some(t => t.id === topic.id && t.type === topic.type)
   }
 
-  unlisten(id: number, event: TopicType) {
-    const topic = event + id
-
-    const message = this.getUnlistenMessageForTopic([topic])
+  unlisten(topic: Topic) {
+    const message = this.getMessage([topic], 'UNLISTEN')
 
     this.sendMessage(message)
 
     this.removeTopic(topic)
   }
 
-  removeTopic(topic: string) {
+  removeTopic(topic: Topic) {
     const index = this.topics.indexOf(topic);
 
     if (index > -1) {
