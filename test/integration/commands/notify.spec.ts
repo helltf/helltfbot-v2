@@ -1,5 +1,6 @@
 import {
   NotifyEventType,
+  TopicString,
   UpdateEventType
 } from '../../../src/modules/pubsub/types.js'
 import { clearDb } from '../../test-utils/clear.js'
@@ -279,12 +280,14 @@ describe('test notify command: ', () => {
       spyOn(hb.pubSub, 'listenToTopic')
 
       await notify.execute(channel, userState, message)
-      const expectedStreamerId = returnedStreamerId
-      const expectedNotifyType = NotifyEventType.STATUS
 
+      const expectedTopic = {
+        id: returnedStreamerId,
+        type: TopicString.STATUS
+
+      }
       expect(hb.pubSub.listenToTopic).toHaveBeenCalledWith(
-        expectedStreamerId,
-        expectedNotifyType
+        expectedTopic
       )
     })
   })

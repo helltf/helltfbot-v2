@@ -1,4 +1,3 @@
-import ReconnectingWebSocket from 'reconnecting-websocket'
 import { Notification } from '../../db/export-entities.js'
 
 export interface ParsedPubSubData {

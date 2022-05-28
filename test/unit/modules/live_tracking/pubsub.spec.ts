@@ -1,7 +1,7 @@
 import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel.js"
 import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection.js"
 import { PubSub } from "../../../../src/modules/pubsub/pubsub.js"
-import { NotifyEventType, TopicString } from "../../../../src/modules/pubsub/types.js"
+import { Topic, TopicString } from "../../../../src/modules/pubsub/types.js"
 
 describe('test chunking function', () => {
   let module: PubSub
@@ -86,7 +86,7 @@ describe('test get username from topic', () => {
     it('array is empty return empty array', () => {
       const channels: NotificationChannelInfo[] = []
       const result = module.getTopics(channels)
-      const expectedResult: string[] = []
+      const expectedResult: Topic[] = []
 
       expect(result).toEqual(expectedResult)
     })
@@ -102,7 +102,7 @@ describe('test get username from topic', () => {
 
       const result = module.getTopics(channels)
 
-      const expectedResult = [TopicString.STATUS + exampleChannelInfo.id]
+      const expectedResult = [{ type: TopicString.STATUS, id: exampleChannelInfo.id }]
 
       expect(result).toEqual(expectedResult)
     })
@@ -118,7 +118,7 @@ describe('test get username from topic', () => {
 
       const result = module.getTopics(channels)
 
-      const expectedResult = [TopicString.SETTING + exampleChannelInfo.id]
+      const expectedResult = [{ type: TopicString.SETTING, id: exampleChannelInfo.id }]
 
       expect(result).toEqual(expectedResult)
     })
@@ -135,8 +135,8 @@ describe('test get username from topic', () => {
       const result = module.getTopics(channels)
 
       const expectedResult = [
-        TopicString.SETTING + exampleChannelInfo.id,
-        TopicString.STATUS + exampleChannelInfo.id
+        { type: TopicString.SETTING, id: exampleChannelInfo.id },
+        { type: TopicString.STATUS, id: exampleChannelInfo.id }
       ]
 
       expect(result).toEqual(expectedResult)
@@ -160,10 +160,10 @@ describe('test get username from topic', () => {
       const result = module.getTopics(channels)
 
       const expectedResult = [
-        TopicString.SETTING + exampleChannelInfo1.id,
-        TopicString.STATUS + exampleChannelInfo1.id,
-        TopicString.SETTING + exampleChannelInfo2.id,
-        TopicString.STATUS + exampleChannelInfo2.id
+        { type: TopicString.SETTING, id: exampleChannelInfo1.id },
+        { type: TopicString.STATUS, id: exampleChannelInfo1.id },
+        { type: TopicString.SETTING, id: exampleChannelInfo2.id },
+        { type: TopicString.STATUS, id: exampleChannelInfo2.id }
       ]
 
       expect(result).toEqual(expectedResult)
@@ -172,23 +172,27 @@ describe('test get username from topic', () => {
 
   describe('find connection function', () => {
     it('no connection for topic returns no connection', () => {
-      const id = 1
-      const event = NotifyEventType.SETTING
+      const topic = {
+        id: 1,
+        type: TopicString.SETTING
 
-      const connection = module.findConnectionForTopic(id, event)
+      }
+      const connection = module.findConnectionForTopic(topic)
 
       expect(connection).toBeUndefined()
     })
 
     it('connection exists with topic return connection', () => {
-      const id = 1
-      const event = 'SETTING'
+      const topic = {
+        type: TopicString.SETTING,
+        id: 1
+      }
       const connection = new PubSubConnection()
 
-      connection.topics.push(TopicString[event] + id)
+      connection.topics.push(topic)
       module.connections.push(connection)
 
-      const foundConnection = module.findConnectionForTopic(id, NotifyEventType[event])
+      const foundConnection = module.findConnectionForTopic(topic)
 
       expect(foundConnection).toBeDefined()
     })
