@@ -169,11 +169,8 @@ describe('test get username from topic', () => {
       expect(result).toEqual(expectedResult)
     })
   })
-  // describe('unlisten topic', () => {
 
-  // })
-
-  fdescribe('find connection function', () => {
+  describe('find connection function', () => {
     it('no connection for topic returns no connection', () => {
       const id = 1
       const event = NotifyEventType.SETTING
