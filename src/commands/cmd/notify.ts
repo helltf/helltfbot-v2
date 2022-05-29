@@ -17,11 +17,11 @@ export class NotifyCommand implements Command {
     user: TwitchUserState,
     [streamer, event]: string[]
   ): Promise<BotResponse> {
-    if (this.eventIsNotValid(event)) return this.getUnknownEventErrorResponse(channel)
+    if (this.methods.eventIsNotValid(event)) return this.methods.getUnknownEventErrorResponse(channel)
     const eventType = event as UserNotificationType
     const userId = parseInt(user['user-id']!)
 
-    if (await this.userIsAlreadyNotified(userId, streamer, eventType)) {
+    if (await this.methods.userIsAlreadyNotified(userId, streamer, eventType)) {
       return {
         channel: channel,
         success: false,
@@ -29,8 +29,8 @@ export class NotifyCommand implements Command {
       }
     }
 
-    if (!(await this.pubSubConnectedToStreamerEvent(streamer, eventType))) {
-      const success = await this.createNewStreamerConnection(streamer, eventType)
+    if (!(await this.methods.pubSubConnectedToStreamerEvent(streamer, eventType))) {
+      const success = await this.methods.createNewStreamerConnection(streamer, eventType)
 
       if (!success) {
         return {
@@ -41,7 +41,7 @@ export class NotifyCommand implements Command {
       }
     }
 
-    await this.updateNotification(channel, streamer, eventType, userId)
+    await this.methods.updateNotification(channel, streamer, eventType, userId)
 
     return {
       channel: channel,
@@ -50,138 +50,138 @@ export class NotifyCommand implements Command {
     }
   }
 
+  methods = {
+    async createNewStreamerConnection(
+      streamer: string,
+      event: UserNotificationType
+    ): Promise<boolean> {
+      const id = await hb.api.twitch.getUserIdByName(streamer)
+      if (!id) return false
 
-  async createNewStreamerConnection(
-    streamer: string,
-    event: UserNotificationType
-  ): Promise<boolean> {
-    const id = await hb.api.twitch.getUserIdByName(streamer)
-    if (!id) return false
+      const notifyType = this.mapEventTypeToNotifyType(event)
 
-    const notifyType = this.mapEventTypeToNotifyType(event)
+      await this.updateTopicTypeForChannel(streamer, id, notifyType)
 
-    await this.updateTopicTypeForChannel(streamer, id, notifyType)
+      const topic: Topic = {
+        id: id,
+        prefix: hb.pubSub.mapNotifyTypeToTopicPrefix(notifyType)
+      }
 
-    const topic: Topic = {
-      id: id,
-      prefix: hb.pubSub.mapNotifyTypeToTopicPrefix(notifyType)
-    }
+      hb.pubSub.listenToTopic(topic)
 
-    hb.pubSub.listenToTopic(topic)
+      return true
+    },
 
-    return true
-  }
-
-  async userIsAlreadyNotified(
-    userId: number,
-    streamer: string,
-    event: UserNotificationType
-  ): Promise<boolean> {
-    return (
-      (await hb.db.notificationRepo.findOne({
-        where: {
-          user: {
-            id: userId
+    async userIsAlreadyNotified(
+      userId: number,
+      streamer: string,
+      event: UserNotificationType
+    ): Promise<boolean> {
+      return (
+        (await hb.db.notificationRepo.findOne({
+          where: {
+            user: {
+              id: userId
+            },
+            streamer: streamer,
+            [event]: true
           },
-          streamer: streamer,
+          relations: {
+            user: true
+          }
+        })) !== null
+      )
+    },
+
+    async updateTopicTypeForChannel(
+      channel: string,
+      id: number,
+      topicType: NotifyEventType
+    ) {
+      await hb.db.notificationChannelRepo.save({
+        name: channel,
+        [topicType]: true,
+        id: id
+      })
+    },
+
+    async pubSubConnectedToStreamerEvent(
+      streamer: string,
+      eventType: UserNotificationType
+    ): Promise<boolean> {
+      const event = this.mapEventTypeToNotifyType(eventType)
+      return (
+        (await hb.db.notificationChannelRepo.countBy({
+          name: streamer,
           [event]: true
-        },
-        relations: {
-          user: true
-        }
-      })) !== null
-    )
-  }
+        })) === 1
+      )
+    },
 
-  async updateTopicTypeForChannel(
-    channel: string,
-    id: number,
-    topicType: NotifyEventType
-  ) {
-    await hb.db.notificationChannelRepo.save({
-      name: channel,
-      [topicType]: true,
-      id: id
-    })
-  }
+    eventIsNotValid(event: string) {
+      return !Object.values(UserNotificationType).includes(event as UserNotificationType)
+    },
 
-  async pubSubConnectedToStreamerEvent(
-    streamer: string,
-    eventType: UserNotificationType
-  ): Promise<boolean> {
-    const event = this.mapEventTypeToNotifyType(eventType)
-    return (
-      (await hb.db.notificationChannelRepo.countBy({
-        name: streamer,
-        [event]: true
-      })) === 1
-    )
-  }
+    mapEventTypeToNotifyType(
+      event: UserNotificationType
+    ): NotifyEventType {
+      if (event === UserNotificationType.GAME || event === UserNotificationType.TITLE)
+        return NotifyEventType.SETTING
+      return NotifyEventType.STATUS
+    },
 
-  eventIsNotValid(event: string) {
-    return !Object.values(UserNotificationType).includes(event as UserNotificationType)
-  }
-
-  mapEventTypeToNotifyType(
-    event: UserNotificationType
-  ): NotifyEventType {
-    if (event === UserNotificationType.GAME || event === UserNotificationType.TITLE)
-      return NotifyEventType.SETTING
-    return NotifyEventType.STATUS
-  }
-
-  async updateNotification(
-    channel: string,
-    streamer: string,
-    event: UserNotificationType,
-    id: number
-  ) {
-    if (await this.userNotificationIsExisting(id, streamer)) {
-      await hb.db.notificationRepo.update(
-        {
+    async updateNotification(
+      channel: string,
+      streamer: string,
+      event: UserNotificationType,
+      id: number
+    ) {
+      if (await this.userNotificationIsExisting(id, streamer)) {
+        await hb.db.notificationRepo.update(
+          {
+            streamer: streamer,
+            user: {
+              id: id
+            }
+          },
+          {
+            [event]: true
+          }
+        )
+      } else {
+        await hb.db.notificationRepo.save({
+          channel: channel,
           streamer: streamer,
+          [event]: true,
           user: {
             id: id
           }
-        },
-        {
-          [event]: true
-        }
+        })
+      }
+    },
+
+    async userNotificationIsExisting(
+      userId: number,
+      streamer: string
+    ): Promise<boolean> {
+      return (
+        (await hb.db.notificationRepo.findOneBy({
+          user: {
+            id: userId
+          },
+          streamer: streamer
+        })) !== null
       )
-    } else {
-      await hb.db.notificationRepo.save({
+    },
+
+    getUnknownEventErrorResponse(channel: string): BotResponse {
+      return {
+        response: `Event unknown. Valid events are ${Object.values(
+          UserNotificationType
+        ).join(' ')}`,
         channel: channel,
-        streamer: streamer,
-        [event]: true,
-        user: {
-          id: id
-        }
-      })
+        success: false
+      }
     }
   }
-
-  async userNotificationIsExisting(
-    userId: number,
-    streamer: string
-  ): Promise<boolean> {
-    return (
-      (await hb.db.notificationRepo.findOneBy({
-        user: {
-          id: userId
-        },
-        streamer: streamer
-      })) !== null
-    )
-  }
-
-  getUnknownEventErrorResponse(channel: string): BotResponse {
-    return {
-      response: `Event unknown. Valid events are ${Object.values(
-        UserNotificationType
-      ).join(' ')}`,
-      channel: channel,
-      success: false
-    }
-  }
-
 }

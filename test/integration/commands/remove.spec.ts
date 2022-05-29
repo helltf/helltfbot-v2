@@ -160,7 +160,7 @@ describe('test remove command', () => {
 
         await saveNotificationWithUser(notification)
 
-        const { affected } = await remove.removeEventNotification(notification.user.id, streamer, event)
+        const { affected } = await remove.methods.removeEventNotification(notification.user.id, streamer, event)
 
         const updatedEntity = await hb.db.notificationRepo.findOneBy({
           user: { id: notification.user.id },
@@ -174,7 +174,7 @@ describe('test remove command', () => {
 
     it('notification does not exist no row affected', async () => {
       const notification = getExampleNotificationEntity({})
-      const { affected } = await remove.removeEventNotification(notification.user.id, streamer, UserNotificationType.GAME)
+      const { affected } = await remove.methods.removeEventNotification(notification.user.id, streamer, UserNotificationType.GAME)
 
       expect(affected).toBe(0)
     })

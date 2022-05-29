@@ -36,15 +36,15 @@ export class JoinCommand implements Command {
 
     joinChannel = joinChannel === 'me' ? user.username! : joinChannel
 
-    if (await this.functions.isAlreadyConnected(joinChannel)) {
+    if (await this.methods.isAlreadyConnected(joinChannel)) {
       errorResponse.response = 'Already connected to that channel'
       return errorResponse
     }
 
-    const { success, message } = await this.functions.connectToChannel(joinChannel)
+    const { success, message } = await this.methods.connectToChannel(joinChannel)
 
     if (success) {
-      await this.functions.updateChannelInDb(joinChannel)
+      await this.methods.updateChannelInDb(joinChannel)
     }
 
     return {
@@ -54,7 +54,7 @@ export class JoinCommand implements Command {
     }
   }
 
-  functions = {
+  methods = {
     isAlreadyConnected: async (channel: string): Promise<number> => {
       return hb.db.channelRepo.countBy({
         joined: true,

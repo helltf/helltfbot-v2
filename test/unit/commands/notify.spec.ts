@@ -17,7 +17,7 @@ describe('unit test notify command functions', () => {
     const updateEvent = UserNotificationType.OFFLINE
     const expectedNotifyEvent = NotifyEventType.STATUS
 
-    const result = notify.mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -26,7 +26,7 @@ describe('unit test notify command functions', () => {
     const updateEvent = UserNotificationType.LIVE
     const expectedNotifyEvent = NotifyEventType.STATUS
 
-    const result = notify.mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -35,7 +35,7 @@ describe('unit test notify command functions', () => {
     const updateEvent = UserNotificationType.GAME
     const expectedNotifyEvent = NotifyEventType.SETTING
 
-    const result = notify.mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -44,7 +44,7 @@ describe('unit test notify command functions', () => {
     const updateEvent = UserNotificationType.TITLE
     const expectedNotifyEvent = NotifyEventType.SETTING
 
-    const result = notify.mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -53,7 +53,7 @@ describe('unit test notify command functions', () => {
     const events = ['live', 'offline', 'title', 'game']
 
     for (const event of events) {
-      const isNotValid = notify.eventIsNotValid(event)
+      const isNotValid = notify.methods.eventIsNotValid(event)
       expect(isNotValid).toBeFalse()
     }
   })

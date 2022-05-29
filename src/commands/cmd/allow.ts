@@ -32,7 +32,7 @@ export class AllowCommand implements Command {
 
     updateChannel = updateChannel || user.username!
 
-    const success = await this.updateChannelAllowSettings(updateChannel)
+    const success = await this.methods.updateChannelAllowSettings(updateChannel)
 
     if (!success) {
       errorResponse.response = 'This channel is not registered'
@@ -46,26 +46,32 @@ export class AllowCommand implements Command {
     }
   }
 
-  async updateChannelAllowSettings(channel: string) {
-    if (!(await this.IsChannelExisting(channel))) return false
-    await hb.db.channelRepo.update(
-      {
-        channel: channel
+  methods = {
+    updateChannelAllowSettings:
+      async (channel: string): Promise<boolean> => {
+        if (!(await this.methods.IsChannelExisting(channel))) return false
+        await hb.db.channelRepo.update(
+          {
+            channel: channel
+          },
+          {
+            allowed: true
+          }
+        )
+        return true
       },
-      {
-        allowed: true
+
+    IsChannelExisting:
+      async (channel: string): Promise<boolean> => {
+        return (
+          (await hb.db.channelRepo.countBy({
+            channel: channel
+          })) !== 0
+        )
       }
-    )
-    return true
   }
 
-  async IsChannelExisting(channel: string) {
-    return (
-      (await hb.db.channelRepo.countBy({
-        channel: channel
-      })) !== 0
-    )
-  }
+
 }
 
 

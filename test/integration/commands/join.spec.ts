@@ -77,21 +77,21 @@ describe('join command tests', () => {
   })
 
   it('test isAlreadyConneected client is not connected return 0', async () => {
-    const isConnected = await join.isAlreadyConnected(channel)
+    const isConnected = await join.methods.isAlreadyConnected(channel)
 
     expect(isConnected).toBeFalsy()
   })
 
   it('test isAlreadyConneected client is connected return 1', async () => {
     await saveExampleChannel(channel)
-    const isConnected = await join.isAlreadyConnected(channel)
+    const isConnected = await join.methods.isAlreadyConnected(channel)
 
     expect(isConnected).toBeTruthy()
   })
 
   it('connectToChannel is successful return true', async () => {
     spyOn(hb.client, 'join').and.resolveTo([channel])
-    const { success, message } = await join.connectToChannel(channel)
+    const { success, message } = await join.methods.connectToChannel(channel)
 
     expect(success).toBeTrue()
     expect(message).toBe('Successfully joined the channel')
@@ -100,7 +100,7 @@ describe('join command tests', () => {
   it('connectToChannel is not successful return false', async () => {
     const errorMessage = 'Error'
     spyOn(hb.client, 'join').and.rejectWith(errorMessage)
-    const { success, message } = await join.connectToChannel(channel)
+    const { success, message } = await join.methods.connectToChannel(channel)
 
     expect(success).toBeFalse()
     expect(message).toBe(errorMessage)
@@ -221,14 +221,14 @@ describe('join command tests', () => {
 
   describe('save channel function', () => {
     it('saves new channel if not existing', async () => {
-      await join.updateChannelInDb(channel)
+      await join.methods.updateChannelInDb(channel)
       const savedEntitiesLength = await hb.db.channelRepo.count()
 
       expect(savedEntitiesLength).toBe(1)
     })
 
     it('updates new channel if not existing', async () => {
-      await join.updateChannelInDb(channel)
+      await join.methods.updateChannelInDb(channel)
 
       const savedEntitiy = await hb.db.channelRepo.findOneBy({
         channel: channel

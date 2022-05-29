@@ -84,7 +84,7 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
-    const { success, message } = await leave.leaveChannel(channelToLeave)
+    const { success, message } = await leave.methods.leaveChannel(channelToLeave)
 
     expect(success).toBeTrue()
     expect(message).toBe('Successfully left the channel')
@@ -94,7 +94,7 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'part').and.rejectWith('Error')
 
-    const { success, message } = await leave.leaveChannel(channelToLeave)
+    const { success, message } = await leave.methods.leaveChannel(channelToLeave)
 
     expect(success).toBeFalse()
     expect(message).toBe('Could not leave the channel')
@@ -145,7 +145,7 @@ describe('test leave command', () => {
       getExampleChannel({ joined: true, channel: channelToLeave })
     )
 
-    await leave.updateChannelProperty(channelToLeave)
+    await leave.methods.updateChannelProperty(channelToLeave)
 
     const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave
@@ -166,7 +166,7 @@ describe('test leave command', () => {
       getExampleChannel({ joined: true, channel: otherChannel })
     )
 
-    await leave.updateChannelProperty(channelToLeave)
+    await leave.methods.updateChannelProperty(channelToLeave)
 
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave

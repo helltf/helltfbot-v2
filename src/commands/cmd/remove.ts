@@ -31,7 +31,7 @@ export class RemoveCommand implements Command {
             return errorResponse
         }
 
-        if (this.eventIsNotValid(eventType)) {
+        if (this.methods.eventIsNotValid(eventType)) {
             errorResponse.response = `Event unknown. Valid events are ${Object.values(
                 UserNotificationType
             ).join(' ')}`
@@ -39,7 +39,7 @@ export class RemoveCommand implements Command {
             return errorResponse
         }
 
-        const { affected } = await this.removeEventNotification(userId, streamer, eventType)
+        const { affected } = await this.methods.removeEventNotification(userId, streamer, eventType)
 
         if (!affected) {
             errorResponse.response = 'No matching notification found'
@@ -54,17 +54,19 @@ export class RemoveCommand implements Command {
             response: 'Successfully removed your notification'
         }
     }
+    methods = {
+        async removeEventNotification(userId: number, streamer: string, event: UserNotificationType): Promise<UpdateResult> {
+            return await hb.db.notificationRepo.update({
+                user: { id: userId },
+                streamer: streamer
+            }, {
+                [event]: false
+            })
+        },
 
-    async removeEventNotification(userId: number, streamer: string, event: UserNotificationType): Promise<UpdateResult> {
-        return await hb.db.notificationRepo.update({
-            user: { id: userId },
-            streamer: streamer
-        }, {
-            [event]: false
-        })
-    }
-    eventIsNotValid(event: string) {
-        return !Object.values(UserNotificationType).includes(event as UserNotificationType)
-    }
+        eventIsNotValid(event: string) {
+            return !Object.values(UserNotificationType).includes(event as UserNotificationType)
+        }
 
+    }
 }

@@ -25,7 +25,7 @@ export class SuggestCommand implements Command {
 
     const suggestionMessage = suggestion.join(' ')
 
-    const id = await this.saveSuggestion(
+    const id = await this.methods.saveSuggestion(
       suggestionMessage,
       parseInt(userstate['user-id']!)
     )
@@ -37,19 +37,20 @@ export class SuggestCommand implements Command {
     }
   }
 
-
-  async saveSuggestion(
-    suggestion: string,
-    user_id: number
-  ): Promise<number> {
-    return (
-      await hb.db.suggestionRepo.save({
-        date: Date.now(),
-        suggestion,
-        user: {
-          id: user_id
-        }
-      })
-    ).id
+  methods = {
+    async saveSuggestion(
+      suggestion: string,
+      user_id: number
+    ): Promise<number> {
+      return (
+        await hb.db.suggestionRepo.save({
+          date: Date.now(),
+          suggestion,
+          user: {
+            id: user_id
+          }
+        })
+      ).id
+    }
   }
 }

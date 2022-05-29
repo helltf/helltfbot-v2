@@ -31,12 +31,12 @@ export class RemoveSuggestCommand implements Command {
       return response
     }
 
-    if (await this.idIsNotValidForUser(user['user-id']!, id)) {
+    if (await this.methods.idIsNotValidForUser(user['user-id']!, id)) {
       response.response = `Id ${id} not existing or the suggestion is created by somebody else`
       return response
     }
 
-    await this.deleteSuggestion(id)
+    await this.methods.deleteSuggestion(id)
 
     return {
       response: `Succesfully removed your suggestion with id ${id}`,
@@ -44,35 +44,35 @@ export class RemoveSuggestCommand implements Command {
       success: true
     }
   }
+  methods = {
+    async idIsNotValidForUser(
+      userId: string,
+      suggestionId: string
+    ): Promise<boolean> {
+      const parsedUserId = parseInt(userId)
+      const parsedSuggestionId = parseInt(suggestionId)
 
-
-  async idIsNotValidForUser(
-    userId: string,
-    suggestionId: string
-  ): Promise<boolean> {
-    const parsedUserId = parseInt(userId)
-    const parsedSuggestionId = parseInt(suggestionId)
-
-    const entity = await hb.db.suggestionRepo.findOne({
-      where: {
-        id: parsedSuggestionId,
-        user: {
-          id: parsedUserId
+      const entity = await hb.db.suggestionRepo.findOne({
+        where: {
+          id: parsedSuggestionId,
+          user: {
+            id: parsedUserId
+          }
+        },
+        relations: {
+          user: true
         }
-      },
-      relations: {
-        user: true
-      }
-    })
-    return entity === null
+      })
+      return entity === null
+    },
+
+    async deleteSuggestion(suggestionId: string) {
+      const parsedSuggestionId = parseInt(suggestionId)
+
+      await hb.db.suggestionRepo.delete({
+        id: parsedSuggestionId
+      })
+    }
+
   }
-
-  async deleteSuggestion(suggestionId: string) {
-    const parsedSuggestionId = parseInt(suggestionId)
-
-    await hb.db.suggestionRepo.delete({
-      id: parsedSuggestionId
-    })
-  }
-
 }

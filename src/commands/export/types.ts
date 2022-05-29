@@ -10,8 +10,8 @@ export interface Command {
   optionalParams: string[]
   alias: string[]
   cooldown: number,
-  functions?: {
-    [key: string]: (...args: any) => Promise<any>
+  methods?: {
+    [key: string]: (...args: any) => Promise<any> | any
   }
   execute: (
     channel: string,

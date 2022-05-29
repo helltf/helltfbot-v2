@@ -29,13 +29,13 @@ export class LeaveCommand implements Command {
     }
     channeltoLeave = channeltoLeave === 'me' ? user.username! : channeltoLeave
 
-    if (await this.isNotConnectedToChannel(channeltoLeave)) {
+    if (await this.methods.isNotConnectedToChannel(channeltoLeave)) {
       errorResponse.response = 'Not connected to channel'
       return errorResponse
     }
-    const { success, message } = await this.leaveChannel(channeltoLeave)
+    const { success, message } = await this.methods.leaveChannel(channeltoLeave)
 
-    if (success) await this.updateChannelProperty(channeltoLeave)
+    if (success) await this.methods.updateChannelProperty(channeltoLeave)
     return {
       success,
       response: message,
@@ -43,43 +43,45 @@ export class LeaveCommand implements Command {
     }
   }
 
-  async isNotConnectedToChannel(channel: string): Promise<boolean> {
-    return (
-      (await hb.db.channelRepo.countBy({
-        channel: channel,
-        joined: true
-      })) === 0
-    )
-  }
+  methods = {
+    async leaveChannel(channel: string): Promise<{
+      success: boolean
+      message: string
+    }> {
+      try {
+        await hb.client.part(channel)
+        return {
+          success: true,
+          message: 'Successfully left the channel'
+        }
+      } catch (e) {
+        return {
+          success: false,
+          message: 'Could not leave the channel'
+        }
+      }
+    },
 
-  async updateChannelProperty(channel: string) {
-    await hb.db.channelRepo.update(
-      {
-        channel: channel
-      },
-      {
-        joined: false
-      }
-    )
-  }
+    async updateChannelProperty(channel: string) {
+      await hb.db.channelRepo.update(
+        {
+          channel: channel
+        },
+        {
+          joined: false
+        }
+      )
+    },
 
-  async leaveChannel(channel: string): Promise<{
-    success: boolean
-    message: string
-  }> {
-    try {
-      await hb.client.part(channel)
-      return {
-        success: true,
-        message: 'Successfully left the channel'
-      }
-    } catch (e) {
-      return {
-        success: false,
-        message: 'Could not leave the channel'
-      }
+
+    async isNotConnectedToChannel(channel: string): Promise<boolean> {
+      return (
+        (await hb.db.channelRepo.countBy({
+          channel: channel,
+          joined: true
+        })) === 0
+      )
     }
   }
-
 }
 
