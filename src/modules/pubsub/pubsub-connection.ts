@@ -73,8 +73,6 @@ export class PubSubConnection {
     if (parsedData.type === 'RECONNECT') {
       this.reconnect()
     }
-
-    this.logError(parsedData.error)
   }
 
   async reconnect() {
@@ -90,29 +88,25 @@ export class PubSubConnection {
     hb.log(LogType.PUBSUB, 'Connection successfully restartet')
   }
 
-  logError(error: any) {
-    if (!error) return
-
-    hb.log(LogType.PUBSUB, 'Error occured: ' + error)
-  }
-
   containsTopic(topic: Topic): boolean {
     return this.topics.some(t => t.id === topic.id && t.prefix === topic.prefix)
   }
 
-  unlisten(topic: Topic) {
-    const message = this.getMessage([topic], 'UNLISTEN')
+  unlisten(topics: Topic[]) {
+    const message = this.getMessage(topics, 'UNLISTEN')
 
     this.sendMessage(message)
 
-    this.removeTopic(topic)
+    this.removeTopic(topics)
   }
 
-  removeTopic(topic: Topic) {
-    const index = this.topics.indexOf(topic);
+  removeTopic(topics: Topic[]) {
+    for (const topic of topics) {
+      const index = this.topics.indexOf(topic);
 
-    if (index > -1) {
-      this.topics.splice(index, 1)
+      if (index > -1) {
+        this.topics.splice(index, 1)
+      }
     }
   }
 }
