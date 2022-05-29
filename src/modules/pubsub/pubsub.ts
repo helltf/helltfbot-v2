@@ -15,7 +15,6 @@ export class PubSub {
     this.notificationHandler = new NotificationHandler()
   }
 
-
   async handleIncomingMessage({ data }: any) {
     if (!data?.message) return
     data.message = JSON.parse(data.message)

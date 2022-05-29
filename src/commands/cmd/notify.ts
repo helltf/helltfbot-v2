@@ -1,7 +1,7 @@
 import { BotResponse } from '../../client/types.js'
 
 import { TwitchUserState } from '../../client/types.js'
-import { NotifyEventType, Topic, TopicPrefix, UserNotificationType } from '../../modules/pubsub/types.js'
+import { NotifyEventType, Topic, UserNotificationType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
