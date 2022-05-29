@@ -1,7 +1,7 @@
 import { BotResponse } from '../../client/types.js'
 
 import { TwitchUserState } from '../../client/types.js'
-import { NotifyEventType, UpdateEventType } from '../../modules/pubsub/types.js'
+import { NotifyEventType, Topic, UserNotificationType } from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 const notify = new Command({
@@ -18,7 +18,7 @@ const notify = new Command({
     [streamer, event]: string[]
   ): Promise<BotResponse> => {
     if (eventIsNotValid(event)) return getUnknownEventErrorResponse(channel)
-    const eventType = event as UpdateEventType
+    const eventType = event as UserNotificationType
     const userId = parseInt(user['user-id']!)
 
     if (await userIsAlreadyNotified(userId, streamer, eventType)) {
@@ -53,15 +53,21 @@ const notify = new Command({
 
 async function createNewStreamerConnection(
   streamer: string,
-  event: UpdateEventType
+  event: UserNotificationType
 ): Promise<boolean> {
   const id = await hb.api.twitch.getUserIdByName(streamer)
   if (!id) return false
 
   const notifyType = mapEventTypeToNotifyType(event)
+
   await updateTopicTypeForChannel(streamer, id, notifyType)
 
-  hb.pubSub.listenToTopic(id, notifyType)
+  const topic: Topic = {
+    id: id,
+    prefix: hb.pubSub.mapNotifyTypeToTopicPrefix(notifyType)
+  }
+
+  hb.pubSub.listenToTopic(topic)
 
   return true
 }
@@ -69,7 +75,7 @@ async function createNewStreamerConnection(
 export async function userIsAlreadyNotified(
   userId: number,
   streamer: string,
-  event: UpdateEventType
+  event: UserNotificationType
 ): Promise<boolean> {
   return (
     (await hb.db.notificationRepo.findOne({
@@ -101,7 +107,7 @@ export async function updateTopicTypeForChannel(
 
 export async function pubSubConnectedToStreamerEvent(
   streamer: string,
-  eventType: UpdateEventType
+  eventType: UserNotificationType
 ): Promise<boolean> {
   const event = mapEventTypeToNotifyType(eventType)
   return (
@@ -113,13 +119,13 @@ export async function pubSubConnectedToStreamerEvent(
 }
 
 export function eventIsNotValid(event: string) {
-  return !Object.values(UpdateEventType).includes(event as UpdateEventType)
+  return !Object.values(UserNotificationType).includes(event as UserNotificationType)
 }
 
 export function mapEventTypeToNotifyType(
-  event: UpdateEventType
+  event: UserNotificationType
 ): NotifyEventType {
-  if (event === UpdateEventType.GAME || event === UpdateEventType.TITLE)
+  if (event === UserNotificationType.GAME || event === UserNotificationType.TITLE)
     return NotifyEventType.SETTING
   return NotifyEventType.STATUS
 }
@@ -127,7 +133,7 @@ export function mapEventTypeToNotifyType(
 export async function updateNotification(
   channel: string,
   streamer: string,
-  event: UpdateEventType,
+  event: UserNotificationType,
   id: number
 ) {
   if (await userNotificationIsExisting(id, streamer)) {
@@ -171,7 +177,7 @@ export async function userNotificationIsExisting(
 function getUnknownEventErrorResponse(channel: string): BotResponse {
   return {
     response: `Event unknown. Valid events are ${Object.values(
-      UpdateEventType
+      UserNotificationType
     ).join(' ')}`,
     channel: channel,
     success: false

@@ -1,18 +1,18 @@
-import { UpdateEventType } from '../../../../src/modules/pubsub/types.js'
-import { UpdateEventHandler } from '../../../../src/modules/pubsub/update-event-handler.js'
+import { UserNotificationType } from '../../../../src/modules/pubsub/types.js'
+import { PubSubEventHandler } from '../../../../src/modules/pubsub/pubsub-event-handler.js'
 
 describe('test update event handler unit tests', () => {
-  let handler: UpdateEventHandler = new UpdateEventHandler()
+  let handler: PubSubEventHandler = new PubSubEventHandler()
   let streamer: string
   let value: string
   beforeEach(() => {
-    handler = new UpdateEventHandler()
+    handler = new PubSubEventHandler()
     streamer = 'streamer'
     value = 'example'
   })
 
   it('get notification message for live event return live message', () => {
-    const type = UpdateEventType.LIVE
+    const type = UserNotificationType.LIVE
 
     const result = handler.getNotificationMessage(type, streamer, value)
 
@@ -21,7 +21,7 @@ describe('test update event handler unit tests', () => {
   })
 
   it('get notification message for title event return title message', () => {
-    const type = UpdateEventType.TITLE
+    const type = UserNotificationType.TITLE
 
     const result = handler.getNotificationMessage(type, streamer, value)
 
@@ -31,7 +31,7 @@ describe('test update event handler unit tests', () => {
   })
 
   it('get notification message for game event return game message', () => {
-    const type = UpdateEventType.GAME
+    const type = UserNotificationType.GAME
 
     const result = handler.getNotificationMessage(type, streamer, value)
 
@@ -41,7 +41,7 @@ describe('test update event handler unit tests', () => {
   })
 
   it('get notification message for offline event return offline message', () => {
-    const type = UpdateEventType.OFFLINE
+    const type = UserNotificationType.OFFLINE
 
     const result = handler.getNotificationMessage(type, streamer, value)
 

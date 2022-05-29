@@ -1,6 +1,6 @@
 import { TwitchUserState } from '../../../src/client/types.js'
 import { remove, removeEventNotification } from '../../../src/commands/cmd/remove.js'
-import { UpdateEventType } from '../../../src/modules/pubsub/types.js'
+import { UserNotificationType } from '../../../src/modules/pubsub/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
@@ -54,7 +54,7 @@ describe('test remove command', () => {
     } = await remove.execute(messageChannel, user, message)
 
     expect(success).toBeFalse()
-    expect(response).toBe(`Event unknown. Valid events are ${Object.values(UpdateEventType).join(
+    expect(response).toBe(`Event unknown. Valid events are ${Object.values(UserNotificationType).join(
       ' '
     )}`)
     expect(responseChannel).toBe(messageChannel)
@@ -73,7 +73,7 @@ describe('test remove command', () => {
 
     expect(success).toBeFalse()
     expect(response).toBe(
-      `Event unknown. Valid events are ${Object.values(UpdateEventType).join(
+      `Event unknown. Valid events are ${Object.values(UserNotificationType).join(
         ' '
       )}`
     )
@@ -81,7 +81,7 @@ describe('test remove command', () => {
   })
 
   it('notification does not exist return error response', async () => {
-    const message = [streamer, UpdateEventType.GAME]
+    const message = [streamer, UserNotificationType.GAME]
 
     const {
       response,
@@ -95,7 +95,7 @@ describe('test remove command', () => {
   })
 
   it('notification existing and updated return success response', async () => {
-    const event = UpdateEventType.GAME
+    const event = UserNotificationType.GAME
     const message = [streamer, event]
 
     const notification = getExampleNotificationEntity({
@@ -120,7 +120,7 @@ describe('test remove command', () => {
   })
 
   it('notification exists and game events gets set to false', async () => {
-    const event = UpdateEventType.GAME
+    const event = UserNotificationType.GAME
     const message = [streamer, event]
 
     const notification = getExampleNotificationEntity({
@@ -146,7 +146,7 @@ describe('test remove command', () => {
   })
 
   describe('remove notification', () => {
-    const events: UpdateEventType[] = Object.values(UpdateEventType)
+    const events: UserNotificationType[] = Object.values(UserNotificationType)
 
     events.forEach(event => {
       it('tests removing of event', async () => {
@@ -173,7 +173,7 @@ describe('test remove command', () => {
 
     it('notification does not exist no row affected', async () => {
       const notification = getExampleNotificationEntity({})
-      const { affected } = await removeEventNotification(notification.user.id, streamer, UpdateEventType.GAME)
+      const { affected } = await removeEventNotification(notification.user.id, streamer, UserNotificationType.GAME)
 
       expect(affected).toBe(0)
     })
