@@ -1,4 +1,6 @@
-export class BanTracking {
+import { Module } from "./export/module.js"
+
+export class BanTracking implements Module {
   name = 'Ban'
   initialize = () => {
     hb.client.on('ban', (channel: string, username: string) => {
