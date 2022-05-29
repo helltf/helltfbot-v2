@@ -1,5 +1,5 @@
 import { TwitchUserState } from '../../../src/client/types.js'
-import { suggest } from '../../../src/commands/cmd/suggest.js'
+import { SuggestCommand } from '../../../src/commands/cmd/suggest.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
@@ -9,9 +9,10 @@ import { setupDatabase } from '../../test-utils/setup-db.js'
 describe('test suggest command', () => {
   let channel: string
   let user: TwitchUserState = getExampleTwitchUserState({})
-
+  let suggest: SuggestCommand
   beforeAll(async () => {
     channel = 'channel'
+    suggest = new SuggestCommand()
     user = getExampleTwitchUserState({})
     await setupDatabase()
   })

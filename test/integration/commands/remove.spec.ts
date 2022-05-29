@@ -1,5 +1,5 @@
 import { TwitchUserState } from '../../../src/client/types.js'
-import { remove, removeEventNotification } from '../../../src/commands/cmd/remove.js'
+import { RemoveCommand } from '../../../src/commands/cmd/remove.js'
 import { UserNotificationType } from '../../../src/modules/pubsub/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
@@ -12,7 +12,7 @@ describe('test remove command', () => {
   let messageChannel = 'testmessageChannel'
   let streamer = 'streamer'
   let user: TwitchUserState
-
+  let remove: RemoveCommand
 
   beforeAll(async () => {
     await setupDatabase()
@@ -21,6 +21,7 @@ describe('test remove command', () => {
   beforeEach(async () => {
     messageChannel = 'testmessageChannel'
     streamer = 'streamer'
+    remove = new RemoveCommand()
     user = getExampleTwitchUserState({})
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
@@ -159,7 +160,7 @@ describe('test remove command', () => {
 
         await saveNotificationWithUser(notification)
 
-        const { affected } = await removeEventNotification(notification.user.id, streamer, event)
+        const { affected } = await remove.removeEventNotification(notification.user.id, streamer, event)
 
         const updatedEntity = await hb.db.notificationRepo.findOneBy({
           user: { id: notification.user.id },
@@ -173,7 +174,7 @@ describe('test remove command', () => {
 
     it('notification does not exist no row affected', async () => {
       const notification = getExampleNotificationEntity({})
-      const { affected } = await removeEventNotification(notification.user.id, streamer, UserNotificationType.GAME)
+      const { affected } = await remove.removeEventNotification(notification.user.id, streamer, UserNotificationType.GAME)
 
       expect(affected).toBe(0)
     })
