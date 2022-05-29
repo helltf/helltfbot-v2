@@ -4,19 +4,22 @@ import { TwitchUserState } from '../../client/types.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
 
-const allow = new Command({
-  name: 'allow',
-  description: 'Allow messages from the bot',
-  permissions: 0,
-  requiredParams: [],
-  optionalParams: ['channel'],
-  cooldown: 5000,
-  alias: [],
-  execute: async (
+
+export class AllowCommand implements Command {
+  name = 'allow'
+  description = 'Allow messages from the bot'
+  permissions = 0
+  requiredParams = []
+  optionalParams = ['channel']
+  cooldown = 5000
+  alias = []
+
+  async execute(
     channel: string,
     user: TwitchUserState,
-    [updateChannel]
-  ): Promise<BotResponse> => {
+    [updateChannel]: string[]
+  ): Promise<BotResponse> {
+
     const errorResponse = {
       channel: channel,
       response: 'You are not permitted to execute this command',
@@ -29,7 +32,7 @@ const allow = new Command({
 
     updateChannel = updateChannel || user.username!
 
-    const success = await updateChannelAllowSettings(updateChannel)
+    const success = await this.updateChannelAllowSettings(updateChannel)
 
     if (!success) {
       errorResponse.response = 'This channel is not registered'
@@ -42,26 +45,28 @@ const allow = new Command({
       success: true
     }
   }
-})
 
-export async function updateChannelAllowSettings(channel: string) {
-  if (!(await IsChannelExisting(channel))) return false
-  await hb.db.channelRepo.update(
-    {
-      channel: channel
-    },
-    {
-      allowed: true
-    }
-  )
-  return true
+  async updateChannelAllowSettings(channel: string) {
+    if (!(await this.IsChannelExisting(channel))) return false
+    await hb.db.channelRepo.update(
+      {
+        channel: channel
+      },
+      {
+        allowed: true
+      }
+    )
+    return true
+  }
+
+  async IsChannelExisting(channel: string) {
+    return (
+      (await hb.db.channelRepo.countBy({
+        channel: channel
+      })) !== 0
+    )
+  }
 }
 
-export async function IsChannelExisting(channel: string) {
-  return (
-    (await hb.db.channelRepo.countBy({
-      channel: channel
-    })) !== 0
-  )
-}
-export { allow }
+
+

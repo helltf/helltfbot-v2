@@ -1,4 +1,4 @@
-import { allow } from '../../../src/commands/cmd/allow.js'
+import { AllowCommand } from '../../../src/commands/cmd/allow.js'
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
@@ -10,6 +10,7 @@ describe('test allow command', () => {
   let user = getExampleTwitchUserState({
     permission: PermissionLevel.ADMIN
   })
+  let allow: AllowCommand
 
   beforeAll(async () => {
     await setupDatabase()
@@ -20,6 +21,7 @@ describe('test allow command', () => {
     user = getExampleTwitchUserState({
       permission: PermissionLevel.ADMIN
     })
+    allow = new AllowCommand()
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })
