@@ -23,6 +23,7 @@ export class JoinCommand implements Command {
       response: '',
       success: false
     }
+
     if (!joinChannel) {
       errorResponse.response = 'channel has to be defined'
       return errorResponse
@@ -35,15 +36,15 @@ export class JoinCommand implements Command {
 
     joinChannel = joinChannel === 'me' ? user.username! : joinChannel
 
-    if (await this.isAlreadyConnected(joinChannel)) {
+    if (await this.functions.isAlreadyConnected(joinChannel)) {
       errorResponse.response = 'Already connected to that channel'
       return errorResponse
     }
 
-    const { success, message } = await this.connectToChannel(joinChannel)
+    const { success, message } = await this.functions.connectToChannel(joinChannel)
 
     if (success) {
-      await this.updateChannelInDb(joinChannel)
+      await this.functions.updateChannelInDb(joinChannel)
     }
 
     return {
@@ -53,56 +54,57 @@ export class JoinCommand implements Command {
     }
   }
 
-  async connectToChannel(channel: string): Promise<{
-    message: string
-    success: boolean
-  }> {
-    try {
-      await hb.client.join(channel)
-      return {
-        message: 'Successfully joined the channel',
-        success: true
-      }
-    } catch (e: any) {
-      return {
-        success: false,
-        message: e
-      }
-    }
-  }
+  functions = {
+    isAlreadyConnected: async (channel: string): Promise<number> => {
+      return hb.db.channelRepo.countBy({
+        joined: true,
+        channel: channel
+      })
+    },
 
-  async isAlreadyConnected(channel: string): Promise<number> {
-    return hb.db.channelRepo.countBy({
-      joined: true,
-      channel: channel
-    })
-  }
-
-  updateChannelInDb = async (channel: string) => {
-    const channelExsisting = await hb.db.channelRepo.countBy({
-      channel: channel
-    })
-
-    if (channelExsisting) {
-      return await hb.db.channelRepo.update(
-        {
-          channel: channel
-        },
-        {
-          joined: true
+    connectToChannel: async (channel: string): Promise<{
+      message: string
+      success: boolean
+    }> => {
+      try {
+        await hb.client.join(channel)
+        return {
+          message: 'Successfully joined the channel',
+          success: true
         }
-      )
-    }
-    return await hb.db.channelRepo.save({
-      channel: channel,
-      allowed: true,
-      allowed_live: true,
-      connect_timestamp: Date.now(),
-      times_connected: 1,
-      joined: true
-    })
-  }
+      } catch (e: any) {
+        return {
+          success: false,
+          message: e
+        }
+      }
+    },
 
+    updateChannelInDb: async (channel: string) => {
+      const channelExsisting = await hb.db.channelRepo.countBy({
+        channel: channel
+      })
+
+      if (channelExsisting) {
+        return await hb.db.channelRepo.update(
+          {
+            channel: channel
+          },
+          {
+            joined: true
+          }
+        )
+      }
+      return await hb.db.channelRepo.save({
+        channel: channel,
+        allowed: true,
+        allowed_live: true,
+        connect_timestamp: Date.now(),
+        times_connected: 1,
+        joined: true
+      })
+    }
+  }
 }
 
 

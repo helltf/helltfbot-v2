@@ -9,7 +9,10 @@ export interface Command {
   requiredParams: string[]
   optionalParams: string[]
   alias: string[]
-  cooldown: number
+  cooldown: number,
+  functions?: {
+    [key: string]: (...args: any) => Promise<any>
+  }
   execute: (
     channel: string,
     userstate: TwitchUserState,
