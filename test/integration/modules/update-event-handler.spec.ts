@@ -1,5 +1,5 @@
 import { UserNotificationType } from '../../../src/modules/pubsub/types.js'
-import { UpdateEventHandler } from '../../../src/modules/pubsub/update-event-handler.js'
+import { PubSubEventHandler } from '../../../src/modules/pubsub/pubsub-event-handler.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
@@ -7,12 +7,12 @@ import { Notification } from '../../../src/db/export-entities.js'
 import { getExampleNotificationEntity } from '../../test-utils/example.js'
 
 describe('Test event handler to return the correct messages', () => {
-  let eventHandler: UpdateEventHandler = new UpdateEventHandler()
+  let eventHandler: PubSubEventHandler = new PubSubEventHandler()
   let streamer: string
 
   beforeEach(async () => {
     streamer = `streamer`
-    eventHandler = new UpdateEventHandler()
+    eventHandler = new PubSubEventHandler()
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })

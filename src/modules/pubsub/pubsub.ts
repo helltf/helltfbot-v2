@@ -3,15 +3,15 @@ import { LogType } from '../../logger/log-type.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
 import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types.js'
-import { UpdateEventHandler } from './update-event-handler.js'
+import { PubSubEventHandler } from './pubsub-event-handler.js'
 
 export class PubSub {
-  updateEventHandler: UpdateEventHandler
+  pubSubEventHandler: PubSubEventHandler
   notificationHandler: NotificationHandler
   connections: PubSubConnection[] = []
 
   constructor() {
-    this.updateEventHandler = new UpdateEventHandler()
+    this.pubSubEventHandler = new PubSubEventHandler()
     this.notificationHandler = new NotificationHandler()
   }
 
@@ -29,7 +29,7 @@ export class PubSub {
       type === 'stream-down' ||
       type === 'broadcast_settings_update'
     ) {
-      const messages = await this.updateEventHandler.handleUpdate(
+      const messages = await this.pubSubEventHandler.handleUpdate(
         data,
         streamer,
         type
@@ -68,13 +68,12 @@ export class PubSub {
   }
 
   getTopics(channels: NotificationChannelInfo[]): Topic[] {
-    return channels.reduce((acc: Topic[], { setting, status, id }) => {
-      const topics: Topic[] = []
+    return channels.reduce((topics: Topic[], { setting, status, id }) => {
 
       if (setting) topics.push({ prefix: TopicPrefix.SETTING, id })
       if (status) topics.push({ prefix: TopicPrefix.STATUS, id })
 
-      return acc.concat(topics)
+      return topics
     }, [])
   }
 
@@ -148,6 +147,6 @@ export class PubSub {
 
     if (!connection) return
 
-    connection.unlisten(topic)
+    connection.unlisten([topic])
   }
 }

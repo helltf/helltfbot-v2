@@ -8,7 +8,7 @@ import {
   UserNotificationType
 } from './types.js'
 
-export class UpdateEventHandler {
+export class PubSubEventHandler {
   messageGenerator: MessageGenerator
 
   constructor() {
