@@ -194,7 +194,7 @@ describe('test pubsub', () => {
       })
     })
 
-    fdescribe('create new connection', () => {
+    describe('create new connection', () => {
       it('creating new functions return empty PubSubConnection', () => {
         const connection = module.createNewPubSubConnection()
 

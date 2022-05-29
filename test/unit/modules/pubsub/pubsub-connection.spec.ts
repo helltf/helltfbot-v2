@@ -1,11 +1,16 @@
+import ReconnectingWebSocket from "reconnecting-websocket"
 import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection.js"
 import { TopicPrefix } from "../../../../src/modules/pubsub/types.js"
+import { createMockedWSConnection } from "../../../test-utils/example.js"
 
-describe('test pubsub connection class', () => {
+fdescribe('test pubsub connection class', () => {
     let connection: PubSubConnection
+    let mockedWS: ReconnectingWebSocket
 
     beforeEach(() => {
-        connection = new PubSubConnection()
+        mockedWS = createMockedWSConnection()
+
+        connection = new PubSubConnection(mockedWS)
     })
 
     it('connection does not listen to topic return false', () => {
@@ -22,4 +27,9 @@ describe('test pubsub connection class', () => {
 
         expect(result).toBeTrue()
     })
+
+    it('listener should be appended on creation', () => {
+        expect(mockedWS.addEventListener).toHaveBeenCalled()
+    })
 })
+

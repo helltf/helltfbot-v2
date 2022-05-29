@@ -17,19 +17,15 @@ export class PubSubConnection {
   topics: Topic[] = []
   interval: NodeJS.Timer
 
-  constructor() {
-    this.connection = this.createRWSSocket()
+  constructor(ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
+    WebSocket: WS.WebSocket
+  })) {
+    this.connection = ws
 
     this.interval = this.setPingInterval()
 
     this.connection.addEventListener('message', (message) => {
       this.handleIncomingMessage(message)
-    })
-  }
-
-  createRWSSocket(): ReconnectingWebSocket {
-    return new RWS.default(PUBSUB_URL, [], {
-      WebSocket: WS.WebSocket
     })
   }
 
