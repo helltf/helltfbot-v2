@@ -7,12 +7,7 @@ import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import {
-  notify,
-  pubSubConnectedToStreamerEvent,
-  updateNotification,
-  userNotificationIsExisting,
-  userIsAlreadyNotified,
-  updateTopicTypeForChannel
+  NotifyCommand
 } from '../../../src/commands/cmd/notify.js'
 import { TwitchUser } from '../../../src/db/export-entities.js'
 import { Notification } from '../../../src/db/export-entities.js'
@@ -24,6 +19,7 @@ describe('test notify command: ', () => {
   let streamer = 'streamer'
   let user: TwitchUser
   let notification: Notification
+  let notify: NotifyCommand
 
   beforeAll(async () => {
     await setupDatabase()
@@ -34,6 +30,7 @@ describe('test notify command: ', () => {
     streamer = 'streamer'
     notification = getExampleNotificationEntity({})
     user = getExampleTwitchUserEntity({})
+    notify = new NotifyCommand()
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })
@@ -87,7 +84,7 @@ describe('test notify command: ', () => {
         status: false,
         setting: false
       })
-      const result = await pubSubConnectedToStreamerEvent(
+      const result = await notify.methods.pubSubConnectedToStreamerEvent(
         streamer,
         UserNotificationType.GAME
       )
@@ -103,7 +100,7 @@ describe('test notify command: ', () => {
         setting: false
       })
 
-      const result = await pubSubConnectedToStreamerEvent(
+      const result = await notify.methods.pubSubConnectedToStreamerEvent(
         streamer,
         UserNotificationType.LIVE
       )
@@ -119,7 +116,7 @@ describe('test notify command: ', () => {
         setting: true
       })
 
-      const result = await pubSubConnectedToStreamerEvent(
+      const result = await notify.methods.pubSubConnectedToStreamerEvent(
         streamer,
         UserNotificationType.GAME
       )
@@ -133,7 +130,7 @@ describe('test notify command: ', () => {
       const event = UserNotificationType.LIVE
       await hb.db.userRepo.save(user)
 
-      await updateNotification(channel, streamer, event, user.id)
+      await notify.methods.updateNotification(channel, streamer, event, user.id)
 
       const result = await findNotification(user.id, streamer)
 
@@ -145,7 +142,7 @@ describe('test notify command: ', () => {
       await hb.db.userRepo.save(notification.user)
       await hb.db.notificationRepo.save(notification)
 
-      await updateNotification(channel, streamer, event, notification.user.id)
+      await notify.methods.updateNotification(channel, streamer, event, notification.user.id)
 
       const result = await findNotification(notification.user.id, streamer)
 
@@ -156,7 +153,7 @@ describe('test notify command: ', () => {
   describe('notification existing', () => {
     it('user has no notification for streamer return false', async () => {
       const id = 1
-      const result = await userNotificationIsExisting(id, streamer)
+      const result = await notify.methods.userNotificationIsExisting(id, streamer)
 
       expect(result).toBeFalse()
     })
@@ -166,7 +163,7 @@ describe('test notify command: ', () => {
 
       await hb.db.notificationRepo.save(notification)
 
-      const result = await userNotificationIsExisting(
+      const result = await notify.methods.userNotificationIsExisting(
         notification.user.id,
         streamer
       )
@@ -181,7 +178,7 @@ describe('test notify command: ', () => {
       await hb.db.userRepo.save(notification.user)
       await hb.db.notificationRepo.save(notification)
 
-      const userIsNotified = await userIsAlreadyNotified(
+      const userIsNotified = await notify.methods.userIsAlreadyNotified(
         notification.user.id,
         notification.streamer,
         UserNotificationType.GAME
@@ -191,7 +188,7 @@ describe('test notify command: ', () => {
     })
 
     it('user is not notified return false', async () => {
-      const userIsNotified = await userIsAlreadyNotified(
+      const userIsNotified = await notify.methods.userIsAlreadyNotified(
         notification.user.id,
         streamer,
         UserNotificationType.GAME
@@ -212,7 +209,7 @@ describe('test notify command: ', () => {
         user: user
       })
 
-      const isNotified = await userIsAlreadyNotified(
+      const isNotified = await notify.methods.userIsAlreadyNotified(
         notification.user.id,
         streamer,
         UserNotificationType.GAME
@@ -232,7 +229,7 @@ describe('test notify command: ', () => {
         setting: false
       })
 
-      await updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
+      await notify.methods.updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
 
       const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
@@ -250,7 +247,7 @@ describe('test notify command: ', () => {
         setting: false
       })
 
-      await updateTopicTypeForChannel(streamer, id, NotifyEventType.SETTING)
+      await notify.methods.updateTopicTypeForChannel(streamer, id, NotifyEventType.SETTING)
 
       const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
@@ -260,7 +257,7 @@ describe('test notify command: ', () => {
     })
     it('should create new entry if not existing with status type true', async () => {
       const id = 1
-      await updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
+      await notify.methods.updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
 
       const createdEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer

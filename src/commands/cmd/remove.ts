@@ -3,22 +3,20 @@ import { TwitchUserState, BotResponse } from "../../client/types.js"
 import { UserNotificationType } from "../../modules/pubsub/types.js"
 import { NotificationService } from "../../service/notification.service.js"
 import { Command } from "../export/types.js"
-import { eventIsNotValid } from "./notify.js"
 
-
-export const remove = new Command({
-    name: 'remove',
-    alias: ['rmn', 'removenotify', 'removeme', 'removenotification'],
-    cooldown: 5000,
-    description: 'removes your notification for the given streamer on the event',
-    optionalParams: [],
-    requiredParams: ['streamer', 'event'],
-    permissions: 0,
-    execute: async (
+export class RemoveCommand implements Command {
+    name = 'remove'
+    alias = ['rmn', 'removenotify', 'removeme', 'removenotification']
+    cooldown = 5000
+    description = 'removes your notification for the given streamer on the event'
+    optionalParams = []
+    requiredParams = ['streamer', 'event']
+    permissions = 0
+    async execute(
         channel: string,
         { 'user-id': unparsedUserId }: TwitchUserState,
         [streamer, event]: string[]
-    ): Promise<BotResponse> => {
+    ): Promise<BotResponse> {
         const userId = Number(unparsedUserId)
         const eventType = event as UserNotificationType
 
@@ -33,7 +31,7 @@ export const remove = new Command({
             return errorResponse
         }
 
-        if (eventIsNotValid(eventType)) {
+        if (this.methods.eventIsNotValid(eventType)) {
             errorResponse.response = `Event unknown. Valid events are ${Object.values(
                 UserNotificationType
             ).join(' ')}`
@@ -41,7 +39,7 @@ export const remove = new Command({
             return errorResponse
         }
 
-        const { affected } = await removeEventNotification(userId, streamer, eventType)
+        const { affected } = await this.methods.removeEventNotification(userId, streamer, eventType)
 
         if (!affected) {
             errorResponse.response = 'No matching notification found'
@@ -56,13 +54,19 @@ export const remove = new Command({
             response: 'Successfully removed your notification'
         }
     }
-})
+    methods = {
+        async removeEventNotification(userId: number, streamer: string, event: UserNotificationType): Promise<UpdateResult> {
+            return await hb.db.notificationRepo.update({
+                user: { id: userId },
+                streamer: streamer
+            }, {
+                [event]: false
+            })
+        },
 
-export async function removeEventNotification(userId: number, streamer: string, event: UserNotificationType): Promise<UpdateResult> {
-    return await hb.db.notificationRepo.update({
-        user: { id: userId },
-        streamer: streamer
-    }, {
-        [event]: false
-    })
+        eventIsNotValid(event: string) {
+            return !Object.values(UserNotificationType).includes(event as UserNotificationType)
+        }
+
+    }
 }

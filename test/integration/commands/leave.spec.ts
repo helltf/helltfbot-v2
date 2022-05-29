@@ -1,8 +1,6 @@
 import { TwitchUserState } from '../../../src/client/types.js'
 import {
-  leave,
-  leaveChannel,
-  updateChannelProperty
+  LeaveCommand
 } from '../../../src/commands/cmd/leave.js'
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
@@ -13,7 +11,7 @@ import { setupDatabase } from '../../test-utils/setup-db.js'
 describe('test leave command', () => {
   let user: TwitchUserState
   let messageChannel: string
-
+  let leave: LeaveCommand
   beforeAll(async () => {
     user = getExampleTwitchUserState({
       permission: 100
@@ -24,6 +22,7 @@ describe('test leave command', () => {
   })
 
   beforeEach(async () => {
+    leave = new LeaveCommand()
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
     await clearDb(hb.db.dataSource)
   })
@@ -85,7 +84,7 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
-    const { success, message } = await leaveChannel(channelToLeave)
+    const { success, message } = await leave.methods.leaveChannel(channelToLeave)
 
     expect(success).toBeTrue()
     expect(message).toBe('Successfully left the channel')
@@ -95,7 +94,7 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'part').and.rejectWith('Error')
 
-    const { success, message } = await leaveChannel(channelToLeave)
+    const { success, message } = await leave.methods.leaveChannel(channelToLeave)
 
     expect(success).toBeFalse()
     expect(message).toBe('Could not leave the channel')
@@ -146,7 +145,7 @@ describe('test leave command', () => {
       getExampleChannel({ joined: true, channel: channelToLeave })
     )
 
-    await updateChannelProperty(channelToLeave)
+    await leave.methods.updateChannelProperty(channelToLeave)
 
     const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave
@@ -167,7 +166,7 @@ describe('test leave command', () => {
       getExampleChannel({ joined: true, channel: otherChannel })
     )
 
-    await updateChannelProperty(channelToLeave)
+    await leave.methods.updateChannelProperty(channelToLeave)
 
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave

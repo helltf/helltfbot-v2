@@ -1,6 +1,5 @@
 import {
-  mapEventTypeToNotifyType,
-  eventIsNotValid
+  NotifyCommand
 } from '../../../src/commands/cmd/notify.js'
 import {
   NotifyEventType,
@@ -8,11 +7,17 @@ import {
 } from '../../../src/modules/pubsub/types.js'
 
 describe('unit test notify command functions', () => {
+  let notify: NotifyCommand
+
+  beforeEach(() => {
+    notify = new NotifyCommand
+  })
+
   it('Update event is offline map to status', () => {
     const updateEvent = UserNotificationType.OFFLINE
     const expectedNotifyEvent = NotifyEventType.STATUS
 
-    const result = mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -21,7 +26,7 @@ describe('unit test notify command functions', () => {
     const updateEvent = UserNotificationType.LIVE
     const expectedNotifyEvent = NotifyEventType.STATUS
 
-    const result = mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -30,7 +35,7 @@ describe('unit test notify command functions', () => {
     const updateEvent = UserNotificationType.GAME
     const expectedNotifyEvent = NotifyEventType.SETTING
 
-    const result = mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -39,7 +44,7 @@ describe('unit test notify command functions', () => {
     const updateEvent = UserNotificationType.TITLE
     const expectedNotifyEvent = NotifyEventType.SETTING
 
-    const result = mapEventTypeToNotifyType(updateEvent)
+    const result = notify.methods.mapEventTypeToNotifyType(updateEvent)
 
     expect(result).toBe(expectedNotifyEvent)
   })
@@ -48,7 +53,7 @@ describe('unit test notify command functions', () => {
     const events = ['live', 'offline', 'title', 'game']
 
     for (const event of events) {
-      const isNotValid = eventIsNotValid(event)
+      const isNotValid = notify.methods.eventIsNotValid(event)
       expect(isNotValid).toBeFalse()
     }
   })
