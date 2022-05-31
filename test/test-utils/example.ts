@@ -109,8 +109,14 @@ export const getExampleNotificationEntity = ({
 
 export const createMockedWSConnection = (): ReconnectingWebSocket => {
   return jasmine.createSpyObj({
-    addEventListener: () => { },
-    send: () => { },
-    reconnect: () => { }
+    addEventListener: () => {
+      return {}
+    },
+    send: () => {
+      return {}
+    },
+    reconnect: () => {
+      return {}
+    }
   })
 }
