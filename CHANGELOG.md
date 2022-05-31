@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - remove command for removing notifications
+- added redis connection for caching
+- created unit tests for pubsub and pubsub connection
 
 ### Fixed
 
