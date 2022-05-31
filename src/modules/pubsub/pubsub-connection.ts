@@ -17,9 +17,11 @@ export class PubSubConnection {
   topics: Topic[] = []
   interval: NodeJS.Timer
 
-  constructor(ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
-    WebSocket: WS.WebSocket
-  })) {
+  constructor(
+    ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
+      WebSocket: WS.WebSocket
+    })
+  ) {
     this.connection = ws
 
     this.interval = this.setPingInterval()
@@ -57,7 +59,7 @@ export class PubSubConnection {
       nonce: '',
       data: {
         auth_token: process.env.TWITCH_OAUTH,
-        topics: topics.map(t => t.prefix + t.id)
+        topics: topics.map((t) => t.prefix + t.id)
       }
     }
   }
@@ -89,7 +91,9 @@ export class PubSubConnection {
   }
 
   containsTopic(topic: Topic): boolean {
-    return this.topics.some(t => t.id === topic.id && t.prefix === topic.prefix)
+    return this.topics.some(
+      (t) => t.id === topic.id && t.prefix === topic.prefix
+    )
   }
 
   unlisten(topics: Topic[]) {
@@ -97,12 +101,12 @@ export class PubSubConnection {
 
     this.sendMessage(message)
 
-    this.removeTopic(topics)
+    this.removeTopics(topics)
   }
 
-  removeTopic(topics: Topic[]) {
+  removeTopics(topics: Topic[]) {
     for (const topic of topics) {
-      const index = this.topics.indexOf(topic);
+      const index = this.topics.indexOf(topic)
 
       if (index > -1) {
         this.topics.splice(index, 1)
