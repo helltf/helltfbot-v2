@@ -17,10 +17,12 @@ export class PubSubConnection {
   topics: Topic[] = []
   interval: NodeJS.Timer
 
-  constructor() {
-    this.connection = new RWS.default(PUBSUB_URL, [], {
+  constructor(
+    ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
       WebSocket: WS.WebSocket
     })
+  ) {
+    this.connection = ws
 
     this.interval = this.setPingInterval()
 
@@ -99,10 +101,10 @@ export class PubSubConnection {
 
     this.sendMessage(message)
 
-    this.removeTopic(topics)
+    this.removeTopics(topics)
   }
 
-  removeTopic(topics: Topic[]) {
+  removeTopics(topics: Topic[]) {
     for (const topic of topics) {
       const index = this.topics.indexOf(topic)
 

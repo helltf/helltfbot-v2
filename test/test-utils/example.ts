@@ -1,3 +1,4 @@
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import { TwitchUserState } from '../../src/client/types.js'
 import { Command } from '../../src/commands/export/types.js'
 import { Channel, TwitchUser } from '../../src/db/export-entities.js'
@@ -104,4 +105,18 @@ export const getExampleNotificationEntity = ({
   notification.user = user
   notification.game = game
   return notification
+}
+
+export const createMockedWSConnection = (): ReconnectingWebSocket => {
+  return jasmine.createSpyObj({
+    addEventListener: () => {
+      return {}
+    },
+    send: () => {
+      return {}
+    },
+    reconnect: () => {
+      return {}
+    }
+  })
 }

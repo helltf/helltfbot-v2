@@ -115,11 +115,9 @@ export class PubSub {
   }
 
   getOpenConnection(): PubSubConnection {
-    const openConnections = this.connections.filter((c) => c.topics.length < 50)
+    const openConnection = this.connections.find((c) => c.topics.length < 50)
 
-    return !openConnections.length
-      ? this.createNewPubSubConnection()
-      : openConnections[0]
+    return openConnection ? openConnection : this.createNewPubSubConnection()
   }
 
   listenToTopic(topic: Topic) {
