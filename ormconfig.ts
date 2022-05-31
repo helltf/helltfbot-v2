@@ -1,49 +1,40 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 
-const {
-  DB_HOST,
-  DB_PORT,
-  DB_USERNAME,
-  DB_PASSWORD,
-  DB_DATABASE,
-  TEST_DB_PORT,
-  TEST_DB_HOST,
-  TEST_DB_USERNAME,
-  TEST_DB_PASSWORD,
-  TEST_DB_DATABASE
-} = process.env
-
 const getOrmConf = (): PostgresConnectionOptions => {
-  if (process.env.NODE_ENV == 'test') {
+  if (hb.config.isTest()) {
     return getTestOrmConf()
   }
 
   return getDevOrmConf()
 }
 function getTestOrmConf(): PostgresConnectionOptions {
+  const defaultConf = getDefaultOrmConf()
   return {
-    type: 'postgres',
-    host: TEST_DB_HOST,
-    port: parseInt(TEST_DB_PORT),
-    username: TEST_DB_USERNAME,
-    password: TEST_DB_PASSWORD,
-    database: TEST_DB_DATABASE,
-    synchronize: true,
-    logging: false,
-    entities: ['dist/src/db/entity/**/*.js'],
-    migrations: ['db/migrations/**/*.ts'],
-    subscribers: ['db/subscriber/**/*.ts']
+    ...defaultConf,
+    host: hb.config.get('TEST_DB_HOST'),
+    port: Number(hb.config.get('TEST_DB_PORT')),
+    username: hb.config.get('TEST_DB_USERNAME'),
+    password: hb.config.get('TEST_DB_PASSWORD'),
+    database: hb.config.get('TEST_DB_DATABASE'),
+    synchronize: true
   }
 }
 
 function getDevOrmConf(): PostgresConnectionOptions {
+  const defaultConf = getDefaultOrmConf()
+  return {
+    ...defaultConf,
+    host: hb.config.get('DB_HOST'),
+    port: Number(hb.config.get('DB_PORT')),
+    username: hb.config.get('DB_USERNAME'),
+    password: hb.config.get('DB_PASSWORD'),
+    database: hb.config.get('DB_DATABASE')
+  }
+}
+
+function getDefaultOrmConf(): PostgresConnectionOptions {
   return {
     type: 'postgres',
-    host: DB_HOST,
-    port: Number(DB_PORT),
-    username: DB_USERNAME,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
     synchronize: false,
     logging: false,
     entities: ['dist/src/db/entity/**/*.js'],
