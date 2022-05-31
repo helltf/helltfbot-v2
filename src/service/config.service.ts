@@ -10,4 +10,13 @@ export class ConfigService {
   isTest() {
     return process.env.NODE_ENV === 'test'
   }
+
+  get(key: keyof NodeJS.ProcessEnv): string | undefined {
+    return process.env[key]
+  }
+
+  has(key: keyof NodeJS.ProcessEnv): boolean {
+    return process.env[key] !== undefined
+  }
 }
+
