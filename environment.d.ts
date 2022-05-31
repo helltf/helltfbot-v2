@@ -24,6 +24,7 @@ declare global {
       TEST_DB_DATABASE: string
       PIPELINE: 'false' | 'true'
       START_UP_MESSAGE: string
+      REDIS_URL: string
     }
   }
 }
