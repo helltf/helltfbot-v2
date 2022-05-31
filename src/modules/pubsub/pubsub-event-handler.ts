@@ -108,7 +108,8 @@ export class PubSubEventHandler {
     value: string | undefined
   ): string {
     if (type === UserNotificationType.LIVE) return `@${streamer} has gone live`
-    if (type === UserNotificationType.OFFLINE) return `@${streamer} has gone offline`
+    if (type === UserNotificationType.OFFLINE)
+      return `@${streamer} has gone offline`
     if (type === UserNotificationType.GAME)
       return `@${streamer} has changed the game to ${value}`
     if (type === UserNotificationType.TITLE)

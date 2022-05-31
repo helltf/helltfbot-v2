@@ -37,7 +37,6 @@ export class PubSub {
     }
   }
 
-
   connect = async () => {
     const channels = await hb.db.notificationChannelRepo.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
@@ -68,7 +67,6 @@ export class PubSub {
 
   getTopics(channels: NotificationChannelInfo[]): Topic[] {
     return channels.reduce((topics: Topic[], { setting, status, id }) => {
-
       if (setting) topics.push({ prefix: TopicPrefix.SETTING, id })
       if (status) topics.push({ prefix: TopicPrefix.STATUS, id })
 
@@ -88,27 +86,28 @@ export class PubSub {
     arr: NotificationChannelInfo[],
     size = 25
   ): NotificationChannelInfo[][] => {
-    return arr.reduce((resultArray: NotificationChannelInfo[][], item, index) => {
-      const chunkIndex = Math.floor(index / size)
+    return arr.reduce(
+      (resultArray: NotificationChannelInfo[][], item, index) => {
+        const chunkIndex = Math.floor(index / size)
 
-      if (!resultArray[chunkIndex]) {
-        resultArray[chunkIndex] = []
-      }
+        if (!resultArray[chunkIndex]) {
+          resultArray[chunkIndex] = []
+        }
 
-      resultArray[chunkIndex].push(item)
+        resultArray[chunkIndex].push(item)
 
-      return resultArray
-    }, [])
+        return resultArray
+      },
+      []
+    )
   }
 
   async getStreamerForTopic(topic: string): Promise<string> {
     const id = this.getIdForTopic(topic)
 
-    return (
-      await hb.db.notificationChannelRepo.findOneBy({
-        id: parseInt(id)
-      })
-    )!.name
+    return (await hb.db.notificationChannelRepo.findOneBy({
+      id: parseInt(id)
+    }))!.name
   }
 
   getIdForTopic(topic: string): string {
@@ -118,7 +117,9 @@ export class PubSub {
   getOpenConnection(): PubSubConnection {
     const openConnections = this.connections.filter((c) => c.topics.length < 50)
 
-    return !openConnections.length ? this.createNewPubSubConnection() : openConnections[0]
+    return !openConnections.length
+      ? this.createNewPubSubConnection()
+      : openConnections[0]
   }
 
   listenToTopic(topic: Topic) {
@@ -128,7 +129,7 @@ export class PubSub {
   }
 
   findConnectionForTopic(topic: Topic): PubSubConnection | undefined {
-    return this.connections.find(con => con.containsTopic(topic))
+    return this.connections.find((con) => con.containsTopic(topic))
   }
 
   mapNotifyTypeToTopicPrefix(event: NotifyEventType): TopicPrefix {

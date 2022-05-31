@@ -37,7 +37,7 @@ export const getExampleTwitchUserEntity = ({
   notifications = [],
   suggestions = []
 }: Partial<TwitchUser>): TwitchUser => {
-  const user = new TwitchUser
+  const user = new TwitchUser()
 
   user.id = id
   user.name = name
@@ -85,14 +85,15 @@ export function getExampleChannel({
   }
 }
 
-export const getExampleNotificationEntity = ({ streamer = 'streamer',
+export const getExampleNotificationEntity = ({
+  streamer = 'streamer',
   channel = 'channel',
   live = false,
   offline = false,
   title = false,
   game = false,
-  user = getExampleTwitchUserEntity({}) }: Partial<Notification>): Notification => {
-
+  user = getExampleTwitchUserEntity({})
+}: Partial<Notification>): Notification => {
   const notification = new Notification()
 
   notification.channel = channel

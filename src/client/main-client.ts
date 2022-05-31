@@ -7,10 +7,9 @@ import { handlePart } from './handlers/part.js'
 const client = createclient()
 
 function createclient(): Client {
-
   return Client({
     identity: {
-      password: "oauth:" + process.env.TWITCH_OAUTH,
+      password: 'oauth:' + process.env.TWITCH_OAUTH,
       username: 'xdforsenxdlol'
     },
     connection: { reconnect: true },

@@ -50,7 +50,10 @@ function sendResponse({ success, response, channel }: BotResponse) {
   }
 }
 
-function setCooldown(command: Command, { 'user-id': id, permission }: TwitchUserState) {
+function setCooldown(
+  command: Command,
+  { 'user-id': id, permission }: TwitchUserState
+) {
   if (permission! >= PermissionLevel.ADMIN) return
   hb.cooldown.setCooldown(command, id!)
 }

@@ -20,9 +20,8 @@ export type MessageType =
   | 'RECONNECT'
   | 'UNLISTEN'
 
-
 export interface Topic {
-  id: number,
+  id: number
   prefix: TopicPrefix
 }
 

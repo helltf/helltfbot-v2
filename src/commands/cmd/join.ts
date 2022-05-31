@@ -41,7 +41,9 @@ export class JoinCommand implements Command {
       return errorResponse
     }
 
-    const { success, message } = await this.methods.connectToChannel(joinChannel)
+    const { success, message } = await this.methods.connectToChannel(
+      joinChannel
+    )
 
     if (success) {
       await this.methods.updateChannelInDb(joinChannel)
@@ -62,7 +64,9 @@ export class JoinCommand implements Command {
       })
     },
 
-    connectToChannel: async (channel: string): Promise<{
+    connectToChannel: async (
+      channel: string
+    ): Promise<{
       message: string
       success: boolean
     }> => {

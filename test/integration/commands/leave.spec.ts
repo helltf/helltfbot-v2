@@ -5,7 +5,10 @@ import {
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleChannel, getExampleTwitchUserState } from '../../test-utils/example.js'
+import {
+  getExampleChannel,
+  getExampleTwitchUserState
+} from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test leave command', () => {
@@ -84,7 +87,9 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
-    const { success, message } = await leave.methods.leaveChannel(channelToLeave)
+    const { success, message } = await leave.methods.leaveChannel(
+      channelToLeave
+    )
 
     expect(success).toBeTrue()
     expect(message).toBe('Successfully left the channel')
@@ -94,7 +99,9 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
     spyOn(hb.client, 'part').and.rejectWith('Error')
 
-    const { success, message } = await leave.methods.leaveChannel(channelToLeave)
+    const { success, message } = await leave.methods.leaveChannel(
+      channelToLeave
+    )
 
     expect(success).toBeFalse()
     expect(message).toBe('Could not leave the channel')

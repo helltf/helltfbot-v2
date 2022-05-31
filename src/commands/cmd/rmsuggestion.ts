@@ -73,6 +73,5 @@ export class RemoveSuggestCommand implements Command {
         id: parsedSuggestionId
       })
     }
-
   }
 }

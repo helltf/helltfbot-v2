@@ -3,7 +3,11 @@ import { RemoveCommand } from '../../../src/commands/cmd/remove.js'
 import { UserNotificationType } from '../../../src/modules/pubsub/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
+import {
+  getExampleNotificationEntity,
+  getExampleTwitchUserEntity,
+  getExampleTwitchUserState
+} from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { saveNotificationWithUser } from '../../test-utils/save-notification.js'
 
@@ -55,13 +59,13 @@ describe('test remove command', () => {
     } = await remove.execute(messageChannel, user, message)
 
     expect(success).toBeFalse()
-    expect(response).toBe(`Event unknown. Valid events are ${Object.values(UserNotificationType).join(
-      ' '
-    )}`)
+    expect(response).toBe(
+      `Event unknown. Valid events are ${Object.values(
+        UserNotificationType
+      ).join(' ')}`
+    )
     expect(responseChannel).toBe(messageChannel)
-
   })
-
 
   it('event does not match existing events return error response', async () => {
     const message = [streamer, 'a']
@@ -74,9 +78,9 @@ describe('test remove command', () => {
 
     expect(success).toBeFalse()
     expect(response).toBe(
-      `Event unknown. Valid events are ${Object.values(UserNotificationType).join(
-        ' '
-      )}`
+      `Event unknown. Valid events are ${Object.values(
+        UserNotificationType
+      ).join(' ')}`
     )
     expect(responseChannel).toBe(messageChannel)
   })
@@ -114,7 +118,6 @@ describe('test remove command', () => {
       success
     } = await remove.execute(messageChannel, user, message)
 
-
     expect(success).toBeTrue()
     expect(responseChannel).toBe(messageChannel)
     expect(response).toBe('Successfully removed your notification')
@@ -142,16 +145,17 @@ describe('test remove command', () => {
       streamer: streamer
     })
 
-
     expect(updatedEntity![event]).toBeFalse()
   })
 
   describe('remove notification', () => {
     const events: UserNotificationType[] = Object.values(UserNotificationType)
 
-    events.forEach(event => {
+    events.forEach((event) => {
       it('tests removing of event', async () => {
-        const userEntity = getExampleTwitchUserEntity({ id: Number(user['user-id']) })
+        const userEntity = getExampleTwitchUserEntity({
+          id: Number(user['user-id'])
+        })
         const notification = getExampleNotificationEntity({
           user: userEntity,
           streamer: streamer,
@@ -160,7 +164,11 @@ describe('test remove command', () => {
 
         await saveNotificationWithUser(notification)
 
-        const { affected } = await remove.methods.removeEventNotification(notification.user.id, streamer, event)
+        const { affected } = await remove.methods.removeEventNotification(
+          notification.user.id,
+          streamer,
+          event
+        )
 
         const updatedEntity = await hb.db.notificationRepo.findOneBy({
           user: { id: notification.user.id },
@@ -174,7 +182,11 @@ describe('test remove command', () => {
 
     it('notification does not exist no row affected', async () => {
       const notification = getExampleNotificationEntity({})
-      const { affected } = await remove.methods.removeEventNotification(notification.user.id, streamer, UserNotificationType.GAME)
+      const { affected } = await remove.methods.removeEventNotification(
+        notification.user.id,
+        streamer,
+        UserNotificationType.GAME
+      )
 
       expect(affected).toBe(0)
     })
