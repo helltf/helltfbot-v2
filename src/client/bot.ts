@@ -11,7 +11,6 @@ import { modules } from '../modules/export/export-modules.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
 import { CommandService } from '../commands/export/commands-service.js'
 import { createClient, RedisClientType } from 'redis'
-import { ConfigService } from '../service/config.service.js'
 
 export class TwitchBot {
   client: Client
@@ -22,7 +21,6 @@ export class TwitchBot {
   pubSub: PubSub
   log: (type: LogType, ...args: any) => void
   cache: RedisClientType
-  config: ConfigService
 
   constructor(client: Client) {
     this.log = customLogMessage
@@ -35,7 +33,6 @@ export class TwitchBot {
     this.cache = createClient({
       url: process.env.REDIS_URL
     })
-    this.config = new ConfigService()
   }
 
   async init() {
@@ -81,5 +78,17 @@ export class TwitchBot {
 
   getCommand(input: string): Command {
     return hb.commands.findCommand(input)
+  }
+
+  isProd() {
+    return process.env.NODE_ENV === 'prod'
+  }
+
+  isDev() {
+    return process.env.NODE_ENV === 'dev'
+  }
+
+  isTest() {
+    return process.env.NODE_ENV === 'test'
   }
 }
