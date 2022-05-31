@@ -37,7 +37,7 @@ export class CommandService {
   }
 
   async updateDb() {
-    if (!hb.isProd()) return
+    if (!hb.config.isProd()) return
     await this.addCommandsToDb()
     await this.updateDeletedCommands()
   }
