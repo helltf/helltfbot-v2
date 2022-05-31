@@ -10,7 +10,7 @@ describe('unit test notify command functions', () => {
   let notify: NotifyCommand
 
   beforeEach(() => {
-    notify = new NotifyCommand
+    notify = new NotifyCommand()
   })
 
   it('Update event is offline map to status', () => {

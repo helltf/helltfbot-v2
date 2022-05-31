@@ -73,7 +73,6 @@ export class LeaveCommand implements Command {
       )
     },
 
-
     async isNotConnectedToChannel(channel: string): Promise<boolean> {
       return (
         (await hb.db.channelRepo.countBy({

@@ -8,7 +8,7 @@ export class ResourceSuccess<T>{
 }
 
 export class ResourceError {
-  error: string;
+  error: string
   constructor(error: string) {
     this.error = error
   }

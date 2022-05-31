@@ -1,7 +1,11 @@
 import { BotResponse } from '../../client/types.js'
 
 import { TwitchUserState } from '../../client/types.js'
-import { NotifyEventType, Topic, UserNotificationType } from '../../modules/pubsub/types.js'
+import {
+  NotifyEventType,
+  Topic,
+  UserNotificationType
+} from '../../modules/pubsub/types.js'
 import { Command } from '../export/types.js'
 
 export class NotifyCommand implements Command {
@@ -17,7 +21,8 @@ export class NotifyCommand implements Command {
     user: TwitchUserState,
     [streamer, event]: string[]
   ): Promise<BotResponse> {
-    if (this.methods.eventIsNotValid(event)) return this.methods.getUnknownEventErrorResponse(channel)
+    if (this.methods.eventIsNotValid(event))
+      return this.methods.getUnknownEventErrorResponse(channel)
     const eventType = event as UserNotificationType
     const userId = parseInt(user['user-id']!)
 
@@ -29,8 +34,13 @@ export class NotifyCommand implements Command {
       }
     }
 
-    if (!(await this.methods.pubSubConnectedToStreamerEvent(streamer, eventType))) {
-      const success = await this.methods.createNewStreamerConnection(streamer, eventType)
+    if (
+      !(await this.methods.pubSubConnectedToStreamerEvent(streamer, eventType))
+    ) {
+      const success = await this.methods.createNewStreamerConnection(
+        streamer,
+        eventType
+      )
 
       if (!success) {
         return {
@@ -119,13 +129,16 @@ export class NotifyCommand implements Command {
     },
 
     eventIsNotValid(event: string) {
-      return !Object.values(UserNotificationType).includes(event as UserNotificationType)
+      return !Object.values(UserNotificationType).includes(
+        event as UserNotificationType
+      )
     },
 
-    mapEventTypeToNotifyType(
-      event: UserNotificationType
-    ): NotifyEventType {
-      if (event === UserNotificationType.GAME || event === UserNotificationType.TITLE)
+    mapEventTypeToNotifyType(event: UserNotificationType): NotifyEventType {
+      if (
+        event === UserNotificationType.GAME ||
+        event === UserNotificationType.TITLE
+      )
         return NotifyEventType.SETTING
       return NotifyEventType.STATUS
     },

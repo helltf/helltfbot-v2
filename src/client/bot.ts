@@ -10,6 +10,7 @@ import { customLogMessage } from '../logger/logger-export.js'
 import { modules } from '../modules/export/export-modules.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
 import { CommandService } from '../commands/export/commands-service.js'
+import { createClient, RedisClientType } from 'redis'
 
 export class TwitchBot {
   client: Client
@@ -19,6 +20,7 @@ export class TwitchBot {
   api: ApiService
   pubSub: PubSub
   log: (type: LogType, ...args: any) => void
+  cache: RedisClientType
 
   constructor(client: Client) {
     this.log = customLogMessage
@@ -28,12 +30,16 @@ export class TwitchBot {
     this.db = new DB()
     this.commands = new CommandService(commands)
     this.api = new ApiService()
+    this.cache = createClient({
+      url: process.env.REDIS_URL
+    })
   }
 
   async init() {
     await this.db.initialize()
     await this.client.connect()
     await this.api.init()
+    await this.cache.connect()
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     this.commands.updateDb()

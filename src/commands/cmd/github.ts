@@ -17,5 +17,4 @@ export class GithubCommand implements Command {
 
     return { response, channel, success: true }
   }
-
 }
