@@ -4,7 +4,6 @@ import { TwitchUserState } from '../../client/types.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../export/types.js'
 
-
 export class AllowCommand implements Command {
   name = 'allow'
   description = 'Allow messages from the bot'
@@ -19,7 +18,6 @@ export class AllowCommand implements Command {
     user: TwitchUserState,
     [updateChannel]: string[]
   ): Promise<BotResponse> {
-
     const errorResponse = {
       channel: channel,
       response: 'You are not permitted to execute this command',
@@ -47,31 +45,27 @@ export class AllowCommand implements Command {
   }
 
   methods = {
-    updateChannelAllowSettings:
-      async (channel: string): Promise<boolean> => {
-        if (!(await this.methods.IsChannelExisting(channel))) return false
-        await hb.db.channelRepo.update(
-          {
-            channel: channel
-          },
-          {
-            allowed: true
-          }
-        )
-        return true
-      },
+    updateChannelAllowSettings: async (channel: string): Promise<boolean> => {
+      if (!(await this.methods.IsChannelExisting(channel))) return false
+      await hb.db.channelRepo.update(
+        {
+          channel: channel
+        },
+        {
+          allowed: true
+        }
+      )
+      return true
+    },
 
-    IsChannelExisting:
-      async (channel: string): Promise<boolean> => {
-        return (
-          (await hb.db.channelRepo.countBy({
-            channel: channel
-          })) !== 0
-        )
-      }
+    IsChannelExisting: async (channel: string): Promise<boolean> => {
+      return (
+        (await hb.db.channelRepo.countBy({
+          channel: channel
+        })) !== 0
+      )
+    }
   }
-
-
 }
 
 

@@ -20,7 +20,6 @@ export class ApiService {
   }
 }
 
-
 export interface BotResponse {
   success?: boolean
   response: string

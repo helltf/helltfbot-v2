@@ -6,12 +6,14 @@ import {
 import { clearDb } from '../../test-utils/clear.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import {
-  NotifyCommand
-} from '../../../src/commands/cmd/notify.js'
+import { NotifyCommand } from '../../../src/commands/cmd/notify.js'
 import { TwitchUser } from '../../../src/db/export-entities.js'
 import { Notification } from '../../../src/db/export-entities.js'
-import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example.js'
+import {
+  getExampleNotificationEntity,
+  getExampleTwitchUserEntity,
+  getExampleTwitchUserState
+} from '../../test-utils/example.js'
 
 describe('test notify command: ', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
@@ -47,9 +49,9 @@ describe('test notify command: ', () => {
     expect(response.channel).toBe(channel)
     expect(response.success).toBeFalse()
     expect(response.response).toEqual(
-      `Event unknown. Valid events are ${Object.values(UserNotificationType).join(
-        ' '
-      )}`
+      `Event unknown. Valid events are ${Object.values(
+        UserNotificationType
+      ).join(' ')}`
     )
   })
 
@@ -142,7 +144,12 @@ describe('test notify command: ', () => {
       await hb.db.userRepo.save(notification.user)
       await hb.db.notificationRepo.save(notification)
 
-      await notify.methods.updateNotification(channel, streamer, event, notification.user.id)
+      await notify.methods.updateNotification(
+        channel,
+        streamer,
+        event,
+        notification.user.id
+      )
 
       const result = await findNotification(notification.user.id, streamer)
 
@@ -153,7 +160,10 @@ describe('test notify command: ', () => {
   describe('notification existing', () => {
     it('user has no notification for streamer return false', async () => {
       const id = 1
-      const result = await notify.methods.userNotificationIsExisting(id, streamer)
+      const result = await notify.methods.userNotificationIsExisting(
+        id,
+        streamer
+      )
 
       expect(result).toBeFalse()
     })
@@ -229,7 +239,11 @@ describe('test notify command: ', () => {
         setting: false
       })
 
-      await notify.methods.updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
+      await notify.methods.updateTopicTypeForChannel(
+        streamer,
+        id,
+        NotifyEventType.STATUS
+      )
 
       const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
@@ -247,7 +261,11 @@ describe('test notify command: ', () => {
         setting: false
       })
 
-      await notify.methods.updateTopicTypeForChannel(streamer, id, NotifyEventType.SETTING)
+      await notify.methods.updateTopicTypeForChannel(
+        streamer,
+        id,
+        NotifyEventType.SETTING
+      )
 
       const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
@@ -257,7 +275,11 @@ describe('test notify command: ', () => {
     })
     it('should create new entry if not existing with status type true', async () => {
       const id = 1
-      await notify.methods.updateTopicTypeForChannel(streamer, id, NotifyEventType.STATUS)
+      await notify.methods.updateTopicTypeForChannel(
+        streamer,
+        id,
+        NotifyEventType.STATUS
+      )
 
       const createdEntity = await hb.db.notificationChannelRepo.findOneBy({
         name: streamer
@@ -281,11 +303,8 @@ describe('test notify command: ', () => {
       const expectedTopic = {
         id: returnedStreamerId,
         prefix: TopicPrefix.STATUS
-
       }
-      expect(hb.pubSub.listenToTopic).toHaveBeenCalledWith(
-        expectedTopic
-      )
+      expect(hb.pubSub.listenToTopic).toHaveBeenCalledWith(expectedTopic)
     })
   })
 })

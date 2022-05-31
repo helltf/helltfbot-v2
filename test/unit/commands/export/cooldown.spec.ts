@@ -1,7 +1,10 @@
 import { TwitchUserState } from '../../../../src/client/types.js'
 import { Cooldown } from '../../../../src/commands/export/cooldown.js'
 import { Command } from '../../../../src/commands/export/types.js'
-import { getExampleCommand, getExampleTwitchUserState } from '../../../test-utils/example.js'
+import {
+  getExampleCommand,
+  getExampleTwitchUserState
+} from '../../../test-utils/example.js'
 
 describe('testing cooldown class', () => {
   let cooldown: Cooldown
@@ -9,15 +12,14 @@ describe('testing cooldown class', () => {
   let user: TwitchUserState
 
   afterEach(function () {
-    jasmine.clock().uninstall();
-  });
-
+    jasmine.clock().uninstall()
+  })
 
   beforeEach(() => {
     cooldown = new Cooldown()
     command = getExampleCommand({})
     user = getExampleTwitchUserState({})
-    jasmine.clock().install();
+    jasmine.clock().install()
   })
 
   it('cooldowns should be empty by default', () => {

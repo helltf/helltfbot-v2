@@ -2,7 +2,10 @@ import { AllowCommand } from '../../../src/commands/cmd/allow.js'
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleChannel, getExampleTwitchUserState } from '../../test-utils/example.js'
+import {
+  getExampleChannel,
+  getExampleTwitchUserState
+} from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test allow command', () => {

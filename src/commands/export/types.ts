@@ -9,7 +9,7 @@ export interface Command {
   requiredParams: string[]
   optionalParams: string[]
   alias: string[]
-  cooldown: number,
+  cooldown: number
   methods?: {
     [key: string]: (...args: any) => Promise<any> | any
   }
