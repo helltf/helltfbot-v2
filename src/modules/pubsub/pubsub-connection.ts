@@ -58,7 +58,7 @@ export class PubSubConnection {
       type: type,
       nonce: '',
       data: {
-        auth_token: hb.config.get('TWITCH_OAUTH'),
+        auth_token: hb.config.get('TWITCH_OAUTH')!,
         topics: topics.map((t) => t.prefix + t.id)
       }
     }
