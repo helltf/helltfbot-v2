@@ -40,6 +40,8 @@ describe('test pubsub connection class', () => {
     jasmine.clock().tick(1000 * 60 * 5)
 
     expect(connection.connection.send).toHaveBeenCalled()
+
+    jasmine.clock().uninstall()
   })
 
   describe('remove topic', () => {
