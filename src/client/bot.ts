@@ -33,7 +33,7 @@ export class TwitchBot {
     this.commands = new CommandService(commands)
     this.api = new ApiService()
     this.cache = createClient({
-      url: process.env.REDIS_URL
+      url: hb.config.get('REDIS_URL')
     })
     this.config = new ConfigService()
   }
@@ -53,7 +53,7 @@ export class TwitchBot {
   }
 
   startJobs() {
-    if (process.env.NODE_ENV === 'dev') return
+    if (hb.config.isDev()) return
 
     for (const { delay, execute } of jobs) {
       execute()
@@ -75,7 +75,8 @@ export class TwitchBot {
     )
   }
 
-  sendMessage(channel: string, message: string) {
+  sendMessage(channel?: string, message?: string) {
+    if (!message || !channel) return
     this.client.say(channel, message)
   }
 
