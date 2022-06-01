@@ -12,6 +12,7 @@ import { PubSub } from '../modules/pubsub/pubsub.js'
 import { CommandService } from '../commands/export/commands-service.js'
 import { createClient, RedisClientType } from 'redis'
 import { ConfigService } from '../service/config.service.js'
+import { client } from './main-client.js'
 
 export class TwitchBot {
   client: Client
@@ -24,7 +25,8 @@ export class TwitchBot {
   cache: RedisClientType
   config: ConfigService
 
-  constructor(client: Client) {
+  constructor() {
+    this.config = new ConfigService()
     this.log = customLogMessage
     this.client = client
     this.cooldown = new Cooldown()
@@ -33,9 +35,8 @@ export class TwitchBot {
     this.commands = new CommandService(commands)
     this.api = new ApiService()
     this.cache = createClient({
-      url: hb.config.get('REDIS_URL')
+      url: process.env.REDIS_URL
     })
-    this.config = new ConfigService()
   }
 
   async init() {

@@ -4,7 +4,7 @@ import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { BotResponse, TwitchUserState } from '../types.js'
 
-const prefix = hb.config.get('PREFIX')!
+const prefix = process.env.PREFIX
 
 const handleChat = async (
   channel: string,

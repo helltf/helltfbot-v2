@@ -9,13 +9,13 @@ const client = createclient()
 function createclient(): Client {
   return Client({
     identity: {
-      password: 'oauth:' + hb.config.get('TWITCH_OAUTH'),
+      password: 'oauth:' + process.env.TWITCH_OAUTH,
       username: 'xdforsenxdlol'
     },
     connection: { reconnect: true },
     logger: {
       info: (msg) => {
-        if (hb.config.get('DEBUG') === 'true') console.log(msg)
+        if (process.env.DEBUG === 'true') console.log(msg)
       },
       error: (msg) => {
         console.log(msg)
