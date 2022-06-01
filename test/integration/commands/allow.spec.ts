@@ -25,7 +25,7 @@ describe('test allow command', () => {
       permission: PermissionLevel.ADMIN
     })
     allow = new AllowCommand()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     await clearDb(hb.db.dataSource)
   })
 

@@ -16,7 +16,7 @@ import {
 } from '../../test-utils/example.js'
 
 describe('test notify command: ', () => {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   let channel = 'testChannel'
   let streamer = 'streamer'
   let user: TwitchUser
@@ -33,7 +33,7 @@ describe('test notify command: ', () => {
     notification = getExampleNotificationEntity({})
     user = getExampleTwitchUserEntity({})
     notify = new NotifyCommand()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     await clearDb(hb.db.dataSource)
   })
 

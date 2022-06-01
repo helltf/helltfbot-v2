@@ -20,7 +20,7 @@ describe('join command tests', () => {
   })
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     user = getExampleTwitchUserState({ permission: 100 })
     channel = 'channel'
     join = new JoinCommand()

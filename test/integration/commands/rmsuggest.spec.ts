@@ -19,7 +19,7 @@ describe('test rmsuggest command', () => {
     rmsuggest = new RemoveSuggestCommand()
     user = getExampleTwitchUserState({})
     await clearDb(hb.db.dataSource)
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   })
 
   afterAll(async () => {
