@@ -15,18 +15,19 @@ describe('test leave command', () => {
   let user: TwitchUserState
   let messageChannel: string
   let leave: LeaveCommand
+
   beforeAll(async () => {
+    await setupDatabase()
+  })
+
+  beforeEach(async () => {
     user = getExampleTwitchUserState({
       permission: 100
     })
 
     messageChannel = 'messageChannel'
-    await setupDatabase()
-  })
-
-  beforeEach(async () => {
     leave = new LeaveCommand()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     await clearDb(hb.db.dataSource)
   })
 

@@ -36,8 +36,8 @@ const mainJoinChannel = async (channel: string) => {
 }
 
 const mainJoinAllChannels = async () => {
-  if (process.env.NODE_ENV === 'dev') {
-    await hb.client.join(process.env.MAIN_USER)
+  if (hb.config.isDev()) {
+    await hb.client.join(hb.config.get('MAIN_USER')!)
     return
   }
 

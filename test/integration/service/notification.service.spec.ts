@@ -6,7 +6,7 @@ import { getExampleNotificationEntity } from '../../test-utils/example.js'
 import { saveNotificationWithUser } from '../../test-utils/save-notification.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-describe('test notificatin service', () => {
+describe('test notification service', () => {
   let service: NotificationService
 
   beforeAll(async () => {
@@ -14,7 +14,7 @@ describe('test notificatin service', () => {
   })
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     service = new NotificationService()
     await clearDb(hb.db.dataSource)
   })

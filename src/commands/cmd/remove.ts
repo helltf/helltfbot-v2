@@ -50,7 +50,7 @@ export class RemoveCommand implements Command {
       return errorResponse
     }
 
-    new NotificationService().cleanAllNotifications()
+    await new NotificationService().cleanAllNotifications()
 
     return {
       success: true,

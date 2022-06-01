@@ -11,6 +11,8 @@ import { modules } from '../modules/export/export-modules.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
 import { CommandService } from '../commands/export/commands-service.js'
 import { createClient, RedisClientType } from 'redis'
+import { ConfigService } from '../service/config.service.js'
+import { client } from './main-client.js'
 
 export class TwitchBot {
   client: Client
@@ -21,8 +23,10 @@ export class TwitchBot {
   pubSub: PubSub
   log: (type: LogType, ...args: any) => void
   cache: RedisClientType
+  config: ConfigService
 
-  constructor(client: Client) {
+  constructor() {
+    this.config = new ConfigService()
     this.log = customLogMessage
     this.client = client
     this.cooldown = new Cooldown()
@@ -50,7 +54,7 @@ export class TwitchBot {
   }
 
   startJobs() {
-    if (process.env.NODE_ENV === 'dev') return
+    if (hb.config.isDev()) return
 
     for (const { delay, execute } of jobs) {
       execute()
@@ -72,23 +76,12 @@ export class TwitchBot {
     )
   }
 
-  sendMessage(channel: string, message: string) {
+  sendMessage(channel?: string, message?: string) {
+    if (!message || !channel) return
     this.client.say(channel, message)
   }
 
   getCommand(input: string): Command {
     return hb.commands.findCommand(input)
-  }
-
-  isProd() {
-    return process.env.NODE_ENV === 'prod'
-  }
-
-  isDev() {
-    return process.env.NODE_ENV === 'dev'
-  }
-
-  isTest() {
-    return process.env.NODE_ENV === 'test'
   }
 }

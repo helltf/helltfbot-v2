@@ -11,8 +11,8 @@ describe('test updating commands', () => {
   })
 
   beforeEach(async () => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     await clearDb(hb.db.dataSource)
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
   })
 
   afterAll(async () => {

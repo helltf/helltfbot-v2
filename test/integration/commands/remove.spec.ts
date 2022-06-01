@@ -12,7 +12,7 @@ import { setupDatabase } from '../../test-utils/setup-db.js'
 import { saveNotificationWithUser } from '../../test-utils/save-notification.js'
 
 describe('test remove command', () => {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   let messageChannel = 'testmessageChannel'
   let streamer = 'streamer'
   let user: TwitchUserState
@@ -27,7 +27,7 @@ describe('test remove command', () => {
     streamer = 'streamer'
     remove = new RemoveCommand()
     user = getExampleTwitchUserState({})
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     await clearDb(hb.db.dataSource)
   })
 

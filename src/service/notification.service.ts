@@ -1,14 +1,28 @@
+import { NotificationChannel } from "../db/export-entities.js"
 import { NotifyEventType, UserNotificationType } from "../modules/pubsub/types.js"
 
 export class NotificationService {
   async cleanAllNotifications() {
-    const notificationChannels = await hb.db.notificationChannelRepo.find()
+    let notificationChannels: NotificationChannel[] = []
+    try {
+      notificationChannels = await hb.db.notificationChannelRepo.find()
+    } catch (e) {
+      console.log(e)
+    }
 
     for (const { id, name, status, setting } of notificationChannels) {
       if (setting)
-        this.cleanNotificationsForStreamer(id, name, NotifyEventType.SETTING)
+        await this.cleanNotificationsForStreamer(
+          id,
+          name,
+          NotifyEventType.SETTING
+        )
       if (status)
-        this.cleanNotificationsForStreamer(id, name, NotifyEventType.STATUS)
+        await this.cleanNotificationsForStreamer(
+          id,
+          name,
+          NotifyEventType.STATUS
+        )
     }
   }
 

@@ -18,7 +18,7 @@ const requestGithubApi = async (path: string): Promise<any> => {
     await fetch(path, {
       method: 'GET',
       headers: {
-        Authorization: 'token ' + process.env.GITHUB_TOKEN
+        Authorization: 'token ' + hb.config.get('GITHUB_TOKEN')
       }
     })
   ).json()
