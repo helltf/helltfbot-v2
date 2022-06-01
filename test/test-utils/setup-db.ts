@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { getOrmConf } from '../../ormconfig.js'
 import { TwitchBot } from '../../src/client/bot.js'
 import { DB } from '../../src/db/export-repositories.js'
