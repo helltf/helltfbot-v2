@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import Jasmine from 'jasmine'
 
 process.env.NODE_ENV = 'test'
