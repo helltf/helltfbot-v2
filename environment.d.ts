@@ -25,6 +25,7 @@ declare global {
       PIPELINE: 'false' | 'true'
       START_UP_MESSAGE: string
       REDIS_URL: string
+      MAIN_USER_ID: string
     }
   }
 }
@@ -51,4 +52,5 @@ export interface Environment {
   TEST_DB_DATABASE: string
   START_UP_MESSAGE: string
   REDIS_URL: string
+  MAIN_USER_ID: string
 }
