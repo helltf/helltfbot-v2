@@ -1,12 +1,23 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 
 const getOrmConf = (): PostgresConnectionOptions => {
+  validateEnv()
+
   if (process.env.NODE_ENV === 'test') {
     return getTestOrmConf()
   }
 
   return getDevOrmConf()
 }
+
+function validateEnv() {
+  if (
+    (process.env.NODE_ENV !== 'prod' && process.env.DB_DATABASE === 'twitch') ||
+    process.env.TEST_DB_DATABASE !== 'test'
+  )
+    throw new Error('monkaS you sure?')
+}
+
 function getTestOrmConf(): PostgresConnectionOptions {
   const defaultConf = getDefaultOrmConf()
   return {
