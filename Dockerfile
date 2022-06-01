@@ -1,11 +1,10 @@
 FROM node:16
+RUN rm -rf /usr/helltfbot-v2
 WORKDIR /usr/helltfbot-v2
-COPY package*.json ./
-COPY tsconfig.json .
+
+COPY . .
 
 RUN npm install
-COPY . .
 RUN npm run build
-
 
 CMD ["node", "."]
