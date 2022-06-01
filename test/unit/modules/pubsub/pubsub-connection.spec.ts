@@ -1,4 +1,5 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
+import { TwitchBot } from '../../../../src/client/bot.js'
 import { PubSubConnection } from '../../../../src/modules/pubsub/pubsub-connection.js'
 import { Topic, TopicPrefix } from '../../../../src/modules/pubsub/types.js'
 import { createMockedWSConnection } from '../../../test-utils/example.js'
@@ -97,6 +98,7 @@ describe('test pubsub connection class', () => {
   })
 
   it('unlisten command should send unlisten to pubsub', () => {
+    globalThis.hb = new TwitchBot()
     const topic = { id: 1, prefix: TopicPrefix.SETTING }
     const topics = [topic]
     connection.topics = topics

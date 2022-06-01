@@ -1,6 +1,10 @@
 import { getTokenBody } from '../../../../src/api/twitch/token.js'
+import { TwitchBot } from '../../../../src/client/bot.js'
 
 describe('test token api ', () => {
+  beforeAll(() => {
+    globalThis.hb = new TwitchBot()
+  })
   it('body should have a client id', () => {
     const testId = 'abc'
     process.env.CLIENT_ID = testId
