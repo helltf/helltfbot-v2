@@ -14,15 +14,16 @@ describe('join command tests', () => {
   let user: TwitchUserState
   let channel: string
   let join: JoinCommand
+
   beforeAll(async () => {
-    user = getExampleTwitchUserState({ permission: 100 })
-    channel = 'channel'
-    join = new JoinCommand()
     await setupDatabase()
   })
 
   beforeEach(async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    user = getExampleTwitchUserState({ permission: 100 })
+    channel = 'channel'
+    join = new JoinCommand()
     await clearDb(hb.db.dataSource)
   })
 
