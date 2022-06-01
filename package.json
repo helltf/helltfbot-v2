@@ -5,9 +5,9 @@
   "main": "./dist/helltfbot.js",
   "type": "module",
   "scripts": {
-    "test": "set NODE_ENV=test&&jasmine",
-    "unit-tests": "set NODE_ENV=test&&jasmine --config=spec/support/jasmine-unit.json",
-    "integration-tests": "set NODE_ENV=test&&jasmine --config=spec/support/jasmine-integration.json",
+    "test": "node dist/spec/support/test-run.js",
+    "unit-tests": "node dist/spec/support/test-unit-run.js",
+    "integration-tests": "node dist/spec/support/test-integration-run.js",
     "build": "tsc",
     "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
