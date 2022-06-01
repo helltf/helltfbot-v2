@@ -5,9 +5,9 @@
   "main": "./dist/helltfbot.js",
   "type": "module",
   "scripts": {
-    "test": "node dist/spec/support/test-run.js",
-    "unit-tests": "node dist/spec/support/test-unit-run.js",
-    "integration-tests": "node dist/spec/support/test-integration-run.js",
+    "test": "node dist/scripts/test-setup/test-run.js",
+    "unit-tests": "node dist/scripts/test-setup/test-unit-run.js",
+    "integration-tests": "node dist/scripts/test-setup/test-integration-run.js",
     "build": "tsc",
     "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
