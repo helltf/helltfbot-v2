@@ -36,11 +36,6 @@ const mainJoinChannel = async (channel: string) => {
 }
 
 const mainJoinAllChannels = async () => {
-  if (hb.config.isDev()) {
-    await hb.client.join(hb.config.get('MAIN_USER')!)
-    return
-  }
-
   const joinedChannels = await hb.db.channelRepo.findBy({
     joined: true
   })
