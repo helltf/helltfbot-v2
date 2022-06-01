@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - remove command for removing notifications
 - added redis connection for caching
 - created unit tests for pubsub and pubsub connection
+- proper dev setup
+- added config service to get env variables
 
 ### Fixed
 
@@ -21,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed 
 
 - commands are now classes thus providing better testability
+- jasmine tests are now running from script
 
 ## [1.1.1](https://github.com/helltf/helltfbot-v2/releases/tag/v1.1.1) - 2022-05-27
 
