@@ -13,7 +13,7 @@ const handleChat = async (
   self: boolean
 ) => {
   if (self) return
-  updateUser(user)
+  await updateUser(user)
   if (!message?.toLowerCase()?.startsWith(prefix)) return
 
   const [commandLookup, ...data] = message
@@ -85,7 +85,7 @@ async function updateUser(user: ChatUserstate) {
     )
   }
 
-  hb.db.userRepo.save({
+  await hb.db.userRepo.save({
     color: user.color,
     display_name: user['display-name'],
     name: user.username,
