@@ -1,5 +1,5 @@
 import { BanTracking } from '../ban-tracking.js'
-import { ColorTracking } from '../color-tracking.js'
+import { ColorTracking } from '../user-tracking.js'
 import { TimeoutTracking } from '../timeout-tracking.js'
 import { Module } from './module.js'
 const timeoutModule = new TimeoutTracking()
