@@ -1,4 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
+import { PermissionLevel } from '../utilities/twitch/types.js'
 import { Module } from './export/module.js'
 
 export class ColorTracking implements Module {
@@ -6,15 +7,18 @@ export class ColorTracking implements Module {
   MAX_SAVED_COLORS = 15
 
   async initialize() {
-    hb.client.on('chat', (c: string, u: ChatUserstate) => {
-      this.handleColorChanges(c, u)
+    hb.client.on('chat', async (_0, user: ChatUserstate, _1, self) => {
+      if (self) return
+      await this.updateUser(user)
+      console.log('saved user')
+      await this.handleColorChanges(user)
     })
   }
 
-  async handleColorChanges(
-    _: string,
-    { 'user-id': userId, color: userColor }: ChatUserstate
-  ) {
+  async handleColorChanges({
+    'user-id': userId,
+    color: userColor
+  }: ChatUserstate) {
     if (!userId) return
     const id = Number(userId)
 
@@ -93,5 +97,36 @@ export class ColorTracking implements Module {
     }
 
     return this.addNewColor(colors, newColor)
+  }
+
+  async updateUser(user: ChatUserstate) {
+    const id = parseInt(user['user-id']!)
+
+    const userEntry = await hb.db.userRepo.findOneBy({
+      id: id
+    })
+
+    if (userEntry) {
+      return await hb.db.userRepo.update(
+        {
+          id: id
+        },
+        {
+          color: user.color,
+          display_name: user['display-name'],
+          name: user.username
+        }
+      )
+    }
+
+    await hb.db.userRepo.save({
+      color: user.color,
+      display_name: user['display-name'],
+      name: user.username,
+      id: id,
+      notifications: [],
+      permission: PermissionLevel.USER,
+      registered_at: Date.now()
+    })
   }
 }
