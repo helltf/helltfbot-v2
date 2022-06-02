@@ -11,8 +11,8 @@ import { modules } from '../modules/export/export-modules.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
 import { CommandService } from '../commands/export/commands-service.js'
 import { createClient, RedisClientType } from 'redis'
-import { ConfigService } from '../service/config.service.js'
 import { client } from './main-client.js'
+import { ConfigService } from '../service/config.service.js'
 
 export class TwitchBot {
   client: Client

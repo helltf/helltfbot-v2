@@ -55,6 +55,7 @@ Copy the following snippet into that file and fill in your own values:
 ``` sh
 NODE_ENV=<env>
 MAIN_USER=<your_username>
+MAIN_USER_ID=<your_user_id>
 DEBUG=false
 PREFIX=<bot_prefix>
 START_UP_MESSAGE=[message]
@@ -73,6 +74,7 @@ CLIENT_SECRET=<twitch_client_secret>
 TWITCH_OAUTH=<twitch_client_oauth>
 BEARERTOKEN_STREAMELEMENTS=<streamelements_api_key>
 GITHUB_TOKEN=<github_api_key>
+REDIS_URL=<redis_db_url>
 ```
 
 Install all dependencies using ```npm install``` and build the project with ```npm run build```, then if nothing went wrong, you can now run the bot:

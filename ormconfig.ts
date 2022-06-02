@@ -7,6 +7,7 @@ const getOrmConf = (): PostgresConnectionOptions => {
 
   return getDevOrmConf()
 }
+
 function getTestOrmConf(): PostgresConnectionOptions {
   const defaultConf = getDefaultOrmConf()
   return {
