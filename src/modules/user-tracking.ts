@@ -10,7 +10,6 @@ export class ColorTracking implements Module {
     hb.client.on('chat', async (_0, user: ChatUserstate, _1, self) => {
       if (self) return
       await this.updateUser(user)
-      console.log('saved user')
       await this.handleColorChanges(user)
     })
   }
