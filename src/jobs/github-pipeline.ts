@@ -2,22 +2,30 @@ import { PipelineData } from '../api/github/github-api.js'
 import { Projects } from '../api/github/github-projects.js'
 import { ResourceError } from '../api/resource.js'
 
-const counts = new Map<Projects, number | undefined>([
-  [Projects.helltfbot_v2, undefined],
-  [Projects.bot_v1_fullstack, undefined]
+interface ProjectInfo {
+  count: number | undefined
+  latestStatus: string | undefined
+}
+
+const counts = new Map<Projects, ProjectInfo>([
+  [Projects.helltfbot_v2, { count: undefined, latestStatus: undefined }],
+  [Projects.bot_v1_fullstack, { count: undefined, latestStatus: undefined }]
 ])
 
-const setCount = (project: Projects, value: number) => {
-  counts.set(project, value)
+const setInfo = (project: Projects, value: number, status: string) => {
+  counts.set(project, { count: value, latestStatus: status })
 }
 
 const updateGithubPipeline = async () => {
-  for (const [project, count] of counts) {
-    checkForUpdate(project, count)
+  for (const [project, info] of counts) {
+    checkForUpdate(project, info)
   }
 }
 
-const checkForUpdate = async (project: Projects, count: number | undefined) => {
+const checkForUpdate = async (
+  project: Projects,
+  { count, latestStatus }: ProjectInfo
+) => {
   const pipelineData = await hb.api.github.getPipeLineData(project)
 
   if (pipelineData instanceof ResourceError) return
@@ -25,29 +33,28 @@ const checkForUpdate = async (project: Projects, count: number | undefined) => {
   const { data } = pipelineData
 
   if (count === undefined) {
-    setCount(project, data.count!)
+    setInfo(project, data.count, data.status)
     return
   }
 
   if (count !== data?.count && data?.status === 'completed') {
-    announcePipeLineFinish(data)
-    setCount(project, data?.count)
+    announcePipeLineFinish(data, latestStatus)
+    setInfo(project, data?.count, data.conclusion)
   }
 }
 
-function announcePipeLineFinish({
-  conclusion,
-  repository,
-  branch,
-  event
-}: PipelineData) {
-  if (conclusion === 'success') {
-    hb.sendMessage(
+function announcePipeLineFinish(
+  { conclusion, repository, branch, event }: PipelineData,
+  latestStatus: string | undefined
+) {
+  if (conclusion === 'success' && latestStatus === 'failure') {
+    return hb.sendMessage(
       hb.config.get('MAIN_USER'),
-      `catJAM 👉✅ pipeline in ${repository} on branch ${branch} was successful`
+      `catJAM 👉✅ pipeline in ${repository} on branch ${branch} has been fixed`
     )
-  } else if (conclusion === 'failure') {
-    hb.sendMessage(
+  }
+  if (conclusion === 'failure') {
+    return hb.sendMessage(
       hb.config.get('MAIN_USER'),
       `monkaS 👉❌ pipeline in ${repository} on branch ${branch} failed @helltf (${event})`
     )
