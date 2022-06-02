@@ -61,7 +61,7 @@ export class TwitchBot {
       setInterval(execute, delay)
     }
 
-    this.loga(LogType.JOBS, `Successfully innitialized ${jobs.length} job(s)`)
+    this.log(LogType.JOBS, `Successfully innitialized ${jobs.length} job(s)`)
   }
 
   async initModules() {
