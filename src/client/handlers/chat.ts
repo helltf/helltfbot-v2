@@ -13,7 +13,7 @@ const handleChat = async (
   self: boolean
 ) => {
   if (self) return
-  await updateUser(user)
+
   if (!message?.toLowerCase()?.startsWith(prefix)) return
 
   const [commandLookup, ...data] = message
@@ -63,37 +63,6 @@ function userHasCooldown(
   { 'user-id': id }: ChatUserstate
 ): boolean | undefined {
   return hb.cooldown.userHasCooldown(command, id!)
-}
-
-async function updateUser(user: ChatUserstate) {
-  const id = parseInt(user['user-id']!)
-
-  const userEntry = await hb.db.userRepo.findOneBy({
-    id: id
-  })
-
-  if (userEntry) {
-    return await hb.db.userRepo.update(
-      {
-        id: id
-      },
-      {
-        color: user.color,
-        display_name: user['display-name'],
-        name: user.username
-      }
-    )
-  }
-
-  await hb.db.userRepo.save({
-    color: user.color,
-    display_name: user['display-name'],
-    name: user.username,
-    id: id,
-    notifications: [],
-    permission: PermissionLevel.USER,
-    registered_at: Date.now()
-  })
 }
 
 export { handleChat }
