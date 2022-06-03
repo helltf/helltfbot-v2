@@ -6,16 +6,16 @@ import {
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types.js'
-import { Command } from '../export/types.js'
+import { Command } from '../types.js'
 
 export class NotifyCommand implements Command {
   name = 'notify'
-  description = 'notify for events'
+  description = 'create a notification for any event'
   permissions = 0
   requiredParams = ['streamer', 'event']
   optionalParams = []
   cooldown = 5000
-  alias = []
+  alias = ['notifyme', 'noti', 'notification']
   async execute(
     channel: string,
     user: TwitchUserState,

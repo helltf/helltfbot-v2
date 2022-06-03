@@ -2,11 +2,11 @@ import { BotResponse } from '../../client/types.js'
 
 import { TwitchUserState } from '../../client/types.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
-import { Command } from '../export/types.js'
+import { Command } from '../types.js'
 
 export class JoinCommand implements Command {
   name = 'join'
-  description = 'join a new channel with main client'
+  description = 'join a channel'
   permissions = 0
   requiredParams = ['channel']
   optionalParams = []
@@ -25,7 +25,7 @@ export class JoinCommand implements Command {
     }
 
     if (!joinChannel) {
-      errorResponse.response = 'channel has to be defined'
+      errorResponse.response = 'Channel has to be defined'
       return errorResponse
     }
 

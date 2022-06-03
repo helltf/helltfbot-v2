@@ -55,7 +55,7 @@ describe('test rmsuggest command', () => {
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
-      `Id ${id} not existing or the suggestion is created by somebody else`
+      `Id ${id} does not exist or the suggestion is created by somebody else`
     )
   })
 
@@ -109,7 +109,7 @@ describe('test rmsuggest command', () => {
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
-      `Id ${id} not existing or the suggestion is created by somebody else`
+      `Id ${id} does not exist or the suggestion is created by somebody else`
     )
     expect(remainingEntity).not.toBeNull()
   })

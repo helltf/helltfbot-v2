@@ -1,18 +1,18 @@
 import { Client } from 'tmi.js'
-import { Cooldown } from '../commands/export/cooldown.js'
+import { Cooldown } from '../service/cooldown.service.js'
 import commands from '../commands/export/export-commands.js'
 import { DB } from '../db/export-repositories.js'
-import { Command } from '../commands/export/types.js'
-import { ApiService } from './types.js'
 import jobs from '../jobs/jobs-export.js'
 import { LogType } from '../logger/log-type.js'
 import { customLogMessage } from '../logger/logger-export.js'
 import { modules } from '../modules/export/export-modules.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
-import { CommandService } from '../commands/export/commands-service.js'
+import { CommandService } from '../service/commands.service.js'
 import { createClient, RedisClientType } from 'redis'
 import { client } from './main-client.js'
 import { ConfigService } from '../service/config.service.js'
+import { ApiService } from '../api/types.js'
+import { Command } from '../commands/types.js'
 
 export class TwitchBot {
   client: Client

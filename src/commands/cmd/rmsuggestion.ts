@@ -1,9 +1,9 @@
-import { Command } from '../export/types.js'
+import { Command } from '../types.js'
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types.js'
 export class RemoveSuggestCommand implements Command {
   name = 'rmsuggest'
-  description = 'remove your given suggestion'
+  description = 'removes your suggestion'
   permissions = 0
   requiredParams = ['id']
   optionalParams = []
@@ -32,7 +32,7 @@ export class RemoveSuggestCommand implements Command {
     }
 
     if (await this.methods.idIsNotValidForUser(user['user-id']!, id)) {
-      response.response = `Id ${id} not existing or the suggestion is created by somebody else`
+      response.response = `Id ${id} does not exist or the suggestion is created by somebody else`
       return response
     }
 

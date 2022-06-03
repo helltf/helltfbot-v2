@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../commands/export/types.js'
+import { Command } from '../../commands/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { BotResponse, TwitchUserState } from '../types.js'
@@ -25,6 +25,7 @@ const handleChat = async (
 
   if (command === undefined || userHasCooldown(command, user)) return
 
+  incrementCommandCounter(command)
   user.permission = await getUserPermissions(user)
 
   if (command.permissions > user.permission) return
@@ -63,6 +64,16 @@ function userHasCooldown(
   { 'user-id': id }: ChatUserstate
 ): boolean | undefined {
   return hb.cooldown.userHasCooldown(command, id!)
+}
+
+async function incrementCommandCounter(command: Command) {
+  await hb.db.commandRepo.increment(
+    {
+      name: command.name
+    },
+    'counter',
+    1
+  )
 }
 
 export { handleChat }

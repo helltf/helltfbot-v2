@@ -1,4 +1,4 @@
-import { Command } from "./types.js";
+import { Command } from "../commands/types.js";
 
 export class CommandService {
   commands: { activate: string[]; command: Command }[] = []
@@ -37,7 +37,6 @@ export class CommandService {
   }
 
   async updateDb() {
-    if (!hb.config.isProd()) return
     await this.addCommandsToDb()
     await this.updateDeletedCommands()
   }

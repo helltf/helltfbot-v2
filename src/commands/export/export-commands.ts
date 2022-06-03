@@ -7,7 +7,7 @@ import { PingCommand } from '../cmd/ping.js'
 import { RemoveSuggestCommand } from '../cmd/rmsuggestion.js'
 import { SuggestCommand } from '../cmd/suggest.js'
 import { WebsiteCommand } from '../cmd/website.js'
-import { Command } from './types.js'
+import { Command } from '../types.js'
 
 const commands: Command[] = [
   new PingCommand(),

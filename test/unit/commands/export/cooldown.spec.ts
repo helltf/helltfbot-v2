@@ -1,6 +1,6 @@
 import { TwitchUserState } from '../../../../src/client/types.js'
-import { Cooldown } from '../../../../src/commands/export/cooldown.js'
-import { Command } from '../../../../src/commands/export/types.js'
+import { Command } from '../../../../src/commands/types.js'
+import { Cooldown } from '../../../../src/service/cooldown.service.js'
 import {
   getExampleCommand,
   getExampleTwitchUserState
