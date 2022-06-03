@@ -1,4 +1,4 @@
-import { Command } from "./types.js";
+import { Command } from "../commands/export/types.js";
 
 export class CommandService {
   commands: { activate: string[]; command: Command }[] = []

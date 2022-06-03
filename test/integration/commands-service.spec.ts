@@ -1,4 +1,4 @@
-import { CommandService } from "../../src/commands/export/commands-service.js"
+import { CommandService } from "../../src/service/commands.service.js"
 import { Command } from "../../src/commands/export/types.js"
 import { clearDb } from "../test-utils/clear.js"
 import { disconnectDatabase } from '../test-utils/disconnect.js'
