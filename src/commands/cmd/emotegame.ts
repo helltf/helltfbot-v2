@@ -32,7 +32,8 @@ export class EmotegameCommand implements Command {
 
   methods = {
     start: async (channel: string): Promise<BotResponse> => {
-      const game = new Emotegame(channel)
+      const emote = await this.methods.getEmote(channel)
+      const game = new Emotegame(channel, emote)
       const success = hb.games.add(game)
 
       return {
@@ -50,8 +51,18 @@ export class EmotegameCommand implements Command {
         response: 'The emotegame has been stopped',
         success: true
       }
+    },
+
+    getEmote: async (channel: string): Promise<string> => {
+      return
     }
   }
 }
 
 type EmotegameAction = 'stop' | 'start'
+
+enum EmoteType {
+  BTTV = 'bttv',
+  FFZ = 'ffz',
+  SEVENTV = 'seventv'
+}
