@@ -13,6 +13,7 @@ import { client } from './main-client.js'
 import { ConfigService } from '../service/config.service.js'
 import { ApiService } from '../api/types.js'
 import { Command } from '../commands/types.js'
+import { GameService } from '../service/game.service.js'
 
 export class TwitchBot {
   client: Client
@@ -24,6 +25,7 @@ export class TwitchBot {
   log: (type: LogType, ...args: any) => void
   cache: RedisClientType
   config: ConfigService
+  games: GameService
 
   constructor() {
     this.config = new ConfigService()
@@ -37,6 +39,7 @@ export class TwitchBot {
     this.cache = createClient({
       url: process.env.REDIS_URL
     })
+    this.games = new GameService()
   }
 
   async init() {
