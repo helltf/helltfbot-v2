@@ -13,7 +13,8 @@
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "start": "tsc && node ."
+    "start": "tsc && node .",
+    "build-and-test": "tsc && node dist/scripts/test-setup/test-run.js"
   },
   "repository": {
     "type": "git",
