@@ -11,7 +11,7 @@ export class GithubCommand implements Command {
   alias = []
 
   async execute(channel: string): Promise<BotResponse> {
-    const response = `Feel free to leave a follow at https://github.com/helltf and visit the github page for my bot https://github.com/helltf/helltfbot-v2`
+    const response = `FeelsOkayMan Feel free to leave a follow at https://github.com/helltf and visit the github page for my bot https://github.com/helltf/helltfbot-v2`
 
     return { response, channel, success: true }
   }

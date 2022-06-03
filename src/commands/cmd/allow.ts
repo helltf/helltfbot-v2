@@ -38,7 +38,7 @@ export class AllowCommand implements Command {
     }
 
     return {
-      response: 'Successfully updated setttngs',
+      response: 'Successfully updated settings',
       channel: channel,
       success: true
     }

@@ -78,7 +78,7 @@ describe('test allow command', () => {
       channel: responseChannel
     } = await allow.execute(messageChannel, user, [])
 
-    expect(response).toBe('Successfully updated setttngs')
+    expect(response).toBe('Successfully updated settings')
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })
@@ -96,7 +96,7 @@ describe('test allow command', () => {
       channel: responseChannel
     } = await allow.execute(messageChannel, user, [])
 
-    expect(response).toBe('Successfully updated setttngs')
+    expect(response).toBe('Successfully updated settings')
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })
@@ -118,7 +118,7 @@ describe('test allow command', () => {
       channel: responseChannel
     } = await allow.execute(messageChannel, user, message)
 
-    expect(response).toBe('Successfully updated setttngs')
+    expect(response).toBe('Successfully updated settings')
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })

@@ -25,7 +25,7 @@ export class JoinCommand implements Command {
     }
 
     if (!joinChannel) {
-      errorResponse.response = 'channel has to be defined'
+      errorResponse.response = 'Channel has to be defined'
       return errorResponse
     }
 

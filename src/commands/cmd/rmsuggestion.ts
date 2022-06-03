@@ -32,7 +32,7 @@ export class RemoveSuggestCommand implements Command {
     }
 
     if (await this.methods.idIsNotValidForUser(user['user-id']!, id)) {
-      response.response = `Id ${id} not existing or the suggestion is created by somebody else`
+      response.response = `Id ${id} does not exist or the suggestion is created by somebody else`
       return response
     }
 

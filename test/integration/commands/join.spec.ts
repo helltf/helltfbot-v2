@@ -40,7 +40,7 @@ describe('join command tests', () => {
       response
     } = await join.execute(channel, user, message)
 
-    const expectedResponse = 'channel has to be defined'
+    const expectedResponse = 'Channel has to be defined'
 
     expect(channelResult).toBe(channel)
     expect(success).toBeFalse()
@@ -56,7 +56,7 @@ describe('join command tests', () => {
       response
     } = await join.execute(channel, user, message)
 
-    const expectedResponse = 'channel has to be defined'
+    const expectedResponse = 'Channel has to be defined'
 
     expect(channelResult).toBe(channel)
     expect(success).toBeFalse()
