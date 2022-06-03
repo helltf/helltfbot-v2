@@ -5,7 +5,7 @@ import { Command } from '../export/types.js'
 
 export class LeaveCommand implements Command {
   name = 'leave'
-  description = 'leave a new channel with main client'
+  description = 'leave a channel'
   permissions = 0
   requiredParams = ['channel']
   optionalParams = []

@@ -3,7 +3,7 @@ import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types.js'
 export class RemoveSuggestCommand implements Command {
   name = 'rmsuggest'
-  description = 'remove your given suggestion'
+  description = 'removes your suggestion'
   permissions = 0
   requiredParams = ['id']
   optionalParams = []

@@ -6,7 +6,7 @@ import { Command } from '../export/types.js'
 
 export class JoinCommand implements Command {
   name = 'join'
-  description = 'join a new channel with main client'
+  description = 'join a channel'
   permissions = 0
   requiredParams = ['channel']
   optionalParams = []
