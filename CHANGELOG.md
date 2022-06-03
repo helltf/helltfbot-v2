@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - created unit tests for pubsub and pubsub connection
 - proper dev setup
 - added config service to get env variables
-
+- increment command counter after execution
 ### Fixed
 
 - Admins no longer get cooldowns on commands
