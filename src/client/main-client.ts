@@ -1,4 +1,5 @@
 import { ChatUserstate, Client } from 'tmi.js'
+import { LogType } from '../logger/log-type.js'
 import { handleChat } from './handlers/chat.js'
 import { handleConnect } from './handlers/connect.js'
 import { handleJoin } from './handlers/join.js'
@@ -15,13 +16,13 @@ function createclient(): Client {
     connection: { reconnect: true },
     logger: {
       info: (msg) => {
-        if (process.env.DEBUG === 'true') console.log(msg)
+        if (process.env.DEBUG === 'true') hb.log(LogType.TWITCHBOT, msg)
       },
       error: (msg) => {
-        console.log(msg)
+        hb.log(LogType.TWITCHBOT, msg)
       },
       warn: (msg) => {
-        console.log(msg)
+        hb.log(LogType.TWITCHBOT, msg)
       }
     }
   })
