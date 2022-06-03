@@ -1,17 +1,25 @@
 import { TwitchUserState } from '../../../../src/client/types.js'
-import { Cooldown } from '../../../../src/commands/export/cooldown.js'
-import { Command } from '../../../../src/commands/export/types.js'
-import { getExampleCommand, getExampleTwitchUserState } from '../../../test-utils/example.js'
+import { Command } from '../../../../src/commands/types.js'
+import { Cooldown } from '../../../../src/service/cooldown.service.js'
+import {
+  getExampleCommand,
+  getExampleTwitchUserState
+} from '../../../test-utils/example.js'
 
 describe('testing cooldown class', () => {
   let cooldown: Cooldown
   let command: Command
   let user: TwitchUserState
 
+  afterEach(function () {
+    jasmine.clock().uninstall()
+  })
+
   beforeEach(() => {
     cooldown = new Cooldown()
     command = getExampleCommand({})
     user = getExampleTwitchUserState({})
+    jasmine.clock().install()
   })
 
   it('cooldowns should be empty by default', () => {
@@ -93,16 +101,32 @@ describe('testing cooldown class', () => {
     expect(result).toHaveSize(expectedSize)
   })
 
-  it('entry should be gone after cooldown is over', (done) => {
+  it('entry should be gone after cooldown is over', () => {
     const userId = user['user-id']!
 
     cooldown.setCooldown(command, userId)
 
-    setTimeout(() => {
-      const entries = cooldown.userHasCooldown(command, userId)
-      expect(entries).toBeFalse()
-      done()
-    }, command.cooldown)
+    let userCooldown = cooldown.userHasCooldown(command, userId)
+
+    expect(userCooldown).toBeTrue()
+
+    jasmine.clock().tick(command.cooldown)
+
+    userCooldown = cooldown.userHasCooldown(command, userId)
+
+    expect(userCooldown).toBeFalse()
+  })
+
+  it('entry should not be gone after cooldown is not fully over', () => {
+    const userId = user['user-id']!
+
+    cooldown.setCooldown(command, userId)
+
+    jasmine.clock().tick(command.cooldown - command.cooldown / 2)
+
+    const userCooldown = cooldown.userHasCooldown(command, userId)
+
+    expect(userCooldown).toBeTrue()
   })
 })
 

@@ -1,28 +1,28 @@
 import { ChatUserstate, Client } from 'tmi.js'
-import { handleChat } from './mainhandlers/chat.js'
-import { handleConnect } from './mainhandlers/connect.js'
-import { handleJoin } from './mainhandlers/join.js'
-import { handlePart } from './mainhandlers/part.js'
+import { LogType } from '../logger/log-type.js'
+import { handleChat } from './handlers/chat.js'
+import { handleConnect } from './handlers/connect.js'
+import { handleJoin } from './handlers/join.js'
+import { handlePart } from './handlers/part.js'
 
 const client = createclient()
 
 function createclient(): Client {
-
   return Client({
     identity: {
-      password: "oauth:" + process.env.TWITCH_OAUTH,
+      password: 'oauth:' + process.env.TWITCH_OAUTH,
       username: 'xdforsenxdlol'
     },
     connection: { reconnect: true },
     logger: {
       info: (msg) => {
-        if (process.env.DEBUG === 'true') console.log(msg)
+        if (process.env.DEBUG === 'true') hb.log(LogType.TWITCHBOT, msg)
       },
       error: (msg) => {
-        console.log(msg)
+        hb.log(LogType.TWITCHBOT, msg)
       },
       warn: (msg) => {
-        console.log(msg)
+        hb.log(LogType.TWITCHBOT, msg)
       }
     }
   })

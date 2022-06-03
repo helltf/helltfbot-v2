@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { Resource, ResourceError, ResourceSuccess } from '../resource.js'
+import { Resource, ResourceError, ResourceSuccess } from '../types.js'
 
 const tokenUrl = 'https://id.twitch.tv/oauth2/token'
 
@@ -33,8 +33,8 @@ const requestApi = async (): Promise<any> => {
 
 function getTokenBody() {
   const body = new URLSearchParams()
-  body.append('client_id', process.env.CLIENT_ID)
-  body.append('client_secret', process.env.CLIENT_SECRET)
+  body.append('client_id', hb.config.get('CLIENT_ID')!)
+  body.append('client_secret', hb.config.get('CLIENT_SECRET')!)
   body.append('grant_type', 'client_credentials')
 
   return body

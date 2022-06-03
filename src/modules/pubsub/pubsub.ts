@@ -2,29 +2,17 @@ import { NotificationChannelInfo } from '../../db/entity/notification_channel.js
 import { LogType } from '../../logger/log-type.js'
 import { NotificationHandler } from './notification-handler.js'
 import { PubSubConnection } from './pubsub-connection.js'
-import { PubSubType, NotifyEventType, TopicType } from './types.js'
-import { UpdateEventHandler } from './update-event-handler.js'
+import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types.js'
+import { PubSubEventHandler } from './pubsub-event-handler.js'
 
 export class PubSub {
-  updateEventHandler: UpdateEventHandler
+  pubSubEventHandler: PubSubEventHandler
   notificationHandler: NotificationHandler
   connections: PubSubConnection[] = []
 
   constructor() {
-    this.updateEventHandler = new UpdateEventHandler()
+    this.pubSubEventHandler = new PubSubEventHandler()
     this.notificationHandler = new NotificationHandler()
-  }
-
-  createNewPubSubConnection(): PubSubConnection {
-    const connection = new PubSubConnection()
-
-    connection.connection.addEventListener('message', ({ data }) => {
-      this.handlePubSubMessage(JSON.parse(data))
-    })
-
-    this.connections.push(connection)
-
-    return connection
   }
 
   async handleIncomingMessage({ data }: any) {
@@ -40,7 +28,7 @@ export class PubSub {
       type === 'stream-down' ||
       type === 'broadcast_settings_update'
     ) {
-      const messages = await this.updateEventHandler.handleUpdate(
+      const messages = await this.pubSubEventHandler.handleUpdate(
         data,
         streamer,
         type
@@ -54,28 +42,40 @@ export class PubSub {
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
     hb.log(LogType.PUBSUB, `Connecting to ${channels.length} topics ...`)
 
-    for await (const channels of chunkedChannels) {
+    for (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection()
 
       const topics = this.getTopics(channels)
+
       connection.listenToTopics(topics)
     }
+
     hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
   }
 
-  getTopics(channels: NotificationChannelInfo[]): string[] {
-    return channels.reduce((acc: string[], { setting, status, id }) => {
-      const topics: string[] = []
+  createNewPubSubConnection(): PubSubConnection {
+    const connection = new PubSubConnection()
 
-      if (setting) topics.push(TopicType.SETTING + id)
-      if (status) topics.push(TopicType.STATUS + id)
+    connection.connection.addEventListener('message', ({ data }) => {
+      this.handlePubSubMessage(JSON.parse(data))
+    })
 
-      return acc.concat(topics)
+    this.connections.push(connection)
+
+    return connection
+  }
+
+  getTopics(channels: NotificationChannelInfo[]): Topic[] {
+    return channels.reduce((topics: Topic[], { setting, status, id }) => {
+      if (setting) topics.push({ prefix: TopicPrefix.SETTING, id })
+      if (status) topics.push({ prefix: TopicPrefix.STATUS, id })
+
+      return topics
     }, [])
   }
 
   handlePubSubMessage = (data: any) => {
-    const type: PubSubType = data.type
+    const type: MessageType = data.type
 
     if (type !== 'MESSAGE') return
 
@@ -86,27 +86,28 @@ export class PubSub {
     arr: NotificationChannelInfo[],
     size = 25
   ): NotificationChannelInfo[][] => {
-    return arr.reduce((resultArray: NotificationChannelInfo[][], item, index) => {
-      const chunkIndex = Math.floor(index / size)
+    return arr.reduce(
+      (resultArray: NotificationChannelInfo[][], item, index) => {
+        const chunkIndex = Math.floor(index / size)
 
-      if (!resultArray[chunkIndex]) {
-        resultArray[chunkIndex] = []
-      }
+        if (!resultArray[chunkIndex]) {
+          resultArray[chunkIndex] = []
+        }
 
-      resultArray[chunkIndex].push(item)
+        resultArray[chunkIndex].push(item)
 
-      return resultArray
-    }, [])
+        return resultArray
+      },
+      []
+    )
   }
 
   async getStreamerForTopic(topic: string): Promise<string> {
     const id = this.getIdForTopic(topic)
 
-    return (
-      await hb.db.notificationChannelRepo.findOneBy({
-        id: parseInt(id)
-      })
-    )!.name
+    return (await hb.db.notificationChannelRepo.findOneBy({
+      id: parseInt(id)
+    }))!.name
   }
 
   getIdForTopic(topic: string): string {
@@ -114,13 +115,36 @@ export class PubSub {
   }
 
   getOpenConnection(): PubSubConnection {
-    const openConnections = this.connections.filter((c) => c.topics.length < 50)
+    const openConnection = this.connections.find((c) => c.topics.length < 50)
 
-    return !openConnections.length ? new PubSubConnection() : openConnections[0]
+    return openConnection ? openConnection : this.createNewPubSubConnection()
   }
 
-  listenToTopic(id: number, event: NotifyEventType) {
+  listenToTopic(topic: Topic) {
     const connection = this.getOpenConnection()
-    connection.listenToTopic(id, event)
+
+    connection.listenToTopics([topic])
+  }
+
+  findConnectionForTopic(topic: Topic): PubSubConnection | undefined {
+    return this.connections.find((con) => con.containsTopic(topic))
+  }
+
+  mapNotifyTypeToTopicPrefix(event: NotifyEventType): TopicPrefix {
+    if (event === NotifyEventType.STATUS) return TopicPrefix.STATUS
+    return TopicPrefix.SETTING
+  }
+
+  unlistenStreamerTopic(id: number, event: NotifyEventType) {
+    const topic: Topic = {
+      id: id,
+      prefix: this.mapNotifyTypeToTopicPrefix(event)
+    }
+
+    const connection = this.findConnectionForTopic(topic)
+
+    if (!connection) return
+
+    connection.unlisten([topic])
   }
 }

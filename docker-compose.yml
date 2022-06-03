@@ -20,6 +20,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - db
+      - redis
     restart: always
     environment:
       - NODE_ENV=prod
@@ -27,5 +28,14 @@ services:
       - DB_USERNAME=${DB_USERNAME?err}
       - DB_PASSWORD=${DB_PASSWORD?err}
       - DB_DATABASE=${DB_DATABASE?err}
+      - REDIS_URL=redis://default:redis@redis:6379
+
+  redis:
+    image: redis:6.0.6-alpine3.12
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --loglevel warning --requirepass redis
+
 volumes:
   db:

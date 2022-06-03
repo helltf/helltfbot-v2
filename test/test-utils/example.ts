@@ -1,11 +1,12 @@
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import { TwitchUserState } from '../../src/client/types.js'
-import { Command } from '../../src/commands/export/types.js'
+import { Command } from '../../src/commands/types.js'
 import { Channel, TwitchUser } from '../../src/db/export-entities.js'
 import { Notification } from '../../src/db/export-entities.js'
 
 export function getExampleCommand({
   alias = [],
-  cooldown = 1,
+  cooldown = 500,
   description = '',
   execute = async () => {
     return { channel: 'channel', response: '', success: true }
@@ -37,7 +38,7 @@ export const getExampleTwitchUserEntity = ({
   notifications = [],
   suggestions = []
 }: Partial<TwitchUser>): TwitchUser => {
-  const user = new TwitchUser
+  const user = new TwitchUser()
 
   user.id = id
   user.name = name
@@ -85,14 +86,15 @@ export function getExampleChannel({
   }
 }
 
-export const getExampleNotificationEntity = ({ streamer = 'streamer',
+export const getExampleNotificationEntity = ({
+  streamer = 'streamer',
   channel = 'channel',
   live = false,
   offline = false,
   title = false,
   game = false,
-  user = getExampleTwitchUserEntity({}) }: Partial<Notification>): Notification => {
-
+  user = getExampleTwitchUserEntity({})
+}: Partial<Notification>): Notification => {
   const notification = new Notification()
 
   notification.channel = channel
@@ -103,4 +105,18 @@ export const getExampleNotificationEntity = ({ streamer = 'streamer',
   notification.user = user
   notification.game = game
   return notification
+}
+
+export const createMockedWSConnection = (): ReconnectingWebSocket => {
+  return jasmine.createSpyObj({
+    addEventListener: () => {
+      return {}
+    },
+    send: () => {
+      return {}
+    },
+    reconnect: () => {
+      return {}
+    }
+  })
 }

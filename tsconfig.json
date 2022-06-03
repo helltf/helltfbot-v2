@@ -1,27 +1,25 @@
 {
-    "compilerOptions": {
-        "module": "ESNext",
-        "target": "ESNext",
-        "outDir": "./dist",
-        "baseUrl" : "./src",
-        "types" : [ "node" ],
-        "skipLibCheck": true,
-        "moduleResolution": "node",
-        "experimentalDecorators": true,
-        "esModuleInterop": true,
-        "strict": true,
-        "paths": {
-            "@db/entities/*": ["db/index.ts"],
-            "@modules/*": ["modules/*"],
-            "@api/*": ["api/*"],
-            "@src/*": ["./*"],
-        },
-        "removeComments": true,
-        "strictPropertyInitialization": false,
-        "importHelpers": true,
-        "sourceMap": true,
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "paths": {
+      "@db/entities/*": ["db/index.ts"],
+      "@modules/*": ["modules/*"],
+      "@api/*": ["api/*"],
+      "@src/*": ["./*"]
     },
-    "exclude": [
-        "node_modules",
-    ]
+    "removeComments": true,
+    "strictPropertyInitialization": false,
+    "importHelpers": true,
+    "sourceMap": true
+  },
+  "exclude": ["node_modules"]
 }

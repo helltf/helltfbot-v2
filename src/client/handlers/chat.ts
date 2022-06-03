@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../commands/export/types.js'
+import { Command } from '../../commands/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { BotResponse, TwitchUserState } from '../types.js'
@@ -13,7 +13,7 @@ const handleChat = async (
   self: boolean
 ) => {
   if (self) return
-  updateUser(user)
+
   if (!message?.toLowerCase()?.startsWith(prefix)) return
 
   const [commandLookup, ...data] = message
@@ -25,6 +25,7 @@ const handleChat = async (
 
   if (command === undefined || userHasCooldown(command, user)) return
 
+  incrementCommandCounter(command)
   user.permission = await getUserPermissions(user)
 
   if (command.permissions > user.permission) return
@@ -50,7 +51,11 @@ function sendResponse({ success, response, channel }: BotResponse) {
   }
 }
 
-function setCooldown(command: Command, { 'user-id': id }: ChatUserstate) {
+function setCooldown(
+  command: Command,
+  { 'user-id': id, permission }: TwitchUserState
+) {
+  if (permission! >= PermissionLevel.ADMIN) return
   hb.cooldown.setCooldown(command, id!)
 }
 
@@ -61,35 +66,14 @@ function userHasCooldown(
   return hb.cooldown.userHasCooldown(command, id!)
 }
 
-async function updateUser(user: ChatUserstate) {
-  const id = parseInt(user['user-id']!)
-
-  const userEntry = await hb.db.userRepo.findOneBy({
-    id: id
-  })
-
-  if (userEntry) {
-    return await hb.db.userRepo.update(
-      {
-        id: id
-      },
-      {
-        color: user.color,
-        display_name: user['display-name'],
-        name: user.username
-      }
-    )
-  }
-
-  hb.db.userRepo.save({
-    color: user.color,
-    display_name: user['display-name'],
-    name: user.username,
-    id: id,
-    notifications: [],
-    permission: PermissionLevel.USER,
-    registered_at: Date.now()
-  })
+async function incrementCommandCounter(command: Command) {
+  await hb.db.commandRepo.increment(
+    {
+      name: command.name
+    },
+    'counter',
+    1
+  )
 }
 
 export { handleChat }

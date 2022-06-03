@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added 
+
+- remove command for removing notifications
+- added redis connection for caching
+- created unit tests for pubsub and pubsub connection
+- proper dev setup
+- added config service to get env variables
+- increment command counter after execution
+### Fixed
+
+- Admins no longer get cooldowns on commands
+- Using jasmine clock instead of setTimeout in tests
+- avoid crash if a new user sends a message
+- cleardb no longer works in prod
+
+### Changed 
+
+- commands are now classes thus providing better testability
+- jasmine tests are now running from script
+- announce pipeline fixes instead of successfull runs
+
 ## [1.1.1](https://github.com/helltf/helltfbot-v2/releases/tag/v1.1.1) - 2022-05-27
 
 ### Added 

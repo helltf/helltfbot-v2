@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { rmsuggest } from '../../../src/commands/cmd/rmsuggestion.js'
+import { RemoveSuggestCommand } from '../../../src/commands/cmd/rmsuggestion.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
@@ -9,15 +9,17 @@ import { setupDatabase } from '../../test-utils/setup-db.js'
 describe('test rmsuggest command', () => {
   let channel: string
   let user: ChatUserstate
+  let rmsuggest: RemoveSuggestCommand
   beforeAll(async () => {
     await setupDatabase()
   })
 
   beforeEach(async () => {
     channel = 'channel'
+    rmsuggest = new RemoveSuggestCommand()
     user = getExampleTwitchUserState({})
     await clearDb(hb.db.dataSource)
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   })
 
   afterAll(async () => {
@@ -53,7 +55,7 @@ describe('test rmsuggest command', () => {
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
-      `Id ${id} not existing or the suggestion is created by somebody else`
+      `Id ${id} does not exist or the suggestion is created by somebody else`
     )
   })
 
@@ -107,7 +109,7 @@ describe('test rmsuggest command', () => {
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
-      `Id ${id} not existing or the suggestion is created by somebody else`
+      `Id ${id} does not exist or the suggestion is created by somebody else`
     )
     expect(remainingEntity).not.toBeNull()
   })

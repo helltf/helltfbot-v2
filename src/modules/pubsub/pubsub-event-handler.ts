@@ -5,10 +5,10 @@ import {
   PubSubData,
   PubSubMessageEventType,
   SettingMessage,
-  UpdateEventType
+  UserNotificationType
 } from './types.js'
 
-export class UpdateEventHandler {
+export class PubSubEventHandler {
   messageGenerator: MessageGenerator
 
   constructor() {
@@ -43,7 +43,7 @@ export class UpdateEventHandler {
 
     if (message.old_status !== message.status) {
       const notificationMessageInfo = await this.getNotificationMessageInfo(
-        UpdateEventType.TITLE,
+        UserNotificationType.TITLE,
         streamer,
         message.status
       )
@@ -55,7 +55,7 @@ export class UpdateEventHandler {
 
     if (message.old_game !== message.game) {
       const notificationMessageInfo = await this.getNotificationMessageInfo(
-        UpdateEventType.GAME,
+        UserNotificationType.GAME,
         streamer,
         message.game
       )
@@ -70,7 +70,7 @@ export class UpdateEventHandler {
 
   async handleLiveEvent(streamer: string): Promise<Map<string, string[]>> {
     const notificationMessageInfo = await this.getNotificationMessageInfo(
-      UpdateEventType.LIVE,
+      UserNotificationType.LIVE,
       streamer
     )
 
@@ -79,7 +79,7 @@ export class UpdateEventHandler {
 
   async handleOfflineEvent(streamer: string): Promise<Map<string, string[]>> {
     const notificationMessageInfo = await this.getNotificationMessageInfo(
-      UpdateEventType.OFFLINE,
+      UserNotificationType.OFFLINE,
       streamer
     )
 
@@ -88,7 +88,7 @@ export class UpdateEventHandler {
 
   async getNotifiedUsers(
     streamer: string,
-    event: UpdateEventType
+    event: UserNotificationType
   ): Promise<Notification[]> {
     const users = hb.db.notificationRepo.find({
       where: {
@@ -103,21 +103,22 @@ export class UpdateEventHandler {
   }
 
   getNotificationMessage(
-    type: UpdateEventType,
+    type: UserNotificationType,
     streamer: string,
     value: string | undefined
   ): string {
-    if (type === UpdateEventType.LIVE) return `@${streamer} has gone live`
-    if (type === UpdateEventType.OFFLINE) return `@${streamer} has gone offline`
-    if (type === UpdateEventType.GAME)
+    if (type === UserNotificationType.LIVE) return `@${streamer} has gone live`
+    if (type === UserNotificationType.OFFLINE)
+      return `@${streamer} has gone offline`
+    if (type === UserNotificationType.GAME)
       return `@${streamer} has changed the game to ${value}`
-    if (type === UpdateEventType.TITLE)
+    if (type === UserNotificationType.TITLE)
       return `@${streamer} has changed the title to ${value}`
     return ``
   }
 
   async getNotificationMessageInfo(
-    type: UpdateEventType,
+    type: UserNotificationType,
     streamer: string,
     value: string | undefined = undefined
   ): Promise<NotificationMessageInfo> {

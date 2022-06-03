@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { Resource, ResourceError, ResourceSuccess } from '../resource.js'
+import { Resource, ResourceError, ResourceSuccess } from '../types.js'
 import { getAuthorizationHeader } from './autorization.js'
 import { TwitchUserInfo } from './types.js'
 
@@ -18,18 +18,15 @@ const fetchUserAPI = async (
   name: string
 ): Promise<Resource<TwitchUserInfo>> => {
   try {
-    const result: TwitchUserInfo = await (
+    const result: TwitchUserInfo = (await (
       await fetch(`${USERS_URL}?login=${name}`, {
         headers: getAuthorizationHeader()
       })
-    ).json() as any
+    ).json()) as any
     return new ResourceSuccess(result)
   } catch (e: any) {
     return new ResourceError(e)
   }
 }
-
-
-
 
 export { getUserIdByName }

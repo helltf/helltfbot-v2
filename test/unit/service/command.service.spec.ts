@@ -1,5 +1,5 @@
-import { CommandService } from '../../../../src/commands/export/commands-service.js'
-import { getExampleCommand } from '../../../test-utils/example.js'
+import { CommandService } from '../../../src/service/commands.service.js'
+import { getExampleCommand } from '../../test-utils/example.js'
 
 describe('testing commands class', () => {
   it('input no command should have no command', () => {
@@ -151,14 +151,12 @@ describe('testing commands class', () => {
     const commands = new CommandService([exampleCommand])
     const allCommands = commands.getAll()
 
-
     const givenCommand = allCommands[0]
 
     expect(allCommands).toHaveSize(1)
 
     expect(givenCommand).toEqual(exampleCommand)
   })
-
 
   it('commands contains two commands get all returns both commands', () => {
     const command1 = getExampleCommand({ name: 'command1' })
@@ -172,5 +170,4 @@ describe('testing commands class', () => {
     expect(allCommands).toContain(command1)
     expect(allCommands).toContain(command2)
   })
-
 })

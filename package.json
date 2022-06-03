@@ -5,14 +5,16 @@
   "main": "./dist/helltfbot.js",
   "type": "module",
   "scripts": {
-    "test": "set NODE_ENV=test&&npx jasmine",
-    "unit-tests": "set NODE_ENV=test&&npx jasmine --config=spec/support/jasmine-unit.json",
-    "integration-tests": "set NODE_ENV=test&&npx jasmine --config=spec/support/jasmine-integration.json",
+    "test": "node dist/scripts/test-setup/test-run.js",
+    "unit-tests": "node dist/scripts/test-setup/test-unit-run.js",
+    "integration-tests": "node dist/scripts/test-setup/test-integration-run.js",
     "build": "tsc",
     "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
     "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix"
+    "lint:fix": "eslint . --ext .ts --fix",
+    "start": "tsc && node .",
+    "build-and-test": "tsc && node dist/scripts/test-setup/test-run.js"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,7 @@
     "npm": "^8.6.0",
     "pg": "^8.7.3",
     "reconnecting-websocket": "^4.4.0",
+    "redis": "^4.1.0",
     "strict-event-emitter-types": "^2.0.0",
     "tmi.js": "^1.8.5",
     "typeorm": "^0.3.5",

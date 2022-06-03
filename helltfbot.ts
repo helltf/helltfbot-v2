@@ -1,10 +1,15 @@
 import 'dotenv/config'
+import { setupDev } from './scripts/env-setup/dev.js';
 import { TwitchBot } from './src/client/bot.js'
-import { client } from './src/client/main-bot.js'
 
-globalThis.hb = new TwitchBot(client)
-;(async () => {
-  await hb.init()
-  hb.startJobs()
-  hb.initModules()
-})()
+globalThis.hb = new TwitchBot()
+{
+  ;(async () => {
+    await hb.init()
+    if (hb.config.isDev()) {
+      await setupDev()
+    }
+    hb.startJobs()
+    hb.initModules()
+  })()
+}

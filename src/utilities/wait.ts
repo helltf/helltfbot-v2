@@ -12,7 +12,7 @@ const mapUnits = (unit: string): number => {
   if (unit === 'm') return TimeoutLengths.M
   if (unit === 'h') return TimeoutLengths.H
   if (unit === 'd') return TimeoutLengths.D
-  throw new Error("Unknown unit mapping")
+  throw new Error('Unknown unit mapping')
 }
 
 const mapTime = (string: string): number => {

@@ -1,25 +1,28 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import { LogType } from '../../logger/log-type.js'
 import {
-  WebSocketConnection,
-  TopicType,
-  PubSubMessage,
+  TopicPrefix,
+  OutgoingMessage,
   NotifyEventType,
-  ParsedPubSubData
+  ParsedPubSubData,
+  Topic,
+  MessageType
 } from './types.js'
 import * as WS from 'ws'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
-export class PubSubConnection implements WebSocketConnection {
+export class PubSubConnection {
   connection: ReconnectingWebSocket
-  topics: string[] = []
+  topics: Topic[] = []
   interval: NodeJS.Timer
 
-  constructor() {
-    this.connection = new RWS.default(PUBSUB_URL, [], {
+  constructor(
+    ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
       WebSocket: WS.WebSocket
     })
+  ) {
+    this.connection = ws
 
     this.interval = this.setPingInterval()
 
@@ -38,49 +41,32 @@ export class PubSubConnection implements WebSocketConnection {
     }, 250 * 1000)
   }
 
-  listenToTopic(id: number, type: NotifyEventType) {
-    const message = this.createMessageForTopic(type, id)
-
-    this.sendMessage(message)
-
-    this.topics.push(...message.data.topics)
-  }
-
-  listenToTopics(topics: string[]) {
-    const message = this.getListenMessageForTopic(topics)
+  listenToTopics(topics: Topic[]) {
+    const message = this.getMessage(topics, 'LISTEN')
 
     this.sendMessage(message)
 
     this.topics.push(...topics)
   }
 
-  sendMessage(message: PubSubMessage) {
+  sendMessage(message: OutgoingMessage) {
     this.connection.send(JSON.stringify(message))
   }
 
-  createMessageForTopic = (
-    notifyType: NotifyEventType,
-    channelId: number
-  ): PubSubMessage => {
-    const type = this.mapNotifyTypeToTopic(notifyType)
-
-    return this.getListenMessageForTopic([`${type}${channelId}`])
-  }
-
-  getListenMessageForTopic(topic: string[]): PubSubMessage {
+  getMessage(topics: Topic[], type: MessageType) {
     return {
-      type: 'LISTEN',
+      type: type,
       nonce: '',
       data: {
-        auth_token: process.env.TWITCH_OAUTH,
-        topics: topic
+        auth_token: hb.config.get('TWITCH_OAUTH')!,
+        topics: topics.map((t) => t.prefix + t.id)
       }
     }
   }
 
-  mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicType {
-    if (notifyType === NotifyEventType.SETTING) return TopicType.SETTING
-    return TopicType.STATUS
+  mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicPrefix {
+    if (notifyType === NotifyEventType.SETTING) return TopicPrefix.SETTING
+    return TopicPrefix.STATUS
   }
 
   handleIncomingMessage({ data }: { data: string }) {
@@ -89,25 +75,42 @@ export class PubSubConnection implements WebSocketConnection {
     if (parsedData.type === 'RECONNECT') {
       this.reconnect()
     }
-
-    this.logError(parsedData.error)
   }
 
   async reconnect() {
-    this.connection.reconnect()
     hb.log(
       LogType.PUBSUB,
       'A Pubsub connection has been closed and will restart'
     )
+
+    this.connection.reconnect()
 
     this.listenToTopics(this.topics)
 
     hb.log(LogType.PUBSUB, 'Connection successfully restartet')
   }
 
-  logError(error: any) {
-    if (!error) return
+  containsTopic(topic: Topic): boolean {
+    return this.topics.some(
+      (t) => t.id === topic.id && t.prefix === topic.prefix
+    )
+  }
 
-    hb.log(LogType.PUBSUB, 'Error occured: ' + error)
+  unlisten(topics: Topic[]) {
+    const message = this.getMessage(topics, 'UNLISTEN')
+
+    this.sendMessage(message)
+
+    this.removeTopics(topics)
+  }
+
+  removeTopics(topics: Topic[]) {
+    for (const topic of topics) {
+      const index = this.topics.indexOf(topic)
+
+      if (index > -1) {
+        this.topics.splice(index, 1)
+      }
+    }
   }
 }

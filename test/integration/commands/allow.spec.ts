@@ -1,8 +1,11 @@
-import { allow } from '../../../src/commands/cmd/allow.js'
+import { AllowCommand } from '../../../src/commands/cmd/allow.js'
 import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
 import { clearDb } from '../../test-utils/clear.js'
 import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleChannel, getExampleTwitchUserState } from '../../test-utils/example.js'
+import {
+  getExampleChannel,
+  getExampleTwitchUserState
+} from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
 describe('test allow command', () => {
@@ -10,6 +13,7 @@ describe('test allow command', () => {
   let user = getExampleTwitchUserState({
     permission: PermissionLevel.ADMIN
   })
+  let allow: AllowCommand
 
   beforeAll(async () => {
     await setupDatabase()
@@ -20,7 +24,8 @@ describe('test allow command', () => {
     user = getExampleTwitchUserState({
       permission: PermissionLevel.ADMIN
     })
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000
+    allow = new AllowCommand()
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     await clearDb(hb.db.dataSource)
   })
 
@@ -73,7 +78,7 @@ describe('test allow command', () => {
       channel: responseChannel
     } = await allow.execute(messageChannel, user, [])
 
-    expect(response).toBe('Successfully updated setttngs')
+    expect(response).toBe('Successfully updated settings')
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })
@@ -91,7 +96,7 @@ describe('test allow command', () => {
       channel: responseChannel
     } = await allow.execute(messageChannel, user, [])
 
-    expect(response).toBe('Successfully updated setttngs')
+    expect(response).toBe('Successfully updated settings')
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })
@@ -113,7 +118,7 @@ describe('test allow command', () => {
       channel: responseChannel
     } = await allow.execute(messageChannel, user, message)
 
-    expect(response).toBe('Successfully updated setttngs')
+    expect(response).toBe('Successfully updated settings')
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeTrue()
   })

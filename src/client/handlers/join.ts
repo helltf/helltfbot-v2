@@ -1,5 +1,5 @@
 import { LogType } from '../../logger/log-type.js'
-import { wait } from '../../utilities/timeout.js'
+import { wait } from '../../utilities/wait.js'
 
 const TWITCH_ERROR_MESSAGE = ['msg_channel_suspended']
 
@@ -36,11 +36,6 @@ const mainJoinChannel = async (channel: string) => {
 }
 
 const mainJoinAllChannels = async () => {
-  if (process.env.NODE_ENV === 'dev') {
-    await hb.client.join(process.env.MAIN_USER)
-    return
-  }
-
   const joinedChannels = await hb.db.channelRepo.findBy({
     joined: true
   })
