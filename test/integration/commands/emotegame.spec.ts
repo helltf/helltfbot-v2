@@ -82,8 +82,9 @@ fdescribe('test emotegame', () => {
 
   it('action is start but game already exists return error response', async () => {
     const message = ['start']
+    const emote = 'emote'
 
-    hb.games.eg.push(new Emotegame(messageChannel))
+    hb.games.eg.push(new Emotegame(messageChannel, emote))
 
     const {
       channel: responseChannel,

@@ -3,9 +3,10 @@ import { GameService } from "../../../src/service/game.service.js"
 
 fdescribe('test game service', () => {
   let service: GameService
-
+  let emote: string
   beforeEach(() => {
     service = new GameService()
+    emote = 'emote'
   })
 
   it('emotegame should be empty array by default', () => {
@@ -14,7 +15,7 @@ fdescribe('test game service', () => {
 
   it('add new emotegame pushes to array', () => {
     const channel = 'channel'
-    const game = new Emotegame(channel)
+    const game = new Emotegame(channel, emote)
 
     const success = service.add(game)
 
@@ -24,7 +25,7 @@ fdescribe('test game service', () => {
 
   it('add emotegame but already existing return false', () => {
     const channel = 'channel'
-    const game = new Emotegame(channel)
+    const game = new Emotegame(channel, emote)
     service.eg.push(game)
 
     const success = service.add(game)
@@ -33,8 +34,8 @@ fdescribe('test game service', () => {
   })
 
   it('add two different channels return true and have length 2', () => {
-    const game1 = new Emotegame('channel1')
-    const game2 = new Emotegame('channel2')
+    const game1 = new Emotegame('channel1', emote)
+    const game2 = new Emotegame('channel2', emote)
 
     const success1 = service.add(game1)
     expect(success1).toBeTrue()
