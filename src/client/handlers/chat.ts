@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../commands/export/types.js'
+import { Command } from '../../commands/types.js'
 import { getUserPermissions } from '../../utilities/twitch/permission.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { BotResponse, TwitchUserState } from '../types.js'

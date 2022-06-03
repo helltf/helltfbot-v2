@@ -1,4 +1,4 @@
-import { Command } from '../export/types.js'
+import { Command } from '../types.js'
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types.js'
 export class RemoveSuggestCommand implements Command {

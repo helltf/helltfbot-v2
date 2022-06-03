@@ -1,6 +1,5 @@
-import { BotResponse } from '../../client/types.js'
+import { BotResponse, TwitchUserState } from "../client/types.js"
 
-import { TwitchUserState } from '../../client/types.js'
 
 export interface Command {
   name: string

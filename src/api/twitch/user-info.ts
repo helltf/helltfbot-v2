@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { Resource, ResourceError, ResourceSuccess } from '../resource.js'
+import { Resource, ResourceError, ResourceSuccess } from '../types.js'
 import { getAuthorizationHeader } from './autorization.js'
 import { TwitchUserInfo } from './types.js'
 

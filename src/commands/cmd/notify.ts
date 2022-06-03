@@ -6,7 +6,7 @@ import {
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types.js'
-import { Command } from '../export/types.js'
+import { Command } from '../types.js'
 
 export class NotifyCommand implements Command {
   name = 'notify'

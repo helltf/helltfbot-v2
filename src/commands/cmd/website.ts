@@ -1,4 +1,4 @@
-import { Command } from '../export/types.js'
+import { Command } from '../types.js'
 import { BotResponse } from '../../client/types.js'
 
 export class WebsiteCommand implements Command {
