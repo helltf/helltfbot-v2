@@ -1,6 +1,7 @@
 import { TwitchUserState, BotResponse } from "../../client/types.js";
 import { Emotegame } from "../../games/emotegame.js";
-import { PermissionLevel } from "../../utilities/twitch/types.js";
+import { random } from "../../utilities/random.js";
+import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../types.js'
 
 export class EmotegameCommand implements Command {
@@ -54,15 +55,24 @@ export class EmotegameCommand implements Command {
     },
 
     getEmote: async (channel: string): Promise<string> => {
-      return
+      const type = this.methods.getRandomEmoteService()
+      const cachedEmotes = await hb.cache.getEmoteSet(channel, type)
+
+      const emotes = cachedEmotes
+        ? cachedEmotes
+        : await hb.api[type].getEmotesForChannel(channel)
+
+      return emotes[random(0, emotes.length)]
+    },
+
+    getRandomEmoteService() {
+      const emoteTypes: EmoteType[] = ['bttv', 'ffz', 'seventv']
+      const number = random(0, 2)
+
+      return emoteTypes[number]
     }
   }
 }
 
-type EmotegameAction = 'stop' | 'start'
-
-enum EmoteType {
-  BTTV = 'bttv',
-  FFZ = 'ffz',
-  SEVENTV = 'seventv'
-}
+declare type EmotegameAction = 'stop' | 'start'
+export declare type EmoteType = 'ffz' | 'bttv' | 'seventv' 
