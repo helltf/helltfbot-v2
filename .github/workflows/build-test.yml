@@ -81,6 +81,14 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --requirepass redis
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -100,3 +108,4 @@ jobs:
           TEST_DB_USERNAME: ${{ secrets.MYSQL_USER }}
           TEST_DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           TEST_DB_DATABASE: twitch
+          REDIS_URL: redis://default:redis@redis:6379
