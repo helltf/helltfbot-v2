@@ -7,7 +7,7 @@ import { disconnectDatabase } from '../../test-utils/disconnect.js'
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test emotegame', () => {
+describe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
@@ -22,6 +22,7 @@ fdescribe('test emotegame', () => {
     user = getExampleTwitchUserState({})
     messageChannel = 'messageChannel'
     emotegame = new EmotegameCommand()
+    mockEmoteApis()
     await clearDb(hb.db.dataSource)
   })
 
@@ -97,4 +98,9 @@ fdescribe('test emotegame', () => {
     expect(response).toBe('An emotegame is already running')
   })
 })
-  
+
+function mockEmoteApis() {
+  spyOn(hb.api.bttv, 'getEmotesForChannel').and.resolveTo([])
+  spyOn(hb.api.ffz, 'getEmotesForChannel').and.resolveTo([])
+  spyOn(hb.api.seventv, 'getEmotesForChannel').and.resolveTo([])
+}
