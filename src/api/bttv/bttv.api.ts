@@ -21,8 +21,12 @@ export class BttvApi {
     }
   }
 
-  async getEmotesForChannel(channel: string) {
-    return this.fetchEmotes(channel)
+  async getEmotesForChannel(channel: string): Promise<string[]> {
+    const emotes = await this.fetchEmotes(channel)
+
+    if (emotes instanceof ResourceError) return []
+
+    return emotes.data
   }
 }
 

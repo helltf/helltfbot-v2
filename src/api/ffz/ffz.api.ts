@@ -1,17 +1,33 @@
 import fetch from "node-fetch"
-import { Resource, ResourceError } from "../types.js"
+import { EmoteApi, Resource, ResourceError, ResourceSuccess } from "../types.js"
 
-export class FfzApi {
+export class FfzApi implements EmoteApi {
   url = 'https://api.frankerfacez.com/v1/room/'
   async fetchEmotes(channel: string): Promise<Resource<string[]>> {
     const error = new ResourceError('Error fetching ffz emotes')
+
     try {
       const { sets } = (await (
         await fetch(this.url + channel)
       ).json()) as FfzEmoteResponse
-    } catch (e) {}
+
+      return new ResourceSuccess(this.getEmoteNamesFromSets(sets))
+    } catch (e) {
+      return error
+    }
   }
-  async getEmotesForChannel(channel: string) {}
+
+  getEmoteNamesFromSets(sets: FfzEmoteSets): string[] {
+    return Object.values(sets)[0].emoticons.map((e) => e.name)
+  }
+
+  async getEmotesForChannel(channel: string): Promise<string[]> {
+    const emotes = await this.fetchEmotes(channel)
+
+    if (emotes instanceof ResourceError) return []
+
+    return emotes.data
+  }
 }
 
 interface FfzEmoteResponse {
