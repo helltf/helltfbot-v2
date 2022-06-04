@@ -62,6 +62,8 @@ export class EmotegameCommand implements Command {
         ? cachedEmotes
         : await hb.api[type].getEmotesForChannel(channel)
 
+      if (!cachedEmotes) hb.cache.saveEmoteSet(emotes, channel, type)
+
       return emotes[random(0, emotes.length)]
     },
 
