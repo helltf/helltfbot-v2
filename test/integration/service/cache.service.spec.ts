@@ -1,13 +1,17 @@
+import { EmoteType } from '../../../src/commands/cmd/emotegame.js'
 import { clearRedis } from '../../test-utils/clear.js'
 import { disconnectRedis } from '../../test-utils/disconnect.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test redis service', () => {
+describe('test redis service', () => {
+  const emoteTypes: EmoteType[] = ['ffz', 'bttv', 'seventv']
+  let channel: string
   beforeAll(async () => {
     await setupDatabase()
   })
 
   beforeEach(async () => {
+    channel = 'channel'
     await clearRedis()
   })
 
@@ -15,17 +19,46 @@ fdescribe('test redis service', () => {
     await disconnectRedis()
   })
 
-  it('test', async () => {
-    await hb.cache.redis.set('a', 'b')
+  emoteTypes.forEach((eType) => {
+    it('get emote set key should return channel with type', () => {
+      const key = hb.cache.getEmoteSetKey(channel, eType)
 
-    const result = await hb.cache.redis.get('a')
-
-    expect(result).toBe('b')
+      expect(key).toBe(`emoteset:${channel}-${eType}`)
+    })
   })
 
-  it('test', async () => {
-    const result = await hb.cache.redis.get('a')
+  emoteTypes.forEach((eType) => {
+    it('save emote set should cache whole array in redis', async () => {
+      const emotes = ['a']
 
-    expect(result).toBe(null)
+      await hb.cache.saveEmoteSet(emotes, channel, eType)
+      const key = hb.cache.getEmoteSetKey(channel, eType)
+      const savedEmotesString = await hb.cache.redis.get(key)
+
+      expect(savedEmotesString).not.toBeNull()
+
+      const savedEmotes = JSON.parse(savedEmotesString!)
+
+      expect(savedEmotes).toEqual(emotes)
+    })
+  })
+  emoteTypes.forEach((eType) => {
+    it('get emote set key does not exist return null', async () => {
+      const result = await hb.cache.getEmoteSet(channel, eType)
+
+      expect(result).toBeNull()
+    })
+  })
+
+  emoteTypes.forEach((eType) => {
+    it('get emote set return correct values for existing key', async () => {
+      const emotes = ['a', 'b']
+
+      await hb.cache.saveEmoteSet(emotes, channel, eType)
+
+      const result = await hb.cache.getEmoteSet(channel, eType)
+
+      expect(result).toEqual(emotes)
+    })
   })
 })
