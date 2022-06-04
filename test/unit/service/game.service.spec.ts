@@ -1,7 +1,7 @@
 import { Emotegame } from "../../../src/games/emotegame.js"
 import { GameService } from "../../../src/service/game.service.js"
 
-fdescribe('test game service', () => {
+describe('test game service', () => {
   let service: GameService
   let emote: string
   beforeEach(() => {
@@ -42,5 +42,21 @@ fdescribe('test game service', () => {
 
     const success2 = service.add(game2)
     expect(success2).toBeTrue()
+  })
+
+  it('emote game exists returns false because games is empty', () => {
+    const game = new Emotegame('channel', emote)
+    const result = service.emoteGameExists(game)
+
+    expect(result).toBeFalse()
+  })
+
+  it('emote game exists return true', () => {
+    const game = new Emotegame('channel', emote)
+    service.add(game)
+
+    const result = service.emoteGameExists(game)
+
+    expect(result).toBeTrue()
   })
 })
