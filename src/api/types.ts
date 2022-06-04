@@ -40,3 +40,6 @@ export class ApiService {
   }
 }
 
+export declare interface EmoteApi {
+  getEmotesForChannel: (channel: string) => Promise<string[]>
+}
