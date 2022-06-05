@@ -37,6 +37,7 @@ export class EmotegameCommand implements Command {
   methods = {
     start: async (channel: string, type?: EmoteType): Promise<BotResponse> => {
       const emote = await this.methods.getEmote(channel, type)
+
       if (emote instanceof ResourceError) {
         return {
           success: false,
@@ -52,7 +53,7 @@ export class EmotegameCommand implements Command {
       return {
         channel,
         response: success
-          ? 'An emotegame has started'
+          ? 'An emotegame has started, the word is ' + game.getLetterString()
           : 'An emotegame is already running',
         success
       }

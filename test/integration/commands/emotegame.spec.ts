@@ -63,7 +63,9 @@ describe('test emotegame', () => {
     } = await emotegame.execute(messageChannel, user, message)
 
     expect(responseChannel).toBe(messageChannel)
-    expect(response).toBe('An emotegame has started')
+    expect(response).toBe(
+      'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
+    )
     expect(success).toBeTrue()
   })
 
@@ -93,7 +95,9 @@ describe('test emotegame', () => {
       } = await emotegame.execute(messageChannel, user, message)
 
       expect(responseChannel).toBe(messageChannel)
-      expect(response).toBe('An emotegame has started')
+      expect(response).toBe(
+        'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
+      )
       expect(success).toBeTrue()
     })
   })
