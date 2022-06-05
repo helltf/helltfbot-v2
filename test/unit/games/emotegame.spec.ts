@@ -9,16 +9,17 @@ describe('test emotegame class', () => {
     game = new Emotegame(channel, emote)
   })
 
-  fdescribe('generate underscores', () => {
-    it('given emote has length of one return one underscore', () => {
-      const emote = 'a'
+  describe('generate underscores', () => {
+    for (let i = 1; i < 10; i++) {
+      it(`given emote has length of ${i} return ${i} underscore(s)`, () => {
+        const emote = 'a'.repeat(i)
 
-      const underscores = game.generateUnderscores(emote)
+        const underscores = game.generateUnderscores(emote)
 
-      const expectedResult = ['_']
+        const expectedResult = Array(i).fill('_')
 
-      expect(underscores).toBe(expectedResult)
-    })
+        expect(underscores).toEqual(expectedResult)
+      })
+    }
   })
-  it('', () => {})
 })
