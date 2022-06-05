@@ -15,7 +15,7 @@ export class EmotegameCommand implements Command {
   cooldown = 10000
   async execute(
     channel: string,
-    userstate: TwitchUserState,
+    _: TwitchUserState,
     [action, type]: string[]
   ): Promise<BotResponse> {
     const emoteGameAction = action as EmotegameAction
@@ -101,14 +101,17 @@ export class EmotegameCommand implements Command {
         return new ResourceError(`No emotes were found for ${type} emotes`)
       }
 
-      const randomEmote = emotes.data[random(0, emotes.data.length)]
+      const randomEmote = emotes.data[random(0, emotes.data.length - 1)]
 
       return new ResourceSuccess(randomEmote)
     },
 
     getRandomEmoteService() {
-      const emoteTypes: EmoteType[] = ['bttv', 'ffz', 'seventv']
-
+      const emoteTypes: EmoteType[] = [
+        EmoteType.BTTV,
+        EmoteType.FFZ,
+        EmoteType.SEVENTV
+      ]
       return emoteTypes[random(0, 2)]
     },
 
@@ -132,5 +135,9 @@ export class EmotegameCommand implements Command {
 }
 
 declare type EmotegameAction = 'stop' | 'start'
-export declare type EmoteType = 'ffz' | 'bttv' | 'seventv'
+export enum EmoteType {
+  FFZ = 'ffz',
+  BTTV = 'bttv',
+  SEVENTV = 'seventv'
+}
 export declare type Emote = string
