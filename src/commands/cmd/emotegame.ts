@@ -66,6 +66,9 @@ export class EmotegameCommand implements Command {
           response: 'There is no game running at the moment'
         }
       }
+
+      hb.games.removeGameForChannel(channel)
+
       return {
         channel: channel,
         response: 'The emotegame has been stopped',
