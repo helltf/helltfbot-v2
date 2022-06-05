@@ -64,7 +64,7 @@ describe('test redis service', () => {
   })
 
   emoteTypes.forEach((eType) => {
-    fit('get emote set returns null after key expires', async () => {
+    it('get emote set returns null after key expires', async () => {
       const emotes = ['a', 'b']
       hb.cache.DEFAULT_EMOTE_EXPIRE_TIME = 1
 
