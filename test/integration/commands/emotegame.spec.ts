@@ -15,7 +15,7 @@ import {
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test emotegame', () => {
+describe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
@@ -163,6 +163,30 @@ fdescribe('test emotegame', () => {
       expect(responseChannel).toBe(messageChannel)
       expect(response).toBe('There is no game running at the moment')
       expect(success).toBeFalse()
+    })
+
+    it('game is running return successful response', async () => {
+      hb.games.add(new Emotegame(messageChannel, 'emote'))
+
+      const {
+        channel: responseChannel,
+        response,
+        success
+      } = await emotegame.methods.stop(messageChannel)
+
+      expect(responseChannel).toBe(messageChannel)
+      expect(response).toBe('The emotegame has been stopped')
+      expect(success).toBeTrue()
+    })
+
+    it('game is running stops removes the game', async () => {
+      spyOn(hb.games, 'removeGameForChannel')
+
+      hb.games.add(new Emotegame(messageChannel, 'emote'))
+
+      await emotegame.methods.stop(messageChannel)
+
+      expect(hb.games.removeGameForChannel).toHaveBeenCalledWith(messageChannel)
     })
   })
 
