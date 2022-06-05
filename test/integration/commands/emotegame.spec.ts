@@ -19,7 +19,11 @@ describe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
-  const emoteTypes: EmoteType[] = ['bttv', 'ffz', 'seventv']
+  const emoteTypes: EmoteType[] = [
+    EmoteType.BTTV,
+    EmoteType.FFZ,
+    EmoteType.SEVENTV
+  ]
 
   beforeAll(async () => {
     await setupDatabase()
@@ -50,6 +54,21 @@ describe('test emotegame', () => {
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeFalse()
     expect(response).toBe('Action has to be either start or stop')
+  })
+
+  it('emote type is not ffz, bttv oder 7tv return error response', async () => {
+    const type = 'otherType'
+    const message = ['start', type]
+
+    const {
+      channel: responseChannel,
+      response,
+      success
+    } = await emotegame.execute(messageChannel, user, message)
+
+    expect(responseChannel).toBe(messageChannel)
+    expect(response).toBe('type has to be ffz, bttv or seventv')
+    expect(success).toBeFalse()
   })
 
   it('action is start return successful response', async () => {
@@ -269,7 +288,7 @@ describe('test emotegame', () => {
 
     describe('get emote method', () => {
       emoteTypes.forEach((type) => {
-        it('get emotes returns resource error return error message', async () => {
+        it('returns resource error return error message', async () => {
           const error = 'Error message'
           spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
             new ResourceError(error)
@@ -284,7 +303,7 @@ describe('test emotegame', () => {
           expect(result.error).toBe(error)
         })
 
-        it('get emotes returns empty array return resource error', async () => {
+        it('returns empty array return resource error', async () => {
           spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
             new ResourceSuccess([])
           )
@@ -297,7 +316,7 @@ describe('test emotegame', () => {
           expect(result.error).toBe(`No emotes were found for ${type} emotes`)
         })
 
-        it('get emotes returns array return element from that array', async () => {
+        it('get emotes resolves to array return element from that array', async () => {
           const emotes = ['emote1', 'emote2', 'emote3']
           spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
             new ResourceSuccess(emotes)

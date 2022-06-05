@@ -28,9 +28,18 @@ export class EmotegameCommand implements Command {
         success: false
       }
 
+    if (emoteGameType && !Object.values(EmoteType).includes(emoteGameType)) {
+      return {
+        channel,
+        response: 'type has to be ffz, bttv or seventv',
+        success: false
+      }
+    }
+
     if (emoteGameAction === 'start') {
       return await this.methods.start(channel, emoteGameType)
     }
+
     return await this.methods.stop(channel)
   }
 
