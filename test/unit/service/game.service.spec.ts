@@ -59,4 +59,23 @@ describe('test game service', () => {
 
     expect(result).toBeTrue()
   })
+
+  fit('added emotegame will be removed after expiring time over', () => {
+    jasmine.clock().install()
+    spyOn(hb, 'sendMessage')
+    const game = new Emotegame('channel', emote)
+    service.add(game)
+
+    jasmine.clock().tick(game.expiringAfter)
+    const gameExisting = service.emoteGameExists(game)
+
+    expect(gameExisting).toBeFalse()
+    expect(hb.sendMessage).toHaveBeenCalledWith(
+      game.channel,
+      `The running emotegame has been cancelled, because the time limit of ${
+        game.expiringAfter / 1000 / 60
+      } minutes is over`
+    )
+    jasmine.clock().uninstall()
+  })
 })
