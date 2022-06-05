@@ -10,15 +10,16 @@ export class EmotegameCommand implements Command {
   permissions = PermissionLevel.USER
   description = 'start or stop an emotegame'
   requiredParams = ['start|stop']
-  optionalParams: string[]
+  optionalParams = ['type']
   alias = ['hangman', 'egame', 'bttvgame', 'ffzgame', '7tvgame']
   cooldown = 10000
   async execute(
     channel: string,
     userstate: TwitchUserState,
-    [action]: string[]
+    [action, type]: string[]
   ): Promise<BotResponse> {
     const emoteGameAction = action as EmotegameAction
+    const emoteGameType = type as EmoteType
 
     if (!action)
       return {
@@ -27,7 +28,8 @@ export class EmotegameCommand implements Command {
         success: false
       }
 
-    if (emoteGameAction === 'start') return await this.methods.start(channel)
+    if (emoteGameAction === 'start')
+      return await this.methods.start(channel, emoteGameType)
 
     return await this.methods.stop(channel)
   }
@@ -36,7 +38,15 @@ export class EmotegameCommand implements Command {
     start: async (channel: string, type?: EmoteType): Promise<BotResponse> => {
       const emote = await this.methods.getEmote(channel, type)
 
-      const game = new Emotegame(channel, emote)
+      if (emote instanceof ResourceError) {
+        return {
+          success: false,
+          channel: channel,
+          response: emote.error
+        }
+      }
+
+      const game = new Emotegame(channel, emote.data)
 
       const success = hb.games.add(game)
 
