@@ -1,4 +1,5 @@
 import { EmoteType } from '../../../src/commands/cmd/emotegame.js'
+import { wait } from '../../../src/utilities/wait.js'
 import { clearRedis } from '../../test-utils/clear.js'
 import { disconnectRedis } from '../../test-utils/disconnect.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
@@ -59,6 +60,21 @@ describe('test redis service', () => {
       const result = await hb.cache.getEmoteSet(channel, eType)
 
       expect(result).toEqual(emotes)
+    })
+  })
+
+  emoteTypes.forEach((eType) => {
+    fit('get emote set returns null after key expires', async () => {
+      const emotes = ['a', 'b']
+      hb.cache.DEFAULT_EMOTE_EXPIRE_TIME = 1
+
+      await hb.cache.saveEmoteSet(emotes, channel, eType)
+
+      await wait`1s`
+
+      const result = await hb.cache.getEmoteSet(channel, eType)
+
+      expect(result).toBeNull()
     })
   })
 })
