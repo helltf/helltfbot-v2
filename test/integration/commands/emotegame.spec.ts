@@ -15,7 +15,7 @@ import {
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-describe('test emotegame', () => {
+fdescribe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
@@ -75,7 +75,6 @@ describe('test emotegame', () => {
     it('action is start with set emotetype return successful response', async () => {
       mockEmoteApis()
       const message = ['start', type]
-      spyOn(emotegame.methods, 'start')
 
       const {
         channel: responseChannel,
@@ -86,11 +85,6 @@ describe('test emotegame', () => {
       expect(responseChannel).toBe(messageChannel)
       expect(response).toBe('An emotegame has started')
       expect(success).toBeTrue()
-
-      expect(emotegame.methods.start).toHaveBeenCalledOnceWith(
-        messageChannel,
-        type
-      )
     })
   })
 
@@ -137,7 +131,7 @@ describe('test emotegame', () => {
     expect(response).toBe('An emotegame is already running')
   })
 
-  fdescribe('start method', () => {
+  describe('start method', () => {
     emoteTypes.forEach((type) => {
       it('get emote returns ResourceError return error response', async () => {
         const error = 'error message'
@@ -155,6 +149,20 @@ describe('test emotegame', () => {
         expect(response).toBe(error)
         expect(success).toBeFalse()
       })
+    })
+  })
+
+  describe('stop method', () => {
+    it('no game is running return errror response', async () => {
+      const {
+        channel: responseChannel,
+        response,
+        success
+      } = await emotegame.methods.stop(messageChannel)
+
+      expect(responseChannel).toBe(messageChannel)
+      expect(response).toBe('There is no game running at the moment')
+      expect(success).toBeFalse()
     })
   })
 
