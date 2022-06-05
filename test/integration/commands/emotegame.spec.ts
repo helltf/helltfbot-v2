@@ -15,7 +15,7 @@ import {
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-fdescribe('test emotegame', () => {
+describe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
