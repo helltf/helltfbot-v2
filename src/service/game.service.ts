@@ -38,6 +38,10 @@ export class GameService {
     }
   }
 
+  getGame(channel: string): Emotegame | undefined {
+    return this.eg.find((g) => g.channel === channel)
+  }
+
   async remove(game: ChatGame) {
     if (game instanceof Emotegame) {
       const index = this.eg.findIndex((g) => game.channel === g.channel)

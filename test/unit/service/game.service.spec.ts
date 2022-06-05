@@ -4,6 +4,7 @@ import { GameService } from "../../../src/service/game.service.js"
 describe('test game service', () => {
   let service: GameService
   let emote: string
+
   beforeEach(() => {
     service = new GameService()
     emote = 'emote'
@@ -87,5 +88,34 @@ describe('test game service', () => {
     service.removeGameForChannel(game.channel)
 
     expect(service.eg).toHaveSize(0)
+  })
+
+  describe('get game function', () => {
+    it('game is not existing return undefined', () => {
+      const channel = 'channel'
+
+      const game = service.getGame(channel)
+
+      expect(game).toBeUndefined()
+    })
+    it('other game is existing return undefined', () => {
+      const channel = 'channel'
+      const addedGame = new Emotegame(channel, 'emote')
+      service.addEmoteGame(addedGame)
+
+      const game = service.getGame('otherChannel')
+
+      expect(game).toBeUndefined()
+    })
+
+    it('game is existing return game', () => {
+      const channel = 'channel'
+      const addedGame = new Emotegame(channel, 'emote')
+      service.addEmoteGame(addedGame)
+
+      const game = service.getGame(channel)
+
+      expect(game).toEqual(addedGame)
+    })
   })
 })
