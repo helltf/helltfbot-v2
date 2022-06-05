@@ -1,3 +1,3 @@
 export interface ChatGame {
-  expiringAfter: number
+  EXPIRING_AFTER: number
 }

@@ -24,10 +24,10 @@ export class GameService {
     return this.eg.some((g) => g.channel === channel)
   }
 
-  removeAfterTime(game: Emotegame) {
+  removeAfterTime(game: ChatGame) {
     setTimeout(() => {
       this.remove(game)
-    }, game.expiringAfter)
+    }, game.EXPIRING_AFTER)
   }
 
   removeGameForChannel(channel: string) {
@@ -47,7 +47,7 @@ export class GameService {
         await hb.sendMessage(
           game.channel,
           `The running emotegame has been cancelled, because the time limit of ${
-            game.expiringAfter / 1000 / 60
+            game.EXPIRING_AFTER / 1000 / 60
           } minutes is over`
         )
       }

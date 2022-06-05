@@ -67,14 +67,14 @@ describe('test game service', () => {
     const game = new Emotegame('channel', emote)
     service.add(game)
 
-    jasmine.clock().tick(game.expiringAfter)
+    jasmine.clock().tick(game.EXPIRING_AFTER)
     const gameExisting = service.emoteGameExists(game.channel)
 
     expect(gameExisting).toBeFalse()
     expect(hb.sendMessage).toHaveBeenCalledWith(
       game.channel,
       `The running emotegame has been cancelled, because the time limit of ${
-        game.expiringAfter / 1000 / 60
+        game.EXPIRING_AFTER / 1000 / 60
       } minutes is over`
     )
     jasmine.clock().uninstall()
