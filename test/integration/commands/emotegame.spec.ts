@@ -2,8 +2,11 @@ import { TwitchUserState } from "../../../src/client/types.js"
 import { EmotegameCommand } from "../../../src/commands/cmd/emotegame.js"
 import { Emotegame } from "../../../src/games/emotegame.js"
 import { GameService } from '../../../src/service/game.service.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { clearDb, clearRedis } from '../../test-utils/clear.js'
+import {
+  disconnectDatabase,
+  disconnectRedis
+} from '../../test-utils/disconnect.js'
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
@@ -24,10 +27,12 @@ describe('test emotegame', () => {
     emotegame = new EmotegameCommand()
     mockEmoteApis()
     await clearDb(hb.db.dataSource)
+    await clearRedis()
   })
 
   afterAll(async () => {
     await disconnectDatabase()
+    await disconnectRedis()
   })
 
   it('no action given return error response', async () => {
@@ -100,7 +105,7 @@ describe('test emotegame', () => {
 })
 
 function mockEmoteApis() {
-  spyOn(hb.api.bttv, 'getEmotesForChannel').and.resolveTo([])
-  spyOn(hb.api.ffz, 'getEmotesForChannel').and.resolveTo([])
-  spyOn(hb.api.seventv, 'getEmotesForChannel').and.resolveTo([])
+  spyOn(hb.api.bttv, 'getEmotesForChannel').and.resolveTo(['emote'])
+  spyOn(hb.api.ffz, 'getEmotesForChannel').and.resolveTo(['emote'])
+  spyOn(hb.api.seventv, 'getEmotesForChannel').and.resolveTo(['emote'])
 }
