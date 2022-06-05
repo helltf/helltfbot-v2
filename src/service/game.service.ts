@@ -12,15 +12,15 @@ export class GameService {
     }
   }
   addEmoteGame(game: Emotegame): boolean {
-    if (this.emoteGameExists(game)) return false
+    if (this.emoteGameExists(game.channel)) return false
 
     this.eg.push(game)
 
     return true
   }
 
-  emoteGameExists(game: Emotegame): boolean {
-    return this.eg.some((g) => g.channel === game.channel)
+  emoteGameExists(channel: string): boolean {
+    return this.eg.some((g) => g.channel === channel)
   }
 
   removeAfterTime(game: Emotegame) {

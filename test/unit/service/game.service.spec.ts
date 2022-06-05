@@ -46,7 +46,7 @@ describe('test game service', () => {
 
   it('emote game exists returns false because games is empty', () => {
     const game = new Emotegame('channel', emote)
-    const result = service.emoteGameExists(game)
+    const result = service.emoteGameExists(game.channel)
 
     expect(result).toBeFalse()
   })
@@ -55,7 +55,7 @@ describe('test game service', () => {
     const game = new Emotegame('channel', emote)
     service.add(game)
 
-    const result = service.emoteGameExists(game)
+    const result = service.emoteGameExists(game.channel)
 
     expect(result).toBeTrue()
   })
@@ -68,7 +68,7 @@ describe('test game service', () => {
     service.add(game)
 
     jasmine.clock().tick(game.expiringAfter)
-    const gameExisting = service.emoteGameExists(game)
+    const gameExisting = service.emoteGameExists(game.channel)
 
     expect(gameExisting).toBeFalse()
     expect(hb.sendMessage).toHaveBeenCalledWith(
