@@ -20,17 +20,17 @@ export class EmotegameCommand implements Command {
   ): Promise<BotResponse> {
     const emoteGameAction = action as EmotegameAction
     const emoteGameType = type as EmoteType
-    if (!action)
+
+    if (!action || (emoteGameAction !== 'start' && emoteGameAction !== 'stop'))
       return {
         channel: channel,
-        response: 'No action defined. Either start or stop an emotegame',
+        response: 'Action has to be either start or stop',
         success: false
       }
 
     if (emoteGameAction === 'start') {
       return await this.methods.start(channel, emoteGameType)
     }
-
     return await this.methods.stop(channel)
   }
 

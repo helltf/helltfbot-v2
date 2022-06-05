@@ -15,7 +15,7 @@ import {
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setupDatabase } from '../../test-utils/setup-db.js'
 
-describe('test emotegame', () => {
+fdescribe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
@@ -41,8 +41,6 @@ describe('test emotegame', () => {
   })
 
   it('no action given return error response', async () => {
-    mockEmoteApis()
-
     const {
       channel: responseChannel,
       response,
@@ -51,14 +49,12 @@ describe('test emotegame', () => {
 
     expect(responseChannel).toBe(messageChannel)
     expect(success).toBeFalse()
-    expect(response).toBe(
-      'No action defined. Either start or stop an emotegame'
-    )
+    expect(response).toBe('Action has to be either start or stop')
   })
 
   it('action is start return successful response', async () => {
-    mockEmoteApis()
     const message = ['start']
+    mockEmoteApis()
 
     const {
       channel: responseChannel,
@@ -69,6 +65,20 @@ describe('test emotegame', () => {
     expect(responseChannel).toBe(messageChannel)
     expect(response).toBe('An emotegame has started')
     expect(success).toBeTrue()
+  })
+
+  it('action is not start or stop return error response', async () => {
+    const message = ['b']
+
+    const {
+      channel: responseChannel,
+      response,
+      success
+    } = await emotegame.execute(messageChannel, user, message)
+
+    expect(responseChannel).toBe(messageChannel)
+    expect(response).toBe('Action has to be either start or stop')
+    expect(success).toBeFalse()
   })
 
   emoteTypes.forEach((type) => {

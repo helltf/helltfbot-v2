@@ -11,6 +11,7 @@ export class GameService {
       return this.addEmoteGame(game)
     }
   }
+
   addEmoteGame(game: Emotegame): boolean {
     if (this.emoteGameExists(game.channel)) return false
 
