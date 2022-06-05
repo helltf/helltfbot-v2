@@ -1,6 +1,7 @@
+import { Resource, ResourceError, ResourceSuccess } from "../../api/types.js";
 import { TwitchUserState, BotResponse } from "../../client/types.js";
-import { Emotegame } from "../../games/emotegame.js";
-import { random } from "../../utilities/random.js";
+import { Emotegame } from '../../games/emotegame.js'
+import { random } from '../../utilities/random.js'
 import { PermissionLevel } from '../../utilities/twitch/types.js'
 import { Command } from '../types.js'
 
@@ -56,27 +57,49 @@ export class EmotegameCommand implements Command {
       }
     },
 
-    getEmote: async (channel: string): Promise<string> => {
-      const type = this.methods.getRandomEmoteService()
-      const cachedEmotes = await hb.cache.getEmoteSet(channel, type)
+    getEmote: async (
+      channel: string,
+      type?: EmoteType
+    ): Promise<Resource<Emote>> => {
+      type = type ?? this.methods.getRandomEmoteService()
+      const emotes = await this.methods.getEmotes(channel, type)
 
-      const emotes = cachedEmotes
-        ? cachedEmotes
-        : await hb.api[type].getEmotesForChannel(channel)
+      if (emotes instanceof ResourceError) {
+        return new ResourceError(emotes.error)
+      }
 
-      if (!cachedEmotes) hb.cache.saveEmoteSet(emotes, channel, type)
+      if (!emotes.data.length) {
+        return new ResourceError(`No emotes were found for ${type} emotes`)
+      }
 
-      return emotes[random(0, emotes.length)]
+      return new ResourceSuccess(emotes[random(0, emotes.length)])
     },
 
     getRandomEmoteService() {
       const emoteTypes: EmoteType[] = ['bttv', 'ffz', 'seventv']
-      const number = random(0, 2)
 
-      return emoteTypes[number]
+      return emoteTypes[random(0, 2)]
+    },
+
+    getEmotes: async (
+      channel: string,
+      type: EmoteType
+    ): Promise<Resource<Emote[]>> => {
+      const cachedEmotes = await hb.cache.getEmoteSet(channel, type)
+
+      if (cachedEmotes) return new ResourceSuccess(cachedEmotes)
+
+      const apiEmotes = await hb.api[type].getEmotesForChannel(channel)
+
+      if (apiEmotes instanceof ResourceSuccess && apiEmotes.data.length) {
+        await hb.cache.saveEmoteSet(apiEmotes.data, channel, type)
+      }
+
+      return apiEmotes
     }
   }
 }
 
 declare type EmotegameAction = 'stop' | 'start'
-export declare type EmoteType = 'ffz' | 'bttv' | 'seventv' 
+export declare type EmoteType = 'ffz' | 'bttv' | 'seventv'
+export declare type Emote = string
