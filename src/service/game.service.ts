@@ -29,6 +29,14 @@ export class GameService {
     }, game.expiringAfter)
   }
 
+  removeGameForChannel(channel: string) {
+    const index = this.eg.findIndex((g) => channel === g.channel)
+
+    if (index > -1) {
+      this.eg.splice(index, 1)
+    }
+  }
+
   async remove(game: ChatGame) {
     if (game instanceof Emotegame) {
       const index = this.eg.findIndex((g) => game.channel === g.channel)
