@@ -206,6 +206,20 @@ describe('test emotegame', () => {
           expect(result).toBeInstanceOf(ResourceError)
           expect(result.error).toBe(`No emotes were found for ${type} emotes`)
         })
+
+        it('get emotes returns array return element from that array', async () => {
+          const emotes = ['emote1', 'emote2', 'emote3']
+          spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
+            new ResourceSuccess(emotes)
+          )
+
+          const result = (await emotegame.methods.getEmote(
+            messageChannel,
+            type
+          )) as ResourceSuccess<Emote>
+
+          expect(emotes).toContain(result.data)
+        })
       })
     })
   })

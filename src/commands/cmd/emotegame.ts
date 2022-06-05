@@ -33,8 +33,8 @@ export class EmotegameCommand implements Command {
   }
 
   methods = {
-    start: async (channel: string): Promise<BotResponse> => {
-      const emote = await this.methods.getEmote(channel)
+    start: async (channel: string, type?: EmoteType): Promise<BotResponse> => {
+      const emote = await this.methods.getEmote(channel, type)
 
       const game = new Emotegame(channel, emote)
 
@@ -72,7 +72,9 @@ export class EmotegameCommand implements Command {
         return new ResourceError(`No emotes were found for ${type} emotes`)
       }
 
-      return new ResourceSuccess(emotes[random(0, emotes.length)])
+      const randomEmote = emotes.data[random(0, emotes.data.length)]
+
+      return new ResourceSuccess(randomEmote)
     },
 
     getRandomEmoteService() {
