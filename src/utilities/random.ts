@@ -1,3 +1,3 @@
-export const random = (lowerLimit: number = 0, upperLimit: number = 1) => {
+export const random = (lowerLimit = 0, upperLimit = 1) => {
   return Math.floor(Math.random() * upperLimit) + lowerLimit
 }
