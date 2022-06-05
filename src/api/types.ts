@@ -1,3 +1,4 @@
+import { Emote } from "../commands/cmd/emotegame.js";
 import { SevenTvApi } from "./7tv/Seventv.api.js";
 import { BttvApi } from "./bttv/bttv.api.js";
 import { FfzApi } from "./ffz/ffz.api.js";
@@ -41,5 +42,5 @@ export class ApiService {
 }
 
 export declare interface EmoteApi {
-  getEmotesForChannel: (channel: string) => Promise<string[]>
+  getEmotesForChannel: (channel: string) => Promise<Resource<Emote[]>>
 }

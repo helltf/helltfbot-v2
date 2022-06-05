@@ -1,5 +1,5 @@
 import { RedisClientType, createClient } from "redis"
-import { EmoteType } from "../commands/cmd/emotegame.js"
+import { Emote, EmoteType } from "../commands/cmd/emotegame.js"
 
 
 export class CacheService {
@@ -20,7 +20,7 @@ export class CacheService {
     return `emoteset:${channel}-${type}`
   }
 
-  async saveEmoteSet(emotes: string[], channel: string, type: EmoteType) {
+  async saveEmoteSet(emotes: Emote[], channel: string, type: EmoteType) {
     const emoteString = JSON.stringify(emotes)
 
     const redisKey = this.getEmoteSetKey(channel, type)
@@ -30,10 +30,7 @@ export class CacheService {
     })
   }
 
-  async getEmoteSet(
-    channel: string,
-    type: EmoteType
-  ): Promise<string[] | null> {
+  async getEmoteSet(channel: string, type: EmoteType): Promise<Emote[] | null> {
     const redisKey = this.getEmoteSetKey(channel, type)
     const result = await this.redis.get(redisKey)
 
