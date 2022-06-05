@@ -1,1 +1,3 @@
-export interface ChatGame {}
+export interface ChatGame {
+  expiringAfter: number
+}

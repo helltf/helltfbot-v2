@@ -34,7 +34,9 @@ export class EmotegameCommand implements Command {
   methods = {
     start: async (channel: string): Promise<BotResponse> => {
       const emote = await this.methods.getEmote(channel)
+
       const game = new Emotegame(channel, emote)
+
       const success = hb.games.add(game)
 
       return {

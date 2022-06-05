@@ -1,9 +1,9 @@
 import { RedisClientType, createClient } from "redis"
 import { EmoteType } from "../commands/cmd/emotegame.js"
 
-const DEFAULT_EMOTE_EXPIRE_TIME = 60 * 15 
 
 export class CacheService {
+  DEFAULT_EMOTE_EXPIRE_TIME = 60 * 15
   redis: RedisClientType
   constructor() {
     this.redis = createClient({
@@ -13,6 +13,7 @@ export class CacheService {
 
   async connect() {
     await this.redis.connect()
+    return this
   }
 
   getEmoteSetKey(channel: string, type: EmoteType) {
@@ -25,7 +26,7 @@ export class CacheService {
     const redisKey = this.getEmoteSetKey(channel, type)
 
     await this.redis.set(redisKey, emoteString, {
-      EX: DEFAULT_EMOTE_EXPIRE_TIME
+      EX: this.DEFAULT_EMOTE_EXPIRE_TIME
     })
   }
 
