@@ -91,7 +91,7 @@ fdescribe('test emotegame', () => {
   it('action is stop return successful response', async () => {
     const message = ['stop']
     mockEmoteApis()
-
+    hb.games.add(new Emotegame(messageChannel, 'emote'))
     const {
       channel: responseChannel,
       response,

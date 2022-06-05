@@ -20,7 +20,6 @@ export class EmotegameCommand implements Command {
   ): Promise<BotResponse> {
     const emoteGameAction = action as EmotegameAction
     const emoteGameType = type as EmoteType
-
     if (!action)
       return {
         channel: channel,
@@ -28,8 +27,9 @@ export class EmotegameCommand implements Command {
         success: false
       }
 
-    if (emoteGameAction === 'start')
+    if (emoteGameAction === 'start') {
       return await this.methods.start(channel, emoteGameType)
+    }
 
     return await this.methods.stop(channel)
   }
@@ -37,7 +37,6 @@ export class EmotegameCommand implements Command {
   methods = {
     start: async (channel: string, type?: EmoteType): Promise<BotResponse> => {
       const emote = await this.methods.getEmote(channel, type)
-
       if (emote instanceof ResourceError) {
         return {
           success: false,
@@ -60,6 +59,13 @@ export class EmotegameCommand implements Command {
     },
 
     stop: async (channel: string): Promise<BotResponse> => {
+      if (!hb.games.emoteGameExists(channel)) {
+        return {
+          channel: channel,
+          success: false,
+          response: 'There is no game running at the moment'
+        }
+      }
       return {
         channel: channel,
         response: 'The emotegame has been stopped',
