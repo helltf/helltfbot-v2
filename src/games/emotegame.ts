@@ -1,5 +1,5 @@
 import { Emote } from '../commands/cmd/emotegame.js'
-import { ChatGame } from './types.js'
+import { ChatGame, EmoteGameInputResult } from './types.js'
 
 export class Emotegame implements ChatGame {
   channel: string
@@ -16,4 +16,13 @@ export class Emotegame implements ChatGame {
   generateUnderscores(emote: Emote): string[] {
     return Array(emote.length).fill('_')
   }
+
+  input(input: string): EmoteGameInputResult {
+    if (input === this.emote) return EmoteGameInputResult.FINISHED
+    if (!input || input.length > 1) return EmoteGameInputResult.NOTHING
+    if (this.emote.includes(input)) return EmoteGameInputResult.LETTER_CORRECT
+
+    return EmoteGameInputResult.NOTHING
+  }
 }
+
