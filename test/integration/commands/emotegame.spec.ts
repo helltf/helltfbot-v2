@@ -1,3 +1,4 @@
+import { channel } from "diagnostics_channel"
 import { Resource, ResourceError, ResourceSuccess } from "../../../src/api/types.js"
 import { TwitchUserState } from "../../../src/client/types.js"
 import {
@@ -114,7 +115,28 @@ describe('test emotegame', () => {
     expect(response).toBe('An emotegame is already running')
   })
 
-  describe('get emotes method', () => {
+  describe('start method', () => {
+    emoteTypes.forEach((type) => {
+      it('get emote returns ResourceError return error response', async () => {
+        const error = 'error message'
+        spyOn(emotegame.methods, 'getEmote').and.resolveTo(
+          new ResourceError(error)
+        )
+
+        const {
+          channel: responseChannel,
+          response,
+          success
+        } = await emotegame.methods.start(messageChannel, type)
+
+        expect(responseChannel).toBe(messageChannel)
+        expect(response).toBe(error)
+        expect(success).toBeFalse()
+      })
+    })
+  })
+
+  fdescribe('get emotes method', () => {
     emoteTypes.forEach((type) => {
       it('emotes are cached return cached emotes', async () => {
         mockEmoteApis()
@@ -177,7 +199,7 @@ describe('test emotegame', () => {
       })
     })
 
-    fdescribe('get emote method', () => {
+    describe('get emote method', () => {
       emoteTypes.forEach((type) => {
         it('get emotes returns resource error return error message', async () => {
           const error = 'Error message'
