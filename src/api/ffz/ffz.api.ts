@@ -1,9 +1,10 @@
 import fetch from "node-fetch"
+import { Emote } from "../../commands/cmd/emotegame.js"
 import { EmoteApi, Resource, ResourceError, ResourceSuccess } from "../types.js"
 
 export class FfzApi implements EmoteApi {
   url = 'https://api.frankerfacez.com/v1/room/'
-  async fetchEmotes(channel: string): Promise<Resource<string[]>> {
+  async fetchEmotes(channel: string): Promise<Resource<Emote[]>> {
     const error = new ResourceError('Error fetching ffz emotes')
 
     try {
@@ -17,16 +18,12 @@ export class FfzApi implements EmoteApi {
     }
   }
 
-  getEmoteNamesFromSets(sets: FfzEmoteSets): string[] {
+  getEmoteNamesFromSets(sets: FfzEmoteSets): Emote[] {
     return Object.values(sets)[0].emoticons.map((e) => e.name)
   }
 
-  async getEmotesForChannel(channel: string): Promise<string[]> {
-    const emotes = await this.fetchEmotes(channel)
-
-    if (emotes instanceof ResourceError) return []
-
-    return emotes.data
+  async getEmotesForChannel(channel: string): Promise<Resource<Emote[]>> {
+    return await this.fetchEmotes(channel)
   }
 }
 

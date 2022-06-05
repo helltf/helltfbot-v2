@@ -1,9 +1,10 @@
+import { Emote } from "../../commands/cmd/emotegame.js"
 import { Resource, ResourceError, ResourceSuccess } from "../types.js"
 
 export class SevenTvApi {
   url = 'https://api.7tv.app/v2/users/'
 
-  async fetchEmotes(channel: string): Promise<Resource<string[]>> {
+  async fetchEmotes(channel: string): Promise<Resource<Emote[]>> {
     const error = new ResourceError('Error fetching 7tv emotes')
 
     try {
@@ -16,12 +17,8 @@ export class SevenTvApi {
     }
   }
 
-  async getEmotesForChannel(channel: string): Promise<string[]> {
-    const emotes = await this.fetchEmotes(channel)
-
-    if (emotes instanceof ResourceError) return []
-
-    return emotes.data
+  async getEmotesForChannel(channel: string): Promise<Resource<Emote[]>> {
+    return await this.fetchEmotes(channel)
   }
 }
 
