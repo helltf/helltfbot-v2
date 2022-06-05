@@ -79,4 +79,13 @@ describe('test game service', () => {
     )
     jasmine.clock().uninstall()
   })
+
+  it('remove game for channel removes existing game', () => {
+    const game = new Emotegame('channel', 'emote')
+    service.add(game)
+
+    service.removeGameForChannel(game.channel)
+
+    expect(service.eg).toHaveSize(0)
+  })
 })
