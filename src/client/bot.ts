@@ -77,9 +77,9 @@ export class TwitchBot {
     )
   }
 
-  sendMessage(channel?: string, message?: string) {
+  async sendMessage(channel?: string, message?: string) {
     if (!message || !channel) return
-    this.client.say(channel, message)
+    await this.client.say(channel, message)
   }
 
   getCommand(input: string): Command {
