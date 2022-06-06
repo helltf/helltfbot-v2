@@ -100,6 +100,14 @@ describe('test emotegame class', () => {
 
       expect(result).toBe(EmoteGameInputResult.NOTHING)
     })
+
+    it('input is correct but is other case', () => {
+      const input = 'E'
+
+      const result = game.getInputResult(input)
+
+      expect(result).toBe(EmoteGameInputResult.LETTER_CORRECT)
+    })
   })
 
   describe('input function', () => {
