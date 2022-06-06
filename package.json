@@ -5,15 +5,15 @@
   "main": "",
   "type": "commonjs",
   "scripts": {
-    "test": "ts-node scripts/test-setup/test-run.ts",
-    "test:unit": "ts-node scripts/test-setup/test-unit-run.ts",
-    "test:integration": "ts-node scripts/test-setup/test-integration-run.ts",
+    "test": "ts-node -r tsconfig-paths/register scripts/test-setup/test-run.ts",
+    "test:unit": "ts-node -r tsconfig-paths/register scripts/test-setup/test-unit-run.ts",
+    "test:integration": "ts-node -r tsconfig-paths/register scripts/test-setup/test-integration-run.ts",
     "build": "tsc",
     "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "start": "ts-node helltfbot.ts"
+    "start": "ts-node -r tsconfig-paths/register helltfbot.ts"
   },
   "repository": {
     "type": "git",
@@ -54,6 +54,7 @@
     "jasmine-ts": "^0.4.0",
     "prettier": "^2.6.2",
     "ts-node": "^10.8.1",
+    "tsconfig-paths": "^4.0.0",
     "tslib": "^2.4.0",
     "typescript": "^4.7.2"
   }
