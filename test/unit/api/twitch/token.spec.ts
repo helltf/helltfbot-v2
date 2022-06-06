@@ -1,5 +1,5 @@
-import { getTokenBody } from '../../../../src/api/twitch/token.js'
-import { TwitchBot } from '../../../../src/client/bot.js'
+import { getTokenBody } from '../../../../src/api/twitch/token'
+import { TwitchBot } from '../../../../src/client/bot'
 
 describe('test token api ', () => {
   beforeAll(() => {

@@ -1,6 +1,6 @@
-import { Resource, ResourceError, ResourceSuccess } from '../types.js'
+import { Resource, ResourceError, ResourceSuccess } from '../types'
+import { Projects } from './github-projects'
 import fetch from 'node-fetch'
-import { Projects } from './github-projects.js'
 
 const getPipeLineData = async (
   project: Projects

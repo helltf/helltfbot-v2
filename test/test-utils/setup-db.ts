@@ -1,7 +1,7 @@
-import { getOrmConf } from '../../ormconfig.js'
-import { TwitchBot } from '../../src/client/bot.js'
-import { DB } from '../../src/db/export-repositories.js'
-import { CacheService } from '../../src/service/cache.service.js'
+import { getOrmConf } from '../../ormconfig'
+import { TwitchBot } from '../../src/client/bot'
+import { DB } from '../../src/db/export-repositories'
+import { CacheService } from '../../src/service/cache.service'
 
 export const setupDatabase = async () => {
   globalThis.hb = new TwitchBot()

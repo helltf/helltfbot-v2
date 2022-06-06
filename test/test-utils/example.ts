@@ -1,8 +1,8 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
-import { TwitchUserState } from '../../src/client/types.js'
-import { Command } from '../../src/commands/types.js'
-import { Channel, TwitchUser } from '../../src/db/export-entities.js'
-import { Notification } from '../../src/db/export-entities.js'
+import { TwitchUserState } from '../../src/client/types'
+import { Command } from '../../src/commands/types'
+import { Channel, TwitchUser } from '../../src/db/export-entities'
+import { Notification } from '../../src/db/export-entities'
 
 export function getExampleCommand({
   alias = [],

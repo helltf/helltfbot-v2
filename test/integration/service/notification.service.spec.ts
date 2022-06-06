@@ -1,10 +1,10 @@
-import { NotifyEventType, UserNotificationType } from "../../../src/modules/pubsub/types.js"
-import { NotificationService } from "../../../src/service/notification.service.js"
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleNotificationEntity } from '../../test-utils/example.js'
-import { saveNotificationWithUser } from '../../test-utils/save-notification.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+import { NotifyEventType, UserNotificationType } from "../../../src/modules/pubsub/types"
+import { NotificationService } from "../../../src/service/notification.service"
+import { clearDb } from '../../test-utils/clear'
+import { disconnectDatabase } from '../../test-utils/disconnect'
+import { getExampleNotificationEntity } from '../../test-utils/example'
+import { saveNotificationWithUser } from '../../test-utils/save-notification'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test notification service', () => {
   let service: NotificationService

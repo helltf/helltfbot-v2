@@ -1,7 +1,7 @@
-import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel.js"
-import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection.js"
-import { PubSub } from "../../../../src/modules/pubsub/pubsub.js"
-import { Topic, TopicPrefix } from "../../../../src/modules/pubsub/types.js"
+import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel"
+import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection"
+import { PubSub } from '../../../../src/modules/pubsub/pubsub'
+import { Topic, TopicPrefix } from '../../../../src/modules/pubsub/types'
 
 describe('test pubsub', () => {
   let module: PubSub
@@ -98,7 +98,9 @@ describe('test pubsub', () => {
 
         const result = module.getTopics(channels)
 
-        const expectedResult = [{ prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }]
+        const expectedResult = [
+          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }
+        ]
 
         expect(result).toEqual(expectedResult)
       })
@@ -114,7 +116,9 @@ describe('test pubsub', () => {
 
         const result = module.getTopics(channels)
 
-        const expectedResult = [{ prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id }]
+        const expectedResult = [
+          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id }
+        ]
 
         expect(result).toEqual(expectedResult)
       })
@@ -171,7 +175,6 @@ describe('test pubsub', () => {
         const topic = {
           id: 1,
           prefix: TopicPrefix.SETTING
-
         }
         const connection = module.findConnectionForTopic(topic)
 
@@ -247,7 +250,6 @@ describe('test pubsub', () => {
 
         expect(module.createNewPubSubConnection).toHaveBeenCalled()
       })
-
     })
   })
 })

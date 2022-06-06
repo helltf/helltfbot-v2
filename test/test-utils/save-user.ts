@@ -1,4 +1,4 @@
-import { TwitchUserState } from '../../src/client/types.js'
+import { TwitchUserState } from '../../src/client/types'
 
 export async function saveUserStateAsUser(user: TwitchUserState) {
   await hb.db.userRepo.save({

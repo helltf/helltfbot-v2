@@ -1,6 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
-import { PermissionLevel } from '../utilities/twitch/types.js'
-import { Module } from './export/module.js'
+import { PermissionLevel } from '../utilities/twitch/types'
+import { Module } from './export/module'
 
 export class ColorTracking implements Module {
   name = 'Color'

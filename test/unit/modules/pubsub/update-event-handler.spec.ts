@@ -1,5 +1,5 @@
-import { UserNotificationType } from '../../../../src/modules/pubsub/types.js'
-import { PubSubEventHandler } from '../../../../src/modules/pubsub/pubsub-event-handler.js'
+import { UserNotificationType } from '../../../../src/modules/pubsub/types'
+import { PubSubEventHandler } from '../../../../src/modules/pubsub/pubsub-event-handler'
 
 describe('test update event handler unit tests', () => {
   let handler: PubSubEventHandler = new PubSubEventHandler()

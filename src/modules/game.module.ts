@@ -1,16 +1,24 @@
 import { ChatUserstate } from 'tmi.js'
-import { EmoteGameInputResult } from '../games/types.js'
-import { Module } from './export/module.js'
+import { EmoteGameInputResult } from '../games/types'
+import { Module } from './export/module'
 
 export class GameModule implements Module {
   name = 'Game'
 
   initialize() {
-    hb.client.on('chat', (channel, user, message, self) => {
-      if (self) return
-      channel = channel.replace('#', '')
-      this.input(channel, user, message)
-    })
+    hb.client.on(
+      'chat',
+      (
+        channel: string,
+        user: ChatUserstate,
+        message: string,
+        self: boolean
+      ) => {
+        if (self) return
+        channel = channel.replace('#', '')
+        this.input(channel, user, message)
+      }
+    )
   }
 
   input(channel: string, user: ChatUserstate, message: string) {

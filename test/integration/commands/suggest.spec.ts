@@ -1,10 +1,10 @@
-import { TwitchUserState } from '../../../src/client/types.js'
-import { SuggestCommand } from '../../../src/commands/cmd/suggest.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleTwitchUserState } from '../../test-utils/example.js'
-import { saveUserStateAsUser } from '../../test-utils/save-user.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+import { TwitchUserState } from '../../../src/client/types'
+import { SuggestCommand } from '../../../src/commands/cmd/suggest'
+import { clearDb } from '../../test-utils/clear'
+import { disconnectDatabase } from '../../test-utils/disconnect'
+import { getExampleTwitchUserState } from '../../test-utils/example'
+import { saveUserStateAsUser } from '../../test-utils/save-user'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test suggest command', () => {
   let channel: string

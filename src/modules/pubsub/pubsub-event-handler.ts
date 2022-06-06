@@ -1,12 +1,12 @@
-import { Notification } from '../../db/export-entities.js'
-import { MessageGenerator } from './message-generator.js'
+import { Notification } from '../../db/export-entities'
+import { MessageGenerator } from './message-generator'
 import {
   NotificationMessageInfo,
   PubSubData,
   PubSubMessageEventType,
   SettingMessage,
   UserNotificationType
-} from './types.js'
+} from './types'
 
 export class PubSubEventHandler {
   messageGenerator: MessageGenerator

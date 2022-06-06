@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
-import { TwitchUser } from './user.js'
+import { TwitchUser } from './user'
 
 @Entity('suggestion')
 export class Suggestion extends BaseEntity {

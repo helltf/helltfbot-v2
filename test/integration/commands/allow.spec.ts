@@ -1,12 +1,12 @@
-import { AllowCommand } from '../../../src/commands/cmd/allow.js'
-import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { AllowCommand } from '../../../src/commands/cmd/allow'
+import { PermissionLevel } from '../../../src/utilities/twitch/types'
+import { clearDb } from '../../test-utils/clear'
+import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
   getExampleChannel,
   getExampleTwitchUserState
-} from '../../test-utils/example.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+} from '../../test-utils/example'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test allow command', () => {
   let messageChannel = 'messageChannel'

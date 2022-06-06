@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "CommonJS",
+    "target": "ES2022",
     "outDir": "./dist",
     "baseUrl": "./src",
     "types": ["node"],
+    "lib": ["dom", "ES2022"],
     "skipLibCheck": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,

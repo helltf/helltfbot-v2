@@ -1,4 +1,4 @@
-import { PingCommand } from "../../../src/commands/cmd/ping.js"
+import { PingCommand } from "../../../src/commands/cmd/ping"
 
 describe('test ping command', () => {
   let ping: PingCommand

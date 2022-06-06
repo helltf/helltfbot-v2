@@ -1,4 +1,4 @@
-import { Notification } from '../../db/export-entities.js'
+import { Notification } from '../../db/export-entities'
 
 export interface ParsedPubSubData {
   type: MessageType

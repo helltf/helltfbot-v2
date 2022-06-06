@@ -1,10 +1,10 @@
-import { UserNotificationType } from '../../../src/modules/pubsub/types.js'
-import { PubSubEventHandler } from '../../../src/modules/pubsub/pubsub-event-handler.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { Notification } from '../../../src/db/export-entities.js'
-import { getExampleNotificationEntity } from '../../test-utils/example.js'
+import { UserNotificationType } from '../../../src/modules/pubsub/types'
+import { PubSubEventHandler } from '../../../src/modules/pubsub/pubsub-event-handler'
+import { clearDb } from '../../test-utils/clear'
+import { setupDatabase } from '../../test-utils/setup-db'
+import { disconnectDatabase } from '../../test-utils/disconnect'
+import { Notification } from '../../../src/db/export-entities'
+import { getExampleNotificationEntity } from '../../test-utils/example'
 
 describe('Test event handler to return the correct messages', () => {
   let eventHandler: PubSubEventHandler = new PubSubEventHandler()

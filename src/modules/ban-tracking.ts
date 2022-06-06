@@ -1,4 +1,4 @@
-import { Module } from "./export/module.js"
+import { Module } from "./export/module"
 
 export class BanTracking implements Module {
   name = 'Ban'

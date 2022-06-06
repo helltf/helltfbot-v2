@@ -1,9 +1,9 @@
-import { Emote } from "../commands/cmd/emotegame.js";
-import { SevenTvApi } from "./7tv/seventv.api.js";
-import { BttvApi } from "./bttv/bttv.api.js";
-import { FfzApi } from "./ffz/ffz.api.js";
-import { GithubApi } from './github/export-github-api.js'
-import { TwitchApi } from './twitch/export-api.js'
+import { Emote } from "../commands/cmd/emotegame";
+import { SevenTvApi } from "./7tv/seventv.api";
+import { BttvApi } from "./bttv/bttv.api";
+import { FfzApi } from "./ffz/ffz.api";
+import { GithubApi } from './github/export-github-api'
+import { TwitchApi } from './twitch/export-api'
 
 export type Resource<T> = ResourceError | ResourceSuccess<T>
 

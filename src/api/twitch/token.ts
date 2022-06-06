@@ -1,5 +1,5 @@
+import { Resource, ResourceError, ResourceSuccess } from '../types'
 import fetch from 'node-fetch'
-import { Resource, ResourceError, ResourceSuccess } from '../types.js'
 
 const tokenUrl = 'https://id.twitch.tv/oauth2/token'
 

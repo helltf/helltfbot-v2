@@ -1,5 +1,5 @@
-import { NotificationChannel } from "../db/export-entities.js"
-import { NotifyEventType, UserNotificationType } from "../modules/pubsub/types.js"
+import { NotificationChannel } from "../db/export-entities"
+import { NotifyEventType, UserNotificationType } from "../modules/pubsub/types"
 
 export class NotificationService {
   async cleanAllNotifications() {

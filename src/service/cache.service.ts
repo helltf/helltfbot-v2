@@ -1,5 +1,5 @@
 import { RedisClientType, createClient } from "redis"
-import { Emote, EmoteType } from "../commands/cmd/emotegame.js"
+import { Emote, EmoteType } from "../commands/cmd/emotegame"
 
 
 export class CacheService {

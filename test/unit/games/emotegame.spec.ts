@@ -1,5 +1,5 @@
-import { Emotegame } from "../../../src/games/emotegame.js"
-import { EmoteGameInputResult } from "../../../src/games/types.js"
+import { Emotegame } from "../../../src/games/emotegame"
+import { EmoteGameInputResult } from "../../../src/games/types"
 
 describe('test emotegame class', () => {
   let game: Emotegame

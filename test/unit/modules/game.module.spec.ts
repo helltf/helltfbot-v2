@@ -1,8 +1,8 @@
-import { Emotegame } from "../../../src/games/emotegame.js"
-import { EmoteGameInputResult } from "../../../src/games/types.js"
-import { GameModule } from "../../../src/modules/game.module.js"
-import { getExampleTwitchUserState } from '../../test-utils/example.js'
-import { setup } from '../../test-utils/setup.js'
+import { Emotegame } from "../../../src/games/emotegame"
+import { EmoteGameInputResult } from "../../../src/games/types"
+import { GameModule } from "../../../src/modules/game.module"
+import { getExampleTwitchUserState } from '../../test-utils/example'
+import { setup } from '../../test-utils/setup'
 
 describe('test game module', () => {
   let module: GameModule

@@ -1,4 +1,4 @@
-import { MessageGenerator } from '../../../../src/modules/pubsub/message-generator.js'
+import { MessageGenerator } from '../../../../src/modules/pubsub/message-generator'
 
 describe('Testing message generator service', () => {
   let service: MessageGenerator

@@ -1,6 +1,6 @@
 import 'dotenv/config'
-import { setupDev } from './scripts/env-setup/dev.js';
-import { TwitchBot } from './src/client/bot.js'
+import { setupDev } from './scripts/env-setup/dev';
+import { TwitchBot } from './src/client/bot'
 
 globalThis.hb = new TwitchBot()
 {

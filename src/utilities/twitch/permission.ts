@@ -1,5 +1,5 @@
 import { Userstate, Badges } from 'tmi.js'
-import { PermissionLevel } from './types.js'
+import { PermissionLevel } from './types'
 
 export const getChatPermissions = (badges: Badges): PermissionLevel => {
   if (badges.broadcaster !== undefined) return PermissionLevel.BROADCASTER

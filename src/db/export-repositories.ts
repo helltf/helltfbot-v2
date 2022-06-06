@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
-import { getOrmConf } from '../../ormconfig.js'
+import { getOrmConf } from '../../ormconfig'
 import {
   WordleWord,
   ColorHistory,
@@ -12,7 +12,7 @@ import {
   Notification,
   NotificationChannel,
   Suggestion
-} from './export-entities.js'
+} from './export-entities'
 
 export interface DbRepositories {
   wordleRepo: Repository<WordleWord>

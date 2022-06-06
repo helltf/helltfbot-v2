@@ -1,4 +1,4 @@
-import { BotResponse, TwitchUserState } from "../client/types.js"
+import { BotResponse, TwitchUserState } from "../client/types"
 
 
 export interface Command {
