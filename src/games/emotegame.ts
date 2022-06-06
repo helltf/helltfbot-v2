@@ -54,7 +54,7 @@ export class Emotegame implements ChatGame {
   isCorrectLetter(input: string): boolean {
     if (input.length > 1) return false
 
-    return this.emote.includes(input)
+    return this.emote.toLowerCase().includes(input)
   }
 
   isValidInput(input: string): boolean {
