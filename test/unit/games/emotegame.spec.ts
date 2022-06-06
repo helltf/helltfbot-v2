@@ -129,7 +129,6 @@ describe('test emotegame class', () => {
 
       const expectedResult = game.generateUnderscores(game.emote)
       expectedResult[1] = input
-
       expect(game.currentLetters).toEqual(expectedResult)
     })
 
@@ -180,6 +179,7 @@ describe('test emotegame class', () => {
 
     it('letter e has been guessed return underscores but e replaced', () => {
       const input = 'e'
+
       game.input(input)
 
       const result = game.getLetterString()
@@ -205,6 +205,41 @@ describe('test emotegame class', () => {
       expectedString[1] = inputM
 
       expect(result).toBe(expectedString.join(' '))
+    })
+  })
+
+  describe('update letters function', () => {
+    it('input us not correct not update anything', () => {
+      const input = 'a'
+
+      game.updateCurrentLetters(input)
+
+      expect(game.currentLetters).toEqual(game.generateUnderscores(game.emote))
+    })
+
+    it('input is correct on one location update this location', () => {
+      const input = 'm'
+
+      game.updateCurrentLetters(input)
+      const expectedResult = game.generateUnderscores(game.emote)
+      expectedResult[1] = input
+
+      expect(game.currentLetters).toEqual(expectedResult)
+    })
+
+    it('input is correct on two locations update both locations', () => {
+      const inputE = 'e'
+      const inputM = 'm'
+
+      game.updateCurrentLetters(inputE)
+      game.updateCurrentLetters(inputM)
+
+      const expectedResult = game.generateUnderscores(game.emote)
+      expectedResult[1] = inputM
+      expectedResult[0] = inputE
+      expectedResult[4] = inputE
+
+      expect(game.currentLetters).toEqual(expectedResult)
     })
   })
 })
