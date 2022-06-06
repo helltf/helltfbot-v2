@@ -1,8 +1,8 @@
-import { BotResponse } from '../../client/types.js'
+import { BotResponse } from '../../client/types'
 
-import { TwitchUserState } from '../../client/types.js'
-import { PermissionLevel } from '../../utilities/twitch/types.js'
-import { Command } from '../types.js'
+import { TwitchUserState } from '../../client/types'
+import { PermissionLevel } from '../../utilities/twitch/types'
+import { Command } from '../types'
 
 export class JoinCommand implements Command {
   name = 'join'

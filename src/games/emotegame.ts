@@ -1,5 +1,5 @@
-import { Emote } from '../commands/cmd/emotegame.js'
-import { ChatGame, EmoteGameInputResult } from './types.js'
+import { Emote } from '../commands/cmd/emotegame'
+import { ChatGame, EmoteGameInputResult } from './types'
 
 export class Emotegame implements ChatGame {
   channel: string

@@ -1,5 +1,5 @@
-import { Command } from '../types.js'
-import { BotResponse } from '../../client/types.js'
+import { Command } from '../types'
+import { BotResponse } from '../../client/types'
 
 export class GithubCommand implements Command {
   name = 'github'

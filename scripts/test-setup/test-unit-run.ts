@@ -1,7 +1,5 @@
-import 'dotenv/config'
-import Jasmine from 'jasmine'
+import setupJasmine from './setup-jasmine'
 
-process.env.NODE_ENV = 'test'
-const jasmine = new Jasmine()
+const jasmine = setupJasmine()
 jasmine.loadConfigFile('spec/support/jasmine-unit.json')
 jasmine.execute()

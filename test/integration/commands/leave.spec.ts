@@ -1,15 +1,15 @@
-import { TwitchUserState } from '../../../src/client/types.js'
+import { TwitchUserState } from '@client/types'
 import {
   LeaveCommand
-} from '../../../src/commands/cmd/leave.js'
-import { PermissionLevel } from '../../../src/utilities/twitch/types.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
+} from '@commands/cmd/leave'
+import { PermissionLevel } from '@utilities/twitch/types'
+import { clearDb } from '../../test-utils/clear'
+import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
   getExampleChannel,
   getExampleTwitchUserState
-} from '../../test-utils/example.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+} from '../../test-utils/example'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test leave command', () => {
   let user: TwitchUserState

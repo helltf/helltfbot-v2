@@ -1,19 +1,19 @@
-import {  ResourceError, ResourceSuccess } from "../../../src/api/types.js"
-import { TwitchUserState } from "../../../src/client/types.js"
+import {  ResourceError, ResourceSuccess } from "@api/types"
+import { TwitchUserState } from "@client/types"
 import {
   Emote,
   EmotegameCommand,
   EmoteType
-} from '../../../src/commands/cmd/emotegame.js'
-import { Emotegame } from '../../../src/games/emotegame.js'
-import { GameService } from '../../../src/service/game.service.js'
-import { clearDb, clearRedis } from '../../test-utils/clear.js'
+} from '@commands/cmd/emotegame'
+import { Emotegame } from '@games/emotegame'
+import { GameService } from '@service/game.service'
+import { clearDb, clearRedis } from '../../test-utils/clear'
 import {
   disconnectDatabase,
   disconnectRedis
-} from '../../test-utils/disconnect.js'
-import { getExampleTwitchUserState } from '../../test-utils/example.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+} from '../../test-utils/disconnect'
+import { getExampleTwitchUserState } from '../../test-utils/example'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test emotegame', () => {
   let user: TwitchUserState

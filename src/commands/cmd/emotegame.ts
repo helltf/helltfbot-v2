@@ -1,9 +1,9 @@
-import { Resource, ResourceError, ResourceSuccess } from "../../api/types.js";
-import { TwitchUserState, BotResponse } from "../../client/types.js";
-import { Emotegame } from '../../games/emotegame.js'
-import { random } from '../../utilities/random.js'
-import { PermissionLevel } from '../../utilities/twitch/types.js'
-import { Command } from '../types.js'
+import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
+import { TwitchUserState, BotResponse } from "../../client/types";
+import { Emotegame } from '../../games/emotegame'
+import { random } from '../../utilities/random'
+import { PermissionLevel } from '../../utilities/twitch/types'
+import { Command } from '../types'
 
 export class EmotegameCommand implements Command {
   name = 'emotegame'

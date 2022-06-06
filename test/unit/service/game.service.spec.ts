@@ -1,5 +1,5 @@
-import { Emotegame } from "../../../src/games/emotegame.js"
-import { GameService } from "../../../src/service/game.service.js"
+import { Emotegame } from "@games/emotegame"
+import { GameService } from "@service/game.service"
 
 describe('test game service', () => {
   let service: GameService

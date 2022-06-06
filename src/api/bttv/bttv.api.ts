@@ -1,6 +1,6 @@
-import fetch from "node-fetch";
-import { Emote } from "../../commands/cmd/emotegame.js";
-import { Resource, ResourceError, ResourceSuccess } from "../types.js";
+import { Emote } from "../../commands/cmd/emotegame";
+import { Resource, ResourceError, ResourceSuccess } from "../types";
+import fetch from 'node-fetch'
 
 export class BttvApi {
   url = 'https://api.betterttv.net/3/cached/users/twitch/'

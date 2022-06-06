@@ -6,10 +6,10 @@ import {
   OneToOne,
   PrimaryColumn
 } from 'typeorm'
-import { PermissionLevel } from '../../utilities/twitch/types.js'
-import { ColorHistory } from './color_history.js'
-import { Notification } from './notification.js'
-import { Suggestion } from './suggestion.js'
+import { PermissionLevel } from '../../utilities/twitch/types'
+import { ColorHistory } from './color_history'
+import { Notification } from './notification'
+import { Suggestion } from './suggestion'
 
 @Entity('user')
 export class TwitchUser extends BaseEntity {

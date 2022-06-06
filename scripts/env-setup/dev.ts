@@ -1,5 +1,5 @@
-import { ColorHistory, Suggestion } from "../../src/db/export-entities.js"
-import { PermissionLevel } from "../../src/utilities/twitch/types.js"
+import { Suggestion, ColorHistory } from "@db/entities"
+import { PermissionLevel } from "@utilities/twitch/types"
 
 export const setupDev = async () => {
   const user = hb.config.get('MAIN_USER')

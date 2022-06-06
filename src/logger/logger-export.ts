@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import { format } from 'date-fns'
-import { LogType } from './log-type.js'
+import { LogType } from './log-type'
 
 const getEnumKey = (type: LogType) =>
   Object.keys(LogType)[Object.values(LogType).indexOf(type)]

@@ -1,9 +1,9 @@
-import { NotificationChannelInfo } from '../../db/entity/notification_channel.js'
-import { LogType } from '../../logger/log-type.js'
-import { NotificationHandler } from './notification-handler.js'
-import { PubSubConnection } from './pubsub-connection.js'
-import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types.js'
-import { PubSubEventHandler } from './pubsub-event-handler.js'
+import { NotificationChannelInfo } from '../../db/entity/notification_channel'
+import { LogType } from '../../logger/log-type'
+import { NotificationHandler } from './notification-handler'
+import { PubSubConnection } from './pubsub-connection'
+import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types'
+import { PubSubEventHandler } from './pubsub-event-handler'
 
 export class PubSub {
   pubSubEventHandler: PubSubEventHandler

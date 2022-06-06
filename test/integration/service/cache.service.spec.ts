@@ -1,8 +1,8 @@
-import { EmoteType } from '../../../src/commands/cmd/emotegame.js'
-import { wait } from '../../../src/utilities/wait.js'
-import { clearRedis } from '../../test-utils/clear.js'
-import { disconnectRedis } from '../../test-utils/disconnect.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+import { EmoteType } from '@commands/cmd/emotegame'
+import { wait } from '@utilities/wait'
+import { clearRedis } from '../../test-utils/clear'
+import { disconnectRedis } from '../../test-utils/disconnect'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test redis service', () => {
   const emoteTypes: EmoteType[] = [

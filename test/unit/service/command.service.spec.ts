@@ -1,5 +1,5 @@
-import { CommandService } from '../../../src/service/commands.service.js'
-import { getExampleCommand } from '../../test-utils/example.js'
+import { CommandService } from '@service/commands.service'
+import { getExampleCommand } from '../../test-utils/example'
 
 describe('testing commands class', () => {
   it('input no command should have no command', () => {

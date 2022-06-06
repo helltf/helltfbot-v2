@@ -1,12 +1,12 @@
-import { BotResponse } from '../../client/types.js'
+import { BotResponse } from '../../client/types'
 
-import { TwitchUserState } from '../../client/types.js'
+import { TwitchUserState } from '../../client/types'
 import {
   NotifyEventType,
   Topic,
   UserNotificationType
-} from '../../modules/pubsub/types.js'
-import { Command } from '../types.js'
+} from '../../modules/pubsub/types'
+import { Command } from '../types'
 
 export class NotifyCommand implements Command {
   name = 'notify'

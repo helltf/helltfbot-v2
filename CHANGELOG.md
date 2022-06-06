@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Emotegame command
 - integration tests with redis
 
+### Changed
+
+- Using ts-node instead of node
+- setup correct path lookup with ts
+
 ## [1.2.0](https://github.com/helltf/helltfbot-v2/releases/tag/v1.2.0) - 2022-06-03
 
 ### Added 

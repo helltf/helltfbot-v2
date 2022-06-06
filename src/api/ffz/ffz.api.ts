@@ -1,6 +1,6 @@
-import fetch from "node-fetch"
-import { Emote } from "../../commands/cmd/emotegame.js"
-import { EmoteApi, Resource, ResourceError, ResourceSuccess } from "../types.js"
+import { Emote } from "../../commands/cmd/emotegame"
+import { EmoteApi, Resource, ResourceError, ResourceSuccess } from "../types"
+import fetch from 'node-fetch'
 
 export class FfzApi implements EmoteApi {
   url = 'https://api.frankerfacez.com/v1/room/'

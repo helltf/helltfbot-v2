@@ -1,5 +1,5 @@
-import { Emotegame } from '../games/emotegame.js'
-import { ChatGame } from '../games/types.js'
+import { Emotegame } from '../games/emotegame'
+import { ChatGame } from '../games/types'
 
 export class GameService {
   eg: Emotegame[] = []

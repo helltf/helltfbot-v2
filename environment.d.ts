@@ -1,4 +1,4 @@
-import { TwitchBot } from './src/client/bot.js'
+import { TwitchBot } from './src/client/bot'
 declare global {
   var hb: TwitchBot
   namespace NodeJS {

@@ -1,10 +1,10 @@
 import { ChatUserstate } from 'tmi.js'
-import { RemoveSuggestCommand } from '../../../src/commands/cmd/rmsuggestion.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
-import { getExampleTwitchUserState } from '../../test-utils/example.js'
-import { saveUserStateAsUser } from '../../test-utils/save-user.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+import { RemoveSuggestCommand } from '@commands/cmd/rmsuggestion'
+import { clearDb } from '../../test-utils/clear'
+import { disconnectDatabase } from '../../test-utils/disconnect'
+import { getExampleTwitchUserState } from '../../test-utils/example'
+import { saveUserStateAsUser } from '../../test-utils/save-user'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test rmsuggest command', () => {
   let channel: string

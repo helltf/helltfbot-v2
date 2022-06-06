@@ -1,8 +1,8 @@
 import { UpdateResult } from "typeorm"
-import { TwitchUserState, BotResponse } from "../../client/types.js"
-import { UserNotificationType } from "../../modules/pubsub/types.js"
-import { NotificationService } from '../../service/notification.service.js'
-import { Command } from '../types.js'
+import { TwitchUserState, BotResponse } from "../../client/types"
+import { UserNotificationType } from "../../modules/pubsub/types"
+import { NotificationService } from '../../service/notification.service'
+import { Command } from '../types'
 
 export class RemoveCommand implements Command {
   name = 'remove'

@@ -1,5 +1,5 @@
-import { getUserIdByName } from './user-info.js'
-import { generateToken } from './token.js'
+import { getUserIdByName } from './user-info'
+import { generateToken } from './token'
 
 export class TwitchApi {
   accessToken: string

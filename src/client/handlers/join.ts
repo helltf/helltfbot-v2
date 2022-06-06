@@ -1,5 +1,5 @@
-import { LogType } from '../../logger/log-type.js'
-import { wait } from '../../utilities/wait.js'
+import { LogType } from '../../logger/log-type'
+import { wait } from '../../utilities/wait'
 
 const TWITCH_ERROR_MESSAGE = ['msg_channel_suspended']
 

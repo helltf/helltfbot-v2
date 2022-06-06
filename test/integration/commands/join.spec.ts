@@ -1,14 +1,14 @@
-import { TwitchUserState } from '../../../src/client/types.js'
+import { TwitchUserState } from '@client/types'
 import {
   JoinCommand
-} from '../../../src/commands/cmd/join.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
+} from '@commands/cmd/join'
+import { clearDb } from '../../test-utils/clear'
+import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
   getExampleChannel,
   getExampleTwitchUserState
-} from '../../test-utils/example.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
+} from '../../test-utils/example'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('join command tests', () => {
   let user: TwitchUserState
