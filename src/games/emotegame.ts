@@ -22,6 +22,7 @@ export class Emotegame implements ChatGame {
     const result = this.getInputResult(input)
 
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
+      input = input.toLowerCase()
       this.updateCurrentLetters(input)
       this.guessedLetters.push(input)
     }
@@ -33,16 +34,16 @@ export class Emotegame implements ChatGame {
     this.emote
       .split('')
       .reduce((acc: number[], v, index) => {
-        if (v === input) acc.push(index)
+        if (v.toLowerCase() === input) acc.push(index)
         return acc
       }, [])
-      .forEach((i) => (this.currentLetters[i] = input))
+      .forEach((i) => (this.currentLetters[i] = this.emote[i]))
   }
 
   getInputResult(input: string): EmoteGameInputResult {
-    if (this.isValidInput(input)) return EmoteGameInputResult.NOTHING
-
     input = input.toLowerCase()
+
+    if (this.isValidInput(input)) return EmoteGameInputResult.NOTHING
 
     if (this.isCorrectInput(input)) return EmoteGameInputResult.FINISHED
 
