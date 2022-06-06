@@ -1,5 +1,5 @@
 import 'jasmine'
-import { mapTime } from '../../../src/utilities/wait'
+import { mapTime } from '@utilities/wait'
 
 describe('test timeout mappings', () => {
   it('1ms should return 1', () => {

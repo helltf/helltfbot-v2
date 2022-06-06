@@ -1,4 +1,4 @@
-import { PingCommand } from "../../../src/commands/cmd/ping"
+import { PingCommand } from "@commands/cmd/ping"
 
 describe('test ping command', () => {
   let ping: PingCommand

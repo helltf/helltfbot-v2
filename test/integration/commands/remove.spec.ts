@@ -1,6 +1,6 @@
-import { TwitchUserState } from '../../../src/client/types'
-import { RemoveCommand } from '../../../src/commands/cmd/remove'
-import { UserNotificationType } from '../../../src/modules/pubsub/types'
+import { TwitchUserState } from '@client/types'
+import { RemoveCommand } from '@commands/cmd/remove'
+import { UserNotificationType } from '@modules/pubsub/types'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {

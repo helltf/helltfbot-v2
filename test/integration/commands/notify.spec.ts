@@ -2,18 +2,17 @@ import {
   NotifyEventType,
   TopicPrefix,
   UserNotificationType
-} from '../../../src/modules/pubsub/types'
+} from '@modules/pubsub/types'
 import { clearDb } from '../../test-utils/clear'
 import { setupDatabase } from '../../test-utils/setup-db'
 import { disconnectDatabase } from '../../test-utils/disconnect'
-import { NotifyCommand } from '../../../src/commands/cmd/notify'
-import { TwitchUser } from '../../../src/db/export-entities'
-import { Notification } from '../../../src/db/export-entities'
+import { NotifyCommand } from '@commands/cmd/notify'
 import {
   getExampleNotificationEntity,
   getExampleTwitchUserEntity,
   getExampleTwitchUserState
 } from '../../test-utils/example'
+import { TwitchUser, Notification } from '@db/entities'
 
 describe('test notify command: ', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000

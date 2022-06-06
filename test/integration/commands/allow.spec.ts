@@ -1,5 +1,5 @@
-import { AllowCommand } from '../../../src/commands/cmd/allow'
-import { PermissionLevel } from '../../../src/utilities/twitch/types'
+import { AllowCommand } from '@commands/cmd/allow'
+import { PermissionLevel } from '@utilities/twitch/types'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {

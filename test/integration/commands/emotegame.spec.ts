@@ -1,12 +1,12 @@
-import {  ResourceError, ResourceSuccess } from "../../../src/api/types"
-import { TwitchUserState } from "../../../src/client/types"
+import {  ResourceError, ResourceSuccess } from "@api/types"
+import { TwitchUserState } from "@client/types"
 import {
   Emote,
   EmotegameCommand,
   EmoteType
-} from '../../../src/commands/cmd/emotegame'
-import { Emotegame } from '../../../src/games/emotegame'
-import { GameService } from '../../../src/service/game.service'
+} from '@commands/cmd/emotegame'
+import { Emotegame } from '@games/emotegame'
+import { GameService } from '@service/game.service'
 import { clearDb, clearRedis } from '../../test-utils/clear'
 import {
   disconnectDatabase,

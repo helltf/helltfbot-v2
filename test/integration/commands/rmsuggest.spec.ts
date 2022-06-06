@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { RemoveSuggestCommand } from '../../../src/commands/cmd/rmsuggestion'
+import { RemoveSuggestCommand } from '@commands/cmd/rmsuggestion'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import { getExampleTwitchUserState } from '../../test-utils/example'

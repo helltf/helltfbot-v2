@@ -1,5 +1,5 @@
 import 'jasmine'
-import { ColorTracking } from '../../../src/modules/user-tracking'
+import { ColorTracking } from '@modules/user-tracking'
 
 describe('color tracking tests', () => {
   let module: ColorTracking

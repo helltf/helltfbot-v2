@@ -12,10 +12,17 @@
     "esModuleInterop": true,
     "strict": true,
     "paths": {
-      "@db/entities/*": ["db/index.ts"],
-      "@modules/*": ["modules/*"],
-      "@api/*": ["api/*"],
-      "@src/*": ["./*"]
+      "@db/entities": ["db/export-entities.ts"],
+      "@test-utils*": ["../test/test-utils*"],
+      "@modules*": ["modules*"],
+      "@api*": ["api*"],
+      "@src*": [".*"],
+      "@jobs*": ["jobs*"],
+      "@service*": ["service*"],
+      "@commands*": ["commands*"],
+      "@client*": ["client*"],
+      "@games*": ["games*"],
+      "@utilities*": ["utilities*"]
     },
     "removeComments": true,
     "strictPropertyInitialization": false,

@@ -1,9 +1,9 @@
-import { UserNotificationType } from '../../../src/modules/pubsub/types'
-import { PubSubEventHandler } from '../../../src/modules/pubsub/pubsub-event-handler'
+import { UserNotificationType } from '@modules/pubsub/types'
+import { PubSubEventHandler } from '@modules/pubsub/pubsub-event-handler'
 import { clearDb } from '../../test-utils/clear'
 import { setupDatabase } from '../../test-utils/setup-db'
 import { disconnectDatabase } from '../../test-utils/disconnect'
-import { Notification } from '../../../src/db/export-entities'
+import { Notification } from '@db/entities'
 import { getExampleNotificationEntity } from '../../test-utils/example'
 
 describe('Test event handler to return the correct messages', () => {

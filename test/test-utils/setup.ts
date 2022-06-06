@@ -1,4 +1,4 @@
-import { TwitchBot } from '../../src/client/bot'
+import { TwitchBot } from '@client/bot'
 
 export const setup = () => {
   globalThis.hb = new TwitchBot()

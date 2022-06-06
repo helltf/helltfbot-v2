@@ -1,7 +1,7 @@
-import { TwitchUserState } from '../../../src/client/types'
+import { TwitchUserState } from '@client/types'
 import {
   JoinCommand
-} from '../../../src/commands/cmd/join'
+} from '@commands/cmd/join'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {

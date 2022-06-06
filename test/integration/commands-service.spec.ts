@@ -1,5 +1,5 @@
-import { Command } from "../../src/commands/types"
-import { CommandService } from "../../src/service/commands.service"
+import { Command } from "@commands/types"
+import { CommandService } from "@service/commands.service"
 import { clearDb } from "../test-utils/clear"
 import { disconnectDatabase } from '../test-utils/disconnect'
 import { getExampleCommand } from '../test-utils/example'

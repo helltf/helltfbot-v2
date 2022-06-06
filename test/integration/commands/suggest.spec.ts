@@ -1,5 +1,5 @@
-import { TwitchUserState } from '../../../src/client/types'
-import { SuggestCommand } from '../../../src/commands/cmd/suggest'
+import { TwitchUserState } from '@client/types'
+import { SuggestCommand } from '@commands/cmd/suggest'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import { getExampleTwitchUserState } from '../../test-utils/example'

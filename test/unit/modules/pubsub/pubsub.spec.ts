@@ -1,7 +1,7 @@
-import { NotificationChannelInfo } from "../../../../src/db/entity/notification_channel"
-import { PubSubConnection } from "../../../../src/modules/pubsub/pubsub-connection"
-import { PubSub } from '../../../../src/modules/pubsub/pubsub'
-import { Topic, TopicPrefix } from '../../../../src/modules/pubsub/types'
+import { PubSubConnection } from "@modules/pubsub/pubsub-connection"
+import { PubSub } from '@modules/pubsub/pubsub'
+import { Topic, TopicPrefix } from '@modules/pubsub/types'
+import { NotificationChannelInfo } from 'db/entity/notification_channel'
 
 describe('test pubsub', () => {
   let module: PubSub

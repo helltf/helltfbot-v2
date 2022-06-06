@@ -1,6 +1,6 @@
-import { Emotegame } from "../../../src/games/emotegame"
-import { EmoteGameInputResult } from "../../../src/games/types"
-import { GameModule } from "../../../src/modules/game.module"
+import { Emotegame } from "@games/emotegame"
+import { EmoteGameInputResult } from "@games/types"
+import { GameModule } from "@modules/game.module"
 import { getExampleTwitchUserState } from '../../test-utils/example'
 import { setup } from '../../test-utils/setup'
 

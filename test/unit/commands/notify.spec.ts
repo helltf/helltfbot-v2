@@ -1,10 +1,5 @@
-import {
-  NotifyCommand
-} from '../../../src/commands/cmd/notify'
-import {
-  NotifyEventType,
-  UserNotificationType
-} from '../../../src/modules/pubsub/types'
+import { NotifyCommand } from "@commands/cmd/notify"
+import { UserNotificationType, NotifyEventType } from "@modules/pubsub/types"
 
 describe('unit test notify command functions', () => {
   let notify: NotifyCommand
