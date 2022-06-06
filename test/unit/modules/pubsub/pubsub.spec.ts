@@ -1,7 +1,7 @@
 import { PubSubConnection } from "@modules/pubsub/pubsub-connection"
 import { PubSub } from '@modules/pubsub/pubsub'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
-import { NotificationChannelInfo } from 'db/entity/notification_channel'
+import { NotificationChannelInfo } from '@src/db/entity/notification_channel'
 
 describe('test pubsub', () => {
   let module: PubSub

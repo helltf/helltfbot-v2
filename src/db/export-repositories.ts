@@ -1,4 +1,3 @@
-import { ErrorEntity } from '@srcdb/entity/error.entity'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { getOrmConf } from '../../ormconfig'
@@ -12,7 +11,8 @@ import {
   CommandEntity,
   Notification,
   NotificationChannel,
-  Suggestion
+  Suggestion,
+  ErrorEntity
 } from './export-entities'
 
 export interface DbRepositories {

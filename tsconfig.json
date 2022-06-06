@@ -16,7 +16,7 @@
       "@test-utils*": ["test/test-utils*"],
       "@modules*": ["src/modules*"],
       "@api*": ["src/api*"],
-      "@src*": ["src/*"],
+      "@src*": ["src*"],
       "@jobs*": ["src/jobs*"],
       "@service*": ["src/service*"],
       "@commands*": ["src/commands*"],
