@@ -48,6 +48,10 @@ export class TwitchBot {
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     this.commands.updateDb()
+
+    const startUpMessage = hb.config.get('START_UP_MESSAGE')
+
+    hb.sendMessage(hb.config.get('MAIN_USER'), startUpMessage)
   }
 
   startPubSub() {
