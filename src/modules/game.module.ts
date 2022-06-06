@@ -4,12 +4,12 @@ import { EmoteGameInputResult } from '../games/types.js'
 import { Module } from './export/module.js'
 
 export class GameModule implements Module {
-  name: string = 'game'
+  name: string = 'Game'
 
   initialize() {
     hb.client.on('chat', (channel, user, message, self) => {
-      if (!self) return
-
+      if (self) return
+      channel = channel.replace('#', '')
       this.input(channel, user, message)
     })
   }
@@ -23,15 +23,18 @@ export class GameModule implements Module {
 
     if (result === EmoteGameInputResult.FINISHED) {
       return hb.sendMessage(
+        channel,
         `${user.username} has guessed the emote. The emote was ${game.emote}`
       )
     }
 
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
-      return hb.sendMessage(`
-        ${
+      return hb.sendMessage(
+        channel,
+        `${
           user.username
-        } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`)
+        } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
+      )
     }
   }
 }

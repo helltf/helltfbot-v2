@@ -4,7 +4,7 @@ import { GameModule } from "../../../src/modules/game.module.js"
 import { getExampleTwitchUserState } from '../../test-utils/example.js'
 import { setup } from '../../test-utils/setup.js'
 
-fdescribe('test game module', () => {
+describe('test game module', () => {
   let module: GameModule
   let game: Emotegame
 
@@ -26,7 +26,7 @@ fdescribe('test game module', () => {
     module.input(channel, user, message)
 
     const expectedMesage = `${user.username} has guessed the emote. The emote was ${game.emote}`
-    expect(hb.sendMessage).toHaveBeenCalledWith(expectedMesage)
+    expect(hb.sendMessage).toHaveBeenCalledWith(channel, expectedMesage)
   })
 
   it('game returns letter correct send letter correct  message', () => {
@@ -42,6 +42,6 @@ fdescribe('test game module', () => {
       user.username
     } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
 
-    expect(hb.sendMessage).toHaveBeenCalledWith(expectedMesage)
+    expect(hb.sendMessage).toHaveBeenCalledWith(channel, expectedMesage)
   })
 })
