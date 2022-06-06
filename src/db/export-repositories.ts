@@ -1,3 +1,4 @@
+import { ErrorEntity } from '@srcdb/entity/error.entity'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { getOrmConf } from '../../ormconfig'
@@ -25,6 +26,7 @@ export interface DbRepositories {
   notificationRepo: Repository<Notification>
   notificationChannelRepo: Repository<NotificationChannel>
   suggestionRepo: Repository<Suggestion>
+  errorRepo: Repository<ErrorEntity>
 }
 
 export class DB implements DbRepositories {
@@ -39,6 +41,7 @@ export class DB implements DbRepositories {
   notificationChannelRepo: Repository<NotificationChannel>
   suggestionRepo: Repository<Suggestion>
   dataSource: DataSource
+  errorRepo: Repository<ErrorEntity>
 
   constructor(config: PostgresConnectionOptions = getOrmConf()) {
     const dataSource = new DataSource(config)
@@ -52,6 +55,7 @@ export class DB implements DbRepositories {
     this.notificationRepo = dataSource.getRepository(Notification)
     this.suggestionRepo = dataSource.getRepository(Suggestion)
     this.notificationChannelRepo = dataSource.getRepository(NotificationChannel)
+    this.errorRepo = dataSource.getRepository(ErrorEntity)
 
     this.dataSource = dataSource
   }
