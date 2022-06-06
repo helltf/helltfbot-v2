@@ -1,10 +1,9 @@
 import { ChatUserstate } from 'tmi.js'
-import { Emotegame } from '../games/emotegame.js'
 import { EmoteGameInputResult } from '../games/types.js'
 import { Module } from './export/module.js'
 
 export class GameModule implements Module {
-  name: string = 'Game'
+  name = 'Game'
 
   initialize() {
     hb.client.on('chat', (channel, user, message, self) => {

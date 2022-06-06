@@ -1,5 +1,5 @@
 import { Emote } from "../commands/cmd/emotegame.js";
-import { SevenTvApi } from "./7tv/Seventv.api.js";
+import { SevenTvApi } from "./7tv/seventv.api.js";
 import { BttvApi } from "./bttv/bttv.api.js";
 import { FfzApi } from "./ffz/ffz.api.js";
 import { GithubApi } from './github/export-github-api.js'
