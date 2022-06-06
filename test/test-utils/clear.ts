@@ -7,5 +7,5 @@ export const clearDb = async (dataSource: DataSource) => {
 }
 
 export const clearRedis = async () => {
-  await hb.cache.flushAll()
+  await hb.cache.redis.flushAll()
 }

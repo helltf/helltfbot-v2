@@ -1,7 +1,8 @@
 import { AllowCommand } from "../cmd/allow.js"
-import { GithubCommand } from "../cmd/github.js"
-import { JoinCommand } from "../cmd/join.js"
-import { LeaveCommand } from "../cmd/leave.js"
+import { EmotegameCommand } from "../cmd/emotegame.js"
+import { GithubCommand } from '../cmd/github.js'
+import { JoinCommand } from '../cmd/join.js'
+import { LeaveCommand } from '../cmd/leave.js'
 import { NotifyCommand } from '../cmd/notify.js'
 import { PingCommand } from '../cmd/ping.js'
 import { RemoveSuggestCommand } from '../cmd/rmsuggestion.js'
@@ -18,6 +19,7 @@ const commands: Command[] = [
   new RemoveSuggestCommand(),
   new JoinCommand(),
   new LeaveCommand(),
-  new AllowCommand()
+  new AllowCommand(),
+  new EmotegameCommand()
 ]
 export default commands

@@ -8,11 +8,12 @@ import { customLogMessage } from '../logger/logger-export.js'
 import { modules } from '../modules/export/export-modules.js'
 import { PubSub } from '../modules/pubsub/pubsub.js'
 import { CommandService } from '../service/commands.service.js'
-import { createClient, RedisClientType } from 'redis'
 import { client } from './main-client.js'
 import { ConfigService } from '../service/config.service.js'
 import { ApiService } from '../api/types.js'
 import { Command } from '../commands/types.js'
+import { GameService } from '../service/game.service.js'
+import { CacheService } from '../service/cache.service.js'
 
 export class TwitchBot {
   client: Client
@@ -22,8 +23,9 @@ export class TwitchBot {
   api: ApiService
   pubSub: PubSub
   log: (type: LogType, ...args: any) => void
-  cache: RedisClientType
+  cache: CacheService
   config: ConfigService
+  games: GameService
 
   constructor() {
     this.config = new ConfigService()
@@ -34,9 +36,8 @@ export class TwitchBot {
     this.db = new DB()
     this.commands = new CommandService(commands)
     this.api = new ApiService()
-    this.cache = createClient({
-      url: process.env.REDIS_URL
-    })
+    this.cache = new CacheService()
+    this.games = new GameService()
   }
 
   async init() {
@@ -47,6 +48,10 @@ export class TwitchBot {
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     this.commands.updateDb()
+
+    const startUpMessage = hb.config.get('START_UP_MESSAGE')
+
+    hb.sendMessage(hb.config.get('MAIN_USER'), startUpMessage)
   }
 
   startPubSub() {
@@ -76,9 +81,9 @@ export class TwitchBot {
     )
   }
 
-  sendMessage(channel?: string, message?: string) {
+  async sendMessage(channel?: string, message?: string) {
     if (!message || !channel) return
-    this.client.say(channel, message)
+    await this.client.say(channel, message)
   }
 
   getCommand(input: string): Command {
