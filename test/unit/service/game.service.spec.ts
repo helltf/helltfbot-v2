@@ -1,5 +1,6 @@
 import { Emotegame } from "@games/emotegame"
 import { GameService } from "@service/game.service"
+import { TwitchBot } from "@src/client/bot"
 
 describe('test game service', () => {
   let service: GameService
@@ -63,6 +64,7 @@ describe('test game service', () => {
 
   it('added emotegame will be removed after expiring time over', () => {
     jasmine.clock().install()
+    globalThis.hb = new TwitchBot()
     spyOn(hb, 'sendMessage')
 
     const game = new Emotegame('channel', emote)
