@@ -13,7 +13,9 @@
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "start": "ts-node -r tsconfig-paths/register helltfbot.ts"
+    "start": "ts-node -r tsconfig-paths/register helltfbot.ts",
+    "migration": "npx typeorm-ts-node-commonjs migration:run -d migration-datasource.ts",
+    "migration:generate": "npx typeorm-ts-node-commonjs migration:generate -d migration-datasource.ts ./src/db/migration/migration"
   },
   "repository": {
     "type": "git",

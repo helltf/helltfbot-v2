@@ -8,6 +8,7 @@ import { CommandEntity } from './entity/command'
 import { Notification } from './entity/notification'
 import { NotificationChannel } from './entity/notification_channel'
 import { Suggestion } from './entity/suggestion'
+import { ErrorEntity } from './entity/error.entity'
 
 export {
   Ban,
@@ -19,5 +20,6 @@ export {
   CommandEntity,
   Notification,
   NotificationChannel,
-  Suggestion
+  Suggestion,
+  ErrorEntity
 }

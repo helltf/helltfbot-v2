@@ -13,3 +13,14 @@ globalThis.hb = new TwitchBot()
     hb.initModules()
   })()
 }
+
+process.on('uncaughtException', async (error) => {
+  await hb.db.errorRepo.save({
+    message: error.message,
+    stack_trace: error.stack,
+    timestamp: Date.now()
+  })
+  console.error(error)
+
+  process.exit(1)
+})

@@ -11,7 +11,8 @@ import {
   CommandEntity,
   Notification,
   NotificationChannel,
-  Suggestion
+  Suggestion,
+  ErrorEntity
 } from './export-entities'
 
 export interface DbRepositories {
@@ -25,6 +26,7 @@ export interface DbRepositories {
   notificationRepo: Repository<Notification>
   notificationChannelRepo: Repository<NotificationChannel>
   suggestionRepo: Repository<Suggestion>
+  errorRepo: Repository<ErrorEntity>
 }
 
 export class DB implements DbRepositories {
@@ -39,6 +41,7 @@ export class DB implements DbRepositories {
   notificationChannelRepo: Repository<NotificationChannel>
   suggestionRepo: Repository<Suggestion>
   dataSource: DataSource
+  errorRepo: Repository<ErrorEntity>
 
   constructor(config: PostgresConnectionOptions = getOrmConf()) {
     const dataSource = new DataSource(config)
@@ -52,6 +55,7 @@ export class DB implements DbRepositories {
     this.notificationRepo = dataSource.getRepository(Notification)
     this.suggestionRepo = dataSource.getRepository(Suggestion)
     this.notificationChannelRepo = dataSource.getRepository(NotificationChannel)
+    this.errorRepo = dataSource.getRepository(ErrorEntity)
 
     this.dataSource = dataSource
   }
