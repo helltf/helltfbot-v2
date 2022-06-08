@@ -1,7 +1,6 @@
 import { Emote } from "../../commands/cmd/emotegame"
 import { Resource, ResourceError, ResourceSuccess } from "../types"
-
-
+import fetch from "node-fetch"
 
 export class SevenTvApi {
   url = 'https://api.7tv.app/v2/users/'
