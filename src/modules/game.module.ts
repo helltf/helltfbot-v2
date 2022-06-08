@@ -29,6 +29,7 @@ export class GameModule implements Module {
     const result = game.input(message)
 
     if (result === EmoteGameInputResult.FINISHED) {
+      hb.games.remove(game)
       return hb.sendMessage(
         channel,
         `${user.username} has guessed the emote. The emote was ${game.emote}`
