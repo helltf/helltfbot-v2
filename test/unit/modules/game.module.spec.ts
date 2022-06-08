@@ -4,7 +4,7 @@ import { GameModule } from "@modules/game.module"
 import { getExampleTwitchUserState } from '../../test-utils/example'
 import { setup } from '../../test-utils/setup'
 
-fdescribe('test game module', () => {
+describe('test game module', () => {
   let module: GameModule
   let game: Emotegame
   let channel: string
