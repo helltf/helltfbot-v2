@@ -1,4 +1,4 @@
-import { updateGithubPipeline } from './github-pipeline.js'
+import { updateGithubPipeline } from './github-pipeline'
 
 class Job {
   delay: number

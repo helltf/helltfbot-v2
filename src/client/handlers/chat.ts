@@ -1,8 +1,8 @@
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../commands/types.js'
-import { getUserPermissions } from '../../utilities/twitch/permission.js'
-import { PermissionLevel } from '../../utilities/twitch/types.js'
-import { BotResponse, TwitchUserState } from '../types.js'
+import { Command } from '../../commands/types'
+import { getUserPermissions } from '../../utilities/twitch/permission'
+import { PermissionLevel } from '../../utilities/twitch/types'
+import { BotResponse, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
 

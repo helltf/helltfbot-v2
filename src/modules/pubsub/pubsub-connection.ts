@@ -1,5 +1,5 @@
 import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
-import { LogType } from '../../logger/log-type.js'
+import { LogType } from '../../logger/log-type'
 import {
   TopicPrefix,
   OutgoingMessage,
@@ -7,7 +7,7 @@ import {
   ParsedPubSubData,
   Topic,
   MessageType
-} from './types.js'
+} from './types'
 import * as WS from 'ws'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'

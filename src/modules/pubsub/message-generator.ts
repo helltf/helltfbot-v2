@@ -1,5 +1,5 @@
-import { NotificationMessageInfo } from './types.js'
-import { Notification } from '../../db/export-entities.js'
+import { NotificationMessageInfo } from './types'
+import { Notification } from '../../db/export-entities'
 export class MessageGenerator {
   maxMessageLength = 450
 

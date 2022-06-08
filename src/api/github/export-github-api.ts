@@ -1,4 +1,4 @@
-import { getPipeLineData } from './github-api.js'
+import { getPipeLineData } from './github-api'
 
 export class GithubApi {
   getPipeLineData = getPipeLineData

@@ -1,15 +1,15 @@
-import { TwitchUserState } from '../../../src/client/types.js'
-import { RemoveCommand } from '../../../src/commands/cmd/remove.js'
-import { UserNotificationType } from '../../../src/modules/pubsub/types.js'
-import { clearDb } from '../../test-utils/clear.js'
-import { disconnectDatabase } from '../../test-utils/disconnect.js'
+import { TwitchUserState } from '@client/types'
+import { RemoveCommand } from '@commands/cmd/remove'
+import { UserNotificationType } from '@modules/pubsub/types'
+import { clearDb } from '../../test-utils/clear'
+import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
   getExampleNotificationEntity,
   getExampleTwitchUserEntity,
   getExampleTwitchUserState
-} from '../../test-utils/example.js'
-import { setupDatabase } from '../../test-utils/setup-db.js'
-import { saveNotificationWithUser } from '../../test-utils/save-notification.js'
+} from '../../test-utils/example'
+import { setupDatabase } from '../../test-utils/setup-db'
+import { saveNotificationWithUser } from '../../test-utils/save-notification'
 
 describe('test remove command', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000

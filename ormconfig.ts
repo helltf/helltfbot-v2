@@ -38,8 +38,8 @@ function getDefaultOrmConf(): PostgresConnectionOptions {
     type: 'postgres',
     synchronize: false,
     logging: false,
-    entities: ['dist/src/db/entity/**/*.js'],
-    migrations: ['db/migrations/**/*.ts'],
+    entities: ['src/db/entity/**/*'],
+    migrations: ['src/db/migration/**/*.ts'],
     subscribers: ['db/subscriber/**/*.ts']
   }
 }

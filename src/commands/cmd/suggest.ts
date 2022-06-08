@@ -1,6 +1,6 @@
-import { Command } from '../types.js'
+import { Command } from '../types'
 import { ChatUserstate } from 'tmi.js'
-import { BotResponse } from '../../client/types.js'
+import { BotResponse } from '../../client/types'
 
 export class SuggestCommand implements Command {
   name = 'suggest'

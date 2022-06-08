@@ -1,4 +1,4 @@
-import { Environment } from "../../environment.js"
+import { Environment } from "../../environment"
 
 export class ConfigService {
   isProd() {

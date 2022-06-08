@@ -1,9 +1,11 @@
-import { BanTracking } from '../ban-tracking.js'
-import { ColorTracking } from '../user-tracking.js'
-import { TimeoutTracking } from '../timeout-tracking.js'
-import { Module } from './module.js'
+import { BanTracking } from '../ban-tracking'
+import { ColorTracking } from '../user-tracking'
+import { TimeoutTracking } from '../timeout-tracking'
+import { Module } from './module'
+import { GameModule } from '../game.module'
 const timeoutModule = new TimeoutTracking()
 const colorModule = new ColorTracking()
 const banModule = new BanTracking()
-const modules: Module[] = [timeoutModule, banModule, colorModule]
+const gameModule = new GameModule()
+const modules: Module[] = [timeoutModule, banModule, colorModule, gameModule]
 export { modules }

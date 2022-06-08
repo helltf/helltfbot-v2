@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
-import { TwitchUser } from './user.js'
+import { TwitchUser } from './user'
 
 @Entity('notification')
 @Index(['streamer', 'user'], { unique: true })

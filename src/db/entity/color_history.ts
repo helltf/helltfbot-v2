@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
-import { TwitchUser } from './user.js'
+import { TwitchUser } from './user'
 
 @Entity('color_history')
 export class ColorHistory extends BaseEntity {

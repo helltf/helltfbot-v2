@@ -1,13 +1,14 @@
-import { Channel } from './entity/channel.js'
-import { Ban } from './entity/ban.js'
-import { ColorHistory } from './entity/color_history.js'
-import { Timeout } from './entity/timeout.js'
-import { TwitchUser } from './entity/user.js'
-import { WordleWord } from './entity/wordle.js'
-import { CommandEntity } from './entity/command.js'
-import { Notification } from './entity/notification.js'
-import { NotificationChannel } from './entity/notification_channel.js'
-import { Suggestion } from './entity/suggestion.js'
+import { Channel } from './entity/channel'
+import { Ban } from './entity/ban'
+import { ColorHistory } from './entity/color_history'
+import { Timeout } from './entity/timeout'
+import { TwitchUser } from './entity/user'
+import { WordleWord } from './entity/wordle'
+import { CommandEntity } from './entity/command'
+import { Notification } from './entity/notification'
+import { NotificationChannel } from './entity/notification_channel'
+import { Suggestion } from './entity/suggestion'
+import { ErrorEntity } from './entity/error.entity'
 
 export {
   Ban,
@@ -19,5 +20,6 @@ export {
   CommandEntity,
   Notification,
   NotificationChannel,
-  Suggestion
+  Suggestion,
+  ErrorEntity
 }

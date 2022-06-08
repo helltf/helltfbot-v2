@@ -1,7 +1,7 @@
+import { Resource, ResourceError, ResourceSuccess } from '../types'
+import { getAuthorizationHeader } from './autorization'
+import { TwitchUserInfo } from './types'
 import fetch from 'node-fetch'
-import { Resource, ResourceError, ResourceSuccess } from '../types.js'
-import { getAuthorizationHeader } from './autorization.js'
-import { TwitchUserInfo } from './types.js'
 
 const USERS_URL = 'https://api.twitch.tv/helix/users'
 

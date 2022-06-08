@@ -1,6 +1,6 @@
-import { PipelineData } from '../api/github/github-api.js'
-import { Projects } from '../api/github/github-projects.js'
-import { ResourceError } from '../api/types.js'
+import { PipelineData } from '../api/github/github-api'
+import { Projects } from '../api/github/github-projects'
+import { ResourceError } from '../api/types'
 
 interface ProjectInfo {
   count: number | undefined

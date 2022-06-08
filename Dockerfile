@@ -5,6 +5,5 @@ WORKDIR /usr/helltfbot-v2
 COPY . .
 
 RUN npm install
-RUN npm run build
 
-CMD ["node", "."]
+CMD ["npm", "run", "start"]

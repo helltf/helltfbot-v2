@@ -1,20 +1,21 @@
 {
   "name": "helltfbot-v2",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "version 2 for helltfbot",
-  "main": "./dist/helltfbot.js",
-  "type": "module",
+  "main": "",
+  "type": "commonjs",
   "scripts": {
-    "test": "node dist/scripts/test-setup/test-run.js",
-    "unit-tests": "node dist/scripts/test-setup/test-unit-run.js",
-    "integration-tests": "node dist/scripts/test-setup/test-integration-run.js",
+    "test": "ts-node -r tsconfig-paths/register scripts/test-setup/test-run.ts",
+    "test:unit": "ts-node -r tsconfig-paths/register scripts/test-setup/test-unit-run.ts",
+    "test:integration": "ts-node -r tsconfig-paths/register scripts/test-setup/test-integration-run.ts",
     "build": "tsc",
     "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "start": "tsc && node .",
-    "build-and-test": "tsc && node dist/scripts/test-setup/test-run.js"
+    "start": "ts-node -r tsconfig-paths/register helltfbot.ts",
+    "migration": "npx typeorm-ts-node-commonjs migration:run -d migration-datasource.ts",
+    "migration:generate": "npx typeorm-ts-node-commonjs migration:generate -d migration-datasource.ts ./src/db/migration/migration"
   },
   "repository": {
     "type": "git",
@@ -30,10 +31,9 @@
     "@types/jasmine": "^4.0.2",
     "@types/node-fetch": "^2.6.1",
     "@types/tmi.js": "^1.8.1",
-    "chalk": "^5.0.1",
+    "chalk": "^4.1.2",
     "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
-    "node-fetch": "^3.2.3",
     "npm": "^8.6.0",
     "pg": "^8.7.3",
     "reconnecting-websocket": "^4.4.0",
@@ -52,7 +52,11 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jasmine": "^4.1.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "jasmine-ts": "^0.4.0",
     "prettier": "^2.6.2",
+    "ts-node": "^10.8.1",
+    "tsconfig-paths": "^4.0.0",
     "tslib": "^2.4.0",
     "typescript": "^4.7.2"
   }
