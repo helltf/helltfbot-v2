@@ -23,7 +23,7 @@ export class Emotegame implements ChatGame {
   input(input: string): EmoteGameInputResult {
     input = input.toLowerCase()
 
-    let result = this.getInputResult(input)
+    const result = this.getInputResult(input)
 
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
       this.updateCurrentLetters(input)
