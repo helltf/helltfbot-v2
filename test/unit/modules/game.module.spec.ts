@@ -25,7 +25,7 @@ describe('test game module', () => {
 
     await module.input(channel, user, message)
 
-    const expectedMesage = `${user.username} has guessed the emote. The emote was ${game.emote}`
+    const expectedMesage = `${user.username} has guessed the emote. The emote was ${game.actualEmote}`
     expect(hb.sendMessage).toHaveBeenCalledWith(channel, expectedMesage)
   })
 
