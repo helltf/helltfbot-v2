@@ -3,14 +3,16 @@ import { ChatGame, EmoteGameInputResult } from './types'
 
 export class Emotegame implements ChatGame {
   channel: string
-  emote: string
+  lowerEmote: string
+  actualEmote: string
   currentLetters: string[]
   EXPIRING_AFTER: number = 1000 * 60 * 10
   guessedLetters: string[] = []
 
   constructor(channel: string, emote: string) {
     this.channel = channel
-    this.emote = emote
+    this.actualEmote = emote
+    this.lowerEmote = emote.toLowerCase()
     this.currentLetters = this.generateUnderscores(emote)
   }
 
@@ -19,10 +21,11 @@ export class Emotegame implements ChatGame {
   }
 
   input(input: string): EmoteGameInputResult {
+    input = input.toLowerCase()
+
     const result = this.getInputResult(input)
 
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
-      input = input.toLowerCase()
       this.updateCurrentLetters(input)
       this.guessedLetters.push(input)
     }
@@ -31,18 +34,19 @@ export class Emotegame implements ChatGame {
   }
 
   updateCurrentLetters(input: string) {
-    this.emote
-      .split('')
-      .reduce((acc: number[], v, index) => {
-        if (v.toLowerCase() === input) acc.push(index)
-        return acc
-      }, [])
-      .forEach((i) => (this.currentLetters[i] = this.emote[i]))
+    this.getLetterIndices(input).forEach(
+      i => (this.currentLetters[i] = this.actualEmote[i])
+    )
+  }
+
+  getLetterIndices(input: string): number[] {
+    return this.lowerEmote.split('').reduce((acc: number[], v, index) => {
+      if (v.toLowerCase() === input) acc.push(index)
+      return acc
+    }, [])
   }
 
   getInputResult(input: string): EmoteGameInputResult {
-    input = input.toLowerCase()
-
     if (this.isValidInput(input)) return EmoteGameInputResult.NOTHING
 
     if (this.isCorrectInput(input)) return EmoteGameInputResult.FINISHED
@@ -55,7 +59,7 @@ export class Emotegame implements ChatGame {
   isCorrectLetter(input: string): boolean {
     if (input.length > 1) return false
 
-    return this.emote.toLowerCase().includes(input)
+    return this.lowerEmote.includes(input)
   }
 
   isValidInput(input: string): boolean {
@@ -63,7 +67,19 @@ export class Emotegame implements ChatGame {
   }
 
   isCorrectInput(input: string): boolean {
-    return input === this.emote.toLowerCase()
+    const correct = input === this.lowerEmote
+    const wouldFinish = this.wouldFinishWord(input)
+
+    return correct || wouldFinish
+  }
+  wouldFinishWord(input: string): boolean {
+    return (
+      this.currentLetters
+        .map(l => {
+          return l === '_' ? input : l.toLowerCase()
+        })
+        .join('') === this.lowerEmote
+    )
   }
 
   getLetterString(): string {
