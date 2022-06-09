@@ -108,6 +108,16 @@ describe('test emotegame class', () => {
 
       expect(result).toBe(EmoteGameInputResult.LETTER_CORRECT)
     })
+
+    fit('last missing letter is input return finished', () => {
+      const guesses = ['e', 'm', 'o']
+      const missingLetter = 't'
+      guesses.forEach((i) => game.input(i))
+      console.log(game.currentLetters)
+      const result = game.getInputResult(missingLetter)
+
+      expect(result).toBe(EmoteGameInputResult.FINISHED)
+    })
   })
 
   describe('input function', () => {
