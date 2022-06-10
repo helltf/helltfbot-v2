@@ -1,4 +1,4 @@
-import { Suggestion, ColorHistory } from "@db/entities"
+import { SuggestionEntity, ColorHistoryEntity } from "@db/entities"
 import { PermissionLevel } from "@utilities/twitch/types"
 
 export const setupDev = async () => {
@@ -21,8 +21,8 @@ async function permitMainUser(user: string) {
     id: Number(user_id),
     name: user,
     permission: PermissionLevel.ADMIN,
-    suggestions: [] as Suggestion[],
-    colors: {} as ColorHistory,
+    suggestions: [] as SuggestionEntity[],
+    colors: {} as ColorHistoryEntity,
     notifications: [],
     registered_at: Date.now()
   })

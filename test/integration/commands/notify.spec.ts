@@ -12,14 +12,14 @@ import {
   getExampleTwitchUserEntity,
   getExampleTwitchUserState
 } from '../../test-utils/example'
-import { TwitchUser, Notification } from '@db/entities'
+import { TwitchUserEntity, NotificationEntity } from '@db/entities'
 
 describe('test notify command: ', () => {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   let channel = 'testChannel'
   let streamer = 'streamer'
-  let user: TwitchUser
-  let notification: Notification
+  let user: TwitchUserEntity
+  let notification: NotificationEntity
   let notify: NotifyCommand
 
   beforeAll(async () => {
@@ -311,7 +311,7 @@ describe('test notify command: ', () => {
 async function findNotification(
   userId: number,
   streamer: string
-): Promise<Notification | null> {
+): Promise<NotificationEntity | null> {
   return hb.db.notificationRepo.findOne({
     where: {
       user: {

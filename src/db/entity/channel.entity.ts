@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('channel')
-export class Channel extends BaseEntity {
+export class ChannelEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 

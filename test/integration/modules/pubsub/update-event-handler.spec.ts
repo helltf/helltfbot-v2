@@ -1,10 +1,10 @@
 import { UserNotificationType } from '@modules/pubsub/types'
 import { PubSubEventHandler } from '@modules/pubsub/pubsub-event-handler'
-import { clearDb } from '../../test-utils/clear'
-import { setupDatabase } from '../../test-utils/setup-db'
-import { disconnectDatabase } from '../../test-utils/disconnect'
-import { Notification } from '@db/entities'
-import { getExampleNotificationEntity } from '../../test-utils/example'
+import { clearDb } from '../../../test-utils/clear'
+import { setupDatabase } from '../../../test-utils/setup-db'
+import { disconnectDatabase } from '../../../test-utils/disconnect'
+import { NotificationEntity } from '@db/entities'
+import { getExampleNotificationEntity } from '../../../test-utils/example'
 
 describe('Test event handler to return the correct messages', () => {
   let eventHandler: PubSubEventHandler = new PubSubEventHandler()
@@ -29,7 +29,7 @@ describe('Test event handler to return the correct messages', () => {
     const type = UserNotificationType.LIVE
 
     const result = await eventHandler.getNotifiedUsers(streamer, type)
-    const expectedResult: Notification[] = []
+    const expectedResult: NotificationEntity[] = []
 
     expect(result).toEqual(expectedResult)
   })
@@ -88,7 +88,9 @@ describe('Test event handler to return the correct messages', () => {
   })
 })
 
-async function saveNotificationWithUser(notification: Partial<Notification>) {
+async function saveNotificationWithUser(
+  notification: Partial<NotificationEntity>
+) {
   await hb.db.userRepo.save(notification.user!)
   await hb.db.notificationRepo.save(notification)
 }

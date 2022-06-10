@@ -1,25 +1,25 @@
-import { Channel } from './entity/channel'
-import { Ban } from './entity/ban'
-import { ColorHistory } from './entity/color_history'
-import { Timeout } from './entity/timeout'
-import { TwitchUser } from './entity/user'
-import { WordleWord } from './entity/wordle'
-import { CommandEntity } from './entity/command'
-import { Notification } from './entity/notification'
-import { NotificationChannel } from './entity/notification_channel'
-import { Suggestion } from './entity/suggestion'
+import { ChannelEntity } from './entity/channel.entity'
+import { BanEntity } from './entity/ban.entity'
+import { ColorHistoryEntity } from './entity/color_history.entity'
+import { TimeoutEntity } from './entity/timeout.entity'
+import { TwitchUserEntity } from './entity/user.entity'
+import { CommandEntity } from './entity/command.entity'
+import { NotificationEntity } from './entity/notification.entity'
+import { NotificationChannelEntity } from './entity/notification_channel.entity'
+import { SuggestionEntity } from './entity/suggestion.entity'
 import { ErrorEntity } from './entity/error.entity'
+import { WordleWordEntity } from './entity/wordle.entity'
 
 export {
-  Ban,
-  Channel,
-  ColorHistory,
-  Timeout,
-  TwitchUser,
-  WordleWord,
+  BanEntity,
+  ChannelEntity,
+  ColorHistoryEntity,
+  TimeoutEntity,
+  TwitchUserEntity,
+  WordleWordEntity,
   CommandEntity,
-  Notification,
-  NotificationChannel,
-  Suggestion,
+  NotificationEntity,
+  NotificationChannelEntity,
+  SuggestionEntity,
   ErrorEntity
 }

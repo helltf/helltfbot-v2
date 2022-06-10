@@ -1,7 +1,12 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { TwitchUserState } from '@client/types'
 import { Command } from '@commands/types'
-import { TwitchUser, Notification, Channel } from '@db/entities'
+import {
+  TwitchUserEntity,
+  NotificationEntity,
+  ChannelEntity,
+  NotificationChannelEntity
+} from '@db/entities'
 
 export function getExampleCommand({
   alias = [],
@@ -36,8 +41,8 @@ export const getExampleTwitchUserEntity = ({
   display_name = 'user',
   notifications = [],
   suggestions = []
-}: Partial<TwitchUser>): TwitchUser => {
-  const user = new TwitchUser()
+}: Partial<TwitchUserEntity>): TwitchUserEntity => {
+  const user = new TwitchUserEntity()
 
   user.id = id
   user.name = name
@@ -74,7 +79,7 @@ export function getExampleChannel({
   connect_timestamp = 1,
   times_connected = 0,
   joined = true
-}: Partial<Channel>): Partial<Channel> {
+}: Partial<ChannelEntity>): Partial<ChannelEntity> {
   return {
     allowed,
     allowed_live,
@@ -85,6 +90,22 @@ export function getExampleChannel({
   }
 }
 
+export const getExampleNotificationChannelEntity = ({
+  id = 1,
+  name = 'notificationChannel',
+  setting = false,
+  status = false
+}: Partial<NotificationChannelEntity>): NotificationChannelEntity => {
+  const notificationChannel = new NotificationChannelEntity()
+
+  notificationChannel.id = id
+  notificationChannel.name = name
+  notificationChannel.setting = setting
+  notificationChannel.status = status
+
+  return notificationChannel
+}
+
 export const getExampleNotificationEntity = ({
   streamer = 'streamer',
   channel = 'channel',
@@ -93,8 +114,8 @@ export const getExampleNotificationEntity = ({
   title = false,
   game = false,
   user = getExampleTwitchUserEntity({})
-}: Partial<Notification>): Notification => {
-  const notification = new Notification()
+}: Partial<NotificationEntity>): NotificationEntity => {
+  const notification = new NotificationEntity()
 
   notification.channel = channel
   notification.streamer = streamer
