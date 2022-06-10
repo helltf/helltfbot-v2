@@ -1,6 +1,6 @@
-import { BanTracking } from '../ban-tracking'
-import { ColorTracking } from '../user-tracking'
-import { TimeoutTracking } from '../timeout-tracking'
+import { BanTracking } from '../ban.module'
+import { ColorTracking } from '../user.module'
+import { TimeoutTracking } from '../timeout.module'
 import { Module } from './module'
 import { GameModule } from '../game.module'
 const timeoutModule = new TimeoutTracking()

@@ -1,10 +1,10 @@
 import { UserNotificationType } from '@modules/pubsub/types'
 import { PubSubEventHandler } from '@modules/pubsub/pubsub-event-handler'
-import { clearDb } from '../../test-utils/clear'
-import { setupDatabase } from '../../test-utils/setup-db'
-import { disconnectDatabase } from '../../test-utils/disconnect'
+import { clearDb } from '../../../test-utils/clear'
+import { setupDatabase } from '../../../test-utils/setup-db'
+import { disconnectDatabase } from '../../../test-utils/disconnect'
 import { NotificationEntity } from '@db/entities'
-import { getExampleNotificationEntity } from '../../test-utils/example'
+import { getExampleNotificationEntity } from '../../../test-utils/example'
 
 describe('Test event handler to return the correct messages', () => {
   let eventHandler: PubSubEventHandler = new PubSubEventHandler()

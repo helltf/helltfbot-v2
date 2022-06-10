@@ -1,9 +1,9 @@
 import { Command } from "@commands/types"
 import { CommandService } from "@service/commands.service"
-import { clearDb } from "../test-utils/clear"
-import { disconnectDatabase } from '../test-utils/disconnect'
-import { getExampleCommand } from '../test-utils/example'
-import { setupDatabase } from '../test-utils/setup-db'
+import { clearDb } from "../../test-utils/clear"
+import { disconnectDatabase } from '../../test-utils/disconnect'
+import { getExampleCommand } from '../../test-utils/example'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test updating commands', () => {
   beforeAll(async () => {
