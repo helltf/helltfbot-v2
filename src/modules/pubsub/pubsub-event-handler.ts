@@ -1,4 +1,4 @@
-import { Notification } from '../../db/export-entities'
+import { NotificationEntity } from '../../db/export-entities'
 import { MessageGenerator } from './message-generator'
 import {
   NotificationMessageInfo,
@@ -89,7 +89,7 @@ export class PubSubEventHandler {
   async getNotifiedUsers(
     streamer: string,
     event: UserNotificationType
-  ): Promise<Notification[]> {
+  ): Promise<NotificationEntity[]> {
     const users = hb.db.notificationRepo.find({
       where: {
         streamer: streamer,

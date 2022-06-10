@@ -1,9 +1,9 @@
-import { NotificationChannelInfo } from '../../db/entity/notification_channel'
 import { LogType } from '../../logger/log-type'
 import { NotificationHandler } from './notification-handler'
 import { PubSubConnection } from './pubsub-connection'
 import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types'
 import { PubSubEventHandler } from './pubsub-event-handler'
+import { NotificationChannelEntity, NotificationEntity } from '@db/entities'
 
 export class PubSub {
   pubSubEventHandler: PubSubEventHandler
@@ -65,7 +65,7 @@ export class PubSub {
     return connection
   }
 
-  getTopics(channels: NotificationChannelInfo[]): Topic[] {
+  getTopics(channels: NotificationChannelEntity[]): Topic[] {
     return channels.reduce((topics: Topic[], { setting, status, id }) => {
       if (setting) topics.push({ prefix: TopicPrefix.SETTING, id })
       if (status) topics.push({ prefix: TopicPrefix.STATUS, id })
@@ -83,11 +83,11 @@ export class PubSub {
   }
 
   chunkTopicsIntoSize = (
-    arr: NotificationChannelInfo[],
+    arr: NotificationChannelEntity[],
     size = 25
-  ): NotificationChannelInfo[][] => {
+  ): NotificationChannelEntity[][] => {
     return arr.reduce(
-      (resultArray: NotificationChannelInfo[][], item, index) => {
+      (resultArray: NotificationChannelEntity[][], item, index) => {
         const chunkIndex = Math.floor(index / size)
 
         if (!resultArray[chunkIndex]) {
@@ -115,7 +115,7 @@ export class PubSub {
   }
 
   getOpenConnection(): PubSubConnection {
-    const openConnection = this.connections.find((c) => c.topics.length < 50)
+    const openConnection = this.connections.find(c => c.topics.length < 50)
 
     return openConnection ? openConnection : this.createNewPubSubConnection()
   }
@@ -127,7 +127,7 @@ export class PubSub {
   }
 
   findConnectionForTopic(topic: Topic): PubSubConnection | undefined {
-    return this.connections.find((con) => con.containsTopic(topic))
+    return this.connections.find(con => con.containsTopic(topic))
   }
 
   mapNotifyTypeToTopicPrefix(event: NotifyEventType): TopicPrefix {
