@@ -5,15 +5,15 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
-import { TwitchUser } from './user'
+import { TwitchUserEntity } from './user.entity'
 
 @Entity('suggestion')
-export class Suggestion extends BaseEntity {
+export class SuggestionEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @ManyToOne(() => TwitchUser, (user) => user.notifications)
-  user: TwitchUser
+  @ManyToOne(() => TwitchUserEntity, user => user.notifications)
+  user: TwitchUserEntity
 
   @Column('varchar')
   suggestion: string

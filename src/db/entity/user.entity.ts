@@ -7,12 +7,12 @@ import {
   PrimaryColumn
 } from 'typeorm'
 import { PermissionLevel } from '../../utilities/twitch/types'
-import { ColorHistory } from './color_history'
-import { Notification } from './notification'
-import { Suggestion } from './suggestion'
+import { ColorHistoryEntity } from './color_history.entity'
+import { NotificationEntity } from './notification.entity'
+import { SuggestionEntity } from './suggestion.entity'
 
 @Entity('user')
-export class TwitchUser extends BaseEntity {
+export class TwitchUserEntity extends BaseEntity {
   @PrimaryColumn('int')
   id: number
 
@@ -31,12 +31,12 @@ export class TwitchUser extends BaseEntity {
   @Column('varchar')
   display_name: string
 
-  @OneToMany(() => Notification, (notification) => notification.user)
-  notifications: Notification[]
+  @OneToMany(() => NotificationEntity, notification => notification.user)
+  notifications: NotificationEntity[]
 
-  @OneToMany(() => Suggestion, (suggestion) => suggestion.user)
-  suggestions: Suggestion[]
+  @OneToMany(() => SuggestionEntity, suggestion => suggestion.user)
+  suggestions: SuggestionEntity[]
 
-  @OneToOne(() => ColorHistory, (history) => history.user)
-  colors: ColorHistory
+  @OneToOne(() => ColorHistoryEntity, history => history.user)
+  colors: ColorHistoryEntity
 }

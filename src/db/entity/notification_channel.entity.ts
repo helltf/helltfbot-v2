@@ -1,10 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity('notification_channel')
-export class NotificationChannel
-  extends BaseEntity
-  implements NotificationChannelInfo
-{
+export class NotificationChannelEntity extends BaseEntity {
   @PrimaryColumn('int')
   id: number
 
@@ -15,12 +12,5 @@ export class NotificationChannel
   status: boolean
 
   @Column('boolean', { default: false })
-  setting: boolean
-}
-
-export interface NotificationChannelInfo {
-  id: number
-  name: string
-  status: boolean
   setting: boolean
 }
