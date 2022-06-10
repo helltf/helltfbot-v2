@@ -14,6 +14,7 @@ import { ApiService } from '../api/types'
 import { Command } from '../commands/types'
 import { GameService } from '../service/game.service'
 import { CacheService } from '../service/cache.service'
+import { Utility } from '@src/utilities/utility'
 
 export class TwitchBot {
   client: Client
@@ -26,6 +27,7 @@ export class TwitchBot {
   cache: CacheService
   config: ConfigService
   games: GameService
+  utils: Utility
 
   constructor() {
     this.config = new ConfigService()
@@ -38,6 +40,7 @@ export class TwitchBot {
     this.api = new ApiService()
     this.cache = new CacheService()
     this.games = new GameService()
+    this.utils = new Utility()
   }
 
   async init() {
