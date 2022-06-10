@@ -1,14 +1,14 @@
-import { Channel } from './entity/channel'
-import { Ban } from './entity/ban'
-import { ColorHistory } from './entity/color_history'
+import { Channel } from './entity/channel.entity'
+import { Ban } from './entity/ban.entity'
+import { ColorHistory } from './entity/color_history.entity'
 import { Timeout } from './entity/timeout'
 import { TwitchUser } from './entity/user'
 import { WordleWord } from './entity/wordle'
-import { CommandEntity } from './entity/command'
+import { CommandEntity } from './entity/command.entity'
 import { Notification } from './entity/notification'
-import { NotificationChannel } from './entity/notification_channel'
+import { NotificationChannel } from './entity/notification_channel.entity'
 import { Suggestion } from './entity/suggestion'
-import { ErrorEntity } from './entity/error.entity'
+import { ErrorEntity } from './entity/error.entity.entity'
 
 export {
   Ban,
