@@ -1,12 +1,4 @@
 {
-  "reporters": [
-    {
-      "name": "jasmine-spec-reporter#SpecReporter",
-      "options": {
-        "displayStacktrace": "all"
-      }
-    }
-  ],
   "spec_dir": "test/integration",
   "spec_files": ["**/*[sS]pec.ts"]
 }
