@@ -15,7 +15,8 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "start": "ts-node -r tsconfig-paths/register helltfbot.ts",
     "migration": "npx typeorm-ts-node-commonjs migration:run -d migration-datasource.ts",
-    "migration:generate": "npx typeorm-ts-node-commonjs migration:generate -d migration-datasource.ts ./src/db/migration/migration"
+    "migration:generate": "npx typeorm-ts-node-commonjs migration:generate -d migration-datasource.ts ./src/db/migration/migration",
+    "serve": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -54,6 +55,7 @@
     "jasmine": "^4.1.0",
     "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.4.0",
+    "nodemon": "^2.0.16",
     "prettier": "^2.6.2",
     "ts-node": "^10.8.1",
     "tsconfig-paths": "^4.0.0",
