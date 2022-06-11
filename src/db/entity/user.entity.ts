@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryColumn
 } from 'typeorm'
-import { PermissionLevel } from '../../utilities/twitch/types'
+import { PermissionLevel } from '../../utilities/permission/types'
 import { ColorHistoryEntity } from './color_history.entity'
 import { NotificationEntity } from './notification.entity'
 import { SuggestionEntity } from './suggestion.entity'

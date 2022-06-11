@@ -2,7 +2,7 @@ import { TwitchUserState } from '@client/types'
 import {
   LeaveCommand
 } from '@commands/cmd/leave'
-import { PermissionLevel } from '@utilities/twitch/types'
+import { PermissionLevel } from '@src/utilities/permission/types'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {

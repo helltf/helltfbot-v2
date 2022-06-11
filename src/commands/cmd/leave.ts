@@ -1,6 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types'
-import { PermissionLevel } from '../../utilities/twitch/types'
+import { PermissionLevel } from '../../utilities/permission/types'
 import { Command } from '../types'
 
 export class LeaveCommand implements Command {

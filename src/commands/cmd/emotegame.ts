@@ -1,8 +1,7 @@
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
 import { TwitchUserState, BotResponse } from "../../client/types";
 import { Emotegame } from '../../games/emotegame'
-import { random } from '../../utilities/random'
-import { PermissionLevel } from '../../utilities/twitch/types'
+import { PermissionLevel } from '../../utilities/permission/types'
 import { Command } from '../types'
 
 export class EmotegameCommand implements Command {
@@ -101,7 +100,8 @@ export class EmotegameCommand implements Command {
         return new ResourceError(`No emotes were found for ${type} emotes`)
       }
 
-      const randomEmote = emotes.data[random(0, emotes.data.length - 1)]
+      const randomEmote =
+        emotes.data[hb.utils.random(0, emotes.data.length - 1)]
 
       return new ResourceSuccess(randomEmote)
     },
@@ -112,7 +112,7 @@ export class EmotegameCommand implements Command {
         EmoteType.FFZ,
         EmoteType.SEVENTV
       ]
-      return emoteTypes[random(0, 2)]
+      return emoteTypes[hb.utils.random(0, 2)]
     },
 
     getEmotes: async (

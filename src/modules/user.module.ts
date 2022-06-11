@@ -1,5 +1,5 @@
 import { ChatUserstate } from 'tmi.js'
-import { PermissionLevel } from '../utilities/twitch/types'
+import { PermissionLevel } from '../utilities/permission/types'
 import { Module } from './export/module'
 
 export class ColorTracking implements Module {
@@ -69,7 +69,7 @@ export class ColorTracking implements Module {
   }
 
   setNewPosition(colors: string[], newColor: string): string[] {
-    const index = colors.findIndex((c) => c === newColor)
+    const index = colors.findIndex(c => c === newColor)
     colors.splice(index, 1)
     colors.push(newColor)
     return colors

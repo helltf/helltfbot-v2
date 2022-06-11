@@ -1,14 +1,18 @@
 import { Badges } from 'tmi.js'
-import {
-  getChatPermissions,
-  returnHigherPermissions
-} from '@utilities/twitch/permission'
-import { PermissionLevel } from '@utilities/twitch/types'
+
+import { PermissionLevel } from '@src/utilities/permission/types'
+import { Permission } from '@src/utilities/permission/permission'
 
 describe('test mapping of permissions', () => {
+  let permission: Permission
+
+  beforeEach(() => {
+    permission = new Permission()
+  })
+
   it('normal user has permissions of 0', () => {
     const badges: Badges = {}
-    const result = getChatPermissions(badges)
+    const result = permission.getChatPermissions(badges)
 
     expect(result).toBe(PermissionLevel.USER)
   })
@@ -17,7 +21,7 @@ describe('test mapping of permissions', () => {
     const badges: Badges = {
       subscriber: '0'
     }
-    const result = getChatPermissions(badges)
+    const result = permission.getChatPermissions(badges)
 
     expect(result).toBe(PermissionLevel.SUB)
   })
@@ -26,7 +30,7 @@ describe('test mapping of permissions', () => {
     const badges: Badges = {
       founder: '0'
     }
-    const result = getChatPermissions(badges)
+    const result = permission.getChatPermissions(badges)
 
     expect(result).toBe(PermissionLevel.SUB)
   })
@@ -35,7 +39,7 @@ describe('test mapping of permissions', () => {
     const badges: Badges = {
       vip: '0'
     }
-    const result = getChatPermissions(badges)
+    const result = permission.getChatPermissions(badges)
 
     expect(result).toBe(PermissionLevel.VIP)
   })
@@ -44,7 +48,7 @@ describe('test mapping of permissions', () => {
     const badges: Badges = {
       moderator: '0'
     }
-    const result = getChatPermissions(badges)
+    const result = permission.getChatPermissions(badges)
 
     expect(result).toBe(PermissionLevel.MOD)
   })
@@ -53,7 +57,7 @@ describe('test mapping of permissions', () => {
     const badges: Badges = {
       broadcaster: '0'
     }
-    const result = getChatPermissions(badges)
+    const result = permission.getChatPermissions(badges)
 
     expect(result).toBe(PermissionLevel.BROADCASTER)
   })
@@ -64,18 +68,24 @@ describe('test mapping of permissions', () => {
       subscriber: '0',
       broadcaster: '0'
     }
-    const result = getChatPermissions(badges)
+    const result = permission.getChatPermissions(badges)
 
     expect(result).toBe(PermissionLevel.BROADCASTER)
   })
 })
 
 describe('return correct permission', () => {
+  let permission: Permission
+
+  beforeEach(() => {
+    permission = new Permission()
+  })
+
   it('chat perm is heigher returning chat perm', () => {
     const dbPerm = PermissionLevel.USER
     const chatPerm = PermissionLevel.SUB
 
-    const res = returnHigherPermissions(dbPerm, chatPerm)
+    const res = permission.returnHigherPermissions(dbPerm, chatPerm)
 
     expect(res).toBe(chatPerm)
   })
@@ -84,7 +94,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.DEV
     const chatPerm = PermissionLevel.SUB
 
-    const res = returnHigherPermissions(dbPerm, chatPerm)
+    const res = permission.returnHigherPermissions(dbPerm, chatPerm)
 
     expect(res).toBe(dbPerm)
   })
@@ -92,7 +102,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.MOD
     const chatPerm = PermissionLevel.MOD
 
-    const res = returnHigherPermissions(dbPerm, chatPerm)
+    const res = permission.returnHigherPermissions(dbPerm, chatPerm)
 
     expect(res).toBe(chatPerm)
   })
@@ -101,7 +111,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.BLOCKED
     const chatPerm = PermissionLevel.USER
 
-    const resultingLevel = returnHigherPermissions(dbPerm, chatPerm)
+    const resultingLevel = permission.returnHigherPermissions(dbPerm, chatPerm)
 
     expect(resultingLevel).toBe(PermissionLevel.BLOCKED)
   })
@@ -110,7 +120,7 @@ describe('return correct permission', () => {
     const dbPerm = PermissionLevel.BLOCKED
     const chatPerm = PermissionLevel.MOD
 
-    const resultingLevel = returnHigherPermissions(dbPerm, chatPerm)
+    const resultingLevel = permission.returnHigherPermissions(dbPerm, chatPerm)
 
     expect(resultingLevel).toBe(PermissionLevel.BLOCKED)
   })

@@ -1,7 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/types'
-import { getUserPermissions } from '../../utilities/twitch/permission'
-import { PermissionLevel } from '../../utilities/twitch/types'
+import { PermissionLevel } from '../../utilities/permission/types'
 import { BotResponse, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
@@ -26,7 +25,7 @@ const handleChat = async (
   if (command === undefined || userHasCooldown(command, user)) return
 
   incrementCommandCounter(command)
-  user.permission = await getUserPermissions(user)
+  user.permission = await hb.utils.permission.get(user)
 
   if (command.permissions > user.permission) return
 
