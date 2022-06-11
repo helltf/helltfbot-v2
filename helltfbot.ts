@@ -6,15 +6,17 @@ globalThis.hb = new TwitchBot()
 {
   ;(async () => {
     await hb.init()
+
     if (hb.config.isDev()) {
       await setupDev()
     }
+
     hb.startJobs()
     hb.initModules()
   })()
 }
 
-process.on('uncaughtException', async (error) => {
+process.on('uncaughtException', async error => {
   await hb.db.errorRepo.save({
     message: error.message,
     stack_trace: error.stack,
