@@ -1,7 +1,7 @@
 import { BotResponse } from '../../client/types'
 
 import { TwitchUserState } from '../../client/types'
-import { PermissionLevel } from '../../utilities/twitch/types'
+import { PermissionLevel } from '../../utilities/permission/types'
 import { Command } from '../types'
 
 export class JoinCommand implements Command {

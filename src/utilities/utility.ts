@@ -1,4 +1,4 @@
-import { Permission } from '@src/utilities/twitch/permission'
+import { Permission } from '@src/utilities/permission/permission'
 
 export class Utility {
   permission: Permission

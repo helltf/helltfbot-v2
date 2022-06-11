@@ -1,7 +1,7 @@
 import { Badges } from 'tmi.js'
 
-import { PermissionLevel } from '@utilities/twitch/types'
-import { Permission } from '@src/utilities/twitch/permission'
+import { PermissionLevel } from '@src/utilities/permission/types'
+import { Permission } from '@src/utilities/permission/permission'
 
 describe('test mapping of permissions', () => {
   let permission: Permission

@@ -1,5 +1,5 @@
 import { SuggestionEntity, ColorHistoryEntity } from "@db/entities"
-import { PermissionLevel } from "@utilities/twitch/types"
+import { PermissionLevel } from "@src/utilities/permission/types"
 
 export const setupDev = async () => {
   const user = hb.config.get('MAIN_USER')
