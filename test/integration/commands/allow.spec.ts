@@ -1,5 +1,5 @@
 import { AllowCommand } from '@commands/cmd/allow'
-import { PermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
@@ -11,7 +11,7 @@ import { setupDatabase } from '../../test-utils/setup-db'
 describe('test allow command', () => {
   let messageChannel = 'messageChannel'
   let user = getExampleTwitchUserState({
-    permission: PermissionLevel.ADMIN
+    permission: GlobalPermissionLevel.ADMIN
   })
   let allow: AllowCommand
 
@@ -22,7 +22,7 @@ describe('test allow command', () => {
   beforeEach(async () => {
     messageChannel = 'messageChannel'
     user = getExampleTwitchUserState({
-      permission: PermissionLevel.ADMIN
+      permission: GlobalPermissionLevel.ADMIN
     })
     allow = new AllowCommand()
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
@@ -36,7 +36,7 @@ describe('test allow command', () => {
   it('user has broadcaster permissions but provides channel return error response', async () => {
     const allowChannel = 'allowChannel'
     const message = [allowChannel]
-    user.permission = PermissionLevel.BROADCASTER
+    user.permission = ChatPermissionLevel.BROADCASTER
 
     const {
       response,
@@ -50,7 +50,7 @@ describe('test allow command', () => {
   })
 
   it('user has user permissions return error', async () => {
-    user.permission = PermissionLevel.USER
+    user.permission = ChatPermissionLevel.USER
     const {
       response,
       success,
@@ -63,7 +63,7 @@ describe('test allow command', () => {
   })
 
   it('user has broadcaster permissions but provides no params return successfull resoponse', async () => {
-    user.permission = PermissionLevel.BROADCASTER
+    user.permission = ChatPermissionLevel.BROADCASTER
 
     await hb.db.channelRepo.save(
       getExampleChannel({

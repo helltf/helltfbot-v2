@@ -3,7 +3,7 @@ import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permi
 import { getExampleTwitchUserState } from '@test-utils/example'
 import { setup } from '@test-utils/setup'
 
-fdescribe('test level command', () => {
+describe('test level command', () => {
   setup()
   let level: LevelCommand
   const chatPermissionLevels = hb.utils.getEnumValues(ChatPermissionLevel)
@@ -11,7 +11,7 @@ fdescribe('test level command', () => {
 
   const combinations = hb.utils.generateAllCombinations(
     chatPermissionLevels,
-    chatPermissionLevels
+    globalPermissionLevels
   )
 
   beforeEach(async () => {
@@ -45,7 +45,7 @@ fdescribe('test level command', () => {
 
   describe('map to name', () => {
     chatPermissionLevels.forEach(lvl => {
-      it(`chatpermission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
+      it(`chat permission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
         const result = level.methods.mapToPermissionName(lvl)
         const expectedResult = ChatPermissionLevel[lvl].toLowerCase()
 
@@ -54,9 +54,9 @@ fdescribe('test level command', () => {
     })
 
     globalPermissionLevels.forEach(lvl => {
-      it(`chatpermission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
+      it(`global permission lvl ${lvl} returns corrosponding ${GlobalPermissionLevel[lvl]} in lower case`, () => {
         const result = level.methods.mapToPermissionName(lvl)
-        const expectedResult = ChatPermissionLevel[lvl].toLowerCase()
+        const expectedResult = GlobalPermissionLevel[lvl].toLowerCase()
 
         expect(result).toBe(expectedResult)
       })

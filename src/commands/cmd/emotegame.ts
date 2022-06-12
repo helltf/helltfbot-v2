@@ -1,12 +1,12 @@
+import { ChatPermissionLevel } from "@src/utilities/permission/types";
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
-import { TwitchUserState, BotResponse } from "../../client/types";
+import { TwitchUserState, BotResponse } from '../../client/types'
 import { Emotegame } from '../../games/emotegame'
-import { PermissionLevel } from '../../utilities/permission/types'
 import { Command } from '../types'
 
 export class EmotegameCommand implements Command {
   name = 'emotegame'
-  permissions = PermissionLevel.USER
+  permissions = ChatPermissionLevel.USER
   description = 'start or stop an emotegame'
   requiredParams = ['start|stop']
   optionalParams = ['type']

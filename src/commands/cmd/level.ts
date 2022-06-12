@@ -1,6 +1,9 @@
 import { TwitchUserState, BotResponse } from "@src/client/types";
 import { Command } from "@src/commands/types";
-import { PermissionLevel } from "@src/utilities/permission/types";
+import {
+  ChatPermissionLevel,
+  GlobalPermissionLevel
+} from '@src/utilities/permission/types'
 
 export class LevelCommand implements Command {
   name = 'level'
@@ -40,18 +43,23 @@ export class LevelCommand implements Command {
         })
       )?.permission
 
-      if (!permissions) return PermissionLevel.USER
+      if (!permissions) return GlobalPermissionLevel.USER
 
       return permissions
     },
     getUserPermissions: ({ permission }: TwitchUserState): number => {
-      if (!permission) return PermissionLevel.USER
+      if (!permission) return ChatPermissionLevel.USER
 
       return permission
     },
 
-    mapToPermissionName: (permissionslevel: PermissionLevel): string => {
-      return PermissionLevel[permissionslevel].toLowerCase()
+    mapToPermissionName: (
+      permissionslevel: GlobalPermissionLevel | ChatPermissionLevel
+    ): string => {
+      if (permissionslevel in GlobalPermissionLevel)
+        return GlobalPermissionLevel[permissionslevel].toLowerCase()
+
+      return ChatPermissionLevel[permissionslevel].toLowerCase()
     }
   }
 }

@@ -1,13 +1,13 @@
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
 
 import { TwitchUserState } from '../../client/types'
-import { PermissionLevel } from '../../utilities/permission/types'
 import { Command } from '../types'
 
 export class JoinCommand implements Command {
   name = 'join'
   description = 'join a channel'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['channel']
   optionalParams = []
   cooldown = 5000
@@ -29,7 +29,10 @@ export class JoinCommand implements Command {
       return errorResponse
     }
 
-    if (joinChannel !== 'me' && user.permission! < PermissionLevel.ADMIN) {
+    if (
+      joinChannel !== 'me' &&
+      user.permission! < GlobalPermissionLevel.ADMIN
+    ) {
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }

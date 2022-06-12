@@ -1,5 +1,5 @@
+import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { ChatUserstate } from 'tmi.js'
-import { PermissionLevel } from '../utilities/permission/types'
 import { Module } from './export/module'
 
 export class ColorTracking implements Module {
@@ -124,7 +124,7 @@ export class ColorTracking implements Module {
       name: user.username,
       id: id,
       notifications: [],
-      permission: PermissionLevel.USER,
+      permission: GlobalPermissionLevel.USER,
       registered_at: Date.now()
     })
   }
