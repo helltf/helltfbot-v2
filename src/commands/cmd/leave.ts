@@ -1,6 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types'
-import { PermissionLevel } from '../../utilities/permission/types'
+import { GlobalPermissionLevel } from '../../utilities/permission/types'
 import { Command } from '../types'
 
 export class LeaveCommand implements Command {
@@ -23,7 +23,10 @@ export class LeaveCommand implements Command {
       return errorResponse
     }
 
-    if (channeltoLeave !== 'me' && user.permission < PermissionLevel.ADMIN) {
+    if (
+      channeltoLeave !== 'me' &&
+      user.permission < GlobalPermissionLevel.ADMIN
+    ) {
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }

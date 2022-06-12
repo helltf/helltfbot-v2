@@ -1,18 +1,17 @@
 import { LevelCommand } from "@src/commands/cmd/level"
-import { PermissionLevel } from "@src/utilities/permission/types"
-import { getExampleTwitchUserState } from "@test-utils/example"
+import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permission/types"
+import { getExampleTwitchUserState } from '@test-utils/example'
 import { setup } from '@test-utils/setup'
 
 fdescribe('test level command', () => {
   setup()
   let level: LevelCommand
-  const permissionsLevel = Object.keys(PermissionLevel)
-    .filter(v => !isNaN(Number(v)))
-    .map(v => Number(v))
+  const chatPermissionLevels = hb.utils.getEnumValues(ChatPermissionLevel)
+  const globalPermissionLevels = hb.utils.getEnumValues(GlobalPermissionLevel)
 
   const combinations = hb.utils.generateAllCombinations(
-    permissionsLevel,
-    permissionsLevel
+    chatPermissionLevels,
+    chatPermissionLevels
   )
 
   beforeEach(async () => {
@@ -21,7 +20,7 @@ fdescribe('test level command', () => {
   })
 
   describe('get user perms', () => {
-    permissionsLevel.forEach(lvl => {
+    chatPermissionLevels.forEach(lvl => {
       it(`user has permissions with lvl ${lvl} return ${lvl}`, () => {
         const user = getExampleTwitchUserState({
           permission: lvl
@@ -40,15 +39,24 @@ fdescribe('test level command', () => {
 
       const permission = level.methods.getUserPermissions(user)
 
-      expect(permission).toBe(PermissionLevel.USER)
+      expect(permission).toBe(ChatPermissionLevel.USER)
     })
   })
 
   describe('map to name', () => {
-    permissionsLevel.forEach(lvl => {
-      it(`permission lvl ${lvl} returns corrosponding ${PermissionLevel[lvl]} in lower case`, () => {
+    chatPermissionLevels.forEach(lvl => {
+      it(`chatpermission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
         const result = level.methods.mapToPermissionName(lvl)
-        const expectedResult = PermissionLevel[lvl].toLowerCase()
+        const expectedResult = ChatPermissionLevel[lvl].toLowerCase()
+
+        expect(result).toBe(expectedResult)
+      })
+    })
+
+    globalPermissionLevels.forEach(lvl => {
+      it(`chatpermission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
+        const result = level.methods.mapToPermissionName(lvl)
+        const expectedResult = ChatPermissionLevel[lvl].toLowerCase()
 
         expect(result).toBe(expectedResult)
       })
@@ -56,7 +64,7 @@ fdescribe('test level command', () => {
   })
 
   combinations.forEach(([userPerm, dbPerm]) => {
-    it(`userPerm is ${PermissionLevel[userPerm]} and dbperm is ${PermissionLevel[dbPerm]} return correct message`, async () => {
+    it(`userPerm is ${ChatPermissionLevel[userPerm]} and dbperm is ${GlobalPermissionLevel[dbPerm]} return correct message`, async () => {
       const channel = 'channel'
       const user = getExampleTwitchUserState({
         permission: userPerm

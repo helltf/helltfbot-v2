@@ -1,6 +1,6 @@
+import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { ChatUserstate } from 'tmi.js'
 import { Command } from '../../commands/types'
-import { PermissionLevel } from '../../utilities/permission/types'
 import { BotResponse, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
@@ -27,7 +27,7 @@ const handleChat = async (
   incrementCommandCounter(command)
   user.permission = await hb.utils.permission.get(user)
 
-  if (command.permissions > user.permission) return
+  if (command.permissions > user.permission!) return
 
   setCooldown(command, user)
 
@@ -54,7 +54,7 @@ function setCooldown(
   command: Command,
   { 'user-id': id, permission }: TwitchUserState
 ) {
-  if (permission! >= PermissionLevel.ADMIN) return
+  if (permission! >= GlobalPermissionLevel.ADMIN) return
   hb.cooldown.setCooldown(command, id!)
 }
 

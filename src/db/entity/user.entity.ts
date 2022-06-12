@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryColumn
 } from 'typeorm'
-import { PermissionLevel } from '../../utilities/permission/types'
+import { GlobalPermissionLevel } from '../../utilities/permission/types'
 import { ColorHistoryEntity } from './color_history.entity'
 import { NotificationEntity } from './notification.entity'
 import { SuggestionEntity } from './suggestion.entity'
@@ -22,8 +22,8 @@ export class TwitchUserEntity extends BaseEntity {
   @Column('varchar', { nullable: true })
   color?: string
 
-  @Column('int', { default: PermissionLevel.USER })
-  permission: PermissionLevel
+  @Column('int', { default: GlobalPermissionLevel.USER })
+  permission: GlobalPermissionLevel
 
   @Column('bigint')
   registered_at: number
