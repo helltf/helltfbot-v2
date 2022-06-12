@@ -2,15 +2,11 @@ import { LevelCommand } from '@src/commands/cmd/level'
 import { PermissionLevel } from '@src/utilities/permission/types'
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
-import {
-  getExampleTwitchUserEntity,
-  getExampleTwitchUserState
-} from '@test-utils/example'
+import { getExampleTwitchUserEntity } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
 describe('test level command', () => {
   let level: LevelCommand
-
   const permissionsLevel = Object.keys(PermissionLevel)
     .filter(v => !isNaN(Number(v)))
     .map(v => Number(v))

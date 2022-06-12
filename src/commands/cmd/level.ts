@@ -15,10 +15,21 @@ export class LevelCommand implements Command {
     userstate: TwitchUserState,
     message: string[]
   ): Promise<BotResponse> => {
+    const dbPerm = await this.methods.getDatabasePermissions(
+      Number(userstate['user-id'])
+    )
+    const userPerm = this.methods.getUserPermissions(userstate)
+
     return {
       success: true,
       channel,
-      response: ''
+      response: `Permissions for ${
+        userstate.username
+      } are ${this.methods.mapToPermissionName(
+        userPerm
+      )} for this channel and ${this.methods.mapToPermissionName(
+        dbPerm
+      )} overall`
     }
   }
   methods = {
