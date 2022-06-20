@@ -1,4 +1,4 @@
-import {  ResourceError, ResourceSuccess } from "@api/types"
+import { ResourceError, ResourceSuccess } from "@api/types"
 import { TwitchUserState } from "@client/types"
 import {
   Emote,
