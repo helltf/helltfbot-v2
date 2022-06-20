@@ -69,7 +69,8 @@ export const getExampleTwitchUserState = ({
     'user-id': userId,
     color: color,
     'display-name': displayName,
-    permission: permission
+    permission: permission,
+    badges: badges
   }
 }
 

@@ -21,9 +21,7 @@ describe('test level command', () => {
 
   describe('get user perms', () => {
     it('no permissions level is set return 0', () => {
-      const user = getExampleTwitchUserState({
-        permission: undefined
-      })
+      const user = getExampleTwitchUserState({})
 
       const permission = level.methods.getUserPermissions(user)
 
