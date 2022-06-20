@@ -21,7 +21,7 @@ export class GameService {
   }
 
   emoteGameExists(channel: string): boolean {
-    return this.eg.some((g) => g.channel === channel)
+    return this.eg.some(g => g.channel === channel)
   }
 
   removeAfterTime(game: ChatGame) {
@@ -31,7 +31,7 @@ export class GameService {
   }
 
   removeGameForChannel(channel: string) {
-    const index = this.eg.findIndex((g) => channel === g.channel)
+    const index = this.eg.findIndex(g => channel === g.channel)
 
     if (index > -1) {
       this.eg.splice(index, 1)
@@ -39,12 +39,12 @@ export class GameService {
   }
 
   getGame(channel: string): Emotegame | undefined {
-    return this.eg.find((g) => g.channel === channel)
+    return this.eg.find(g => g.channel === channel)
   }
 
   async remove(game: ChatGame) {
     if (game instanceof Emotegame) {
-      const index = this.eg.findIndex((g) => game.channel === g.channel)
+      const index = this.eg.findIndex(g => game.channel === g.channel)
 
       if (index > -1) {
         this.eg.splice(index, 1)

@@ -47,10 +47,9 @@ export class LevelCommand implements Command {
 
       return permissions
     },
-    getUserPermissions: ({ permission }: TwitchUserState): number => {
-      if (!permission) return ChatPermissionLevel.USER
 
-      return permission
+    getUserPermissions: ({ badges }: TwitchUserState): number => {
+      return hb.utils.permission.getChatPermissions(badges!)
     },
 
     mapToPermissionName: (

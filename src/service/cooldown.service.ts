@@ -25,7 +25,7 @@ export class Cooldown {
     if (userCooldowns?.includes(commandName)) {
       this.cooldowns.set(
         userId,
-        userCooldowns.filter((e) => e !== commandName)
+        userCooldowns.filter(e => e !== commandName)
       )
     }
   }
