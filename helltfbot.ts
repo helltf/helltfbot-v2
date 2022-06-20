@@ -4,7 +4,7 @@ import { TwitchBot } from './src/client/bot'
 
 globalThis.hb = new TwitchBot()
 {
-  ;(async () => {
+  ; (async () => {
     await hb.init()
 
     if (hb.config.isDev()) {
