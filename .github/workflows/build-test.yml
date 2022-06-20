@@ -104,5 +104,5 @@ jobs:
 
         env:
           NODE_ENV: test
-          TEST_DB_URI: postgres://${{ secrets.MYSQL_USER }}:${{ secrets.MYSQL_PASSWORD }}@postgres:5432/twitch
+          TEST_DB_URI: postgresql://${{ secrets.MYSQL_USER }}:${{ secrets.MYSQL_PASSWORD }}@postgres:5432/twitch
           REDIS_URL: redis://default@redis:6379
