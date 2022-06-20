@@ -20,18 +20,6 @@ describe('test level command', () => {
   })
 
   describe('get user perms', () => {
-    chatPermissionLevels.forEach(lvl => {
-      it(`user has permissions with lvl ${lvl} return ${lvl}`, () => {
-        const user = getExampleTwitchUserState({
-          permission: lvl
-        })
-
-        const permission = level.methods.getUserPermissions(user)
-
-        expect(permission).toBe(lvl)
-      })
-    })
-
     it('no permissions level is set return 0', () => {
       const user = getExampleTwitchUserState({
         permission: undefined
@@ -44,7 +32,7 @@ describe('test level command', () => {
   })
 
   describe('map to name', () => {
-    chatPermissionLevels.forEach(lvl => {
+    hb.utils.getEnumValues(ChatPermissionLevel).forEach((lvl) => {
       it(`chat permission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
         const result = level.methods.mapToPermissionName(lvl)
         const expectedResult = ChatPermissionLevel[lvl].toLowerCase()
@@ -77,13 +65,12 @@ describe('test level command', () => {
         response,
         success
       } = await level.execute(channel, user, [])
-      const expectedResponse = `Permissions for ${
-        user.username
-      } are ${level.methods.mapToPermissionName(
-        userPerm
-      )} for this channel and ${level.methods.mapToPermissionName(
-        dbPerm
-      )} overall`
+      const expectedResponse = `Permissions for ${user.username
+        } are ${level.methods.mapToPermissionName(
+          userPerm
+        )} for this channel and ${level.methods.mapToPermissionName(
+          dbPerm
+        )} overall`
 
       expect(channel).toBe(responseChannel)
       expect(response).toBe(expectedResponse)
