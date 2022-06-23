@@ -2,7 +2,7 @@ import { TwitchUserState } from '@client/types'
 import {
   LeaveCommand
 } from '@commands/cmd/leave'
-import { PermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
@@ -214,7 +214,7 @@ describe('test leave command', () => {
     const channelToLeave = 'channelToLeave'
 
     const message = [channelToLeave]
-    user.permission = PermissionLevel.USER
+    user.permission = ChatPermissionLevel.USER
     const response = await leave.execute(messageChannel, user, message)
 
     expect(response.success).toBeFalse()

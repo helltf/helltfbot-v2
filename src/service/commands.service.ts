@@ -18,7 +18,7 @@ export class CommandService {
   }
 
   findCommand(input: string): Command {
-    return this.commands.filter((v) => v.activate.includes(input))[0]?.command
+    return this.commands.filter(v => v.activate.includes(input))[0]?.command
   }
 
   checkForError(usedNames: string[], command: Command) {
@@ -33,7 +33,7 @@ export class CommandService {
   }
 
   getAll(): Command[] {
-    return this.commands.map((c) => c.command)
+    return this.commands.map(c => c.command)
   }
 
   async updateDb() {

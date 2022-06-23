@@ -24,7 +24,7 @@ describe('test redis service', () => {
     await disconnectRedis()
   })
 
-  emoteTypes.forEach((eType) => {
+  emoteTypes.forEach(eType => {
     it('get emote set key should return channel with type', () => {
       const key = hb.cache.getEmoteSetKey(channel, eType)
 
@@ -32,7 +32,7 @@ describe('test redis service', () => {
     })
   })
 
-  emoteTypes.forEach((eType) => {
+  emoteTypes.forEach(eType => {
     it('save emote set should cache whole array in redis', async () => {
       const emotes = ['a']
 
@@ -47,7 +47,7 @@ describe('test redis service', () => {
       expect(savedEmotes).toEqual(emotes)
     })
   })
-  emoteTypes.forEach((eType) => {
+  emoteTypes.forEach(eType => {
     it('get emote set key does not exist return null', async () => {
       const result = await hb.cache.getEmoteSet(channel, eType)
 
@@ -55,7 +55,7 @@ describe('test redis service', () => {
     })
   })
 
-  emoteTypes.forEach((eType) => {
+  emoteTypes.forEach(eType => {
     it('get emote set return correct values for existing key', async () => {
       const emotes = ['a', 'b']
 
@@ -67,7 +67,7 @@ describe('test redis service', () => {
     })
   })
 
-  emoteTypes.forEach((eType) => {
+  emoteTypes.forEach(eType => {
     it('get emote set returns null after key expires', async () => {
       const emotes = ['a', 'b']
       hb.cache.DEFAULT_EMOTE_EXPIRE_TIME = 1

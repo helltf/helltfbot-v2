@@ -12,7 +12,7 @@ export class SevenTvApi {
       const emotes = (await (
         await fetch(this.url + channel + '/emotes')
       ).json()) as SeventvEmoteResponse[]
-      return new ResourceSuccess(emotes.map((e) => e.name))
+      return new ResourceSuccess(emotes.map(e => e.name))
     } catch (e) {
       return error
     }

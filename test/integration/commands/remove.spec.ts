@@ -151,7 +151,7 @@ describe('test remove command', () => {
   describe('remove notification', () => {
     const events: UserNotificationType[] = Object.values(UserNotificationType)
 
-    events.forEach((event) => {
+    events.forEach(event => {
       it('tests removing of event', async () => {
         const userEntity = getExampleTwitchUserEntity({
           id: Number(user['user-id'])

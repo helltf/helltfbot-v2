@@ -54,7 +54,7 @@ export class PubSub {
   }
 
   createNewPubSubConnection(): PubSubConnection {
-    const connection = new PubSubConnection()
+    const connection = new PubSubConnection().start()
 
     connection.connection.addEventListener('message', ({ data }) => {
       this.handlePubSubMessage(JSON.parse(data))

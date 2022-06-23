@@ -15,7 +15,7 @@ export class BttvApi {
         await fetch(this.url + id)
       ).json()) as BttvEmoteResponse
       return new ResourceSuccess(
-        [...sharedEmotes, ...channelEmotes].map((e) => e.code)
+        [...sharedEmotes, ...channelEmotes].map(e => e.code)
       )
     } catch (e) {
       return error

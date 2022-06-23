@@ -1,4 +1,4 @@
-import {  ResourceError, ResourceSuccess } from "@api/types"
+import { ResourceError, ResourceSuccess } from "@api/types"
 import { TwitchUserState } from "@client/types"
 import {
   Emote,
@@ -102,7 +102,7 @@ describe('test emotegame', () => {
     expect(success).toBeFalse()
   })
 
-  emoteTypes.forEach((type) => {
+  emoteTypes.forEach(type => {
     it('action is start with set emotetype return successful response', async () => {
       mockEmoteApis()
       const message = ['start', type]
@@ -165,7 +165,7 @@ describe('test emotegame', () => {
   })
 
   describe('start method', () => {
-    emoteTypes.forEach((type) => {
+    emoteTypes.forEach(type => {
       it('get emote returns ResourceError return error response', async () => {
         const error = 'error message'
         spyOn(emotegame.methods, 'getEmote').and.resolveTo(
@@ -224,7 +224,7 @@ describe('test emotegame', () => {
   })
 
   describe('get emotes method', () => {
-    emoteTypes.forEach((type) => {
+    emoteTypes.forEach(type => {
       it('emotes are cached return cached emotes', async () => {
         mockEmoteApis()
         const emotes = ['emote']
@@ -287,7 +287,7 @@ describe('test emotegame', () => {
     })
 
     describe('get emote method', () => {
-      emoteTypes.forEach((type) => {
+      emoteTypes.forEach(type => {
         it('returns resource error return error message', async () => {
           const error = 'Error message'
           spyOn(emotegame.methods, 'getEmotes').and.resolveTo(

@@ -19,16 +19,21 @@ export class PubSubConnection {
 
   constructor(
     ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
-      WebSocket: WS.WebSocket
+      WebSocket: WS.WebSocket,
+      startClosed: true
     })
   ) {
     this.connection = ws
 
     this.interval = this.setPingInterval()
-
-    this.connection.addEventListener('message', (message) => {
+    this.connection.addEventListener('message', message => {
       this.handleIncomingMessage(message)
     })
+  }
+
+  start() {
+    this.connection.reconnect()
+    return this
   }
 
   setPingInterval(): NodeJS.Timer {
@@ -59,7 +64,7 @@ export class PubSubConnection {
       nonce: '',
       data: {
         auth_token: hb.config.get('TWITCH_OAUTH')!,
-        topics: topics.map((t) => t.prefix + t.id)
+        topics: topics.map(t => t.prefix + t.id)
       }
     }
   }
@@ -91,9 +96,7 @@ export class PubSubConnection {
   }
 
   containsTopic(topic: Topic): boolean {
-    return this.topics.some(
-      (t) => t.id === topic.id && t.prefix === topic.prefix
-    )
+    return this.topics.some(t => t.id === topic.id && t.prefix === topic.prefix)
   }
 
   unlisten(topics: Topic[]) {

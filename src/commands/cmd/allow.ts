@@ -1,7 +1,7 @@
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
 
 import { TwitchUserState } from '../../client/types'
-import { PermissionLevel } from '../../utilities/permission/types'
 import { Command } from '../types'
 
 export class AllowCommand implements Command {
@@ -24,8 +24,8 @@ export class AllowCommand implements Command {
       success: false
     }
 
-    if (user.permission! < PermissionLevel.BROADCASTER) return errorResponse
-    if (user.permission! === PermissionLevel.BROADCASTER && updateChannel)
+    if (user.permission! < ChatPermissionLevel.BROADCASTER) return errorResponse
+    if (user.permission! === ChatPermissionLevel.BROADCASTER && updateChannel)
       return errorResponse
 
     updateChannel = updateChannel || user.username!

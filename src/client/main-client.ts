@@ -15,13 +15,13 @@ function createclient(): Client {
     },
     connection: { reconnect: true },
     logger: {
-      info: (msg) => {
+      info: msg => {
         if (process.env.DEBUG === 'true') hb.log(LogType.TWITCHBOT, msg)
       },
-      error: (msg) => {
+      error: msg => {
         hb.log(LogType.TWITCHBOT, msg)
       },
-      warn: (msg) => {
+      warn: msg => {
         hb.log(LogType.TWITCHBOT, msg)
       }
     }

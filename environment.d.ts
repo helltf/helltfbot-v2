@@ -38,3 +38,4 @@ export interface Environment {
   MAIN_USER_ID: string
   TEST_DATABASE_URI: string
 }
+
