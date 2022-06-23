@@ -16,7 +16,6 @@ export class LevelCommand implements Command {
   execute = async (
     channel: string,
     userstate: TwitchUserState,
-    message: string[]
   ): Promise<BotResponse> => {
     const dbPerm = await this.methods.getDatabasePermissions(
       Number(userstate['user-id'])
@@ -26,13 +25,12 @@ export class LevelCommand implements Command {
     return {
       success: true,
       channel,
-      response: `Permissions for ${
-        userstate.username
-      } are ${this.methods.mapToPermissionName(
-        userPerm
-      )} for this channel and ${this.methods.mapToPermissionName(
-        dbPerm
-      )} overall`
+      response: `Permissions for ${userstate.username
+        } are ${this.methods.mapToPermissionName(
+          userPerm
+        )} for this channel and ${this.methods.mapToPermissionName(
+          dbPerm
+        )} overall`
     }
   }
   methods = {
