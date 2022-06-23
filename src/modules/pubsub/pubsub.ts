@@ -3,7 +3,7 @@ import { NotificationHandler } from './notification-handler'
 import { PubSubConnection } from './pubsub-connection'
 import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types'
 import { PubSubEventHandler } from './pubsub-event-handler'
-import { NotificationChannelEntity, NotificationEntity } from '@db/entities'
+import { NotificationChannelEntity } from '@db/entities'
 
 export class PubSub {
   pubSubEventHandler: PubSubEventHandler
