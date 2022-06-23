@@ -2,7 +2,7 @@ import { UidCommand } from "@src/commands/cmd/uid"
 import { getExampleTwitchUserState } from "@test-utils/example"
 import { setup } from "@test-utils/setup"
 
-fdescribe('test uid command', () => {
+describe('test uid command', () => {
     const uid = new UidCommand()
     const channel = 'channel'
     const user = getExampleTwitchUserState({})
