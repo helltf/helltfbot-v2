@@ -18,7 +18,6 @@ export class SuggestCommand implements Command {
     if (!suggestion[0])
       return {
         response: 'You have to specify a suggestion',
-        channel,
         success: false
       }
 
@@ -31,7 +30,6 @@ export class SuggestCommand implements Command {
 
     return {
       response: `Succesfully saved your suggestion with id ${id}`,
-      channel: channel,
       success: true
     }
   }

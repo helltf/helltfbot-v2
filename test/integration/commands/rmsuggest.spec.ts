@@ -35,7 +35,6 @@ describe('test rmsuggest command', () => {
     expect(response.response).toBe(
       'You need to specify an id to delete your suggestion'
     )
-    expect(response.channel).toBe(channel)
   })
 
   it('id is not an number return error', async () => {

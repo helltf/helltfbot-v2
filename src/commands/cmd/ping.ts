@@ -12,7 +12,6 @@ export class PingCommand implements Command {
   async execute(channel: string): Promise<BotResponse> {
     return {
       response: 'pong',
-      channel: channel,
       success: true
     }
   }

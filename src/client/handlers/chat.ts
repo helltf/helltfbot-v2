@@ -33,14 +33,14 @@ const handleChat = async (
 
   const response = await command.execute(channel, user, data)
 
-  sendResponse(response)
+  sendResponse(channel, response)
 }
 
 function sendMessage(channel: string, message: string) {
   hb.sendMessage(channel, message)
 }
 
-function sendResponse({ success, response, channel }: BotResponse) {
+function sendResponse(channel: string, { success, response }: BotResponse) {
   if (!response) return
 
   if (success) {

@@ -35,14 +35,13 @@ describe('join command tests', () => {
     const message: string[] = []
 
     const {
-      channel: channelResult,
+
       success,
       response
     } = await join.execute(channel, user, message)
 
     const expectedResponse = 'Channel has to be defined'
 
-    expect(channelResult).toBe(channel)
     expect(success).toBeFalse()
     expect(response).toBe(expectedResponse)
   })
@@ -51,14 +50,12 @@ describe('join command tests', () => {
     const message = ['']
 
     const {
-      channel: channelResult,
       success,
       response
     } = await join.execute(channel, user, message)
 
     const expectedResponse = 'Channel has to be defined'
 
-    expect(channelResult).toBe(channel)
     expect(success).toBeFalse()
     expect(response).toBe(expectedResponse)
   })
@@ -69,13 +66,13 @@ describe('join command tests', () => {
     await saveExampleChannel(joinChannel)
 
     const {
-      channel: responseChannel,
+
       success,
       response
     } = await join.execute(channel, user, message)
     const expectedResponse = 'Already connected to that channel'
 
-    expect(responseChannel).toBe(channel)
+
     expect(success).toBeFalse()
     expect(response).toBe(expectedResponse)
   })
@@ -118,13 +115,13 @@ describe('join command tests', () => {
 
     const {
       response,
-      channel: responseChannel,
+
       success
     } = await join.execute(channel, user, message)
 
     expect(success).toBeTrue()
     expect(response).toBeDefined()
-    expect(responseChannel).toBe(channel)
+
   })
 
   it('connect to channel is succesful saves channel', async () => {
@@ -150,13 +147,13 @@ describe('join command tests', () => {
 
     const {
       response,
-      channel: responseChannel,
+
       success
     } = await join.execute(channel, user, message)
 
     expect(success).toBeFalse()
     expect(response).toBeDefined()
-    expect(responseChannel).toBe(channel)
+
   })
 
   it('connect to channel sets joined to true', async () => {

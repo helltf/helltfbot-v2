@@ -16,12 +16,10 @@ describe('test uid command', () => {
         const id = user["user-id"]!
 
         const {
-            channel: responseChannel,
             response,
             success
         } = await uid.execute(channel, user, message)
 
-        expect(responseChannel).toBe(channel)
         expect(response).toBe(`${user.username}👉${id}`)
         expect(success).toBeTrue()
 
@@ -34,12 +32,10 @@ describe('test uid command', () => {
         spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(id)
 
         const {
-            channel: responseChannel,
             response,
             success
         } = await uid.execute(channel, user, message)
 
-        expect(responseChannel).toBe(channel)
         expect(response).toBe(`${searchedUser}👉${id}`)
         expect(success).toBeTrue()
     })
@@ -51,12 +47,10 @@ describe('test uid command', () => {
         spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(id)
 
         const {
-            channel: responseChannel,
             response,
             success
         } = await uid.execute(channel, user, message)
 
-        expect(responseChannel).toBe(channel)
         expect(response).toBe(`Could not find user`)
         expect(success).toBeFalse()
     })

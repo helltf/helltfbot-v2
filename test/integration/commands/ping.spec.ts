@@ -10,13 +10,11 @@ describe('test ping command', () => {
   it('return success message', async () => {
     const channel = 'channel'
     const {
-      channel: responseChannel,
       success,
       response
     } = await ping.execute(channel)
 
     expect(success).toBeTrue()
-    expect(responseChannel).toBe(channel)
     expect(response).toBe('pong')
   })
 })

@@ -40,13 +40,13 @@ describe('test remove command', () => {
 
     const {
       response,
-      channel: responseChannel,
+
       success
     } = await remove.execute(messageChannel, user, message)
 
     expect(success).toBeFalse()
     expect(response).toBe('No streamer specified')
-    expect(responseChannel).toBe(messageChannel)
+
   })
 
   it('event is not defined return error response', async () => {
@@ -54,7 +54,7 @@ describe('test remove command', () => {
 
     const {
       response,
-      channel: responseChannel,
+
       success
     } = await remove.execute(messageChannel, user, message)
 
@@ -64,7 +64,7 @@ describe('test remove command', () => {
         UserNotificationType
       ).join(' ')}`
     )
-    expect(responseChannel).toBe(messageChannel)
+
   })
 
   it('event does not match existing events return error response', async () => {
@@ -72,7 +72,7 @@ describe('test remove command', () => {
 
     const {
       response,
-      channel: responseChannel,
+
       success
     } = await remove.execute(messageChannel, user, message)
 
@@ -82,7 +82,7 @@ describe('test remove command', () => {
         UserNotificationType
       ).join(' ')}`
     )
-    expect(responseChannel).toBe(messageChannel)
+
   })
 
   it('notification does not exist return error response', async () => {
@@ -90,12 +90,12 @@ describe('test remove command', () => {
 
     const {
       response,
-      channel: responseChannel,
+
       success
     } = await remove.execute(messageChannel, user, message)
 
     expect(success).toBeFalse()
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('No matching notification found')
   })
 
@@ -114,12 +114,12 @@ describe('test remove command', () => {
 
     const {
       response,
-      channel: responseChannel,
+
       success
     } = await remove.execute(messageChannel, user, message)
 
     expect(success).toBeTrue()
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('Successfully removed your notification')
   })
 

@@ -13,7 +13,6 @@ export class UidCommand implements Command {
 
         if (!searchUser)
             return {
-                channel,
                 response: this.methods.getResponse(userstate["user-id"], userstate.username),
                 success: true
             }
@@ -22,13 +21,11 @@ export class UidCommand implements Command {
 
         if (!id)
             return {
-                channel,
                 response: 'Could not find user',
                 success: false
             }
 
         return {
-            channel,
             response: this.methods.getResponse(id, searchUser),
             success: true
         }

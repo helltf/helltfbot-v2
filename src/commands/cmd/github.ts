@@ -13,6 +13,6 @@ export class GithubCommand implements Command {
   async execute(channel: string): Promise<BotResponse> {
     const response = `FeelsOkayMan Feel free to leave a follow at https://github.com/helltf and visit the github page for my bot https://github.com/helltf/helltfbot-v2`
 
-    return { response, channel, success: true }
+    return { response, success: true }
   }
 }

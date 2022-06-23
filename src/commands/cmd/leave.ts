@@ -16,7 +16,7 @@ export class LeaveCommand implements Command {
     user: ChatUserstate,
     [channeltoLeave]: string[]
   ): Promise<BotResponse> {
-    const errorResponse: BotResponse = { channel, success: false, response: '' }
+    const errorResponse: BotResponse = { success: false, response: '' }
 
     if (!channeltoLeave) {
       errorResponse.response = 'You need to define a channel'
@@ -42,7 +42,6 @@ export class LeaveCommand implements Command {
     return {
       success,
       response: message,
-      channel: channel
     }
   }
 

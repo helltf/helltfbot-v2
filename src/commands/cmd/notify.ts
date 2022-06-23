@@ -28,7 +28,6 @@ export class NotifyCommand implements Command {
 
     if (await this.methods.userIsAlreadyNotified(userId, streamer, eventType)) {
       return {
-        channel: channel,
         success: false,
         response: 'You are already registered for this notification'
       }
@@ -44,7 +43,6 @@ export class NotifyCommand implements Command {
 
       if (!success) {
         return {
-          channel: channel,
           success: false,
           response: 'Could not establish new connection. Streamer not found!'
         }
@@ -54,7 +52,6 @@ export class NotifyCommand implements Command {
     await this.methods.updateNotification(channel, streamer, eventType, userId)
 
     return {
-      channel: channel,
       success: true,
       response: 'Successfully created your notification'
     }
@@ -192,7 +189,6 @@ export class NotifyCommand implements Command {
         response: `Event unknown. Valid events are ${Object.values(
           UserNotificationType
         ).join(' ')}`,
-        channel: channel,
         success: false
       }
     }

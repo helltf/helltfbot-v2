@@ -22,14 +22,12 @@ export class EmotegameCommand implements Command {
 
     if (!action || (emoteGameAction !== 'start' && emoteGameAction !== 'stop'))
       return {
-        channel: channel,
         response: 'Action has to be either start or stop',
         success: false
       }
 
     if (emoteGameType && !Object.values(EmoteType).includes(emoteGameType)) {
       return {
-        channel,
         response: 'type has to be ffz, bttv or seventv',
         success: false
       }
@@ -49,7 +47,6 @@ export class EmotegameCommand implements Command {
       if (emote instanceof ResourceError) {
         return {
           success: false,
-          channel: channel,
           response: emote.error
         }
       }
@@ -59,7 +56,6 @@ export class EmotegameCommand implements Command {
       const success = hb.games.add(game)
 
       return {
-        channel,
         response: success
           ? 'An emotegame has started, the word is ' + game.getLetterString()
           : 'An emotegame is already running',
@@ -70,7 +66,6 @@ export class EmotegameCommand implements Command {
     stop: async (channel: string): Promise<BotResponse> => {
       if (!hb.games.emoteGameExists(channel)) {
         return {
-          channel: channel,
           success: false,
           response: 'There is no game running at the moment'
         }
@@ -79,7 +74,6 @@ export class EmotegameCommand implements Command {
       hb.games.removeGameForChannel(channel)
 
       return {
-        channel: channel,
         response: 'The emotegame has been stopped',
         success: true
       }

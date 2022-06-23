@@ -54,7 +54,6 @@ export class RemoveCommand implements Command {
 
     return {
       success: true,
-      channel: channel,
       response: 'Successfully removed your notification'
     }
   }
