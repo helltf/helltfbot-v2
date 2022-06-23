@@ -62,7 +62,7 @@ describe('test level command', () => {
         channel: responseChannel,
         response,
         success
-      } = await level.execute(channel, user, [])
+      } = await level.execute(channel, user)
       const expectedResponse = `Permissions for ${user.username
         } are ${level.methods.mapToPermissionName(
           userPerm
