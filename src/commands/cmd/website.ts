@@ -15,6 +15,6 @@ export class WebsiteCommand implements Command {
       `The website has been build with Vue https://vuejs.org/ and the backend is a flask https://flask.palletsprojects.com/en/2.1.x/ python webserver` +
       ` hosting a GraphQL API `
 
-    return { response, channel, success: true }
+    return { response, success: true }
   }
 }

@@ -39,12 +39,12 @@ describe('test leave command', () => {
     const message = ['']
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await leave.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('You need to define a channel')
     expect(success).toBeFalse()
   })
@@ -53,12 +53,12 @@ describe('test leave command', () => {
     const message = ['leaveChannel']
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await leave.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('Not connected to channel')
     expect(success).toBeFalse()
   })
@@ -74,12 +74,12 @@ describe('test leave command', () => {
     await hb.db.channelRepo.save(channelEntity)
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await leave.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('Not connected to channel')
     expect(success).toBeFalse()
   })
@@ -118,12 +118,12 @@ describe('test leave command', () => {
     )
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await leave.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeTrue()
     expect(response).toBe('Successfully left the channel')
   })

@@ -41,11 +41,11 @@ describe('test allow command', () => {
     const {
       response,
       success,
-      channel: responseChannel
+
     } = await allow.execute(messageChannel, user, message)
 
     expect(response).toBe('You are not permitted to execute this command')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeFalse()
   })
 
@@ -54,11 +54,11 @@ describe('test allow command', () => {
     const {
       response,
       success,
-      channel: responseChannel
+
     } = await allow.execute(messageChannel, user, [])
 
     expect(response).toBe('You are not permitted to execute this command')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeFalse()
   })
 
@@ -75,11 +75,11 @@ describe('test allow command', () => {
     const {
       response,
       success,
-      channel: responseChannel
+
     } = await allow.execute(messageChannel, user, [])
 
     expect(response).toBe('Successfully updated settings')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeTrue()
   })
 
@@ -93,11 +93,11 @@ describe('test allow command', () => {
     const {
       response,
       success,
-      channel: responseChannel
+
     } = await allow.execute(messageChannel, user, [])
 
     expect(response).toBe('Successfully updated settings')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeTrue()
   })
 
@@ -115,11 +115,11 @@ describe('test allow command', () => {
     const {
       response,
       success,
-      channel: responseChannel
+
     } = await allow.execute(messageChannel, user, message)
 
     expect(response).toBe('Successfully updated settings')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeTrue()
   })
 
@@ -130,12 +130,12 @@ describe('test allow command', () => {
     const {
       response,
       success,
-      channel: responseChannel
+
     } = await allow.execute(messageChannel, user, message)
 
     expect(response).toBe('This channel is not registered')
     expect(success).toBeFalse()
-    expect(responseChannel).toBe(messageChannel)
+
   })
 
   it('no params provided updates users channel in database', async () => {

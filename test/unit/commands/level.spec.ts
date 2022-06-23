@@ -59,10 +59,10 @@ describe('test level command', () => {
       spyOn(level.methods, 'getDatabasePermissions').and.resolveTo(dbPerm)
 
       const {
-        channel: responseChannel,
         response,
         success
       } = await level.execute(channel, user)
+
       const expectedResponse = `Permissions for ${user.username
         } are ${level.methods.mapToPermissionName(
           userPerm
@@ -70,7 +70,6 @@ describe('test level command', () => {
           dbPerm
         )} overall`
 
-      expect(channel).toBe(responseChannel)
       expect(response).toBe(expectedResponse)
       expect(success).toBeTrue()
     })

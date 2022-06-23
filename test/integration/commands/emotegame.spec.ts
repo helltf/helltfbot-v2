@@ -46,12 +46,12 @@ describe('test emotegame', () => {
 
   it('no action given return error response', async () => {
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await emotegame.execute(messageChannel, user, [])
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeFalse()
     expect(response).toBe('Action has to be either start or stop')
   })
@@ -61,12 +61,12 @@ describe('test emotegame', () => {
     const message = ['start', type]
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await emotegame.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('type has to be ffz, bttv or seventv')
     expect(success).toBeFalse()
   })
@@ -76,12 +76,12 @@ describe('test emotegame', () => {
     mockEmoteApis()
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await emotegame.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe(
       'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
     )
@@ -92,12 +92,12 @@ describe('test emotegame', () => {
     const message = ['b']
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await emotegame.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('Action has to be either start or stop')
     expect(success).toBeFalse()
   })
@@ -108,12 +108,12 @@ describe('test emotegame', () => {
       const message = ['start', type]
 
       const {
-        channel: responseChannel,
+
         response,
         success
       } = await emotegame.execute(messageChannel, user, message)
 
-      expect(responseChannel).toBe(messageChannel)
+
       expect(response).toBe(
         'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
       )
@@ -126,12 +126,12 @@ describe('test emotegame', () => {
     mockEmoteApis()
     hb.games.add(new Emotegame(messageChannel, 'emote'))
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await emotegame.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(response).toBe('The emotegame has been stopped')
     expect(success).toBeTrue()
   })
@@ -154,12 +154,12 @@ describe('test emotegame', () => {
     hb.games.eg.push(new Emotegame(messageChannel, emote))
 
     const {
-      channel: responseChannel,
+
       response,
       success
     } = await emotegame.execute(messageChannel, user, message)
 
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeFalse()
     expect(response).toBe('An emotegame is already running')
   })
@@ -173,12 +173,12 @@ describe('test emotegame', () => {
         )
 
         const {
-          channel: responseChannel,
+
           response,
           success
         } = await emotegame.methods.start(messageChannel, type)
 
-        expect(responseChannel).toBe(messageChannel)
+
         expect(response).toBe(error)
         expect(success).toBeFalse()
       })
@@ -188,12 +188,12 @@ describe('test emotegame', () => {
   describe('stop method', () => {
     it('no game is running return errror response', async () => {
       const {
-        channel: responseChannel,
+
         response,
         success
       } = await emotegame.methods.stop(messageChannel)
 
-      expect(responseChannel).toBe(messageChannel)
+
       expect(response).toBe('There is no game running at the moment')
       expect(success).toBeFalse()
     })
@@ -202,12 +202,12 @@ describe('test emotegame', () => {
       hb.games.add(new Emotegame(messageChannel, 'emote'))
 
       const {
-        channel: responseChannel,
+
         response,
         success
       } = await emotegame.methods.stop(messageChannel)
 
-      expect(responseChannel).toBe(messageChannel)
+
       expect(response).toBe('The emotegame has been stopped')
       expect(success).toBeTrue()
     })

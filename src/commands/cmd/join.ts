@@ -19,7 +19,6 @@ export class JoinCommand implements Command {
     [joinChannel]: string[]
   ): Promise<BotResponse> {
     const errorResponse: BotResponse = {
-      channel: channel,
       response: '',
       success: false
     }
@@ -55,7 +54,6 @@ export class JoinCommand implements Command {
     return {
       success: success,
       response: message,
-      channel: channel
     }
   }
 

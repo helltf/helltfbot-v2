@@ -24,7 +24,6 @@ export class LevelCommand implements Command {
 
     return {
       success: true,
-      channel,
       response: `Permissions for ${userstate.username
         } are ${this.methods.mapToPermissionName(
           userPerm

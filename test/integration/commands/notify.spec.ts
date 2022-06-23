@@ -41,7 +41,6 @@ describe('test notify command: ', () => {
     const user = getExampleTwitchUserState({})
     const response = await notify.execute(channel, user, [streamer, event])
 
-    expect(response.channel).toBe(channel)
     expect(response.success).toBeFalse()
     expect(response.response).toEqual(
       `Event unknown. Valid events are ${Object.values(
@@ -61,7 +60,6 @@ describe('test notify command: ', () => {
     const {
       response,
       success,
-      channel: responseChannel
     } = await notify.execute(
       channel,
       { 'user-id': `${notification.user.id}` },
@@ -70,7 +68,6 @@ describe('test notify command: ', () => {
 
     expect(success).toBeFalse()
     expect(response).toBeDefined()
-    expect(responseChannel).toBe(channel)
   })
 
   describe('connected to pubsub', () => {

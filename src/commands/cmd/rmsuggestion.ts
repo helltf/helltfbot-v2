@@ -16,7 +16,6 @@ export class RemoveSuggestCommand implements Command {
     [id]: string[]
   ): Promise<BotResponse> {
     const response: BotResponse = {
-      channel: channel,
       success: false,
       response: ''
     }
@@ -40,7 +39,6 @@ export class RemoveSuggestCommand implements Command {
 
     return {
       response: `Succesfully removed your suggestion with id ${id}`,
-      channel: channel,
       success: true
     }
   }
