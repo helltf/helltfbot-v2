@@ -1,4 +1,5 @@
 import { LevelCommand } from "@src/commands/cmd/level"
+import { UidCommand } from "@src/commands/cmd/uid"
 import { AllowCommand } from "../cmd/allow"
 import { EmotegameCommand } from "../cmd/emotegame"
 import { GithubCommand } from '../cmd/github'
@@ -22,6 +23,8 @@ const commands: Command[] = [
   new LeaveCommand(),
   new AllowCommand(),
   new EmotegameCommand(),
-  new LevelCommand()
+  new LevelCommand(),
+  new UidCommand()
 ]
+
 export default commands
