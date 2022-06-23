@@ -272,7 +272,10 @@ describe('test pubsub', () => {
         expect(module.createNewPubSubConnection).not.toHaveBeenCalled()
       })
       it('get open connection returns new connection because no available', () => {
-        spyOn(module, 'createNewPubSubConnection')
+        const mockedConnection = new PubSubConnection()
+        spyOn(mockedConnection, "start").and.callThrough()
+
+        spyOn(module, 'createNewPubSubConnection').and.returnValue(mockedConnection)
 
         module.getOpenConnection()
 
@@ -281,13 +284,17 @@ describe('test pubsub', () => {
 
       it('existing connection is full return a new connection', () => {
         const connection = new PubSubConnection()
+
+        const mockedConnection = new PubSubConnection()
+        spyOn(mockedConnection, "start").and.callThrough()
+
         const topics: Topic[] = Array(50).fill({
           prefix: TopicPrefix.SETTING,
           id: 1
         })
         connection.topics.push(...topics)
 
-        spyOn(module, 'createNewPubSubConnection')
+        spyOn(module, 'createNewPubSubConnection').and.returnValue(mockedConnection)
 
         module.connections.push(connection)
 

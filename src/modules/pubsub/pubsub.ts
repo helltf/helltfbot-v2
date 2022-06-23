@@ -43,7 +43,7 @@ export class PubSub {
     hb.log(LogType.PUBSUB, `Connecting to ${channels.length} topics ...`)
 
     for (const channels of chunkedChannels) {
-      const connection = this.createNewPubSubConnection()
+      const connection = this.createNewPubSubConnection().start()
 
       const topics = this.getTopics(channels)
 
@@ -54,7 +54,8 @@ export class PubSub {
   }
 
   createNewPubSubConnection(): PubSubConnection {
-    const connection = new PubSubConnection().start()
+
+    const connection = new PubSubConnection()
 
     connection.connection.addEventListener('message', ({ data }) => {
       this.handlePubSubMessage(JSON.parse(data))
@@ -117,7 +118,7 @@ export class PubSub {
   getOpenConnection(): PubSubConnection {
     const openConnection = this.connections.find(c => c.topics.length < 50)
 
-    return openConnection ? openConnection : this.createNewPubSubConnection()
+    return openConnection ? openConnection : this.createNewPubSubConnection().start()
   }
 
   listenToTopic(topic: Topic) {
