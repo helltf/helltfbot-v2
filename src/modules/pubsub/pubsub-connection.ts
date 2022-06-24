@@ -33,8 +33,7 @@ export class PubSubConnection {
   }
 
   start() {
-    if (!(process.env.NODE_ENV === 'test'))
-      this.connection.reconnect()
+    if (!(process.env.NODE_ENV === 'test')) this.connection.reconnect()
     return this
   }
 

@@ -21,7 +21,9 @@ describe('join command tests', () => {
 
   beforeEach(async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
-    user = getExampleTwitchUserState({ permission: 100 })
+    user = getExampleTwitchUserState({
+      permission: 100
+    })
     channel = 'channel'
     join = new JoinCommand()
     await clearDb(hb.db.dataSource)
@@ -34,11 +36,7 @@ describe('join command tests', () => {
   it('channel is undefined return error', async () => {
     const message: string[] = []
 
-    const {
-
-      success,
-      response
-    } = await join.execute(channel, user, message)
+    const { success, response } = await join.execute(channel, user, message)
 
     const expectedResponse = 'Channel has to be defined'
 
@@ -49,10 +47,7 @@ describe('join command tests', () => {
   it('channel is empty string return error', async () => {
     const message = ['']
 
-    const {
-      success,
-      response
-    } = await join.execute(channel, user, message)
+    const { success, response } = await join.execute(channel, user, message)
 
     const expectedResponse = 'Channel has to be defined'
 
@@ -65,13 +60,8 @@ describe('join command tests', () => {
     const message = [joinChannel]
     await saveExampleChannel(joinChannel)
 
-    const {
-
-      success,
-      response
-    } = await join.execute(channel, user, message)
+    const { success, response } = await join.execute(channel, user, message)
     const expectedResponse = 'Already connected to that channel'
-
 
     expect(success).toBeFalse()
     expect(response).toBe(expectedResponse)
@@ -121,7 +111,6 @@ describe('join command tests', () => {
 
     expect(success).toBeTrue()
     expect(response).toBeDefined()
-
   })
 
   it('connect to channel is succesful saves channel', async () => {
@@ -153,7 +142,6 @@ describe('join command tests', () => {
 
     expect(success).toBeFalse()
     expect(response).toBeDefined()
-
   })
 
   it('connect to channel sets joined to true', async () => {
@@ -161,7 +149,10 @@ describe('join command tests', () => {
     spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
 
     await hb.db.channelRepo.save(
-      getExampleChannel({ joined: false, channel: channelToJoin })
+      getExampleChannel({
+        joined: false,
+        channel: channelToJoin
+      })
     )
 
     await join.execute(channel, user, [channelToJoin])
