@@ -100,12 +100,9 @@ export class EmotegameCommand implements Command {
     },
 
     getRandomEmoteService() {
-      const emoteTypes: EmoteType[] = [
-        EmoteType.BTTV,
-        EmoteType.FFZ,
-        EmoteType.SEVENTV
-      ]
-      return emoteTypes[hb.utils.random(0, 2)]
+      const emoteTypes: EmoteType[] = Object.values(EmoteType)
+
+      return emoteTypes[hb.utils.random(0, emoteTypes.length - 1)]
     },
 
     getEmotes: async (
