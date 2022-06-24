@@ -23,7 +23,9 @@ export class ColorTracking implements Module {
 
     const savedColors = (
       await hb.db.userRepo.findOne({
-        where: { id: id },
+        where: {
+          id: id
+        },
         relations: {
           colors: true
         }

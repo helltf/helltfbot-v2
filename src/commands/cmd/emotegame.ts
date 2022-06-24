@@ -1,8 +1,8 @@
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
-import { TwitchUserState, BotResponse } from '../../client/types'
+import { BotResponse } from '../../client/types'
 import { Emotegame } from '../../games/emotegame'
-import { Command } from '../types'
+import { Command, Context } from '../types'
 
 export class EmotegameCommand implements Command {
   name = 'emotegame'
@@ -12,11 +12,10 @@ export class EmotegameCommand implements Command {
   optionalParams = ['type']
   alias = ['hangman', 'egame', 'bttvgame', 'ffzgame', '7tvgame']
   cooldown = 10000
-  async execute(
-    channel: string,
-    _: TwitchUserState,
-    [action, type]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    channel,
+    message: [action, type]
+  }: Context): Promise<BotResponse> {
     const emoteGameAction = action as EmotegameAction
     const emoteGameType = type as EmoteType
 

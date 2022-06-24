@@ -61,7 +61,10 @@ export class NotificationService {
     updateEvents: UserNotificationType[]
   ): Promise<boolean> {
     const queryParams = updateEvents.map(e => {
-      return { streamer, [e]: true }
+      return {
+        streamer,
+        [e]: true
+      }
     })
 
     return (

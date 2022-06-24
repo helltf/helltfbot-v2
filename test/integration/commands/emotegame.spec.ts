@@ -45,12 +45,11 @@ describe('test emotegame', () => {
   })
 
   it('no action given return error response', async () => {
-    const {
-
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, [])
-
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message: []
+    })
 
     expect(success).toBeFalse()
     expect(response).toBe('Action has to be either start or stop')
@@ -60,12 +59,11 @@ describe('test emotegame', () => {
     const type = 'otherType'
     const message = ['start', type]
 
-    const {
-
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
-
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('type has to be ffz, bttv or seventv')
     expect(success).toBeFalse()
@@ -75,12 +73,11 @@ describe('test emotegame', () => {
     const message = ['start']
     mockEmoteApis()
 
-    const {
-
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
-
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe(
       'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
@@ -91,12 +88,11 @@ describe('test emotegame', () => {
   it('action is not start or stop return error response', async () => {
     const message = ['b']
 
-    const {
-
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
-
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('Action has to be either start or stop')
     expect(success).toBeFalse()
@@ -107,12 +103,12 @@ describe('test emotegame', () => {
       mockEmoteApis()
       const message = ['start', type]
 
-      const {
-
-        response,
-        success
-      } = await emotegame.execute(messageChannel, user, message)
-
+      const { response, success } = await emotegame.execute({
+        channel: messageChannel,
+        user,
+        message
+      }
+      )
 
       expect(response).toBe(
         'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
@@ -125,12 +121,11 @@ describe('test emotegame', () => {
     const message = ['stop']
     mockEmoteApis()
     hb.games.add(new Emotegame(messageChannel, 'emote'))
-    const {
-
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
-
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('The emotegame has been stopped')
     expect(success).toBeTrue()
@@ -140,7 +135,7 @@ describe('test emotegame', () => {
     const message = ['start']
     mockEmoteApis()
 
-    await emotegame.execute(messageChannel, user, message)
+    await emotegame.execute({ channel: messageChannel, user, message })
 
     expect(hb.games.eg).toHaveSize(1)
     expect(hb.games.eg[0].channel).toBe(messageChannel)
@@ -153,12 +148,11 @@ describe('test emotegame', () => {
 
     hb.games.eg.push(new Emotegame(messageChannel, emote))
 
-    const {
-
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
-
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(success).toBeFalse()
     expect(response).toBe('An emotegame is already running')
@@ -172,12 +166,10 @@ describe('test emotegame', () => {
           new ResourceError(error)
         )
 
-        const {
-
-          response,
-          success
-        } = await emotegame.methods.start(messageChannel, type)
-
+        const { response, success } = await emotegame.methods.start(
+          messageChannel,
+          type
+        )
 
         expect(response).toBe(error)
         expect(success).toBeFalse()
@@ -187,12 +179,7 @@ describe('test emotegame', () => {
 
   describe('stop method', () => {
     it('no game is running return errror response', async () => {
-      const {
-
-        response,
-        success
-      } = await emotegame.methods.stop(messageChannel)
-
+      const { response, success } = await emotegame.methods.stop(messageChannel)
 
       expect(response).toBe('There is no game running at the moment')
       expect(success).toBeFalse()
@@ -201,12 +188,7 @@ describe('test emotegame', () => {
     it('game is running return successful response', async () => {
       hb.games.add(new Emotegame(messageChannel, 'emote'))
 
-      const {
-
-        response,
-        success
-      } = await emotegame.methods.stop(messageChannel)
-
+      const { response, success } = await emotegame.methods.stop(messageChannel)
 
       expect(response).toBe('The emotegame has been stopped')
       expect(success).toBeTrue()

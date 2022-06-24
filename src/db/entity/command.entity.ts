@@ -5,7 +5,9 @@ export class CommandEntity extends BaseEntity {
   @PrimaryColumn('varchar')
   name: string
 
-  @Column('int', { default: 0 })
+  @Column('int', {
+    default: 0
+  })
   counter: number
 
   @Column('int')
@@ -23,9 +25,14 @@ export class CommandEntity extends BaseEntity {
   @Column('int')
   cooldown: number
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   deleted: boolean
 
-  @Column('varchar', { array: true, nullable: true })
+  @Column('varchar', {
+    array: true,
+    nullable: true
+  })
   alias: string[]
 }

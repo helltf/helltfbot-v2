@@ -144,7 +144,10 @@ describe('test pubsub', () => {
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
@@ -162,7 +165,10 @@ describe('test pubsub', () => {
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id }
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
@@ -180,8 +186,14 @@ describe('test pubsub', () => {
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id },
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo.id
+          },
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
@@ -205,10 +217,22 @@ describe('test pubsub', () => {
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo1.id },
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo1.id },
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo2.id },
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo2.id }
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo1.id
+          },
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo1.id
+          },
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo2.id
+          },
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo2.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
@@ -273,9 +297,11 @@ describe('test pubsub', () => {
       })
       it('get open connection returns new connection because no available', () => {
         const mockedConnection = new PubSubConnection()
-        spyOn(mockedConnection, "start").and.callThrough()
+        spyOn(mockedConnection, 'start').and.callThrough()
 
-        spyOn(module, 'createNewPubSubConnection').and.returnValue(mockedConnection)
+        spyOn(module, 'createNewPubSubConnection').and.returnValue(
+          mockedConnection
+        )
 
         module.getOpenConnection()
 
@@ -286,7 +312,7 @@ describe('test pubsub', () => {
         const connection = new PubSubConnection()
 
         const mockedConnection = new PubSubConnection()
-        spyOn(mockedConnection, "start").and.callThrough()
+        spyOn(mockedConnection, 'start').and.callThrough()
 
         const topics: Topic[] = Array(50).fill({
           prefix: TopicPrefix.SETTING,
@@ -294,7 +320,9 @@ describe('test pubsub', () => {
         })
         connection.topics.push(...topics)
 
-        spyOn(module, 'createNewPubSubConnection').and.returnValue(mockedConnection)
+        spyOn(module, 'createNewPubSubConnection').and.returnValue(
+          mockedConnection
+        )
 
         module.connections.push(connection)
 

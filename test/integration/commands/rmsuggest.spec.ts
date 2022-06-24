@@ -29,7 +29,7 @@ describe('test rmsuggest command', () => {
   it('required id is undefined return error message', async () => {
     const message = ['']
 
-    const response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute({ channel, user, message })
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
@@ -40,7 +40,7 @@ describe('test rmsuggest command', () => {
   it('id is not an number return error', async () => {
     const message = ['a']
 
-    const response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute({ channel, user, message })
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe('id has to be a number')
@@ -50,7 +50,7 @@ describe('test rmsuggest command', () => {
     const id = '1'
     const message = [id]
 
-    const response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute({ channel, user, message })
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(
@@ -72,7 +72,7 @@ describe('test rmsuggest command', () => {
     const id = savedEntity.id
     const message = [`${id}`]
 
-    const response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute({ channel, user, message })
 
     const entity = await hb.db.suggestionRepo.findOneBy({
       id: id
@@ -100,7 +100,7 @@ describe('test rmsuggest command', () => {
 
     user['user-id'] = '5'
 
-    const response = await rmsuggest.execute(channel, user, message)
+    const response = await rmsuggest.execute({ channel, user, message })
 
     const remainingEntity = await hb.db.suggestionRepo.findOneBy({
       id: savedEntity.id

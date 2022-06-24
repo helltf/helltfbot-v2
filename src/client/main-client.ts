@@ -13,7 +13,9 @@ function createclient(): Client {
       password: 'oauth:' + process.env.TWITCH_OAUTH,
       username: 'xdforsenxdlol'
     },
-    connection: { reconnect: true },
+    connection: {
+      reconnect: true
+    },
     logger: {
       info: msg => {
         if (process.env.DEBUG === 'true') hb.log(LogType.TWITCHBOT, msg)

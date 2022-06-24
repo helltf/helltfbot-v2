@@ -30,7 +30,7 @@ describe('test level command', () => {
   })
 
   describe('map to name', () => {
-    hb.utils.getEnumValues(ChatPermissionLevel).forEach((lvl) => {
+    hb.utils.getEnumValues(ChatPermissionLevel).forEach(lvl => {
       it(`chat permission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
         const result = level.methods.mapToPermissionName(lvl)
         const expectedResult = ChatPermissionLevel[lvl].toLowerCase()
@@ -58,10 +58,7 @@ describe('test level command', () => {
       spyOn(level.methods, 'getUserPermissions').and.returnValue(userPerm)
       spyOn(level.methods, 'getDatabasePermissions').and.resolveTo(dbPerm)
 
-      const {
-        response,
-        success
-      } = await level.execute(channel, user)
+      const { response, success } = await level.execute({ channel, user, message: [] })
 
       const expectedResponse = `Permissions for ${user.username
         } are ${level.methods.mapToPermissionName(

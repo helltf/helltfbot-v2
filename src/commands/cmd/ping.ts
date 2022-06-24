@@ -9,7 +9,7 @@ export class PingCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = []
-  async execute(channel: string): Promise<BotResponse> {
+  async execute(): Promise<BotResponse> {
     return {
       response: 'pong',
       success: true

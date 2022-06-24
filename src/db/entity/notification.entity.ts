@@ -20,16 +20,24 @@ export class NotificationEntity extends BaseEntity {
   @Column('varchar')
   channel: string
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   live: boolean
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   offline: boolean
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   title: boolean
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   game: boolean
 
   @ManyToOne(() => TwitchUserEntity, user => user.notifications)
