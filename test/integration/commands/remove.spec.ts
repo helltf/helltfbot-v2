@@ -42,7 +42,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBe('No streamer specified')
@@ -55,7 +55,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBe(
@@ -72,7 +72,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBe(
@@ -89,7 +89,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
 
@@ -115,7 +115,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeTrue()
 
@@ -137,7 +137,7 @@ describe('test remove command', () => {
 
     await saveNotificationWithUser(notification)
 
-    await remove.execute(messageChannel, user, message)
+    await remove.execute({ channel: messageChannel, user, message })
 
     const updatedEntity = await hb.db.notificationRepo.findOneBy({
       user: {

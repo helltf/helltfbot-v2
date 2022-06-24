@@ -41,9 +41,9 @@ describe('test notify command: ', () => {
   })
 
   it('event is not valid return error', async () => {
-    const event = 'unknown'
+    const event: string = 'unknown'
     const user = getExampleTwitchUserState({})
-    const response = await notify.execute(channel, user, [streamer, event])
+    const response = await notify.execute({ channel, user, message: [streamer, event] })
 
     expect(response.success).toBeFalse()
     expect(response.response).toEqual(
@@ -62,11 +62,13 @@ describe('test notify command: ', () => {
     await hb.db.notificationRepo.save(notification)
 
     const { response, success } = await notify.execute(
-      channel,
       {
-        'user-id': `${notification.user.id}`
-      },
-      message
+        channel,
+        user: {
+          'user-id': `${notification.user.id}`
+        },
+        message
+      }
     )
 
     expect(success).toBeFalse()
@@ -293,7 +295,7 @@ describe('test notify command: ', () => {
       spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(returnedStreamerId)
       spyOn(hb.pubSub, 'listenToTopic')
 
-      await notify.execute(channel, userState, message)
+      await notify.execute({ channel, user: userState, message })
 
       const expectedTopic = {
         id: returnedStreamerId,

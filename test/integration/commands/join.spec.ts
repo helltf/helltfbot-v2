@@ -36,7 +36,7 @@ describe('join command tests', () => {
   it('channel is undefined return error', async () => {
     const message: string[] = []
 
-    const { success, response } = await join.execute(channel, user, message)
+    const { success, response } = await join.execute({ channel, user, message })
 
     const expectedResponse = 'Channel has to be defined'
 
@@ -47,7 +47,7 @@ describe('join command tests', () => {
   it('channel is empty string return error', async () => {
     const message = ['']
 
-    const { success, response } = await join.execute(channel, user, message)
+    const { success, response } = await join.execute({ channel, user, message })
 
     const expectedResponse = 'Channel has to be defined'
 
@@ -60,7 +60,7 @@ describe('join command tests', () => {
     const message = [joinChannel]
     await saveExampleChannel(joinChannel)
 
-    const { success, response } = await join.execute(channel, user, message)
+    const { success, response } = await join.execute({ channel, user, message })
     const expectedResponse = 'Already connected to that channel'
 
     expect(success).toBeFalse()
@@ -107,7 +107,7 @@ describe('join command tests', () => {
       response,
 
       success
-    } = await join.execute(channel, user, message)
+    } = await join.execute({ channel, user, message })
 
     expect(success).toBeTrue()
     expect(response).toBeDefined()
@@ -119,7 +119,7 @@ describe('join command tests', () => {
 
     spyOn(hb.client, 'join').and.resolveTo([joinChannel])
 
-    await join.execute(channel, user, message)
+    await join.execute({ channel, user, message })
 
     const savedChannel = await hb.db.channelRepo.findOneBy({
       channel: joinChannel
@@ -138,7 +138,7 @@ describe('join command tests', () => {
       response,
 
       success
-    } = await join.execute(channel, user, message)
+    } = await join.execute({ channel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBeDefined()
@@ -155,7 +155,7 @@ describe('join command tests', () => {
       })
     )
 
-    await join.execute(channel, user, [channelToJoin])
+    await join.execute({ channel, user, message: [channelToJoin] })
 
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToJoin
@@ -169,7 +169,7 @@ describe('join command tests', () => {
     const message = [channelToJoin]
     spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
 
-    await join.execute(channel, user, message)
+    await join.execute({ channel, user, message })
 
     const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
@@ -190,7 +190,7 @@ describe('join command tests', () => {
       })
     )
 
-    await join.execute(channel, user, message)
+    await join.execute({ channel, user, message })
 
     const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
@@ -205,7 +205,7 @@ describe('join command tests', () => {
 
     user.permission = 0
 
-    const { success, response } = await join.execute(channel, user, message)
+    const { success, response } = await join.execute({ channel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBe('You are not permitted to issue this command')

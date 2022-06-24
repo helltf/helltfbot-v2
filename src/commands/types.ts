@@ -19,5 +19,5 @@ export interface Context {
   user: TwitchUserState
   channel: string
   message: string[]
-  type: 'message' | 'whisper'
+  type?: 'message' | 'whisper'
 }
