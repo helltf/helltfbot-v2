@@ -41,7 +41,7 @@ describe('test notify command: ', () => {
   })
 
   it('event is not valid return error', async () => {
-    const event: string = 'unknown'
+    const event = 'unknown'
     const user = getExampleTwitchUserState({})
     const response = await notify.execute({ channel, user, message: [streamer, event] })
 

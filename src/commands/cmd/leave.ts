@@ -1,4 +1,3 @@
-import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types'
 import { GlobalPermissionLevel } from '../../utilities/permission/types'
 import { Command, Context } from '../types'

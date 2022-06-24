@@ -1,5 +1,4 @@
 import { Command, Context } from '../types'
-import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types'
 export class RemoveSuggestCommand implements Command {
   name = 'rmsuggest'

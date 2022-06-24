@@ -1,6 +1,5 @@
 import { BotResponse } from '../../client/types'
 
-import { TwitchUserState } from '../../client/types'
 import {
   NotifyEventType,
   Topic,
