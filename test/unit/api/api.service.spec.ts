@@ -43,8 +43,32 @@ fdescribe('api service', () => {
         expect(emoteInfo).toEqual(expectedResult)
     })
 
-    it('one emote service returns no emotes return empty array for that service', () => {
+    emoteTypes.forEach(type => {
+        it(`${type} emote service returns no emotes return empty array for ${type}`, async () => {
+            const emotes = ['a', 'b']
+            const rest = [...emoteTypes].filter(e => e !== type)
+            const successResponse = new ResourceSuccess(emotes)
+            const errorResponse = new ResourceError('error')
 
+            spyOn(service[type], 'getEmotesForChannel').and.resolveTo(errorResponse)
+
+            rest.forEach(restType => {
+                spyOn(service[restType], 'getEmotesForChannel').and.resolveTo(successResponse)
+            })
+
+            const expectedResult: EmoteInfo = {
+                bttv: [],
+                ffz: [],
+                seventv: []
+            }
+
+            rest.forEach(restType => {
+                expectedResult[restType] = emotes
+            })
+
+            const emoteInfo = await service.fetchAllEmotes(channel)
+            expect(emoteInfo).toEqual(expectedResult)
+        })
     })
 })
 
