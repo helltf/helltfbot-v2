@@ -153,7 +153,7 @@ describe('test allow command', () => {
       })
     )
 
-    await allow.execute({ channel: messageChannel, user, message: [] })
+    await allow.execute({ channel: messageChannel, user, message })
 
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: allowChannel
