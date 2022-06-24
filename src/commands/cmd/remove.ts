@@ -1,8 +1,8 @@
 import { UpdateResult } from "typeorm"
-import { TwitchUserState, BotResponse } from "../../client/types"
+import { BotResponse } from "../../client/types"
 import { UserNotificationType } from "../../modules/pubsub/types"
 import { NotificationService } from '../../service/notification.service'
-import { Command } from '../types'
+import { Command, Context } from '../types'
 
 export class RemoveCommand implements Command {
   name = 'remove'
@@ -12,11 +12,11 @@ export class RemoveCommand implements Command {
   optionalParams = []
   requiredParams = ['streamer', 'event']
   permissions = 0
-  async execute(
-    channel: string,
-    { 'user-id': unparsedUserId }: TwitchUserState,
-    [streamer, event]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    channel,
+    user: { 'user-id': unparsedUserId },
+    message: [streamer, event]
+  }: Context): Promise<BotResponse> {
     const userId = Number(unparsedUserId)
     const eventType = event as UserNotificationType
 
@@ -65,7 +65,9 @@ export class RemoveCommand implements Command {
     ): Promise<UpdateResult> {
       return await hb.db.notificationRepo.update(
         {
-          user: { id: userId },
+          user: {
+            id: userId
+          },
           streamer: streamer
         },
         {

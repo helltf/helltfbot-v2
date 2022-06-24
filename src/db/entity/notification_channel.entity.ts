@@ -8,9 +8,13 @@ export class NotificationChannelEntity extends BaseEntity {
   @Column('varchar')
   name: string
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   status: boolean
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   setting: boolean
 }

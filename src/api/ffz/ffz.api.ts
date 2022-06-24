@@ -46,7 +46,11 @@ interface FfzRoomInfo {
     2: string
     4: string
   }
-  mod_urls: { 1: string; 2: string; 4: string }
+  mod_urls: {
+    1: string
+    2: string
+    4: string
+  }
   user_badges?: any
   user_badges_ids?: any
   css?: any

@@ -1,7 +1,7 @@
 import { LevelCommand } from "@src/commands/cmd/level"
 import { UidCommand } from "@src/commands/cmd/uid"
 import { AllowCommand } from "../cmd/allow"
-import { EmotegameCommand } from "../cmd/emotegame"
+import { EmotegameCommand } from '../cmd/emotegame'
 import { GithubCommand } from '../cmd/github'
 import { JoinCommand } from '../cmd/join'
 import { LeaveCommand } from '../cmd/leave'

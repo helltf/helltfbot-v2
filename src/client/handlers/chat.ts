@@ -31,7 +31,12 @@ const handleChat = async (
 
   setCooldown(command, user)
 
-  const response = await command.execute(channel, user, data)
+  const response = await command.execute({
+    channel,
+    message: data,
+    type: 'message',
+    user: user
+  })
 
   sendResponse(channel, response)
 }

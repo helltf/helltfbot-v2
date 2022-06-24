@@ -38,12 +38,11 @@ describe('test leave command', () => {
   it('no input is given return erorr response', async () => {
     const message = ['']
 
-    const {
-
-      response,
-      success
-    } = await leave.execute(messageChannel, user, message)
-
+    const { response, success } = await leave.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('You need to define a channel')
     expect(success).toBeFalse()
@@ -52,12 +51,11 @@ describe('test leave command', () => {
   it('client is not connected to channel, channel is not in db return error response', async () => {
     const message = ['leaveChannel']
 
-    const {
-
-      response,
-      success
-    } = await leave.execute(messageChannel, user, message)
-
+    const { response, success } = await leave.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('Not connected to channel')
     expect(success).toBeFalse()
@@ -73,12 +71,11 @@ describe('test leave command', () => {
 
     await hb.db.channelRepo.save(channelEntity)
 
-    const {
-
-      response,
-      success
-    } = await leave.execute(messageChannel, user, message)
-
+    const { response, success } = await leave.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('Not connected to channel')
     expect(success).toBeFalse()
@@ -114,15 +111,17 @@ describe('test leave command', () => {
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
     await hb.db.channelRepo.save(
-      getExampleChannel({ joined: true, channel: channelToLeave })
+      getExampleChannel({
+        joined: true,
+        channel: channelToLeave
+      })
     )
 
-    const {
-
-      response,
-      success
-    } = await leave.execute(messageChannel, user, message)
-
+    const { response, success } = await leave.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(success).toBeTrue()
     expect(response).toBe('Successfully left the channel')
@@ -134,10 +133,13 @@ describe('test leave command', () => {
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
     await hb.db.channelRepo.save(
-      getExampleChannel({ joined: true, channel: channelToLeave })
+      getExampleChannel({
+        joined: true,
+        channel: channelToLeave
+      })
     )
 
-    await leave.execute(messageChannel, user, message)
+    await leave.execute({ channel: messageChannel, user, message })
 
     const savedEntity = await hb.db.channelRepo.findOneBy({
       channel: channelToLeave
@@ -150,7 +152,10 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
 
     await hb.db.channelRepo.save(
-      getExampleChannel({ joined: true, channel: channelToLeave })
+      getExampleChannel({
+        joined: true,
+        channel: channelToLeave
+      })
     )
 
     await leave.methods.updateChannelProperty(channelToLeave)
@@ -167,11 +172,17 @@ describe('test leave command', () => {
     const otherChannel = 'otherChannel'
 
     await hb.db.channelRepo.save(
-      getExampleChannel({ joined: true, channel: channelToLeave })
+      getExampleChannel({
+        joined: true,
+        channel: channelToLeave
+      })
     )
 
     await hb.db.channelRepo.save(
-      getExampleChannel({ joined: true, channel: otherChannel })
+      getExampleChannel({
+        joined: true,
+        channel: otherChannel
+      })
     )
 
     await leave.methods.updateChannelProperty(channelToLeave)
@@ -201,7 +212,7 @@ describe('test leave command', () => {
       })
     )
 
-    await leave.execute(messageChannel, user, message)
+    await leave.execute({ channel: messageChannel, user, message })
 
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
@@ -215,7 +226,7 @@ describe('test leave command', () => {
 
     const message = [channelToLeave]
     user.permission = ChatPermissionLevel.USER
-    const response = await leave.execute(messageChannel, user, message)
+    const response = await leave.execute({ channel: messageChannel, user, message })
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(

@@ -13,7 +13,11 @@ export function getExampleCommand({
   cooldown = 500,
   description = '',
   execute = async () => {
-    return { channel: 'channel', response: '', success: true }
+    return {
+      channel: 'channel',
+      response: '',
+      success: true
+    }
   },
   name = 'name',
   optionalParams = [],

@@ -54,7 +54,6 @@ export class PubSub {
   }
 
   createNewPubSubConnection(): PubSubConnection {
-
     const connection = new PubSubConnection()
 
     connection.connection.addEventListener('message', ({ data }) => {
@@ -68,8 +67,16 @@ export class PubSub {
 
   getTopics(channels: NotificationChannelEntity[]): Topic[] {
     return channels.reduce((topics: Topic[], { setting, status, id }) => {
-      if (setting) topics.push({ prefix: TopicPrefix.SETTING, id })
-      if (status) topics.push({ prefix: TopicPrefix.STATUS, id })
+      if (setting)
+        topics.push({
+          prefix: TopicPrefix.SETTING,
+          id
+        })
+      if (status)
+        topics.push({
+          prefix: TopicPrefix.STATUS,
+          id
+        })
 
       return topics
     }, [])
@@ -118,7 +125,9 @@ export class PubSub {
   getOpenConnection(): PubSubConnection {
     const openConnection = this.connections.find(c => c.topics.length < 50)
 
-    return openConnection ? openConnection : this.createNewPubSubConnection().start()
+    return openConnection
+      ? openConnection
+      : this.createNewPubSubConnection().start()
   }
 
   listenToTopic(topic: Topic) {

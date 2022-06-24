@@ -1,7 +1,10 @@
 import { Command } from "../commands/types";
 
 export class CommandService {
-  commands: { activate: string[]; command: Command }[] = []
+  commands: {
+    activate: string[]
+    command: Command
+  }[] = []
 
   constructor(commands: Command[]) {
     const usedNames = []

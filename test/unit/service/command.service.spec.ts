@@ -159,8 +159,12 @@ describe('testing commands class', () => {
   })
 
   it('commands contains two commands get all returns both commands', () => {
-    const command1 = getExampleCommand({ name: 'command1' })
-    const command2 = getExampleCommand({ name: 'command2' })
+    const command1 = getExampleCommand({
+      name: 'command1'
+    })
+    const command2 = getExampleCommand({
+      name: 'command2'
+    })
 
     const commands = new CommandService([command1, command2])
     const allCommands = commands.getAll()

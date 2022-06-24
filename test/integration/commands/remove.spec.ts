@@ -42,11 +42,10 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBe('No streamer specified')
-
   })
 
   it('event is not defined return error response', async () => {
@@ -56,7 +55,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBe(
@@ -64,7 +63,6 @@ describe('test remove command', () => {
         UserNotificationType
       ).join(' ')}`
     )
-
   })
 
   it('event does not match existing events return error response', async () => {
@@ -74,7 +72,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
     expect(response).toBe(
@@ -82,7 +80,6 @@ describe('test remove command', () => {
         UserNotificationType
       ).join(' ')}`
     )
-
   })
 
   it('notification does not exist return error response', async () => {
@@ -92,7 +89,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeFalse()
 
@@ -104,7 +101,9 @@ describe('test remove command', () => {
     const message = [streamer, event]
 
     const notification = getExampleNotificationEntity({
-      user: getExampleTwitchUserEntity({ id: Number(user['user-id']) }),
+      user: getExampleTwitchUserEntity({
+        id: Number(user['user-id'])
+      }),
       streamer: streamer,
       channel: messageChannel,
       [event]: true
@@ -116,7 +115,7 @@ describe('test remove command', () => {
       response,
 
       success
-    } = await remove.execute(messageChannel, user, message)
+    } = await remove.execute({ channel: messageChannel, user, message })
 
     expect(success).toBeTrue()
 
@@ -128,7 +127,9 @@ describe('test remove command', () => {
     const message = [streamer, event]
 
     const notification = getExampleNotificationEntity({
-      user: getExampleTwitchUserEntity({ id: Number(user['user-id']) }),
+      user: getExampleTwitchUserEntity({
+        id: Number(user['user-id'])
+      }),
       streamer: streamer,
       channel: messageChannel,
       [event]: true
@@ -136,7 +137,7 @@ describe('test remove command', () => {
 
     await saveNotificationWithUser(notification)
 
-    await remove.execute(messageChannel, user, message)
+    await remove.execute({ channel: messageChannel, user, message })
 
     const updatedEntity = await hb.db.notificationRepo.findOneBy({
       user: {
@@ -171,7 +172,9 @@ describe('test remove command', () => {
         )
 
         const updatedEntity = await hb.db.notificationRepo.findOneBy({
-          user: { id: notification.user.id },
+          user: {
+            id: notification.user.id
+          },
           streamer: streamer
         })
 

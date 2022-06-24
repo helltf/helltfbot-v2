@@ -7,7 +7,11 @@ import { NotifyCommand } from '@commands/cmd/notify'
 import { TwitchUserEntity, NotificationEntity } from '@db/entities'
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
-import { getExampleNotificationEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '@test-utils/example'
+import {
+  getExampleNotificationEntity,
+  getExampleTwitchUserEntity,
+  getExampleTwitchUserState
+} from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
 describe('test notify command: ', () => {
@@ -39,7 +43,7 @@ describe('test notify command: ', () => {
   it('event is not valid return error', async () => {
     const event = 'unknown'
     const user = getExampleTwitchUserState({})
-    const response = await notify.execute(channel, user, [streamer, event])
+    const response = await notify.execute({ channel, user, message: [streamer, event] })
 
     expect(response.success).toBeFalse()
     expect(response.response).toEqual(
@@ -57,13 +61,14 @@ describe('test notify command: ', () => {
     await hb.db.userRepo.save(notification.user)
     await hb.db.notificationRepo.save(notification)
 
-    const {
-      response,
-      success,
-    } = await notify.execute(
-      channel,
-      { 'user-id': `${notification.user.id}` },
-      message
+    const { response, success } = await notify.execute(
+      {
+        channel,
+        user: {
+          'user-id': `${notification.user.id}`
+        },
+        message
+      }
     )
 
     expect(success).toBeFalse()
@@ -290,7 +295,7 @@ describe('test notify command: ', () => {
       spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(returnedStreamerId)
       spyOn(hb.pubSub, 'listenToTopic')
 
-      await notify.execute(channel, userState, message)
+      await notify.execute({ channel, user: userState, message })
 
       const expectedTopic = {
         id: returnedStreamerId,
