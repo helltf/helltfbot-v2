@@ -1,5 +1,5 @@
-import { TwitchUserState, BotResponse } from "@src/client/types";
-import { Command } from "@src/commands/types";
+import { BotResponse } from "@src/client/types";
+import { Command, Context } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class EmoteCommand implements Command {
@@ -10,10 +10,14 @@ export class EmoteCommand implements Command {
     optionalParams: string[] = ['type', 'channel'];
     alias: string[] = ['emotes'];
     cooldown: number = 20000;
-    execute = async (channel: string, userstate: TwitchUserState, message: string[]): Promise<BotResponse> => {
+    execute = async (
+        { channel }: Context
+    ): Promise<BotResponse> => {
+        const emotes = await hb.api.fetchAllEmotes(channel)
+
         return {
-            success: true,
-            response: ''
+            success: false,
+            response: 'No emotes found'
         }
     }
 }
