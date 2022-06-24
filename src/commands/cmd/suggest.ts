@@ -1,5 +1,4 @@
-import { Command } from '../types'
-import { ChatUserstate } from 'tmi.js'
+import { Command, Context } from '../types'
 import { BotResponse } from '../../client/types'
 
 export class SuggestCommand implements Command {
@@ -10,11 +9,10 @@ export class SuggestCommand implements Command {
   optionalParams = []
   cooldown = 30000
   alias = []
-  async execute(
-    channel: string,
-    userstate: ChatUserstate,
-    [...suggestion]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    user,
+    message: [...suggestion]
+  }: Context): Promise<BotResponse> {
     if (!suggestion[0])
       return {
         response: 'You have to specify a suggestion',
@@ -25,7 +23,7 @@ export class SuggestCommand implements Command {
 
     const id = await this.methods.saveSuggestion(
       suggestionMessage,
-      parseInt(userstate['user-id']!)
+      parseInt(user['user-id']!)
     )
 
     return {

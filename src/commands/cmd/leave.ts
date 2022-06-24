@@ -1,7 +1,7 @@
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types'
 import { GlobalPermissionLevel } from '../../utilities/permission/types'
-import { Command } from '../types'
+import { Command, Context } from '../types'
 
 export class LeaveCommand implements Command {
   name = 'leave'
@@ -11,12 +11,14 @@ export class LeaveCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = ['l']
-  async execute(
-    channel: string,
-    user: ChatUserstate,
-    [channeltoLeave]: string[]
-  ): Promise<BotResponse> {
-    const errorResponse: BotResponse = { success: false, response: '' }
+  async execute({
+    user,
+    message: [channeltoLeave]
+  }: Context): Promise<BotResponse> {
+    const errorResponse: BotResponse = {
+      success: false,
+      response: ''
+    }
 
     if (!channeltoLeave) {
       errorResponse.response = 'You need to define a channel'
@@ -25,7 +27,7 @@ export class LeaveCommand implements Command {
 
     if (
       channeltoLeave !== 'me' &&
-      user.permission < GlobalPermissionLevel.ADMIN
+      user.permission! < GlobalPermissionLevel.ADMIN
     ) {
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
@@ -41,7 +43,7 @@ export class LeaveCommand implements Command {
     if (success) await this.methods.updateChannelProperty(channeltoLeave)
     return {
       success,
-      response: message,
+      response: message
     }
   }
 

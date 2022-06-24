@@ -1,4 +1,4 @@
-import { Command } from '../types'
+import { Command, Context } from '../types'
 import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types'
 export class RemoveSuggestCommand implements Command {
@@ -10,11 +10,7 @@ export class RemoveSuggestCommand implements Command {
   cooldown = 30000
   alias = ['rms']
 
-  async execute(
-    channel: string,
-    user: ChatUserstate,
-    [id]: string[]
-  ): Promise<BotResponse> {
+  async execute({ user, message: [id] }: Context): Promise<BotResponse> {
     const response: BotResponse = {
       success: false,
       response: ''

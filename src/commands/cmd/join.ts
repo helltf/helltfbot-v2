@@ -1,8 +1,6 @@
 import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-
-import { TwitchUserState } from '../../client/types'
-import { Command } from '../types'
+import { Command, Context } from '../types'
 
 export class JoinCommand implements Command {
   name = 'join'
@@ -13,11 +11,10 @@ export class JoinCommand implements Command {
   cooldown = 5000
   alias = ['j']
 
-  async execute(
-    channel: string,
-    user: TwitchUserState,
-    [joinChannel]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    user,
+    message: [joinChannel]
+  }: Context): Promise<BotResponse> {
     const errorResponse: BotResponse = {
       response: '',
       success: false
@@ -53,7 +50,7 @@ export class JoinCommand implements Command {
 
     return {
       success: success,
-      response: message,
+      response: message
     }
   }
 

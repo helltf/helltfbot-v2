@@ -1,5 +1,5 @@
 import { TwitchUserState, BotResponse } from "@src/client/types";
-import { Command } from "@src/commands/types";
+import { Command, Context } from "@src/commands/types";
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
@@ -13,23 +13,21 @@ export class LevelCommand implements Command {
   optionalParams = []
   alias = ['lvl', 'permission', 'permissions']
   cooldown = 5000
-  execute = async (
-    channel: string,
-    userstate: TwitchUserState,
-  ): Promise<BotResponse> => {
+  execute = async ({ user }: Context): Promise<BotResponse> => {
     const dbPerm = await this.methods.getDatabasePermissions(
-      Number(userstate['user-id'])
+      Number(user['user-id'])
     )
-    const userPerm = this.methods.getUserPermissions(userstate)
+    const userPerm = this.methods.getUserPermissions(user)
 
     return {
       success: true,
-      response: `Permissions for ${userstate.username
-        } are ${this.methods.mapToPermissionName(
-          userPerm
-        )} for this channel and ${this.methods.mapToPermissionName(
-          dbPerm
-        )} overall`
+      response: `Permissions for ${
+        user.username
+      } are ${this.methods.mapToPermissionName(
+        userPerm
+      )} for this channel and ${this.methods.mapToPermissionName(
+        dbPerm
+      )} overall`
     }
   }
   methods = {

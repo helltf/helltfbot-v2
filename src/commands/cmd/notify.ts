@@ -6,7 +6,7 @@ import {
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types'
-import { Command } from '../types'
+import { Command, Context } from '../types'
 
 export class NotifyCommand implements Command {
   name = 'notify'
@@ -16,11 +16,11 @@ export class NotifyCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = ['notifyme', 'noti', 'notification']
-  async execute(
-    channel: string,
-    user: TwitchUserState,
-    [streamer, event]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    channel,
+    user,
+    message: [streamer, event]
+  }: Context): Promise<BotResponse> {
     if (this.methods.eventIsNotValid(event))
       return this.methods.getUnknownEventErrorResponse(channel)
     const eventType = event as UserNotificationType

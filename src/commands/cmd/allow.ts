@@ -1,8 +1,6 @@
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-
-import { TwitchUserState } from '../../client/types'
-import { Command } from '../types'
+import { Command, Context } from '../types'
 
 export class AllowCommand implements Command {
   name = 'allow'
@@ -13,11 +11,11 @@ export class AllowCommand implements Command {
   cooldown = 5000
   alias = []
 
-  async execute(
-    channel: string,
-    user: TwitchUserState,
-    [updateChannel]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    channel,
+    user,
+    message: [updateChannel]
+  }: Context): Promise<BotResponse> {
     const errorResponse = {
       channel: channel,
       response: 'You are not permitted to execute this command',
