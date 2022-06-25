@@ -5,7 +5,7 @@ import { getExampleTwitchUserState } from "@test-utils/example"
 import { mockEmoteApis } from "@test-utils/mocks"
 import { setup } from "@test-utils/setup"
 
-fdescribe('emote command', () => {
+describe('emote command', () => {
     let messageChannel: string
     let user: TwitchUserState
     let emote: EmoteCommand

@@ -3,7 +3,7 @@ import { Emote, EmoteType } from "@src/commands/cmd/emotegame"
 import { ChatPermissionLevel } from "@src/utilities/permission/types"
 import { setup } from "@test-utils/setup"
 
-fdescribe('api service', () => {
+describe('api service', () => {
     setup()
     let service: ApiService
     let channel: string
