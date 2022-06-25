@@ -1,6 +1,5 @@
-import { ApiService, EmoteApi, EmoteInfo, Resource, ResourceError, ResourceSuccess } from "@api/types"
+import { ApiService, EmoteInfo, Resource, ResourceError, ResourceSuccess } from "@api/types"
 import { Emote, EmoteType } from "@src/commands/cmd/emotegame"
-import { ChatPermissionLevel } from "@src/utilities/permission/types"
 import { setup } from "@test-utils/setup"
 
 describe('api service', () => {

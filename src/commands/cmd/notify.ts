@@ -21,7 +21,8 @@ export class NotifyCommand implements Command {
     message: [streamer, event]
   }: Context): Promise<BotResponse> {
     if (this.methods.eventIsNotValid(event))
-      return this.methods.getUnknownEventErrorResponse(channel)
+      return this.methods.getUnknownEventErrorResponse()
+
     const eventType = event as UserNotificationType
     const userId = parseInt(user['user-id']!)
 
@@ -183,7 +184,7 @@ export class NotifyCommand implements Command {
       )
     },
 
-    getUnknownEventErrorResponse(channel: string): BotResponse {
+    getUnknownEventErrorResponse(): BotResponse {
       return {
         response: `Event unknown. Valid events are ${Object.values(
           UserNotificationType

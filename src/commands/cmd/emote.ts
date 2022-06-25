@@ -1,17 +1,15 @@
-import { EmoteInfo } from "@api/types";
 import { BotResponse } from "@src/client/types";
-import { Emote } from "@src/commands/cmd/emotegame";
 import { Command, Context } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class EmoteCommand implements Command {
-    name: string = 'emote';
+    name = 'emote';
     permissions: number = ChatPermissionLevel.USER;
     description = 'sends all emote for the channel';
     requiredParams: string[] = [];
     optionalParams: string[] = ['channel'];
     alias: string[] = ['emotes'];
-    cooldown: number = 20000;
+    cooldown = 20000;
     execute = async (
         { channel, message: [channelParam] }: Context
     ): Promise<BotResponse> => {
