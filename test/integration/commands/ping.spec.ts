@@ -3,7 +3,6 @@ import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from "@test-utils/disconnect"
 import { getExampleChannel, getExampleCommand } from "@test-utils/example"
 import { setupDatabase } from "@test-utils/setup-db"
-import { BADHINTS } from "dns"
 
 fdescribe('test ping command', () => {
   let ping: PingCommand
@@ -27,6 +26,7 @@ fdescribe('test ping command', () => {
     const commandsIssued = 400
     const joinedChannels = 1
     const latency = 190
+
     spyOn(ping.methods, 'getUptime').and.returnValue(uptime)
     spyOn(ping.methods, 'getMemory').and.returnValue(memoryUsage)
     spyOn(ping.methods, 'getCommandsIssued').and.resolveTo(commandsIssued)
