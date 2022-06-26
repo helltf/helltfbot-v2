@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - remove channel from Response
 - use database-url instead of single params
-
+- ping command returns more information
 ### Fix
 
 - no longer sending letters after word has been guessed
