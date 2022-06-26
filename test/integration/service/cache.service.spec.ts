@@ -5,12 +5,9 @@ import { disconnectRedis } from '../../test-utils/disconnect'
 import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test redis service', () => {
-  const emoteTypes: EmoteType[] = [
-    EmoteType.BTTV,
-    EmoteType.FFZ,
-    EmoteType.SEVENTV
-  ]
+  const emoteTypes: EmoteType[] = Object.values(EmoteType)
   let channel: string
+
   beforeAll(async () => {
     await setupDatabase()
   })

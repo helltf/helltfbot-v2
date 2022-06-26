@@ -7,6 +7,7 @@ import {
 } from '@commands/cmd/emotegame'
 import { Emotegame } from '@games/emotegame'
 import { GameService } from '@service/game.service'
+import { mockEmoteApis } from "@test-utils/mocks"
 import { clearDb, clearRedis } from '../../test-utils/clear'
 import {
   disconnectDatabase,
@@ -19,11 +20,8 @@ describe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
-  const emoteTypes: EmoteType[] = [
-    EmoteType.BTTV,
-    EmoteType.FFZ,
-    EmoteType.SEVENTV
-  ]
+
+  const emoteTypes: EmoteType[] = Object.values(EmoteType)
 
   beforeAll(async () => {
     await setupDatabase()
@@ -315,11 +313,3 @@ describe('test emotegame', () => {
     })
   })
 })
-
-function mockEmoteApis(resolveTo: Emote[] = ['emote']) {
-  const result = new ResourceSuccess(resolveTo)
-
-  spyOn(hb.api.bttv, 'getEmotesForChannel').and.resolveTo(result)
-  spyOn(hb.api.ffz, 'getEmotesForChannel').and.resolveTo(result)
-  spyOn(hb.api.seventv, 'getEmotesForChannel').and.resolveTo(result)
-}

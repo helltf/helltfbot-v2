@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - global utils functions
 - hot reload for dev
+- emote command to fetch all emotes for channel
 ### Changed
 
 - remove channel from Response

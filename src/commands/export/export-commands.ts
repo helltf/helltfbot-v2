@@ -10,6 +10,8 @@ import { PingCommand } from '../cmd/ping'
 import { RemoveSuggestCommand } from '../cmd/rmsuggestion'
 import { SuggestCommand } from '../cmd/suggest'
 import { WebsiteCommand } from '../cmd/website'
+import { EmoteCommand } from '../cmd/emote'
+
 import { Command } from '../types'
 
 const commands: Command[] = [
@@ -24,7 +26,8 @@ const commands: Command[] = [
   new AllowCommand(),
   new EmotegameCommand(),
   new LevelCommand(),
-  new UidCommand()
+  new UidCommand(),
+  new EmoteCommand()
 ]
 
 export default commands
