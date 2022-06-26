@@ -1,19 +1,33 @@
 import { Emotegame } from "@games/emotegame"
 import { EmoteGameInputResult } from "@games/types"
 import { GameModule } from "@modules/game.module"
+import { clearDb } from "@test-utils/clear"
+import { disconnectDatabase } from "@test-utils/disconnect"
+import { setupDatabase } from "@test-utils/setup-db"
 import { getExampleTwitchUserState } from '../../test-utils/example'
 import { setup } from '../../test-utils/setup'
 
-describe('test game module', () => {
+fdescribe('test game module', () => {
   let module: GameModule
   let game: Emotegame
   let channel: string
-  beforeEach(() => {
+
+  beforeEach(async () => {
+    setup()
     channel = 'channel'
     module = new GameModule()
-    setup()
     game = new Emotegame(channel, 'emote')
     hb.games.addEmoteGame(game)
+    await clearDb(hb.db.dataSource)
+  })
+
+  beforeAll(async () => {
+    await setupDatabase()
+    console.log('set up')
+  })
+
+  afterAll(async () => {
+    await disconnectDatabase()
   })
 
   it('game returns finished send finish message', async () => {
@@ -37,9 +51,8 @@ describe('test game module', () => {
 
     await module.input(channel, user, message)
 
-    const expectedMesage = `${
-      user.username
-    } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
+    const expectedMesage = `${user.username
+      } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
 
     expect(hb.sendMessage).toHaveBeenCalledWith(channel, expectedMesage)
   })
@@ -54,5 +67,22 @@ describe('test game module', () => {
     await module.input(channel, user, message)
 
     expect(hb.games.eg).toHaveSize(0)
+  })
+
+  fdescribe('save finish', () => {
+    it('user is new save result to database', async () => {
+      const userId = 1
+
+      await module.saveFinishedEmotegame(userId)
+
+      const savedEntity = await hb.db.emoteStatsRepo.findOneBy({
+        user: {
+          id: userId
+        }
+      })
+
+      expect(savedEntity?.emote_guesses).toBe(1)
+
+    })
   })
 })
