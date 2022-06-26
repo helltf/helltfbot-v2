@@ -1,6 +1,6 @@
 import { PingCommand } from "@commands/cmd/ping"
 
-describe('test ping command', () => {
+fdescribe('test ping command', () => {
   let ping: PingCommand
 
   beforeEach(() => {
@@ -8,9 +8,13 @@ describe('test ping command', () => {
   })
 
   it('return success message', async () => {
+    const uptime = '1s'
+
+    spyOn(ping.methods, 'getUptime').and.returnValue(uptime)
+
     const { success, response } = await ping.execute()
 
     expect(success).toBeTrue()
-    expect(response).toBe('pong')
+    expect(response).toBe(`pong | Uptime: ${uptime}`)
   })
 })
