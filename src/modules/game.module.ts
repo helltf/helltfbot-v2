@@ -22,7 +22,7 @@ export class GameModule implements Module {
     )
   }
 
-  input(channel: string, user: ChatUserstate, message: string) {
+  async input(channel: string, user: ChatUserstate, message: string) {
     const game = hb.games.getGame(channel)
 
     if (!game) return
@@ -30,23 +30,23 @@ export class GameModule implements Module {
     const result = game.input(message)
     const userId = Number(user['user-id']!)
 
-    this.saveEmotegameEventStats(userId, result)
-
     if (result === EmoteGameInputResult.FINISHED) {
       hb.games.removeGameForChannel(game.channel)
-      return hb.sendMessage(
+      hb.sendMessage(
         channel,
         `${user.username} has guessed the emote. The emote was ${game.actualEmote}`
       )
     }
 
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
-      return hb.sendMessage(
+      hb.sendMessage(
         channel,
         `${user.username
         } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
       )
     }
+
+    await this.saveEmotegameEventStats(userId, result)
   }
 
   async saveEmotegameEventStats(userId: number, result: EmoteGameInputResult) {
