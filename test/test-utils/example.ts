@@ -169,7 +169,3 @@ export const createMockedWSConnection = (): ReconnectingWebSocket => {
     }
   })
 }
-
-function getExampleColorsEntity(arg0: {}): import("@db/entities").ColorHistoryEntity | undefined {
-  throw new Error('Function not implemented.')
-}

@@ -1,4 +1,3 @@
-import { timeStamp } from 'console'
 import { ChatUserstate } from 'tmi.js'
 import { EmoteGameInputResult } from '../games/types'
 import { Module } from './export/module'

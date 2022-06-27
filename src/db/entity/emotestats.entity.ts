@@ -1,5 +1,5 @@
 import { TwitchUserEntity } from "@db/entities";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('emotegame_stats')
 export class EmoteStatsEntity {
