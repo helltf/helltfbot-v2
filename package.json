@@ -8,6 +8,7 @@
     "test": "ts-node -r tsconfig-paths/register scripts/test-setup/test-run.ts",
     "test:unit": "ts-node -r tsconfig-paths/register scripts/test-setup/test-unit-run.ts",
     "test:integration": "ts-node -r tsconfig-paths/register scripts/test-setup/test-integration-run.ts",
+    "test:no-output": "ts-node -r tsconfig-paths/register scripts/test-setup/test-no-output.ts",
     "build": "tsc",
     "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
