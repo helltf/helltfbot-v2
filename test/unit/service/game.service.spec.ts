@@ -121,7 +121,7 @@ describe('test game service', () => {
     })
   })
 
-  fdescribe('map function', () => {
+  describe('map function', () => {
     const results: Array<[EmoteGameInputResult, string | undefined]> = [
       [EmoteGameInputResult.FINISHED, 'emotes_guessed'],
       [EmoteGameInputResult.LETTER_CORRECT, 'letters_guessed'],

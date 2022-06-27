@@ -9,7 +9,7 @@ import { saveUserStateAsUser } from "@test-utils/save-user"
 import { setupDatabase } from "@test-utils/setup-db"
 import { getExampleEmoteStatsEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example'
 
-fdescribe('test game module', () => {
+describe('test game module', () => {
   let module: GameModule
   let game: Emotegame
   let channel: string
