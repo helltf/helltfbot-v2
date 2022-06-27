@@ -66,7 +66,7 @@ describe('test emotegame class', () => {
 
       const result = game.getInputResult(input)
 
-      expect(result).toBe(EmoteGameInputResult.NOTHING)
+      expect(result).toBe(EmoteGameInputResult.INCORRECT)
     })
 
     it('input contains two letters of correct word return nothing', () => {
@@ -106,7 +106,7 @@ describe('test emotegame class', () => {
       const expectedResult = game.generateUnderscores(game.actualEmote)
 
       expect(game.currentLetters).toEqual(expectedResult)
-      expect(result).toBe(EmoteGameInputResult.NOTHING)
+      expect(result).toBe(EmoteGameInputResult.INCORRECT)
     })
 
     it('input letter is part of emote but uppercase return letter correct', () => {
