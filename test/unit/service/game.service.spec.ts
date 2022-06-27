@@ -1,6 +1,7 @@
 import { Emotegame } from "@games/emotegame"
 import { GameService } from "@service/game.service"
 import { TwitchBot } from "@src/client/bot"
+import { EmoteGameInputResult } from "@src/games/types"
 
 describe('test game service', () => {
   let service: GameService
@@ -76,8 +77,7 @@ describe('test game service', () => {
     expect(gameExisting).toBeFalse()
     expect(hb.sendMessage).toHaveBeenCalledWith(
       game.channel,
-      `The running emotegame has been cancelled, because the time limit of ${
-        game.EXPIRING_AFTER / 1000 / 60
+      `The running emotegame has been cancelled, because the time limit of ${game.EXPIRING_AFTER / 1000 / 60
       } minutes is over`
     )
     jasmine.clock().uninstall()
@@ -118,6 +118,23 @@ describe('test game service', () => {
       const game = service.getGame(channel)
 
       expect(game).toEqual(addedGame)
+    })
+  })
+
+  fdescribe('map function', () => {
+    const results: Array<[EmoteGameInputResult, string | undefined]> = [
+      [EmoteGameInputResult.FINISHED, 'emotes_guessed'],
+      [EmoteGameInputResult.LETTER_CORRECT, 'letters_guessed'],
+      [EmoteGameInputResult.INCORRECT, 'incorrect_guesses'],
+      [EmoteGameInputResult.NOTHING, undefined]
+    ]
+
+    results.forEach(([result, expectedString]) => {
+      it(`${EmoteGameInputResult[result]} result returns ${expectedString}`, () => {
+        const key = service.mapResultToValue(result)
+
+        expect(key as string | undefined).toBe(expectedString)
+      })
     })
   })
 })
