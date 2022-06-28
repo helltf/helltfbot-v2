@@ -1,9 +1,10 @@
 import { Command, Context } from '../types'
 import { BotResponse } from '../../client/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 export class RemoveSuggestCommand implements Command {
   name = 'rmsuggest'
   description = 'removes your suggestion'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['id']
   optionalParams = []
   cooldown = 30000

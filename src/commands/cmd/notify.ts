@@ -1,3 +1,4 @@
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
 
 import {
@@ -10,7 +11,7 @@ import { Command, Context } from '../types'
 export class NotifyCommand implements Command {
   name = 'notify'
   description = 'create a notification for any event'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['streamer', 'event']
   optionalParams = []
   cooldown = 5000

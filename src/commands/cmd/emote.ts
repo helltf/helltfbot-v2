@@ -4,7 +4,7 @@ import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class EmoteCommand implements Command {
     name = 'emote';
-    permissions: number = ChatPermissionLevel.USER;
+    permissions = ChatPermissionLevel.USER;
     description = 'sends all emote for the channel';
     requiredParams: string[] = [];
     optionalParams: string[] = ['channel'];

@@ -5,7 +5,7 @@ import { Command, Context } from '../types'
 export class AllowCommand implements Command {
   name = 'allow'
   description = 'Allow messages from the bot'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = []
   optionalParams = ['channel']
   cooldown = 5000

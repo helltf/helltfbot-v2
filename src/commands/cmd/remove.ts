@@ -1,3 +1,4 @@
+import { ChatPermissionLevel } from "@src/utilities/permission/types"
 import { UpdateResult } from "typeorm"
 import { BotResponse } from "../../client/types"
 import { UserNotificationType } from "../../modules/pubsub/types"
@@ -11,7 +12,7 @@ export class RemoveCommand implements Command {
   description = 'removes your notification for the given streamer on the event'
   optionalParams = []
   requiredParams = ['streamer', 'event']
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   async execute({
     channel,
     user: { 'user-id': unparsedUserId },
