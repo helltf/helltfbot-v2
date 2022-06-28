@@ -1,7 +1,6 @@
 import { HelpCommmand } from "@src/commands/cmd/help"
 import { getExampleTwitchUserState } from "@test-utils/example"
 import { setup } from "@test-utils/setup"
-import exp from "constants"
 
 describe('help command', () => {
     let help: HelpCommmand
