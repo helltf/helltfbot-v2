@@ -13,6 +13,8 @@ import { WebsiteCommand } from '../cmd/website'
 import { EmoteCommand } from '../cmd/emote'
 
 import { Command } from '../types'
+import { HelpCommmand } from "@src/commands/cmd/help"
+import { StatsCommand } from "@src/commands/cmd/stats"
 
 const commands: Command[] = [
   new PingCommand(),
@@ -27,7 +29,9 @@ const commands: Command[] = [
   new EmotegameCommand(),
   new LevelCommand(),
   new UidCommand(),
-  new EmoteCommand()
+  new EmoteCommand(),
+  new HelpCommmand(),
+  new StatsCommand()
 ]
 
 export default commands

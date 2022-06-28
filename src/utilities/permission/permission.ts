@@ -38,4 +38,12 @@ export class Permission {
 
     return this.returnHigherPermissions(dbPermissions, chatPermissions)
   }
+
+  map(level: ChatPermissionLevel | GlobalPermissionLevel): string | undefined {
+    if (ChatPermissionLevel[level])
+      return ChatPermissionLevel[level].toLowerCase()
+    if (GlobalPermissionLevel[level])
+      return GlobalPermissionLevel[level].toLowerCase()
+
+  }
 }
