@@ -48,6 +48,10 @@ function sendMessage(channel: string, message: string) {
 function sendResponse(channel: string, { success, response }: BotResponse) {
   if (!response) return
 
+  response = Array.isArray(response)
+    ? response.join(' | ')
+    : response
+
   if (success) {
     sendMessage(channel, response)
   } else {

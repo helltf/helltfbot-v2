@@ -6,5 +6,5 @@ export interface TwitchUserState extends ChatUserstate {
 }
 export interface BotResponse {
   success?: boolean
-  response: string
+  response: string | string[]
 }
