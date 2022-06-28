@@ -3,7 +3,7 @@ import { getExampleTwitchUserState } from "@test-utils/example"
 import { setup } from "@test-utils/setup"
 import exp from "constants"
 
-fdescribe('help command', () => {
+describe('help command', () => {
     let help: HelpCommmand
     const channel = ''
     const user = getExampleTwitchUserState({})
