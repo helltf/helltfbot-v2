@@ -1,10 +1,11 @@
 import { Command } from '../types'
 import { BotResponse } from '../../client/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class GithubCommand implements Command {
   name = 'github'
   description = 'link to my repo and my github profile'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = []
   optionalParams = []
   cooldown = 5000

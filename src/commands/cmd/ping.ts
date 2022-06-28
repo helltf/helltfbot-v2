@@ -1,9 +1,10 @@
 import { Command } from '../types'
 import { BotResponse } from '../../client/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 export class PingCommand implements Command {
   name = 'ping'
   description = 'just a ping command'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = []
   optionalParams = []
   cooldown = 5000

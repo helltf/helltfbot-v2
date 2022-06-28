@@ -8,6 +8,7 @@ import {
   EmoteStatsEntity,
   ColorHistoryEntity
 } from '@db/entities'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export function getExampleCommand({
   alias = [],
@@ -23,7 +24,7 @@ export function getExampleCommand({
   name = 'name',
   optionalParams = [],
   requiredParams = [],
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
 }: Partial<Command>): Command {
   return {
     alias,

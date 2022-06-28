@@ -1,11 +1,11 @@
 import { BotResponse } from '../../client/types'
-import { GlobalPermissionLevel } from '../../utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '../../utilities/permission/types'
 import { Command, Context } from '../types'
 
 export class LeaveCommand implements Command {
   name = 'leave'
   description = 'leave a channel'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['channel']
   optionalParams = []
   cooldown = 5000

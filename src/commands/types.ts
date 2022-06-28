@@ -1,9 +1,10 @@
+import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permission/types"
 import { BotResponse, TwitchUserState } from "../client/types"
 
 
 export interface Command {
   name: string
-  permissions: number
+  permissions: ChatPermissionLevel | GlobalPermissionLevel
   description: string
   requiredParams: string[]
   optionalParams: string[]
