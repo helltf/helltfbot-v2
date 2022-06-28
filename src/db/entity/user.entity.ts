@@ -1,4 +1,4 @@
-import { EmoteStatsEntity } from '@db/entities'
+import { EmoteStatsEntity } from './emotestats.entity'
 import {
   BaseEntity,
   Column,
