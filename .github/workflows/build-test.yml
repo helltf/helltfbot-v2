@@ -2,9 +2,17 @@ name: CI-build-and-test
 
 on:
   push:
-    branches: [master, feature, dev, hotfix-**]
+    branches: [master]
   pull_request:
-    branches: [master, feature, dev]
+    branches: [master, feature]
+    paths-ignore:
+      - '*.md'
+      - '.devcontainer/**'
+      - '.vscode/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - 'docs/**'
+      - '.github/CODEOWNERS'
+      - '.dockerignore'
 
 jobs:
   lint:
@@ -19,28 +27,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Run build and lint script
+      - name: Run lint script
         run: |
-          npm install typescript
+          npm install
           npm run lint
 
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - name: Run build and lint script
-        run: |
-          npm install typescript
-          npm run build
-  unit-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -56,6 +48,20 @@ jobs:
         run: |
           npm install typescript
           npm run build
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: install dependencies
+        run: npm install
       - name: Run unit tests
         env:
           NODE_ENV: test
@@ -96,9 +102,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm ci
-          npm install typescript
-          npm run build
+          npm install 
       - name: Run integrations tests
         run: npm run test:integration
 
