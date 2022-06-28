@@ -6,15 +6,18 @@ export class HelpCommmand implements Command {
     name = 'help';
     permissions = ChatPermissionLevel.USER;
     description = 'replies with information about the given command'
-    requiredParams = ['command'];
-    optionalParams = [];
-    alias = ['command', 'cmd', 'cmdinfo'];
+    optionalParams = ['command'];
+    requiredParams: string[] = [];
+    alias = ['command', 'commandinfo', 'commands'];
     cooldown = 10000;
     execute = async ({ message: [command] }: Context): Promise<BotResponse> => {
         if (!command)
             return {
-                response: 'You need to specify a command',
-                success: false
+                response: [
+                    'Bot created by @helltf',
+                    'All commands are listed here (coming soon)'
+                ],
+                success: true
             }
 
         const foundCommand = hb.getCommand(command)
@@ -27,7 +30,15 @@ export class HelpCommmand implements Command {
 
         return {
             success: true,
-            response: ''
+            response: [
+                `Name: ${foundCommand.name}`,
+                `Aliases: ${foundCommand.alias.join(',')}`,
+                `Description: ${foundCommand.description}`,
+                `Cooldown: ${foundCommand.cooldown / 1000}s`,
+                `Permissions: ${hb.utils.permission.map(foundCommand.permissions)}`,
+                `Required params: ${foundCommand.requiredParams.join(',')}`,
+                `Optional params: ${foundCommand.optionalParams.join(',')}`
+            ]
         }
     }
 

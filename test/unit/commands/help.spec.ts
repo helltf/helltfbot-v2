@@ -19,9 +19,13 @@ fdescribe('help command', () => {
             message: [],
             user
         })
+        const expectedResponse = [
+            'Bot created by @helltf',
+            'All commands are listed here (coming soon)'
+        ]
 
-        expect(success).toBeFalse()
-        expect(response).toBe('You need to specify a command')
+        expect(success).toBeTrue()
+        expect(response).toEqual(expectedResponse)
     })
 
     it('command does not exist return error', async () => {
@@ -48,7 +52,13 @@ fdescribe('help command', () => {
         })
 
         const expectedResponse = [
-            `Name: ${command.name}`
+            `Name: ${command.name}`,
+            `Aliases: ${command.alias.join(',')}`,
+            `Description: ${command.description}`,
+            `Cooldown: ${command.cooldown / 1000}s`,
+            `Permissions: ${hb.utils.permission.map(command.permissions)}`,
+            `Required params: ${command.requiredParams.join(',')}`,
+            `Optional params: ${command.optionalParams.join(',')}`
         ]
 
         expect(success).toBeTrue()
