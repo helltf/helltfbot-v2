@@ -1,5 +1,4 @@
 import { StatsCommand, StatsType } from "@src/commands/cmd/stats"
-import { Emotegame } from "@src/games/emotegame"
 import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from "@test-utils/disconnect"
 import { getExampleTwitchUserEntity, getExampleTwitchUserState } from "@test-utils/example"

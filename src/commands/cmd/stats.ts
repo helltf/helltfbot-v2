@@ -5,11 +5,11 @@ import { ChatPermissionLevel } from "@src/utilities/permission/types";
 export class StatsCommand implements Command {
     name = 'stats';
     permissions: number = ChatPermissionLevel.USER;
-    description: string = 'displays your stats';
+    description = 'displays your stats';
     requiredParams: string[] = ['type'];
     optionalParams: string[] = ['user'];
     alias: string[] = ['statistics'];
-    cooldown: number = 20000;
+    cooldown = 20000;
     execute = async ({ message: [type, lookup], user }: Context): Promise<BotResponse> => {
         const username = lookup !== undefined ? lookup : user.username!
 
