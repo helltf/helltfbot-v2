@@ -23,7 +23,7 @@ export function getExampleCommand({
   name = 'name',
   optionalParams = [],
   requiredParams = [],
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
 }: Partial<Command>): Command {
   return {
     alias,

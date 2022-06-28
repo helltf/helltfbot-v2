@@ -1,9 +1,10 @@
 import { BotResponse } from "@src/client/types";
 import { Command, Context } from "@src/commands/types";
+import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class UidCommand implements Command {
   name = 'uid'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   description = 'retrieves the user id'
   requiredParams: string[] = []
   optionalParams: string[] = ['user']

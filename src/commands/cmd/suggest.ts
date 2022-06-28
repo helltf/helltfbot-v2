@@ -1,10 +1,11 @@
 import { Command, Context } from '../types'
 import { BotResponse } from '../../client/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class SuggestCommand implements Command {
   name = 'suggest'
   description = 'suggest a feature you want to see'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = []
   optionalParams = []
   cooldown = 30000

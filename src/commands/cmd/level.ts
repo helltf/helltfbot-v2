@@ -7,7 +7,7 @@ import {
 
 export class LevelCommand implements Command {
   name = 'level'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   description = 'Displays your current level'
   requiredParams = []
   optionalParams = []
@@ -21,13 +21,12 @@ export class LevelCommand implements Command {
 
     return {
       success: true,
-      response: `Permissions for ${
-        user.username
-      } are ${this.methods.mapToPermissionName(
-        userPerm
-      )} for this channel and ${this.methods.mapToPermissionName(
-        dbPerm
-      )} overall`
+      response: `Permissions for ${user.username
+        } are ${this.methods.mapToPermissionName(
+          userPerm
+        )} for this channel and ${this.methods.mapToPermissionName(
+          dbPerm
+        )} overall`
     }
   }
   methods = {
