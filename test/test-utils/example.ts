@@ -155,17 +155,3 @@ export const getExampleNotificationEntity = ({
   notification.game = game
   return notification
 }
-
-export const createMockedWSConnection = (): ReconnectingWebSocket => {
-  return jasmine.createSpyObj({
-    addEventListener: () => {
-      return {}
-    },
-    send: () => {
-      return {}
-    },
-    reconnect: () => {
-      return {}
-    }
-  })
-}

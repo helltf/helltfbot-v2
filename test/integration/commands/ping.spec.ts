@@ -4,7 +4,7 @@ import { disconnectDatabase } from "@test-utils/disconnect"
 import { getExampleChannel, getExampleCommand } from "@test-utils/example"
 import { setupDatabase } from "@test-utils/setup-db"
 
-fdescribe('test ping command', () => {
+describe('test ping command', () => {
   let ping: PingCommand
 
   beforeAll(async () => {
