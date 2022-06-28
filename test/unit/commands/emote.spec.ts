@@ -45,9 +45,12 @@ describe('emote command', () => {
             user: user
         })
 
-        const expectedResponse = `FFZ: ${emotes.join(' ')} | BTTV: ${emotes.join(' ')} | 7TV: ${emotes.join(' ')}`
+        const expectedResponse = [
+            `FFZ: ${emotes.join(' ')}`,
+            `BTTV: ${emotes.join(' ')}`,
+            `7TV: ${emotes.join(' ')}`]
 
-        expect(response).toBe(expectedResponse)
+        expect(response).toEqual(expectedResponse)
         expect(success).toBeTrue()
     })
 
@@ -60,15 +63,18 @@ describe('emote command', () => {
         spyOn(hb.api.ffz, 'getEmotesForChannel').withArgs(messageChannel).and.resolveTo(errorResponse)
         spyOn(hb.api.seventv, 'getEmotesForChannel').withArgs(messageChannel).and.resolveTo(successResponse)
 
-
         const { success, response } = await emote.execute({
             channel: messageChannel,
             message: [],
             user: user
         })
 
+        const expectedResponse = [
+            `BTTV: ${emotes.join(' ')}`,
+            `7TV: ${emotes.join(' ')}`]
+
         expect(success).toBeTrue()
-        expect(response).toBe(`BTTV: ${emotes.join(' ')} | 7TV: ${emotes.join(' ')}`)
+        expect(response).toEqual(expectedResponse)
     })
 
     it('channel is given return emotes for channel', async () => {
@@ -86,9 +92,12 @@ describe('emote command', () => {
             user: user
         })
 
-        const expectedResponse = `FFZ: ${emotes.join(' ')} | BTTV: ${emotes.join(' ')} | 7TV: ${emotes.join(' ')}`
+        const expectedResponse = [
+            `FFZ: ${emotes.join(' ')}`,
+            `BTTV: ${emotes.join(' ')}`,
+            `7TV: ${emotes.join(' ')}`]
 
         expect(success).toBeTrue()
-        expect(response).toBe(expectedResponse)
+        expect(response).toEqual(expectedResponse)
     })
 })

@@ -35,8 +35,16 @@ describe('test ping command', () => {
 
     const { success, response } = await ping.execute()
 
+    const expectedResponse = [
+      `pong`,
+      `Latency: ${latency}ms`,
+      `Uptime: ${uptime}`,
+      `Memory used: ${memoryUsage}`,
+      `Commands issued: ${commandsIssued}`,
+      `Connected to ${joinedChannels} channels`
+    ]
     expect(success).toBeTrue()
-    expect(response).toBe(`pong | Latency: ${latency}ms | Uptime: ${uptime} | Memory used: ${memoryUsage} | Commands issued: ${commandsIssued} | Connected to ${joinedChannels} channels`)
+    expect(response).toEqual(expectedResponse)
   })
 
   it('get commands issued method returns all counter added up', async () => {

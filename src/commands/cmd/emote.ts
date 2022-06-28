@@ -39,7 +39,7 @@ export class EmoteCommand implements Command {
 
         return {
             success: true,
-            response: responses.join(' | ')
+            response: responses
         }
     }
 }

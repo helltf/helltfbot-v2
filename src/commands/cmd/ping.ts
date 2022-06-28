@@ -11,12 +11,21 @@ export class PingCommand implements Command {
   async execute(): Promise<BotResponse> {
     const uptime = this.methods.getUptime()
     const memoryUsage = this.methods.getMemory()
-    const commandsIssued = await this.methods.getCommandsIssued()
-    const joinedChannels = await this.methods.getChannels()
-    const latency = await this.methods.getLatency()
+    const [commandsIssued, joinedChannels, latency] = await Promise.all([
+      this.methods.getCommandsIssued(),
+      this.methods.getChannels(),
+      this.methods.getLatency()
+    ])
 
     return {
-      response: `pong | Latency: ${latency}ms | Uptime: ${uptime} | Memory used: ${memoryUsage} | Commands issued: ${commandsIssued} | Connected to ${joinedChannels} channels`,
+      response: [
+        `pong`,
+        `Latency: ${latency}ms`,
+        `Uptime: ${uptime}`,
+        `Memory used: ${memoryUsage}`,
+        `Commands issued: ${commandsIssued}`,
+        `Connected to ${joinedChannels} channels`
+      ],
       success: true
     }
   }
