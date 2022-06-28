@@ -8,6 +8,7 @@ import {
   EmoteStatsEntity,
   ColorHistoryEntity
 } from '@db/entities'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export function getExampleCommand({
   alias = [],
