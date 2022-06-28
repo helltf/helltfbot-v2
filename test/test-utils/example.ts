@@ -1,4 +1,3 @@
-import ReconnectingWebSocket from 'reconnecting-websocket'
 import { TwitchUserState } from '@client/types'
 import { Command } from '@commands/types'
 import {

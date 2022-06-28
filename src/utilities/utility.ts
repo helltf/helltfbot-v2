@@ -21,6 +21,10 @@ export class Utility {
       .map(v => Number(v))
   }
 
+  enumContains(anyEnum: any, value: string) {
+    return Object.values(anyEnum).indexOf(value) !== -1
+  }
+
   humanize(time: number): string {
     const formatter = new HumanizeDuration(new HumanizeDurationLanguage())
     return this.shortenTimeString(formatter.humanize(time, { round: true }))
