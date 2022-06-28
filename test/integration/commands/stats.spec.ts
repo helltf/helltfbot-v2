@@ -6,7 +6,7 @@ import { getExampleTwitchUserEntity, getExampleTwitchUserState } from "@test-uti
 import { saveUserStateAsUser } from "@test-utils/save-user"
 import { setupDatabase } from "@test-utils/setup-db"
 
-fdescribe('stats command', () => {
+describe('stats command', () => {
     let stats: StatsCommand
     const user = getExampleTwitchUserState({})
     const channel = 'channel'
@@ -153,6 +153,6 @@ fdescribe('stats command', () => {
         ]
 
         expect(response).toEqual(expectedResponse)
-        expect(success).toBeFalse()
+        expect(success).toBeTrue()
     })
 })
