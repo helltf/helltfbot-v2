@@ -9,7 +9,8 @@ import {
   NotificationEntity,
   NotificationChannelEntity,
   SuggestionEntity,
-  ErrorEntity
+  ErrorEntity,
+  EmoteStatsEntity
 } from '@db/entities'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
@@ -42,6 +43,7 @@ export class DB implements DbRepositories {
   suggestionRepo: Repository<SuggestionEntity>
   dataSource: DataSource
   errorRepo: Repository<ErrorEntity>
+  emoteStatsRepo: Repository<EmoteStatsEntity>
 
   constructor(config: PostgresConnectionOptions = getOrmConf()) {
     const dataSource = new DataSource(config)
@@ -58,7 +60,7 @@ export class DB implements DbRepositories {
       NotificationChannelEntity
     )
     this.errorRepo = dataSource.getRepository(ErrorEntity)
-
+    this.emoteStatsRepo = dataSource.getRepository(EmoteStatsEntity)
     this.dataSource = dataSource
   }
   async initialize(): Promise<DB> {

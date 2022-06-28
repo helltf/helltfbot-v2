@@ -47,23 +47,21 @@ export class Emotegame implements ChatGame {
   }
 
   getInputResult(input: string): EmoteGameInputResult {
-    if (this.isValidInput(input)) return EmoteGameInputResult.NOTHING
-
     if (this.isCorrectInput(input)) return EmoteGameInputResult.FINISHED
+
+    if (this.isInvalidInput(input)) return EmoteGameInputResult.NOTHING
 
     if (this.isCorrectLetter(input)) return EmoteGameInputResult.LETTER_CORRECT
 
-    return EmoteGameInputResult.NOTHING
+    return EmoteGameInputResult.INCORRECT
   }
 
   isCorrectLetter(input: string): boolean {
-    if (input.length > 1) return false
-
     return this.lowerEmote.includes(input)
   }
 
-  isValidInput(input: string): boolean {
-    return !input || this.guessedLetters.includes(input)
+  isInvalidInput(input: string): boolean {
+    return !input || this.guessedLetters.includes(input) || input.length > 1
   }
 
   isCorrectInput(input: string): boolean {

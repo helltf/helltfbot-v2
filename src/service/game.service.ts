@@ -1,7 +1,9 @@
+import { EmoteStatsEntity } from '@db/entities'
 import { Emotegame } from '../games/emotegame'
-import { ChatGame } from '../games/types'
+import { ChatGame, EmoteGameInputResult } from '../games/types'
 
 export class GameService {
+
   eg: Emotegame[] = []
 
   add(game: ChatGame) {
@@ -50,11 +52,15 @@ export class GameService {
         this.eg.splice(index, 1)
         await hb.sendMessage(
           game.channel,
-          `The running emotegame has been cancelled, because the time limit of ${
-            game.EXPIRING_AFTER / 1000 / 60
+          `The running emotegame has been cancelled, because the time limit of ${game.EXPIRING_AFTER / 1000 / 60
           } minutes is over`
         )
       }
     }
+  }
+  mapResultToValue(result: EmoteGameInputResult): keyof EmoteStatsEntity | undefined {
+    if (result === EmoteGameInputResult.FINISHED) return 'emotes_guessed'
+    if (result === EmoteGameInputResult.INCORRECT) return 'incorrect_guesses'
+    if (result === EmoteGameInputResult.LETTER_CORRECT) return 'letters_guessed'
   }
 }

@@ -1,3 +1,4 @@
+import { EmoteStatsEntity } from '@db/entities'
 import {
   BaseEntity,
   Column,
@@ -43,4 +44,7 @@ export class TwitchUserEntity extends BaseEntity {
 
   @OneToOne(() => ColorHistoryEntity, history => history.user)
   colors: ColorHistoryEntity
+
+  @OneToOne(() => EmoteStatsEntity, stats => stats.user)
+  emotegameStats: EmoteStatsEntity
 }

@@ -5,7 +5,9 @@ import {
   TwitchUserEntity,
   NotificationEntity,
   ChannelEntity,
-  NotificationChannelEntity
+  NotificationChannelEntity,
+  EmoteStatsEntity,
+  ColorHistoryEntity
 } from '@db/entities'
 
 export function getExampleCommand({
@@ -36,6 +38,23 @@ export function getExampleCommand({
   }
 }
 
+export const getExampleEmoteStatsEntity = ({
+  emotes_guessed = 0,
+  incorrect_guesses = 0,
+  letters_guessed = 0,
+  user = new TwitchUserEntity()
+
+}: Partial<EmoteStatsEntity>): EmoteStatsEntity => {
+  const entity = new EmoteStatsEntity()
+
+  entity.emotes_guessed = emotes_guessed
+  entity.incorrect_guesses = incorrect_guesses
+  entity.letters_guessed = letters_guessed
+  entity.user = user
+
+  return entity
+}
+
 export const getExampleTwitchUserEntity = ({
   id = 1,
   name = 'user',
@@ -44,7 +63,9 @@ export const getExampleTwitchUserEntity = ({
   registered_at = 1,
   display_name = 'user',
   notifications = [],
-  suggestions = []
+  suggestions = [],
+  emotegameStats = new EmoteStatsEntity(),
+  colors = new ColorHistoryEntity()
 }: Partial<TwitchUserEntity>): TwitchUserEntity => {
   const user = new TwitchUserEntity()
 
@@ -56,6 +77,8 @@ export const getExampleTwitchUserEntity = ({
   user.registered_at = registered_at
   user.notifications = notifications
   user.suggestions = suggestions
+  user.emotegameStats = emotegameStats
+  user.colors = colors
 
   return user
 }
