@@ -15,6 +15,7 @@ import { EmoteCommand } from '../cmd/emote'
 import { Command } from '../types'
 import { HelpCommmand } from "@src/commands/cmd/help"
 import { StatsCommand } from "@src/commands/cmd/stats"
+import { EvalCommand } from "@src/commands/cmd/eval"
 
 const commands: Command[] = [
   new PingCommand(),
@@ -31,7 +32,8 @@ const commands: Command[] = [
   new UidCommand(),
   new EmoteCommand(),
   new HelpCommmand(),
-  new StatsCommand()
+  new StatsCommand(),
+  new EvalCommand()
 ]
 
 export default commands
