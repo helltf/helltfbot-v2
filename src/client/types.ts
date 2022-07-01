@@ -1,11 +1,25 @@
+import { MessageType } from '@src/commands/types'
 import { ChatUserstate } from 'tmi.js'
-import { PermissionLevel } from '../utilities/twitch/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '../utilities/permission/types'
 
 export interface TwitchUserState extends ChatUserstate {
-  permission?: PermissionLevel
+  permission?: ChatPermissionLevel | GlobalPermissionLevel
 }
 export interface BotResponse {
   success?: boolean
-  response: string
-  channel: string
+  response: string | string[]
+}
+
+export interface ChatContext {
+  where: string
+  type: MessageType
+  self: boolean
+  message: string
+  user: TwitchUserState
+}
+
+export interface ResponseContext {
+  where: string
+  response: BotResponse
+  type: MessageType
 }

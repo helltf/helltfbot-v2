@@ -1,4 +1,4 @@
-import { Notification } from '../../db/export-entities'
+import { NotificationEntity } from '../../db/export-entities'
 
 export interface ParsedPubSubData {
   type: MessageType
@@ -38,7 +38,7 @@ export interface NotificationMessageInfo {
   type: UserNotificationType
   message: string
   streamer: string
-  notifiedUsers: Notification[]
+  notifiedUsers: NotificationEntity[]
 }
 
 export interface StatusMessage extends IncomingMessage {

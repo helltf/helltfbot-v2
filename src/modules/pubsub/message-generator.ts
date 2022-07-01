@@ -1,5 +1,5 @@
 import { NotificationMessageInfo } from './types'
-import { Notification } from '../../db/export-entities'
+import { NotificationEntity } from '../../db/export-entities'
 export class MessageGenerator {
   maxMessageLength = 450
 
@@ -57,7 +57,7 @@ export class MessageGenerator {
     return (message + user).length < this.maxMessageLength
   }
 
-  getChannelUsersMap(users: Notification[]): Map<string, string[]> {
+  getChannelUsersMap(users: NotificationEntity[]): Map<string, string[]> {
     const result = new Map()
 
     for (const {

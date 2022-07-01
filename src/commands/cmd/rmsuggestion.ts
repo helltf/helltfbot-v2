@@ -1,22 +1,18 @@
-import { Command } from '../types'
-import { ChatUserstate } from 'tmi.js'
+import { Command, CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 export class RemoveSuggestCommand implements Command {
   name = 'rmsuggest'
   description = 'removes your suggestion'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['id']
   optionalParams = []
   cooldown = 30000
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   alias = ['rms']
 
-  async execute(
-    channel: string,
-    user: ChatUserstate,
-    [id]: string[]
-  ): Promise<BotResponse> {
+  async execute({ user, message: [id] }: CommandContext): Promise<BotResponse> {
     const response: BotResponse = {
-      channel: channel,
       success: false,
       response: ''
     }
@@ -40,7 +36,6 @@ export class RemoveSuggestCommand implements Command {
 
     return {
       response: `Succesfully removed your suggestion with id ${id}`,
-      channel: channel,
       success: true
     }
   }

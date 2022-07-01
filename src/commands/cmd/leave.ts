@@ -1,29 +1,34 @@
-import { ChatUserstate } from 'tmi.js'
 import { BotResponse } from '../../client/types'
-import { PermissionLevel } from '../../utilities/twitch/types'
-import { Command } from '../types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '../../utilities/permission/types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class LeaveCommand implements Command {
   name = 'leave'
   description = 'leave a channel'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['channel']
   optionalParams = []
   cooldown = 5000
   alias = ['l']
-  async execute(
-    channel: string,
-    user: ChatUserstate,
-    [channeltoLeave]: string[]
-  ): Promise<BotResponse> {
-    const errorResponse: BotResponse = { channel, success: false, response: '' }
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
+  async execute({
+    user,
+    message: [channeltoLeave]
+  }: CommandContext): Promise<BotResponse> {
+    const errorResponse: BotResponse = {
+      success: false,
+      response: ''
+    }
 
     if (!channeltoLeave) {
       errorResponse.response = 'You need to define a channel'
       return errorResponse
     }
 
-    if (channeltoLeave !== 'me' && user.permission < PermissionLevel.ADMIN) {
+    if (
+      channeltoLeave !== 'me' &&
+      user.permission! < GlobalPermissionLevel.ADMIN
+    ) {
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }
@@ -38,8 +43,7 @@ export class LeaveCommand implements Command {
     if (success) await this.methods.updateChannelProperty(channeltoLeave)
     return {
       success,
-      response: message,
-      channel: channel
+      response: message
     }
   }
 

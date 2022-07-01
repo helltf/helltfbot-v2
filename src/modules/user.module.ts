@@ -1,5 +1,5 @@
+import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { ChatUserstate } from 'tmi.js'
-import { PermissionLevel } from '../utilities/twitch/types'
 import { Module } from './export/module'
 
 export class ColorTracking implements Module {
@@ -23,7 +23,9 @@ export class ColorTracking implements Module {
 
     const savedColors = (
       await hb.db.userRepo.findOne({
-        where: { id: id },
+        where: {
+          id: id
+        },
         relations: {
           colors: true
         }
@@ -69,7 +71,7 @@ export class ColorTracking implements Module {
   }
 
   setNewPosition(colors: string[], newColor: string): string[] {
-    const index = colors.findIndex((c) => c === newColor)
+    const index = colors.findIndex(c => c === newColor)
     colors.splice(index, 1)
     colors.push(newColor)
     return colors
@@ -124,7 +126,7 @@ export class ColorTracking implements Module {
       name: user.username,
       id: id,
       notifications: [],
-      permission: PermissionLevel.USER,
+      permission: GlobalPermissionLevel.USER,
       registered_at: Date.now()
     })
   }

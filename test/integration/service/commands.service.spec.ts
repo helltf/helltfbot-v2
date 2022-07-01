@@ -1,9 +1,9 @@
 import { Command } from "@commands/types"
 import { CommandService } from "@service/commands.service"
-import { clearDb } from "../test-utils/clear"
-import { disconnectDatabase } from '../test-utils/disconnect'
-import { getExampleCommand } from '../test-utils/example'
-import { setupDatabase } from '../test-utils/setup-db'
+import { clearDb } from "../../test-utils/clear"
+import { disconnectDatabase } from '../../test-utils/disconnect'
+import { getExampleCommand } from '../../test-utils/example'
+import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test updating commands', () => {
   beforeAll(async () => {
@@ -46,7 +46,9 @@ describe('test updating commands', () => {
     it('two commands existing and two commands will be saved to db', async () => {
       const commands = [
         getExampleCommand({}),
-        getExampleCommand({ name: 'command1' })
+        getExampleCommand({
+          name: 'command1'
+        })
       ]
 
       const commandsService = new CommandService(commands)

@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2](https://github.com/helltf/helltfbot-v2/releases/tag/v1.2.2) - 2022-07-01
+
+### Added
+
+- global utils functions
+- hot reload for dev
+- emote command to fetch all emotes for channel
+- save emotegame results as stats
+- commands can now be run via whispers
+- help command to display information about a command
+- eval command for better debugging
+- stats command to show saved emotegame stats
+
+### Changed
+
+- remove channel from Response
+- use database-url instead of single params
+- ping command returns more information
+- response can be string array or string now
+
+### Fix
+
+- no longer sending letters after word has been guessed
+
 ## [1.2.1](https://github.com/helltf/helltfbot-v2/releases/tag/v1.2.1) - 2022-06-08
 
 ### Added 

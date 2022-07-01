@@ -1,9 +1,9 @@
-import { NotificationChannel } from "../db/export-entities"
+import { NotificationChannelEntity } from "../db/export-entities"
 import { NotifyEventType, UserNotificationType } from "../modules/pubsub/types"
 
 export class NotificationService {
   async cleanAllNotifications() {
-    let notificationChannels: NotificationChannel[] = []
+    let notificationChannels: NotificationChannelEntity[] = []
     try {
       notificationChannels = await hb.db.notificationChannelRepo.find()
     } catch (e) {
@@ -60,8 +60,11 @@ export class NotificationService {
     streamer: string,
     updateEvents: UserNotificationType[]
   ): Promise<boolean> {
-    const queryParams = updateEvents.map((e) => {
-      return { streamer, [e]: true }
+    const queryParams = updateEvents.map(e => {
+      return {
+        streamer,
+        [e]: true
+      }
     })
 
     return (

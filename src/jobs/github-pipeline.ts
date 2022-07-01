@@ -8,12 +8,27 @@ interface ProjectInfo {
 }
 
 const counts = new Map<Projects, ProjectInfo>([
-  [Projects.helltfbot_v2, { count: undefined, latestStatus: undefined }],
-  [Projects.bot_v1_fullstack, { count: undefined, latestStatus: undefined }]
+  [
+    Projects.helltfbot_v2,
+    {
+      count: undefined,
+      latestStatus: undefined
+    }
+  ],
+  [
+    Projects.bot_v1_fullstack,
+    {
+      count: undefined,
+      latestStatus: undefined
+    }
+  ]
 ])
 
 const setInfo = (project: Projects, value: number, status: string) => {
-  counts.set(project, { count: value, latestStatus: status })
+  counts.set(project, {
+    count: value,
+    latestStatus: status
+  })
 }
 
 const updateGithubPipeline = async () => {

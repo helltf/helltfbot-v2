@@ -1,5 +1,5 @@
 import { AllowCommand } from '@commands/cmd/allow'
-import { PermissionLevel } from '@utilities/twitch/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
@@ -11,7 +11,7 @@ import { setupDatabase } from '../../test-utils/setup-db'
 describe('test allow command', () => {
   let messageChannel = 'messageChannel'
   let user = getExampleTwitchUserState({
-    permission: PermissionLevel.ADMIN
+    permission: GlobalPermissionLevel.ADMIN
   })
   let allow: AllowCommand
 
@@ -22,7 +22,7 @@ describe('test allow command', () => {
   beforeEach(async () => {
     messageChannel = 'messageChannel'
     user = getExampleTwitchUserState({
-      permission: PermissionLevel.ADMIN
+      permission: GlobalPermissionLevel.ADMIN
     })
     allow = new AllowCommand()
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
@@ -36,34 +36,30 @@ describe('test allow command', () => {
   it('user has broadcaster permissions but provides channel return error response', async () => {
     const allowChannel = 'allowChannel'
     const message = [allowChannel]
-    user.permission = PermissionLevel.BROADCASTER
+    user.permission = ChatPermissionLevel.BROADCASTER
 
-    const {
-      response,
-      success,
-      channel: responseChannel
-    } = await allow.execute(messageChannel, user, message)
+    const { response, success } = await allow.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('You are not permitted to execute this command')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeFalse()
   })
 
   it('user has user permissions return error', async () => {
-    user.permission = PermissionLevel.USER
-    const {
-      response,
-      success,
-      channel: responseChannel
-    } = await allow.execute(messageChannel, user, [])
+    user.permission = ChatPermissionLevel.USER
+    const { response, success } = await allow.execute({ channel: messageChannel, user, message: [] })
 
     expect(response).toBe('You are not permitted to execute this command')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeFalse()
   })
 
   it('user has broadcaster permissions but provides no params return successfull resoponse', async () => {
-    user.permission = PermissionLevel.BROADCASTER
+    user.permission = ChatPermissionLevel.BROADCASTER
 
     await hb.db.channelRepo.save(
       getExampleChannel({
@@ -72,14 +68,10 @@ describe('test allow command', () => {
       })
     )
 
-    const {
-      response,
-      success,
-      channel: responseChannel
-    } = await allow.execute(messageChannel, user, [])
+    const { response, success } = await allow.execute({ channel: messageChannel, user, message: [] })
 
     expect(response).toBe('Successfully updated settings')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeTrue()
   })
 
@@ -90,14 +82,10 @@ describe('test allow command', () => {
         allowed: false
       })
     )
-    const {
-      response,
-      success,
-      channel: responseChannel
-    } = await allow.execute(messageChannel, user, [])
+    const { response, success } = await allow.execute({ channel: messageChannel, user, message: [] })
 
     expect(response).toBe('Successfully updated settings')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeTrue()
   })
 
@@ -112,14 +100,14 @@ describe('test allow command', () => {
       })
     )
 
-    const {
-      response,
-      success,
-      channel: responseChannel
-    } = await allow.execute(messageChannel, user, message)
+    const { response, success } = await allow.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('Successfully updated settings')
-    expect(responseChannel).toBe(messageChannel)
+
     expect(success).toBeTrue()
   })
 
@@ -127,15 +115,14 @@ describe('test allow command', () => {
     const allowChannel = 'allowChannel'
     const message = [allowChannel]
 
-    const {
-      response,
-      success,
-      channel: responseChannel
-    } = await allow.execute(messageChannel, user, message)
+    const { response, success } = await allow.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response).toBe('This channel is not registered')
     expect(success).toBeFalse()
-    expect(responseChannel).toBe(messageChannel)
   })
 
   it('no params provided updates users channel in database', async () => {
@@ -146,7 +133,7 @@ describe('test allow command', () => {
       })
     )
 
-    await allow.execute(messageChannel, user, [])
+    await allow.execute({ channel: messageChannel, user, message: [] })
 
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: user.username
@@ -166,7 +153,7 @@ describe('test allow command', () => {
       })
     )
 
-    await allow.execute(messageChannel, user, message)
+    await allow.execute({ channel: messageChannel, user, message })
 
     const updatedEntity = await hb.db.channelRepo.findOneBy({
       channel: allowChannel

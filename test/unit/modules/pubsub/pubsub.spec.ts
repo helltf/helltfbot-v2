@@ -1,7 +1,8 @@
 import { PubSubConnection } from "@modules/pubsub/pubsub-connection"
 import { PubSub } from '@modules/pubsub/pubsub'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
-import { NotificationChannelInfo } from '@src/db/entity/notification_channel'
+import { NotificationChannelEntity } from '@db/entities'
+import { getExampleNotificationChannelEntity } from '@test-utils/example'
 
 describe('test pubsub', () => {
   let module: PubSub
@@ -12,7 +13,7 @@ describe('test pubsub', () => {
 
   describe('test chunking function', () => {
     it('array reduce should return 0 entries', () => {
-      const channels: NotificationChannelInfo[] = []
+      const channels: NotificationChannelEntity[] = []
       const result = module.chunkTopicsIntoSize(channels)
       const expectedSize = 0
 
@@ -20,9 +21,23 @@ describe('test pubsub', () => {
     })
 
     it('array reduce should return 0 entries', () => {
-      const channels = [{ id: 1, name: 'user1', setting: true, status: true }]
+      const channels = [
+        getExampleNotificationChannelEntity({
+          id: 1,
+          name: 'user1',
+          setting: true,
+          status: true
+        })
+      ]
       const expectedResult = [
-        [{ id: 1, name: 'user1', setting: true, status: true }]
+        [
+          getExampleNotificationChannelEntity({
+            id: 1,
+            name: 'user1',
+            setting: true,
+            status: true
+          })
+        ]
       ]
 
       const result = module.chunkTopicsIntoSize(channels)
@@ -32,9 +47,24 @@ describe('test pubsub', () => {
 
     it('array reduce should return 0 entries', () => {
       const channels = [
-        { id: 1, name: 'user1', setting: true, status: true },
-        { id: 2, name: 'user2', setting: true, status: true },
-        { id: 3, name: 'user3', setting: true, status: true }
+        getExampleNotificationChannelEntity({
+          id: 1,
+          name: 'user1',
+          setting: true,
+          status: true
+        }),
+        getExampleNotificationChannelEntity({
+          id: 2,
+          name: 'user2',
+          setting: true,
+          status: true
+        }),
+        getExampleNotificationChannelEntity({
+          id: 3,
+          name: 'user3',
+          setting: true,
+          status: true
+        })
       ]
       const expectedLength = 1
 
@@ -46,9 +76,24 @@ describe('test pubsub', () => {
     it('array reduce should return 0 entries', () => {
       const maxArraySize = 1
       const channels = [
-        { id: 1, name: 'user1', setting: true, status: true },
-        { id: 2, name: 'user2', setting: true, status: true },
-        { id: 3, name: 'user3', setting: true, status: true }
+        getExampleNotificationChannelEntity({
+          id: 1,
+          name: 'user1',
+          setting: true,
+          status: true
+        }),
+        getExampleNotificationChannelEntity({
+          id: 2,
+          name: 'user2',
+          setting: true,
+          status: true
+        }),
+        getExampleNotificationChannelEntity({
+          id: 3,
+          name: 'user3',
+          setting: true,
+          status: true
+        })
       ]
       const expectedLength = 3
 
@@ -79,7 +124,7 @@ describe('test pubsub', () => {
 
     describe('get topics', () => {
       it('array is empty return empty array', () => {
-        const channels: NotificationChannelInfo[] = []
+        const channels: NotificationChannelEntity[] = []
         const result = module.getTopics(channels)
         const expectedResult: Topic[] = []
 
@@ -87,83 +132,107 @@ describe('test pubsub', () => {
       })
 
       it('array contains 1 channel with status return status topic', () => {
-        const exampleChannelInfo = {
+        const exampleChannelInfo = getExampleNotificationChannelEntity({
           id: 1,
           name: 'name',
           setting: false,
           status: true
-        }
+        })
 
-        const channels: NotificationChannelInfo[] = [exampleChannelInfo]
+        const channels: NotificationChannelEntity[] = [exampleChannelInfo]
 
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
       })
 
       it('array contains 1 channel with setting return setting topic', () => {
-        const exampleChannelInfo = {
+        const exampleChannelInfo = getExampleNotificationChannelEntity({
           id: 1,
           name: 'name',
           setting: true,
           status: false
-        }
-        const channels: NotificationChannelInfo[] = [exampleChannelInfo]
+        })
+        const channels: NotificationChannelEntity[] = [exampleChannelInfo]
 
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id }
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
       })
 
       it('array contains 1 channel with setting and status return setting and status topic', () => {
-        const exampleChannelInfo = {
+        const exampleChannelInfo = getExampleNotificationChannelEntity({
           id: 1,
           name: 'name',
           setting: true,
           status: true
-        }
-        const channels: NotificationChannelInfo[] = [exampleChannelInfo]
+        })
+        const channels: NotificationChannelEntity[] = [exampleChannelInfo]
 
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo.id },
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo.id }
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo.id
+          },
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
       })
 
       it('array contains two channels with setting return both topics', () => {
-        const exampleChannelInfo1 = {
+        const exampleChannelInfo1 = getExampleNotificationChannelEntity({
           id: 1,
           name: 'name',
           setting: true,
           status: true
-        }
+        })
 
-        const exampleChannelInfo2 = {
+        const exampleChannelInfo2 = getExampleNotificationChannelEntity({
           id: 1,
           name: 'name',
           setting: true,
           status: true
-        }
+        })
         const channels = [exampleChannelInfo1, exampleChannelInfo2]
         const result = module.getTopics(channels)
 
         const expectedResult = [
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo1.id },
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo1.id },
-          { prefix: TopicPrefix.SETTING, id: exampleChannelInfo2.id },
-          { prefix: TopicPrefix.STATUS, id: exampleChannelInfo2.id }
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo1.id
+          },
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo1.id
+          },
+          {
+            prefix: TopicPrefix.SETTING,
+            id: exampleChannelInfo2.id
+          },
+          {
+            prefix: TopicPrefix.STATUS,
+            id: exampleChannelInfo2.id
+          }
         ]
 
         expect(result).toEqual(expectedResult)
@@ -227,7 +296,12 @@ describe('test pubsub', () => {
         expect(module.createNewPubSubConnection).not.toHaveBeenCalled()
       })
       it('get open connection returns new connection because no available', () => {
-        spyOn(module, 'createNewPubSubConnection')
+        const mockedConnection = new PubSubConnection()
+        spyOn(mockedConnection, 'start').and.callThrough()
+
+        spyOn(module, 'createNewPubSubConnection').and.returnValue(
+          mockedConnection
+        )
 
         module.getOpenConnection()
 
@@ -236,13 +310,19 @@ describe('test pubsub', () => {
 
       it('existing connection is full return a new connection', () => {
         const connection = new PubSubConnection()
+
+        const mockedConnection = new PubSubConnection()
+        spyOn(mockedConnection, 'start').and.callThrough()
+
         const topics: Topic[] = Array(50).fill({
           prefix: TopicPrefix.SETTING,
           id: 1
         })
         connection.topics.push(...topics)
 
-        spyOn(module, 'createNewPubSubConnection')
+        spyOn(module, 'createNewPubSubConnection').and.returnValue(
+          mockedConnection
+        )
 
         module.connections.push(connection)
 

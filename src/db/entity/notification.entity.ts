@@ -6,11 +6,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
-import { TwitchUser } from './user'
+import { TwitchUserEntity } from './user.entity'
 
 @Entity('notification')
 @Index(['streamer', 'user'], { unique: true })
-export class Notification extends BaseEntity {
+export class NotificationEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
@@ -20,18 +20,26 @@ export class Notification extends BaseEntity {
   @Column('varchar')
   channel: string
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   live: boolean
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   offline: boolean
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   title: boolean
 
-  @Column('boolean', { default: false })
+  @Column('boolean', {
+    default: false
+  })
   game: boolean
 
-  @ManyToOne(() => TwitchUser, (user) => user.notifications)
-  user: TwitchUser
+  @ManyToOne(() => TwitchUserEntity, user => user.notifications)
+  user: TwitchUserEntity
 }

@@ -25,7 +25,7 @@ describe('test emotegame class', () => {
   })
 
   it('guessed letters for emote should have 5 underscores', () => {
-    const expectedArray = Array(game.emote.length).fill('_')
+    const expectedArray = Array(game.actualEmote.length).fill('_')
     expect(game.currentLetters).toEqual(expectedArray)
   })
 
@@ -46,7 +46,7 @@ describe('test emotegame class', () => {
     })
 
     it('input is exactly the emote return finished', () => {
-      const input = game.emote
+      const input = game.actualEmote
 
       const result = game.getInputResult(input)
 
@@ -66,15 +66,7 @@ describe('test emotegame class', () => {
 
       const result = game.getInputResult(input)
 
-      expect(result).toBe(EmoteGameInputResult.NOTHING)
-    })
-
-    it('input letter is part of emote but uppercase return letter correct', () => {
-      const input = 'E'
-
-      const result = game.getInputResult(input)
-
-      expect(result).toBe(EmoteGameInputResult.LETTER_CORRECT)
+      expect(result).toBe(EmoteGameInputResult.INCORRECT)
     })
 
     it('input contains two letters of correct word return nothing', () => {
@@ -83,13 +75,6 @@ describe('test emotegame class', () => {
       const result = game.getInputResult(input)
 
       expect(result).toBe(EmoteGameInputResult.NOTHING)
-    })
-    it('input is correct but not same case return finished', () => {
-      const input = 'EMOTE'
-
-      const result = game.getInputResult(input)
-
-      expect(result).toBe(EmoteGameInputResult.FINISHED)
     })
 
     it('input is correct but has already been written', () => {
@@ -101,12 +86,14 @@ describe('test emotegame class', () => {
       expect(result).toBe(EmoteGameInputResult.NOTHING)
     })
 
-    it('input is correct but is other case', () => {
-      const input = 'E'
+    it('last missing letter is input return finished', () => {
+      const guesses = ['e', 'm', 'o']
+      const missingLetter = 't'
+      guesses.forEach(i => game.input(i))
 
-      const result = game.getInputResult(input)
+      const result = game.getInputResult(missingLetter)
 
-      expect(result).toBe(EmoteGameInputResult.LETTER_CORRECT)
+      expect(result).toBe(EmoteGameInputResult.FINISHED)
     })
   })
 
@@ -116,10 +103,26 @@ describe('test emotegame class', () => {
 
       const result = game.input(input)
 
-      const expectedResult = game.generateUnderscores(game.emote)
+      const expectedResult = game.generateUnderscores(game.actualEmote)
 
       expect(game.currentLetters).toEqual(expectedResult)
-      expect(result).toBe(EmoteGameInputResult.NOTHING)
+      expect(result).toBe(EmoteGameInputResult.INCORRECT)
+    })
+
+    it('input letter is part of emote but uppercase return letter correct', () => {
+      const input = 'E'
+
+      const result = game.input(input)
+
+      expect(result).toBe(EmoteGameInputResult.LETTER_CORRECT)
+    })
+
+    it('input is correct but not same case return finished', () => {
+      const input = 'EMOTE'
+
+      const result = game.input(input)
+
+      expect(result).toBe(EmoteGameInputResult.FINISHED)
     })
 
     it('input is correct letter updating one locations of that letter', () => {
@@ -127,7 +130,7 @@ describe('test emotegame class', () => {
 
       game.input(input)
 
-      const expectedResult = game.generateUnderscores(game.emote)
+      const expectedResult = game.generateUnderscores(game.actualEmote)
       expectedResult[1] = input
       expect(game.currentLetters).toEqual(expectedResult)
     })
@@ -137,7 +140,7 @@ describe('test emotegame class', () => {
 
       game.input(input)
 
-      const expectedResult = game.generateUnderscores(game.emote)
+      const expectedResult = game.generateUnderscores(game.actualEmote)
       expectedResult[0] = input
       expectedResult[4] = input
 
@@ -159,7 +162,7 @@ describe('test emotegame class', () => {
       game.input(input1)
       game.input(input2)
 
-      const expectedResult = game.generateUnderscores(game.emote)
+      const expectedResult = game.generateUnderscores(game.actualEmote)
       expectedResult[0] = input1
       expectedResult[4] = input1
       expectedResult[1] = input2
@@ -206,6 +209,19 @@ describe('test emotegame class', () => {
 
       expect(result).toBe(expectedString.join(' '))
     })
+
+    it('last missing letter is input return finished but other case', () => {
+      const customEmote = 'ABC'
+      const game = new Emotegame(channel, customEmote)
+      const guesses = ['A', 'B']
+      const missingLetter = 'C'
+
+      guesses.forEach(i => game.input(i))
+
+      const result = game.input(missingLetter)
+
+      expect(result).toBe(EmoteGameInputResult.FINISHED)
+    })
   })
 
   describe('update letters function', () => {
@@ -214,14 +230,16 @@ describe('test emotegame class', () => {
 
       game.updateCurrentLetters(input)
 
-      expect(game.currentLetters).toEqual(game.generateUnderscores(game.emote))
+      expect(game.currentLetters).toEqual(
+        game.generateUnderscores(game.actualEmote)
+      )
     })
 
     it('input is correct on one location update this location', () => {
       const input = 'm'
 
       game.updateCurrentLetters(input)
-      const expectedResult = game.generateUnderscores(game.emote)
+      const expectedResult = game.generateUnderscores(game.actualEmote)
       expectedResult[1] = input
 
       expect(game.currentLetters).toEqual(expectedResult)
@@ -234,7 +252,7 @@ describe('test emotegame class', () => {
       game.updateCurrentLetters(inputE)
       game.updateCurrentLetters(inputM)
 
-      const expectedResult = game.generateUnderscores(game.emote)
+      const expectedResult = game.generateUnderscores(game.actualEmote)
       expectedResult[1] = inputM
       expectedResult[0] = inputE
       expectedResult[4] = inputE

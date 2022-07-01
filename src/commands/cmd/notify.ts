@@ -1,34 +1,35 @@
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
 
-import { TwitchUserState } from '../../client/types'
 import {
   NotifyEventType,
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types'
-import { Command } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class NotifyCommand implements Command {
   name = 'notify'
+  flags: CommandFlag[] = []
   description = 'create a notification for any event'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['streamer', 'event']
   optionalParams = []
   cooldown = 5000
   alias = ['notifyme', 'noti', 'notification']
-  async execute(
-    channel: string,
-    user: TwitchUserState,
-    [streamer, event]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    channel,
+    user,
+    message: [streamer, event]
+  }: CommandContext): Promise<BotResponse> {
     if (this.methods.eventIsNotValid(event))
-      return this.methods.getUnknownEventErrorResponse(channel)
+      return this.methods.getUnknownEventErrorResponse()
+
     const eventType = event as UserNotificationType
     const userId = parseInt(user['user-id']!)
 
     if (await this.methods.userIsAlreadyNotified(userId, streamer, eventType)) {
       return {
-        channel: channel,
         success: false,
         response: 'You are already registered for this notification'
       }
@@ -44,7 +45,6 @@ export class NotifyCommand implements Command {
 
       if (!success) {
         return {
-          channel: channel,
           success: false,
           response: 'Could not establish new connection. Streamer not found!'
         }
@@ -54,7 +54,6 @@ export class NotifyCommand implements Command {
     await this.methods.updateNotification(channel, streamer, eventType, userId)
 
     return {
-      channel: channel,
       success: true,
       response: 'Successfully created your notification'
     }
@@ -187,12 +186,11 @@ export class NotifyCommand implements Command {
       )
     },
 
-    getUnknownEventErrorResponse(channel: string): BotResponse {
+    getUnknownEventErrorResponse(): BotResponse {
       return {
         response: `Event unknown. Valid events are ${Object.values(
           UserNotificationType
         ).join(' ')}`,
-        channel: channel,
         success: false
       }
     }

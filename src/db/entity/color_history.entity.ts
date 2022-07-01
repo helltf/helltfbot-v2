@@ -6,10 +6,10 @@ import {
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
-import { TwitchUser } from './user'
+import { TwitchUserEntity } from './user.entity'
 
 @Entity('color_history')
-export class ColorHistory extends BaseEntity {
+export class ColorHistoryEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
@@ -22,7 +22,7 @@ export class ColorHistory extends BaseEntity {
   @Column('bigint')
   register_timestamp: number
 
-  @OneToOne(() => TwitchUser, (user) => user.colors)
+  @OneToOne(() => TwitchUserEntity, user => user.colors)
   @JoinColumn()
-  user: TwitchUser
+  user: TwitchUserEntity
 }

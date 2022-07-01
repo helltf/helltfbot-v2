@@ -19,7 +19,7 @@ export class FfzApi implements EmoteApi {
   }
 
   getEmoteNamesFromSets(sets: FfzEmoteSets): Emote[] {
-    return Object.values(sets)[0].emoticons.map((e) => e.name)
+    return Object.values(sets)[0].emoticons.map(e => e.name)
   }
 
   async getEmotesForChannel(channel: string): Promise<Resource<Emote[]>> {
@@ -46,7 +46,11 @@ interface FfzRoomInfo {
     2: string
     4: string
   }
-  mod_urls: { 1: string; 2: string; 4: string }
+  mod_urls: {
+    1: string
+    2: string
+    4: string
+  }
   user_badges?: any
   user_badges_ids?: any
   css?: any

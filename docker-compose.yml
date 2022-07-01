@@ -4,9 +4,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_USER=${DB_USERNAME?err}
-      - POSTGRES_PASSWORD=${DB_PASSWORD?err}
-      - POSTGRES_DB=${DB_DATABASE?err}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
     ports:
       - '5432:5432'
     env_file:
@@ -25,9 +25,7 @@ services:
     environment:
       - NODE_ENV=prod
       - DB_HOST=db
-      - DB_USERNAME=${DB_USERNAME?err}
-      - DB_PASSWORD=${DB_PASSWORD?err}
-      - DB_DATABASE=${DB_DATABASE?err}
+      - DATABASE_URI=postgresql://${DB_USERNAME}:${DB_PASSWORD}@db:5432/${DB_DATABASE}
       - REDIS_URL=redis://default:redis@redis:6379
 
   redis:

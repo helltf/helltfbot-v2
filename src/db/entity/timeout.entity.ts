@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('ban')
-export class Ban extends BaseEntity {
+@Entity('timeout')
+export class TimeoutEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
@@ -13,4 +13,7 @@ export class Ban extends BaseEntity {
 
   @Column('bigint')
   at: number
+
+  @Column('bigint')
+  duration: number
 }

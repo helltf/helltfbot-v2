@@ -1,25 +1,21 @@
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-
-import { TwitchUserState } from '../../client/types'
-import { PermissionLevel } from '../../utilities/twitch/types'
-import { Command } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class JoinCommand implements Command {
   name = 'join'
   description = 'join a channel'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = ['channel']
   optionalParams = []
   cooldown = 5000
   alias = ['j']
-
-  async execute(
-    channel: string,
-    user: TwitchUserState,
-    [joinChannel]: string[]
-  ): Promise<BotResponse> {
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
+  async execute({
+    user,
+    message: [joinChannel]
+  }: CommandContext): Promise<BotResponse> {
     const errorResponse: BotResponse = {
-      channel: channel,
       response: '',
       success: false
     }
@@ -29,7 +25,10 @@ export class JoinCommand implements Command {
       return errorResponse
     }
 
-    if (joinChannel !== 'me' && user.permission! < PermissionLevel.ADMIN) {
+    if (
+      joinChannel !== 'me' &&
+      user.permission! < GlobalPermissionLevel.ADMIN
+    ) {
       errorResponse.response = 'You are not permitted to issue this command'
       return errorResponse
     }
@@ -51,8 +50,7 @@ export class JoinCommand implements Command {
 
     return {
       success: success,
-      response: message,
-      channel: channel
+      response: message
     }
   }
 

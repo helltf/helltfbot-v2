@@ -2,7 +2,7 @@ import ReconnectingWebSocket from 'reconnecting-websocket'
 import { TwitchBot } from '@client/bot'
 import { PubSubConnection } from '@modules/pubsub/pubsub-connection'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
-import { createMockedWSConnection } from '../../../test-utils/example'
+import { createMockedWSConnection } from '@test-utils/mocks'
 
 describe('test pubsub connection class', () => {
   let connection: PubSubConnection
@@ -15,14 +15,20 @@ describe('test pubsub connection class', () => {
   })
 
   it('connection does not listen to topic return false', () => {
-    const topic = { id: 1, prefix: TopicPrefix.STATUS }
+    const topic = {
+      id: 1,
+      prefix: TopicPrefix.STATUS
+    }
     const result = connection.containsTopic(topic)
 
     expect(result).toBeFalse()
   })
 
   it('connection contains topic return true', () => {
-    const topic = { id: 1, prefix: TopicPrefix.STATUS }
+    const topic = {
+      id: 1,
+      prefix: TopicPrefix.STATUS
+    }
     connection.topics.push(topic)
     const result = connection.containsTopic(topic)
 
@@ -55,7 +61,12 @@ describe('test pubsub connection class', () => {
     })
 
     it('one topic existing but no removed stays the same', () => {
-      const topics: Topic[] = [{ id: 1, prefix: TopicPrefix.SETTING }]
+      const topics: Topic[] = [
+        {
+          id: 1,
+          prefix: TopicPrefix.SETTING
+        }
+      ]
       connection.topics = topics
 
       connection.removeTopics([])
@@ -64,7 +75,10 @@ describe('test pubsub connection class', () => {
     })
 
     it('one topics existing and gets removed', () => {
-      const topic = { id: 1, prefix: TopicPrefix.SETTING }
+      const topic = {
+        id: 1,
+        prefix: TopicPrefix.SETTING
+      }
       const topics = [topic]
 
       connection.topics = topics
@@ -75,8 +89,14 @@ describe('test pubsub connection class', () => {
     })
 
     it('two topics existing and removing one', () => {
-      const topic1 = { id: 1, prefix: TopicPrefix.SETTING }
-      const topic2 = { id: 2, prefix: TopicPrefix.SETTING }
+      const topic1 = {
+        id: 1,
+        prefix: TopicPrefix.SETTING
+      }
+      const topic2 = {
+        id: 2,
+        prefix: TopicPrefix.SETTING
+      }
       const topics = [topic1, topic2]
       connection.topics = topics
 
@@ -86,8 +106,14 @@ describe('test pubsub connection class', () => {
     })
 
     it('two topics for the same id only one gets removed', () => {
-      const topic1 = { id: 1, prefix: TopicPrefix.SETTING }
-      const topic2 = { id: 2, prefix: TopicPrefix.STATUS }
+      const topic1 = {
+        id: 1,
+        prefix: TopicPrefix.SETTING
+      }
+      const topic2 = {
+        id: 2,
+        prefix: TopicPrefix.STATUS
+      }
       const topics = [topic1, topic2]
       connection.topics = topics
 
@@ -99,7 +125,10 @@ describe('test pubsub connection class', () => {
 
   it('unlisten command should send unlisten to pubsub', () => {
     globalThis.hb = new TwitchBot()
-    const topic = { id: 1, prefix: TopicPrefix.SETTING }
+    const topic = {
+      id: 1,
+      prefix: TopicPrefix.SETTING
+    }
     const topics = [topic]
     connection.topics = topics
     spyOn(connection, 'sendMessage')

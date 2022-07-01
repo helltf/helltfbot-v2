@@ -39,8 +39,30 @@ export class ApiService {
     this.initialized = true
     await this.twitch.init()
   }
+
+  async fetchAllEmotes(channel: string): Promise<EmoteInfo> {
+    const promises = [
+      this.ffz.getEmotesForChannel(channel),
+      this.bttv.getEmotesForChannel(channel),
+      this.seventv.getEmotesForChannel(channel)
+    ]
+
+    const [ffz, bttv, seventv] = await Promise.all(promises)
+
+    return {
+      ffz: ffz instanceof ResourceSuccess ? ffz.data : [],
+      bttv: bttv instanceof ResourceSuccess ? bttv.data : [],
+      seventv: seventv instanceof ResourceSuccess ? seventv.data : [],
+    }
+  }
 }
 
 export declare interface EmoteApi {
   getEmotesForChannel: (channel: string) => Promise<Resource<Emote[]>>
+}
+
+export interface EmoteInfo {
+  bttv: Emote[]
+  ffz: Emote[]
+  seventv: Emote[]
 }

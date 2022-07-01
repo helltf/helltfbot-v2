@@ -1,6 +1,6 @@
 import { ChatUserstate, Client } from 'tmi.js'
 import { LogType } from '../logger/log-type'
-import { handleChat } from './handlers/chat'
+import { handleChat, handleWhisper } from './handlers/chat'
 import { handleConnect } from './handlers/connect'
 import { handleJoin } from './handlers/join'
 import { handlePart } from './handlers/part'
@@ -13,15 +13,17 @@ function createclient(): Client {
       password: 'oauth:' + process.env.TWITCH_OAUTH,
       username: 'xdforsenxdlol'
     },
-    connection: { reconnect: true },
+    connection: {
+      reconnect: true
+    },
     logger: {
-      info: (msg) => {
+      info: msg => {
         if (process.env.DEBUG === 'true') hb.log(LogType.TWITCHBOT, msg)
       },
-      error: (msg) => {
+      error: msg => {
         hb.log(LogType.TWITCHBOT, msg)
       },
-      warn: (msg) => {
+      warn: msg => {
         hb.log(LogType.TWITCHBOT, msg)
       }
     }
@@ -58,4 +60,11 @@ client.on('join', (channel: string, username: string, self: boolean) => {
 client.on('connected', () => {
   handleConnect()
 })
+
+client.on('whisper', (from, user, message, self) => {
+  from = from.replace('#', '')
+  
+  handleWhisper(from, user, message, self)
+})
+
 export { client }

@@ -1,4 +1,4 @@
-import {  ResourceError, ResourceSuccess } from "@api/types"
+import { ResourceError, ResourceSuccess } from "@api/types"
 import { TwitchUserState } from "@client/types"
 import {
   Emote,
@@ -7,6 +7,7 @@ import {
 } from '@commands/cmd/emotegame'
 import { Emotegame } from '@games/emotegame'
 import { GameService } from '@service/game.service'
+import { mockEmoteApis } from "@test-utils/mocks"
 import { clearDb, clearRedis } from '../../test-utils/clear'
 import {
   disconnectDatabase,
@@ -19,11 +20,8 @@ describe('test emotegame', () => {
   let user: TwitchUserState
   let messageChannel: string
   let emotegame: EmotegameCommand
-  const emoteTypes: EmoteType[] = [
-    EmoteType.BTTV,
-    EmoteType.FFZ,
-    EmoteType.SEVENTV
-  ]
+
+  const emoteTypes: EmoteType[] = Object.values(EmoteType)
 
   beforeAll(async () => {
     await setupDatabase()
@@ -45,13 +43,12 @@ describe('test emotegame', () => {
   })
 
   it('no action given return error response', async () => {
-    const {
-      channel: responseChannel,
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, [])
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message: []
+    })
 
-    expect(responseChannel).toBe(messageChannel)
     expect(success).toBeFalse()
     expect(response).toBe('Action has to be either start or stop')
   })
@@ -60,13 +57,12 @@ describe('test emotegame', () => {
     const type = 'otherType'
     const message = ['start', type]
 
-    const {
-      channel: responseChannel,
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
-    expect(responseChannel).toBe(messageChannel)
     expect(response).toBe('type has to be ffz, bttv or seventv')
     expect(success).toBeFalse()
   })
@@ -75,13 +71,12 @@ describe('test emotegame', () => {
     const message = ['start']
     mockEmoteApis()
 
-    const {
-      channel: responseChannel,
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
-    expect(responseChannel).toBe(messageChannel)
     expect(response).toBe(
       'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
     )
@@ -91,29 +86,28 @@ describe('test emotegame', () => {
   it('action is not start or stop return error response', async () => {
     const message = ['b']
 
-    const {
-      channel: responseChannel,
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
-    expect(responseChannel).toBe(messageChannel)
     expect(response).toBe('Action has to be either start or stop')
     expect(success).toBeFalse()
   })
 
-  emoteTypes.forEach((type) => {
+  emoteTypes.forEach(type => {
     it('action is start with set emotetype return successful response', async () => {
       mockEmoteApis()
       const message = ['start', type]
 
-      const {
-        channel: responseChannel,
-        response,
-        success
-      } = await emotegame.execute(messageChannel, user, message)
+      const { response, success } = await emotegame.execute({
+        channel: messageChannel,
+        user,
+        message
+      }
+      )
 
-      expect(responseChannel).toBe(messageChannel)
       expect(response).toBe(
         'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
       )
@@ -125,13 +119,12 @@ describe('test emotegame', () => {
     const message = ['stop']
     mockEmoteApis()
     hb.games.add(new Emotegame(messageChannel, 'emote'))
-    const {
-      channel: responseChannel,
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
-    expect(responseChannel).toBe(messageChannel)
     expect(response).toBe('The emotegame has been stopped')
     expect(success).toBeTrue()
   })
@@ -140,7 +133,7 @@ describe('test emotegame', () => {
     const message = ['start']
     mockEmoteApis()
 
-    await emotegame.execute(messageChannel, user, message)
+    await emotegame.execute({ channel: messageChannel, user, message })
 
     expect(hb.games.eg).toHaveSize(1)
     expect(hb.games.eg[0].channel).toBe(messageChannel)
@@ -153,32 +146,29 @@ describe('test emotegame', () => {
 
     hb.games.eg.push(new Emotegame(messageChannel, emote))
 
-    const {
-      channel: responseChannel,
-      response,
-      success
-    } = await emotegame.execute(messageChannel, user, message)
+    const { response, success } = await emotegame.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
-    expect(responseChannel).toBe(messageChannel)
     expect(success).toBeFalse()
     expect(response).toBe('An emotegame is already running')
   })
 
   describe('start method', () => {
-    emoteTypes.forEach((type) => {
+    emoteTypes.forEach(type => {
       it('get emote returns ResourceError return error response', async () => {
         const error = 'error message'
         spyOn(emotegame.methods, 'getEmote').and.resolveTo(
           new ResourceError(error)
         )
 
-        const {
-          channel: responseChannel,
-          response,
-          success
-        } = await emotegame.methods.start(messageChannel, type)
+        const { response, success } = await emotegame.methods.start(
+          messageChannel,
+          type
+        )
 
-        expect(responseChannel).toBe(messageChannel)
         expect(response).toBe(error)
         expect(success).toBeFalse()
       })
@@ -187,13 +177,8 @@ describe('test emotegame', () => {
 
   describe('stop method', () => {
     it('no game is running return errror response', async () => {
-      const {
-        channel: responseChannel,
-        response,
-        success
-      } = await emotegame.methods.stop(messageChannel)
+      const { response, success } = await emotegame.methods.stop(messageChannel)
 
-      expect(responseChannel).toBe(messageChannel)
       expect(response).toBe('There is no game running at the moment')
       expect(success).toBeFalse()
     })
@@ -201,13 +186,8 @@ describe('test emotegame', () => {
     it('game is running return successful response', async () => {
       hb.games.add(new Emotegame(messageChannel, 'emote'))
 
-      const {
-        channel: responseChannel,
-        response,
-        success
-      } = await emotegame.methods.stop(messageChannel)
+      const { response, success } = await emotegame.methods.stop(messageChannel)
 
-      expect(responseChannel).toBe(messageChannel)
       expect(response).toBe('The emotegame has been stopped')
       expect(success).toBeTrue()
     })
@@ -224,7 +204,7 @@ describe('test emotegame', () => {
   })
 
   describe('get emotes method', () => {
-    emoteTypes.forEach((type) => {
+    emoteTypes.forEach(type => {
       it('emotes are cached return cached emotes', async () => {
         mockEmoteApis()
         const emotes = ['emote']
@@ -287,7 +267,7 @@ describe('test emotegame', () => {
     })
 
     describe('get emote method', () => {
-      emoteTypes.forEach((type) => {
+      emoteTypes.forEach(type => {
         it('returns resource error return error message', async () => {
           const error = 'Error message'
           spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
@@ -333,11 +313,3 @@ describe('test emotegame', () => {
     })
   })
 })
-
-function mockEmoteApis(resolveTo: Emote[] = ['emote']) {
-  const result = new ResourceSuccess(resolveTo)
-
-  spyOn(hb.api.bttv, 'getEmotesForChannel').and.resolveTo(result)
-  spyOn(hb.api.ffz, 'getEmotesForChannel').and.resolveTo(result)
-  spyOn(hb.api.seventv, 'getEmotesForChannel').and.resolveTo(result)
-}

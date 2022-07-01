@@ -1,6 +1,15 @@
 import { TwitchUserState } from '@client/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 
 export async function saveUserStateAsUser(user: TwitchUserState) {
+  let permission: GlobalPermissionLevel
+
+  if (!user.permission || user.permission in ChatPermissionLevel) {
+    permission = GlobalPermissionLevel.USER
+  } else {
+    permission = user.permission as GlobalPermissionLevel
+  }
+
   await hb.db.userRepo.save({
     color: user.color,
     display_name: user['display-name'],
@@ -8,7 +17,7 @@ export async function saveUserStateAsUser(user: TwitchUserState) {
     name: user.username,
     notifications: [],
     suggestions: [],
-    permission: user.permission,
+    permission: permission,
     registered_at: 1
   })
 }

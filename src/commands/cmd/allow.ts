@@ -1,31 +1,28 @@
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-
-import { TwitchUserState } from '../../client/types'
-import { PermissionLevel } from '../../utilities/twitch/types'
-import { Command } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class AllowCommand implements Command {
   name = 'allow'
   description = 'Allow messages from the bot'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = []
   optionalParams = ['channel']
   cooldown = 5000
   alias = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
 
-  async execute(
-    channel: string,
-    user: TwitchUserState,
-    [updateChannel]: string[]
-  ): Promise<BotResponse> {
+  async execute({
+    user,
+    message: [updateChannel]
+  }: CommandContext): Promise<BotResponse> {
     const errorResponse = {
-      channel: channel,
       response: 'You are not permitted to execute this command',
       success: false
     }
 
-    if (user.permission! < PermissionLevel.BROADCASTER) return errorResponse
-    if (user.permission! === PermissionLevel.BROADCASTER && updateChannel)
+    if (user.permission! < ChatPermissionLevel.BROADCASTER) return errorResponse
+    if (user.permission! === ChatPermissionLevel.BROADCASTER && updateChannel)
       return errorResponse
 
     updateChannel = updateChannel || user.username!
@@ -39,7 +36,6 @@ export class AllowCommand implements Command {
 
     return {
       response: 'Successfully updated settings',
-      channel: channel,
       success: true
     }
   }

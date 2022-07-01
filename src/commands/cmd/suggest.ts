@@ -1,24 +1,23 @@
-import { Command } from '../types'
-import { ChatUserstate } from 'tmi.js'
+import { Command, CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class SuggestCommand implements Command {
   name = 'suggest'
   description = 'suggest a feature you want to see'
-  permissions = 0
+  permissions = ChatPermissionLevel.USER
   requiredParams = []
   optionalParams = []
   cooldown = 30000
   alias = []
-  async execute(
-    channel: string,
-    userstate: ChatUserstate,
-    [...suggestion]: string[]
-  ): Promise<BotResponse> {
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
+  async execute({
+    user,
+    message: [...suggestion]
+  }: CommandContext): Promise<BotResponse> {
     if (!suggestion[0])
       return {
         response: 'You have to specify a suggestion',
-        channel,
         success: false
       }
 
@@ -26,12 +25,11 @@ export class SuggestCommand implements Command {
 
     const id = await this.methods.saveSuggestion(
       suggestionMessage,
-      parseInt(userstate['user-id']!)
+      parseInt(user['user-id']!)
     )
 
     return {
       response: `Succesfully saved your suggestion with id ${id}`,
-      channel: channel,
       success: true
     }
   }

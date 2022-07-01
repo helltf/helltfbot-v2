@@ -1,7 +1,9 @@
+import { EmoteStatsEntity } from '@db/entities'
 import { Emotegame } from '../games/emotegame'
-import { ChatGame } from '../games/types'
+import { ChatGame, EmoteGameInputResult } from '../games/types'
 
 export class GameService {
+
   eg: Emotegame[] = []
 
   add(game: ChatGame) {
@@ -21,7 +23,7 @@ export class GameService {
   }
 
   emoteGameExists(channel: string): boolean {
-    return this.eg.some((g) => g.channel === channel)
+    return this.eg.some(g => g.channel === channel)
   }
 
   removeAfterTime(game: ChatGame) {
@@ -31,7 +33,7 @@ export class GameService {
   }
 
   removeGameForChannel(channel: string) {
-    const index = this.eg.findIndex((g) => channel === g.channel)
+    const index = this.eg.findIndex(g => channel === g.channel)
 
     if (index > -1) {
       this.eg.splice(index, 1)
@@ -39,22 +41,26 @@ export class GameService {
   }
 
   getGame(channel: string): Emotegame | undefined {
-    return this.eg.find((g) => g.channel === channel)
+    return this.eg.find(g => g.channel === channel)
   }
 
   async remove(game: ChatGame) {
     if (game instanceof Emotegame) {
-      const index = this.eg.findIndex((g) => game.channel === g.channel)
+      const index = this.eg.findIndex(g => game.channel === g.channel)
 
       if (index > -1) {
         this.eg.splice(index, 1)
         await hb.sendMessage(
           game.channel,
-          `The running emotegame has been cancelled, because the time limit of ${
-            game.EXPIRING_AFTER / 1000 / 60
+          `The running emotegame has been cancelled, because the time limit of ${game.EXPIRING_AFTER / 1000 / 60
           } minutes is over`
         )
       }
     }
+  }
+  mapResultToValue(result: EmoteGameInputResult): keyof EmoteStatsEntity | undefined {
+    if (result === EmoteGameInputResult.FINISHED) return 'emotes_guessed'
+    if (result === EmoteGameInputResult.INCORRECT) return 'incorrect_guesses'
+    if (result === EmoteGameInputResult.LETTER_CORRECT) return 'letters_guessed'
   }
 }

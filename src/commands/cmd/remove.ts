@@ -1,8 +1,9 @@
+import { ChatPermissionLevel } from "@src/utilities/permission/types"
 import { UpdateResult } from "typeorm"
-import { TwitchUserState, BotResponse } from "../../client/types"
-import { UserNotificationType } from "../../modules/pubsub/types"
+import { BotResponse } from "../../client/types"
+import { UserNotificationType } from '../../modules/pubsub/types'
 import { NotificationService } from '../../service/notification.service'
-import { Command } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class RemoveCommand implements Command {
   name = 'remove'
@@ -11,12 +12,13 @@ export class RemoveCommand implements Command {
   description = 'removes your notification for the given streamer on the event'
   optionalParams = []
   requiredParams = ['streamer', 'event']
-  permissions = 0
-  async execute(
-    channel: string,
-    { 'user-id': unparsedUserId }: TwitchUserState,
-    [streamer, event]: string[]
-  ): Promise<BotResponse> {
+  permissions = ChatPermissionLevel.USER
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
+  async execute({
+    channel,
+    user: { 'user-id': unparsedUserId },
+    message: [streamer, event]
+  }: CommandContext): Promise<BotResponse> {
     const userId = Number(unparsedUserId)
     const eventType = event as UserNotificationType
 
@@ -54,7 +56,6 @@ export class RemoveCommand implements Command {
 
     return {
       success: true,
-      channel: channel,
       response: 'Successfully removed your notification'
     }
   }
@@ -66,7 +67,9 @@ export class RemoveCommand implements Command {
     ): Promise<UpdateResult> {
       return await hb.db.notificationRepo.update(
         {
-          user: { id: userId },
+          user: {
+            id: userId
+          },
           streamer: streamer
         },
         {

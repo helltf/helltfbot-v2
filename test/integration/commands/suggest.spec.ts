@@ -28,7 +28,8 @@ describe('test suggest command', () => {
 
   it('suggestion is undefined return error', async () => {
     const suggestion = ''
-    const response = await suggest.execute(channel, user, [suggestion])
+    const message = [suggestion]
+    const response = await suggest.execute({ channel, user, message })
 
     expect(response.success).toBeFalse()
   })
@@ -37,7 +38,7 @@ describe('test suggest command', () => {
     const message = ['add']
     await saveUserStateAsUser(user)
 
-    const response = await suggest.execute(channel, user, message)
+    const response = await suggest.execute({ channel, user, message })
 
     expect(response.success).toBeTrue()
   })
@@ -46,7 +47,7 @@ describe('test suggest command', () => {
     const message = ['add']
     await saveUserStateAsUser(user)
 
-    const response = await suggest.execute(channel, user, message)
+    const response = await suggest.execute({ channel, user, message })
 
     const savedEntity = await hb.db.suggestionRepo.find()
     const expectedLength = 1
@@ -64,7 +65,7 @@ describe('test suggest command', () => {
 
     await saveUserStateAsUser(user)
 
-    const response = await suggest.execute(channel, user, message)
+    const response = await suggest.execute({ channel, user, message })
 
     const savedEntity = await hb.db.suggestionRepo.findOneBy({
       id: id
@@ -89,7 +90,7 @@ describe('test suggest command', () => {
       }
     })
 
-    const response = await suggest.execute(channel, user, message)
+    const response = await suggest.execute({ channel, user, message })
     const expectedId = 2
 
     const savedEntity = await hb.db.suggestionRepo.findOneBy({
