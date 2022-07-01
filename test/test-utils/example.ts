@@ -8,7 +8,10 @@ import {
   EmoteStatsEntity,
   ColorHistoryEntity
 } from '@db/entities'
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import {
+  ChatPermissionLevel,
+  GlobalPermissionLevel
+} from '@src/utilities/permission/types'
 
 export function getExampleCommand({
   alias = [],
@@ -24,7 +27,8 @@ export function getExampleCommand({
   name = 'name',
   optionalParams = [],
   requiredParams = [],
-  permissions = ChatPermissionLevel.USER
+  permissions = ChatPermissionLevel.USER,
+  flags = []
 }: Partial<Command>): Command {
   return {
     alias,
@@ -34,7 +38,8 @@ export function getExampleCommand({
     name,
     optionalParams,
     permissions,
-    requiredParams
+    requiredParams,
+    flags
   }
 }
 
@@ -43,7 +48,6 @@ export const getExampleEmoteStatsEntity = ({
   incorrect_guesses = 0,
   letters_guessed = 0,
   user = new TwitchUserEntity()
-
 }: Partial<EmoteStatsEntity>): EmoteStatsEntity => {
   const entity = new EmoteStatsEntity()
 
@@ -88,7 +92,7 @@ export const getExampleTwitchUserState = ({
   'user-id': userId = '1',
   color = '#FFFFFF',
   'display-name': displayName = 'user',
-  permission = 0,
+  permission = GlobalPermissionLevel.USER,
   badges = {}
 }: Partial<TwitchUserState>): TwitchUserState => {
   return {

@@ -90,6 +90,6 @@ export class TwitchBot {
   }
 
   getCommand(input: string): Command {
-    return hb.commands.findCommand(input)
+    return hb.commands.findCommand(input.toLowerCase())
   }
 }

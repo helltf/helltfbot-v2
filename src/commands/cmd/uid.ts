@@ -1,5 +1,5 @@
 import { BotResponse } from "@src/client/types";
-import { Command, Context } from "@src/commands/types";
+import { Command, CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class UidCommand implements Command {
@@ -10,10 +10,11 @@ export class UidCommand implements Command {
   optionalParams: string[] = ['user']
   alias: string[] = ['userid']
   cooldown = 10000
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   execute = async ({
     message: [searchUser],
     user
-  }: Context): Promise<BotResponse> => {
+  }: CommandContext): Promise<BotResponse> => {
     if (!searchUser)
       return {
         response: this.methods.getResponse(user['user-id'], user.username),
