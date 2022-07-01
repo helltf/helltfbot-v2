@@ -17,3 +17,9 @@ export interface ChatContext {
   message: string
   user: TwitchUserState
 }
+
+export interface ResponseContext {
+  where: string
+  response: BotResponse
+  type: MessageType
+}

@@ -1,8 +1,13 @@
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { wait } from '@src/utilities/wait'
 import { ChatUserstate } from 'tmi.js'
-import { Command, CommandContext, MessageType } from '../../commands/types'
-import { BotResponse, ChatContext, TwitchUserState } from '../types'
+import {
+  Command,
+  CommandContext,
+  CommandFlag,
+  MessageType
+} from '../../commands/types'
+import { ChatContext, ResponseContext, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
 
@@ -23,7 +28,7 @@ const handleChat = async (
   runCommand(chatContext)
 }
 
-export const handleWhisper = (
+export const handleWhisper = async (
   from: string,
   user: TwitchUserState,
   message: string,
@@ -40,38 +45,49 @@ export const handleWhisper = (
   runCommand(chatContext)
 }
 
-async function runCommand({ where, user, message, self, type }: ChatContext) {
+const hasPrefix = (message: string): boolean => {
+  return message?.toLowerCase()?.startsWith(prefix)
+}
+
+async function runCommand({ message, self, type, user, where }: ChatContext) {
   if (self) return
 
-  if (!message?.toLowerCase()?.startsWith(prefix)) return
+  if (!hasPrefix(message)) return
 
-  const [commandLookup, ...data] = getMessageInfo(message)
+  let [commandLookup, ...data] = getMessageInfo(message)
   const command = hb.getCommand(commandLookup)
-
   if (!command) return
-
-  const context: CommandContext = {
-    channel: where,
-    message: data,
-    type: type,
-    user: user
-  }
 
   user.permission = await hb.utils.permission.get(user)
 
   if (
     type === MessageType.WHISPER &&
-    !command.flags.includes(MessageType.WHISPER)
+    !command.flags.includes(CommandFlag.WHISPER)
   )
-    return
+    return sendResponse({
+      where,
+      response: {
+        response: 'This command is not available via whispers',
+        success: true
+      },
+      type
+    })
+
+  if (command.flags.includes(CommandFlag.LOWERCASE))
+    data = data.map(m => m.toLowerCase())
 
   setCooldown(command, user)
 
-  const response = await command.execute(context)
+  const response = await command.execute({
+    channel: where,
+    message: data,
+    type: type,
+    user: user
+  })
 
   incrementCommandCounter(command)
 
-  sendResponse(where, response, type)
+  sendResponse({ where, type, response })
 }
 
 function getMessageInfo(message: string): string[] {
@@ -94,11 +110,11 @@ async function sendWhisper(user: string, message: string) {
   }
 }
 
-function sendResponse(
-  where: string,
-  { success, response }: BotResponse,
-  type: MessageType
-) {
+function sendResponse({
+  where,
+  response: { success, response },
+  type
+}: ResponseContext) {
   if (!response) return
 
   response = Array.isArray(response) ? response.join(' | ') : response
