@@ -1,62 +1,113 @@
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { wait } from '@src/utilities/wait'
 import { ChatUserstate } from 'tmi.js'
-import { Command } from '../../commands/types'
-import { BotResponse, TwitchUserState } from '../types'
+import { Command, CommandContext, MessageType } from '../../commands/types'
+import { BotResponse, ChatContext, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
 
 const handleChat = async (
-  channel: string,
+  where: string,
   user: TwitchUserState,
   message: string,
   self: boolean
 ) => {
+  const chatContext: ChatContext = {
+    where: where,
+    user: user,
+    message: message,
+    self: self,
+    type: MessageType.MESSAGE
+  }
+
+  runCommand(chatContext)
+}
+
+export const handleWhisper = (
+  from: string,
+  user: TwitchUserState,
+  message: string,
+  self: boolean
+) => {
+  const chatContext: ChatContext = {
+    where: from,
+    user: user,
+    message: message,
+    self: self,
+    type: MessageType.WHISPER
+  }
+
+  runCommand(chatContext)
+}
+
+async function runCommand({ where, user, message, self, type }: ChatContext) {
   if (self) return
 
   if (!message?.toLowerCase()?.startsWith(prefix)) return
 
-  const [commandLookup, ...data] = message
-    .substring(prefix.length)
-    .replace(/\s{2,}/g, ' ')
-    .split(' ')
+  const [commandLookup, ...data] = getMessageInfo(message)
+  const command = hb.getCommand(commandLookup)
 
-  const command = hb.getCommand(commandLookup.toLowerCase())
+  if (!command) return
 
-  if (command === undefined || userHasCooldown(command, user)) return
+  const context: CommandContext = {
+    channel: where,
+    message: data,
+    type: type,
+    user: user
+  }
 
-  incrementCommandCounter(command)
   user.permission = await hb.utils.permission.get(user)
 
-  if (command.permissions > user.permission!) return
+  if (
+    type === MessageType.WHISPER &&
+    !command.flags.includes(MessageType.WHISPER)
+  )
+    return
 
   setCooldown(command, user)
 
-  const response = await command.execute({
-    channel,
-    message: data,
-    type: 'message',
-    user: user
-  })
+  const response = await command.execute(context)
 
-  sendResponse(channel, response)
+  incrementCommandCounter(command)
+
+  sendResponse(where, response, type)
+}
+
+function getMessageInfo(message: string): string[] {
+  return message
+    .substring(prefix.length)
+    .replace(/\s{2,}/g, ' ')
+    .split(' ')
 }
 
 function sendMessage(channel: string, message: string) {
   hb.sendMessage(channel, message)
 }
 
-function sendResponse(channel: string, { success, response }: BotResponse) {
+async function sendWhisper(user: string, message: string) {
+  const msgParts = message.match(/.{1,450}(?=\s|$)/g)
+
+  for await (const msg of msgParts!) {
+    await hb.client.whisper(user, msg)
+    await wait`1s`
+  }
+}
+
+function sendResponse(
+  where: string,
+  { success, response }: BotResponse,
+  type: MessageType
+) {
   if (!response) return
 
-  response = Array.isArray(response)
-    ? response.join(' | ')
-    : response
+  response = Array.isArray(response) ? response.join(' | ') : response
 
-  if (success) {
-    sendMessage(channel, response)
-  } else {
-    sendMessage(channel, `❗ Error while executing ➡ ` + response)
-  }
+  if (!success) response = `❗ Error while executing ➡ ` + response
+
+  if (type === MessageType.MESSAGE) return sendMessage(where, response)
+
+  if (type === MessageType.WHISPER) return sendWhisper(where, response)
 }
 
 function setCooldown(
