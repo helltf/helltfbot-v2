@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - emote command to fetch all emotes for channel
 - save emotegame results as stats
 - commands can now be run via whispers
+- help command to display information about a command
+- eval command for better debugging
+- stats command to show saved emotegame stats
 
 ### Changed
 
