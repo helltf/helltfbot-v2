@@ -6,11 +6,11 @@ import {
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types'
-import { Command, CommandContext } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class NotifyCommand implements Command {
   name = 'notify'
-  flags: string[] = []
+  flags: CommandFlag[] = []
   description = 'create a notification for any event'
   permissions = ChatPermissionLevel.USER
   requiredParams = ['streamer', 'event']

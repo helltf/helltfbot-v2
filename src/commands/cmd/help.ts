@@ -1,10 +1,10 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext } from "@src/commands/types";
+import { Command, CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class HelpCommmand implements Command {
   name = 'help'
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   permissions = ChatPermissionLevel.USER
   description = 'replies with information about the given command'
   optionalParams = ['command']

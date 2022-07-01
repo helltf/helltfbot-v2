@@ -1,4 +1,4 @@
-import { Command } from '../types'
+import { Command, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
@@ -10,7 +10,7 @@ export class WebsiteCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = []
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute(): Promise<BotResponse> {
     const response =
       `You can inspect my website on https://helltf.github.io/bot/#/ ` +

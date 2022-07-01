@@ -1,5 +1,5 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext } from "@src/commands/types";
+import { Command, CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from "@src/utilities/permission/types";
 
 export class EvalCommand implements Command {
@@ -10,7 +10,7 @@ export class EvalCommand implements Command {
   optionalParams = []
   alias: string[] = []
   cooldown = 0
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   execute = async ({
     message: [...code]
   }: CommandContext): Promise<BotResponse> => {

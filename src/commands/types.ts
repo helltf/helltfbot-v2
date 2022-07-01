@@ -9,7 +9,7 @@ export interface Command {
   requiredParams: string[]
   optionalParams: string[]
   alias: string[]
-  flags: string[]
+  flags: CommandFlag[]
   cooldown: number
   methods?: {
     [key: string]: (...args: any) => Promise<any> | any
@@ -27,4 +27,9 @@ export interface CommandContext {
 export enum MessageType {
   MESSAGE = 'message',
   WHISPER = 'whisper'
+}
+
+export enum CommandFlag {
+  WHISPER = 'whisper',
+  LOWERCASE = 'lowercase'
 }

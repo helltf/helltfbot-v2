@@ -1,4 +1,4 @@
-import { Command, CommandContext } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
@@ -10,7 +10,7 @@ export class SuggestCommand implements Command {
   optionalParams = []
   cooldown = 30000
   alias = []
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
     message: [...suggestion]

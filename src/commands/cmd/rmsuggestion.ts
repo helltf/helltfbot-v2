@@ -1,4 +1,4 @@
-import { Command, CommandContext } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 export class RemoveSuggestCommand implements Command {
@@ -8,7 +8,7 @@ export class RemoveSuggestCommand implements Command {
   requiredParams = ['id']
   optionalParams = []
   cooldown = 30000
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   alias = ['rms']
 
   async execute({ user, message: [id] }: CommandContext): Promise<BotResponse> {

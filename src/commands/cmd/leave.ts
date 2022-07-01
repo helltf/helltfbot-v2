@@ -1,6 +1,6 @@
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel, GlobalPermissionLevel } from '../../utilities/permission/types'
-import { Command, CommandContext } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class LeaveCommand implements Command {
   name = 'leave'
@@ -10,7 +10,7 @@ export class LeaveCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = ['l']
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
     message: [channeltoLeave]

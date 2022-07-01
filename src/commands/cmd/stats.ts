@@ -1,5 +1,5 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext } from "@src/commands/types";
+import { Command, CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class StatsCommand implements Command {
@@ -10,7 +10,7 @@ export class StatsCommand implements Command {
   optionalParams: string[] = ['user']
   alias: string[] = ['statistics']
   cooldown = 20000
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   execute = async ({
     message: [type, lookup],
     user

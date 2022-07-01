@@ -3,7 +3,7 @@ import { UpdateResult } from "typeorm"
 import { BotResponse } from "../../client/types"
 import { UserNotificationType } from '../../modules/pubsub/types'
 import { NotificationService } from '../../service/notification.service'
-import { Command, CommandContext } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class RemoveCommand implements Command {
   name = 'remove'
@@ -13,7 +13,7 @@ export class RemoveCommand implements Command {
   optionalParams = []
   requiredParams = ['streamer', 'event']
   permissions = ChatPermissionLevel.USER
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     channel,
     user: { 'user-id': unparsedUserId },

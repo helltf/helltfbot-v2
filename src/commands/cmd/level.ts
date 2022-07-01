@@ -1,5 +1,5 @@
 import { TwitchUserState, BotResponse } from "@src/client/types";
-import { Command, CommandContext } from "@src/commands/types";
+import { Command, CommandContext, CommandFlag } from "@src/commands/types";
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
@@ -13,7 +13,7 @@ export class LevelCommand implements Command {
   optionalParams = []
   alias = ['lvl', 'permission', 'permissions']
   cooldown = 5000
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   execute = async ({ user }: CommandContext): Promise<BotResponse> => {
     const dbPerm = await this.methods.getDatabasePermissions(
       Number(user['user-id'])

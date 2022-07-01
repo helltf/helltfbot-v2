@@ -1,6 +1,6 @@
 import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-import { Command, CommandContext } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class JoinCommand implements Command {
   name = 'join'
@@ -10,7 +10,7 @@ export class JoinCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = ['j']
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
     message: [joinChannel]

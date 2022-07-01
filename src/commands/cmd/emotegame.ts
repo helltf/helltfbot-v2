@@ -2,7 +2,7 @@ import { ChatPermissionLevel } from "@src/utilities/permission/types";
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
 import { BotResponse } from '../../client/types'
 import { Emotegame } from '../../games/emotegame'
-import { Command, CommandContext } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class EmotegameCommand implements Command {
   name = 'emotegame'
@@ -12,7 +12,7 @@ export class EmotegameCommand implements Command {
   optionalParams = ['type']
   alias = ['hangman', 'egame', 'bttvgame', 'ffzgame', '7tvgame']
   cooldown = 10000
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.LOWERCASE]
   async execute({
     channel,
     message: [action, type]

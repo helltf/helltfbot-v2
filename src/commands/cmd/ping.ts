@@ -1,8 +1,8 @@
-import { Command } from '../types'
+import { Command, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 export class PingCommand implements Command {
-  flags: string[] = []
+  flags: CommandFlag[] = [CommandFlag.WHISPER]
   name = 'ping'
   description = 'just a ping command'
   permissions = ChatPermissionLevel.USER
