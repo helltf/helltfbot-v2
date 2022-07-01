@@ -1,6 +1,6 @@
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-import { Command, CommandContext, CommandFlag, MessageType } from '../types'
+import { Command, CommandContext, CommandFlag } from '../types'
 
 export class AllowCommand implements Command {
   name = 'allow'

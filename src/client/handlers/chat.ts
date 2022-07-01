@@ -1,12 +1,7 @@
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { wait } from '@src/utilities/wait'
 import { ChatUserstate } from 'tmi.js'
-import {
-  Command,
-  CommandContext,
-  CommandFlag,
-  MessageType
-} from '../../commands/types'
+import { Command, CommandFlag, MessageType } from '../../commands/types'
 import { ChatContext, ResponseContext, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
@@ -54,8 +49,10 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
 
   if (!hasPrefix(message)) return
 
-  let [commandLookup, ...data] = getMessageInfo(message)
+  const [commandLookup, ...data] = getMessageInfo(message)
+  let contextMessage = data
   const command = hb.getCommand(commandLookup)
+
   if (!command) return
 
   user.permission = await hb.utils.permission.get(user)
@@ -73,14 +70,16 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
       type
     })
 
+  if (userHasCooldown(command, user)) return
+
   if (command.flags.includes(CommandFlag.LOWERCASE))
-    data = data.map(m => m.toLowerCase())
+    contextMessage = contextMessage.map(m => m.toLowerCase())
 
   setCooldown(command, user)
 
   const response = await command.execute({
     channel: where,
-    message: data,
+    message: contextMessage,
     type: type,
     user: user
   })
