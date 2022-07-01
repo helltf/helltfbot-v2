@@ -9,16 +9,22 @@ export interface Command {
   requiredParams: string[]
   optionalParams: string[]
   alias: string[]
+  flags: string[]
   cooldown: number
   methods?: {
     [key: string]: (...args: any) => Promise<any> | any
   }
-  execute: (context: Context) => Promise<BotResponse>
+  execute: (context: CommandContext) => Promise<BotResponse>
 }
 
-export interface Context {
+export interface CommandContext {
   user: TwitchUserState
   channel: string
   message: string[]
-  type?: 'message' | 'whisper'
+  type?: MessageType
+}
+
+export enum MessageType {
+  MESSAGE = 'message',
+  WHISPER = 'whisper'
 }
