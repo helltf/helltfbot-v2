@@ -1,6 +1,6 @@
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-import { Command, Context } from '../types'
+import { Command, CommandContext, MessageType } from '../types'
 
 export class AllowCommand implements Command {
   name = 'allow'
@@ -10,14 +10,13 @@ export class AllowCommand implements Command {
   optionalParams = ['channel']
   cooldown = 5000
   alias = []
+  flags: string[] = [MessageType.WHISPER]
 
   async execute({
-    channel,
     user,
     message: [updateChannel]
-  }: Context): Promise<BotResponse> {
+  }: CommandContext): Promise<BotResponse> {
     const errorResponse = {
-      channel: channel,
       response: 'You are not permitted to execute this command',
       success: false
     }

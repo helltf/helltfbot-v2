@@ -2,6 +2,7 @@ import { Command } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 export class PingCommand implements Command {
+  flags: string[] = []
   name = 'ping'
   description = 'just a ping command'
   permissions = ChatPermissionLevel.USER
@@ -37,16 +38,20 @@ export class PingCommand implements Command {
       return hb.utils.humanize(uptime)
     },
 
-    getMemory: (): string => this.methods.formatMemoryUsage(process.memoryUsage().heapUsed),
-    formatMemoryUsage: (data: number) => `${Math.floor(Math.round(data / 1024 / 1024 * 100) / 100)} MB`,
+    getMemory: (): string =>
+      this.methods.formatMemoryUsage(process.memoryUsage().heapUsed),
+    formatMemoryUsage: (data: number) =>
+      `${Math.floor(Math.round((data / 1024 / 1024) * 100) / 100)} MB`,
 
     getCommandsIssued: async (): Promise<number> => {
       return Number(
-        (await hb.db.commandRepo
-          .createQueryBuilder('commands')
-          .select('SUM(commands.counter)', 'sum')
-          .getRawOne())
-          ?.sum)
+        (
+          await hb.db.commandRepo
+            .createQueryBuilder('commands')
+            .select('SUM(commands.counter)', 'sum')
+            .getRawOne()
+        )?.sum
+      )
     },
 
     getChannels: async (): Promise<number> => {

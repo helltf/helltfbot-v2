@@ -1,9 +1,9 @@
 import { ChatPermissionLevel } from "@src/utilities/permission/types"
 import { UpdateResult } from "typeorm"
 import { BotResponse } from "../../client/types"
-import { UserNotificationType } from "../../modules/pubsub/types"
+import { UserNotificationType } from '../../modules/pubsub/types'
 import { NotificationService } from '../../service/notification.service'
-import { Command, Context } from '../types'
+import { Command, CommandContext } from '../types'
 
 export class RemoveCommand implements Command {
   name = 'remove'
@@ -13,11 +13,12 @@ export class RemoveCommand implements Command {
   optionalParams = []
   requiredParams = ['streamer', 'event']
   permissions = ChatPermissionLevel.USER
+  flags: string[] = []
   async execute({
     channel,
     user: { 'user-id': unparsedUserId },
     message: [streamer, event]
-  }: Context): Promise<BotResponse> {
+  }: CommandContext): Promise<BotResponse> {
     const userId = Number(unparsedUserId)
     const eventType = event as UserNotificationType
 

@@ -6,10 +6,11 @@ import {
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types'
-import { Command, Context } from '../types'
+import { Command, CommandContext } from '../types'
 
 export class NotifyCommand implements Command {
   name = 'notify'
+  flags: string[] = []
   description = 'create a notification for any event'
   permissions = ChatPermissionLevel.USER
   requiredParams = ['streamer', 'event']
@@ -20,7 +21,7 @@ export class NotifyCommand implements Command {
     channel,
     user,
     message: [streamer, event]
-  }: Context): Promise<BotResponse> {
+  }: CommandContext): Promise<BotResponse> {
     if (this.methods.eventIsNotValid(event))
       return this.methods.getUnknownEventErrorResponse()
 

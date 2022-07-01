@@ -1,4 +1,4 @@
-import { Command, Context } from '../types'
+import { Command, CommandContext } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
@@ -10,10 +10,11 @@ export class SuggestCommand implements Command {
   optionalParams = []
   cooldown = 30000
   alias = []
+  flags: string[] = []
   async execute({
     user,
     message: [...suggestion]
-  }: Context): Promise<BotResponse> {
+  }: CommandContext): Promise<BotResponse> {
     if (!suggestion[0])
       return {
         response: 'You have to specify a suggestion',

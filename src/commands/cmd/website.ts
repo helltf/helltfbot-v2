@@ -10,6 +10,7 @@ export class WebsiteCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = []
+  flags: string[] = []
   async execute(): Promise<BotResponse> {
     const response =
       `You can inspect my website on https://helltf.github.io/bot/#/ ` +

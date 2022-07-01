@@ -1,5 +1,5 @@
 import { BotResponse } from "@src/client/types";
-import { Command, Context } from "@src/commands/types";
+import { Command, CommandContext } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
 
 export class StatsCommand implements Command {
@@ -10,10 +10,11 @@ export class StatsCommand implements Command {
   optionalParams: string[] = ['user']
   alias: string[] = ['statistics']
   cooldown = 20000
+  flags: string[] = []
   execute = async ({
     message: [type, lookup],
     user
-  }: Context): Promise<BotResponse> => {
+  }: CommandContext): Promise<BotResponse> => {
     const username = lookup !== undefined ? lookup : user.username!
 
     if (!this.methods.isValidType(type))
