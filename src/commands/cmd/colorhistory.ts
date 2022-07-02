@@ -13,8 +13,12 @@ export class ColorHistoryCommand implements Command {
   alias = ['colors', 'history']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000
-  execute = async ({ user }: CommandContext): Promise<BotResponse> => {
-    const history = await this.methods.getColorHistory(user.username!)
+  execute = async ({
+    user,
+    message: [userParam]
+  }: CommandContext): Promise<BotResponse> => {
+    const username = userParam !== undefined ? userParam : user.username!
+    const history = await this.methods.getColorHistory(username)
 
     if (!history)
       return {
@@ -22,11 +26,14 @@ export class ColorHistoryCommand implements Command {
         response: 'no history found'
       }
 
+    const [begin, ...rest] = history.history
+
     return {
       success: true,
       response: [
-        `Your recent colors are ${history.history[0]}`,
-        `last change ${hb.utils.humanizeNow(history.lastChange)} ago`
+        `${username}s recent colors are ${begin}`,
+        ...rest,
+        `changed ${hb.utils.humanizeNow(history.lastChange)} ago`
       ]
     }
   }
@@ -34,7 +41,18 @@ export class ColorHistoryCommand implements Command {
     getColorHistory: async (
       username: string
     ): Promise<{ history: string[]; lastChange: number } | undefined> => {
-      return
+      const entity = await hb.db.colorRepo.findOneBy({
+        user: {
+          name: username
+        }
+      })
+
+      if (!entity) return
+
+      return {
+        history: entity.history,
+        lastChange: Number(entity.change_timestamp)
+      }
     }
   }
 }
