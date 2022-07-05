@@ -26,7 +26,9 @@ export class ColorHistoryCommand implements Command {
         response: 'no history found'
       }
 
-    const [begin, ...rest] = history.history
+    const {
+      history: [begin, ...rest]
+    } = history
 
     return {
       success: true,

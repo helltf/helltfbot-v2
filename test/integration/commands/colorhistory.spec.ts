@@ -6,10 +6,9 @@ import {
   getExampleTwitchUserEntity,
   getExampleTwitchUserState
 } from '@test-utils/example'
-import { saveUserStateAsUser } from '@test-utils/save-user'
 import { setupDatabase } from '@test-utils/setup-db'
 
-fdescribe('colorhistory command', () => {
+describe('colorhistory command', () => {
   let user: TwitchUserState
   let messageChannel: string
   let colorhistory: ColorHistoryCommand
