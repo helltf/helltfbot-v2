@@ -6,7 +6,7 @@ export class BanTracking implements Module {
     hb.client.on('ban', (channel: string, username: string) => {
       channel = channel.replace('#', '')
 
-      hb.db.banRepo.save({
+      hb.db.ban.save({
         at: Date.now(),
         channel: channel,
         user: username

@@ -37,7 +37,7 @@ export class SuggestCommand implements Command {
   methods = {
     async saveSuggestion(suggestion: string, user_id: number): Promise<number> {
       return (
-        await hb.db.suggestionRepo.save({
+        await hb.db.suggestion.save({
           date: Date.now(),
           suggestion,
           user: {

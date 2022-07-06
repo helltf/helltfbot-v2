@@ -8,7 +8,7 @@ export class TimeoutTracking implements Module {
       (channel: string, username: string, _, duration: number) => {
         channel = channel.replace('#', '')
 
-        hb.db.timeoutRepo.save({
+        hb.db.timeout.save({
           at: Date.now(),
           channel: channel,
           duration: duration,

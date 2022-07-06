@@ -38,7 +38,7 @@ export class PubSub {
   }
 
   connect = async () => {
-    const channels = await hb.db.notificationChannelRepo.find()
+    const channels = await hb.db.notificationChannel.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
     hb.log(LogType.PUBSUB, `Connecting to ${channels.length} topics ...`)
 
@@ -113,7 +113,7 @@ export class PubSub {
   async getStreamerForTopic(topic: string): Promise<string> {
     const id = this.getIdForTopic(topic)
 
-    return (await hb.db.notificationChannelRepo.findOneBy({
+    return (await hb.db.notificationChannel.findOneBy({
       id: parseInt(id)
     }))!.name
   }

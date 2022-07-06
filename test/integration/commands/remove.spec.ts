@@ -139,7 +139,7 @@ describe('test remove command', () => {
 
     await remove.execute({ channel: messageChannel, user, message })
 
-    const updatedEntity = await hb.db.notificationRepo.findOneBy({
+    const updatedEntity = await hb.db.notification.findOneBy({
       user: {
         id: notification.user.id
       },
@@ -171,7 +171,7 @@ describe('test remove command', () => {
           event
         )
 
-        const updatedEntity = await hb.db.notificationRepo.findOneBy({
+        const updatedEntity = await hb.db.notification.findOneBy({
           user: {
             id: notification.user.id
           },

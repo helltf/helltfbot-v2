@@ -61,7 +61,7 @@ describe('test rmsuggest command', () => {
   it('id is defined and existing in the database, delete the entry', async () => {
     await saveUserStateAsUser(user)
 
-    const savedEntity = await hb.db.suggestionRepo.save({
+    const savedEntity = await hb.db.suggestion.save({
       date: 1,
       user: {
         id: parseInt(user['user-id']!)
@@ -74,7 +74,7 @@ describe('test rmsuggest command', () => {
 
     const response = await rmsuggest.execute({ channel, user, message })
 
-    const entity = await hb.db.suggestionRepo.findOneBy({
+    const entity = await hb.db.suggestion.findOneBy({
       id: id
     })
 
@@ -90,7 +90,7 @@ describe('test rmsuggest command', () => {
     const message = [id]
     await saveUserStateAsUser(user)
 
-    const savedEntity = await hb.db.suggestionRepo.save({
+    const savedEntity = await hb.db.suggestion.save({
       date: 1,
       user: {
         id: parseInt(user['user-id']!)
@@ -102,7 +102,7 @@ describe('test rmsuggest command', () => {
 
     const response = await rmsuggest.execute({ channel, user, message })
 
-    const remainingEntity = await hb.db.suggestionRepo.findOneBy({
+    const remainingEntity = await hb.db.suggestion.findOneBy({
       id: savedEntity.id
     })
 
