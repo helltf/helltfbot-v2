@@ -30,6 +30,11 @@ export class Utility {
     return this.shortenTimeString(formatter.humanize(time, { round: true }))
   }
 
+  humanizeNow(time: number): string {
+    const difference = Date.now() - time
+    return this.humanize(difference)
+  }
+
   shortenTimeString(timeString: string) {
     return timeString
       .replace(/years?/, 'y')
