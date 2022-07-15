@@ -10,8 +10,7 @@ import { setupDatabase } from '@test-utils/setup-db'
 
 describe('stats command', () => {
   let stats: StatsCommand
-  const user = getExampleTwitchUserState({})
-  const channel = 'channel'
+
 
   beforeAll(async () => {
     await setupDatabase()
@@ -26,145 +25,231 @@ describe('stats command', () => {
     await clearDb(hb.db.dataSource)
   })
 
-  it('type is not given return error', async () => {
-    const message: string[] = []
+  describe('execute', () => {
+    const user = getExampleTwitchUserState({})
+    const channel = 'channel'
 
-    const { response, success } = await stats.execute({
-      channel,
-      user,
-      message
+    it('type is not given return error', async () => {
+      const message: string[] = []
+
+      const { response, success } = await stats.execute({
+        channel,
+        user,
+        message
+      })
+
+      expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
+      expect(success).toBeFalse()
     })
 
-    expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
-    expect(success).toBeFalse()
+    it('type is not existing return error', async () => {
+      const message = ['abc']
+
+      const { response, success } = await stats.execute({
+        channel,
+        user,
+        message
+      })
+
+      expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
+      expect(success).toBeFalse()
+    })
+
+    it('user has no stats return error', async () => {
+      const message = [StatsType.EMOTEGAME]
+
+      const { response, success } = await stats.execute({
+        channel,
+        user,
+        message
+      })
+
+      expect(response).toBe(`${user.username} has no stats recorded`)
+      expect(success).toBeFalse()
+    })
+
+    it('type is emotegame return stats for user', async () => {
+      const message = [StatsType.EMOTEGAME]
+      const letters = 1
+      const emotes = 1
+      const incorrect = 2
+
+      await saveUserStateAsUser(user)
+      await hb.db.emoteStats.save({
+        user: {
+          id: Number(user['user-id'])
+        },
+        emotes_guessed: emotes,
+        letters_guessed: letters,
+        incorrect_guesses: incorrect
+      })
+
+      const { response, success } = await stats.execute({
+        channel,
+        user,
+        message
+      })
+
+      const expectedResponse = [
+        `${user.username} guessed ${letters} letters`,
+        `${emotes} emotes`,
+        `${incorrect} times incorrect`,
+        `Position: 1`
+      ]
+
+      expect(response).toEqual(expectedResponse)
+      expect(success).toBeTrue()
+    })
+
+    it('user is given as param has no stats return error', async () => {
+      const lookupUser = 'lookup'
+      const message = [StatsType.EMOTEGAME, lookupUser]
+
+      const { response, success } = await stats.execute({
+        channel,
+        user,
+        message
+      })
+
+      expect(response).toBe(`${lookupUser} has no stats recorded`)
+      expect(success).toBeFalse()
+    })
+
+    it('user is given as param has no stats but other user has return error', async () => {
+      const lookupUser = 'lookup'
+      const message = [StatsType.EMOTEGAME, lookupUser]
+
+      await saveUserStateAsUser(user)
+      await hb.db.emoteStats.save({
+        user: {
+          id: Number(user['user-id'])
+        },
+        emotes_guessed: 1,
+        letters_guessed: 1,
+        incorrect_guesses: 1
+      })
+
+      const { response, success } = await stats.execute({
+        channel,
+        user,
+        message
+      })
+
+      expect(response).toBe(`${lookupUser} has no stats recorded`)
+      expect(success).toBeFalse()
+    })
+
+    it('user is given and has stats return stats', async () => {
+      const lookupUser = getExampleTwitchUserEntity({ name: 'lookup' })
+      const message = [StatsType.EMOTEGAME, lookupUser.name]
+      const letters_guessed = 1
+      const emotes_guessed = 1
+      const incorrect_guesses = 2
+
+      await hb.db.user.save(lookupUser)
+      await hb.db.emoteStats.save({
+        user: {
+          id: lookupUser.id
+        },
+        emotes_guessed,
+        incorrect_guesses,
+        letters_guessed
+      })
+
+      const { response, success } = await stats.execute({
+        channel,
+        user,
+        message
+      })
+
+      const expectedResponse = [
+        `${lookupUser.name} guessed ${letters_guessed} letters`,
+        `${emotes_guessed} emotes`,
+        `${incorrect_guesses} times incorrect`,
+        `Position: 1`
+      ]
+
+      expect(response).toEqual(expectedResponse)
+      expect(success).toBeTrue()
+    })
+
   })
 
-  it('type is not existing return error', async () => {
-    const message = ['abc']
 
-    const { response, success } = await stats.execute({
-      channel,
-      user,
-      message
+  describe('leaderboard position', () => {
+    let userEntity = getExampleTwitchUserEntity({})
+
+
+    beforeEach(async () => {
+      userEntity = getExampleTwitchUserEntity({})
+      await hb.db.user.save(userEntity)
+
     })
 
-    expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
-    expect(success).toBeFalse()
-  })
+    it('one entry has position of 1', async () => {
+      await hb.db.emoteStats.save({
+        emotes_guessed: 1,
+        incorrect_guesses: 2,
+        letters_guessed: 2,
+        user: userEntity,
+      })
 
-  it('user has no stats return error', async () => {
-    const message = [StatsType.EMOTEGAME]
+      const position = await stats.methods.getLeaderboardPosition(userEntity.name)
 
-    const { response, success } = await stats.execute({
-      channel,
-      user,
-      message
+      expect(position).toBe(1)
     })
 
-    expect(response).toBe(`${user.username} has no stats recorded`)
-    expect(success).toBeFalse()
-  })
+    it('user is on second place return position 2', async () => {
+      const guessedEmotes = 1
+      const letters_guessed = 0
+      const incorrect_guesses = 0
+      const user2 = getExampleTwitchUserEntity({
+        name: 'user2',
+        id: 2
+      })
 
-  it('type is emotegame return stats for user', async () => {
-    const message = [StatsType.EMOTEGAME]
-    const letters = 1
-    const emotes = 1
-    const incorrect = 2
+      await hb.db.user.save(user2)
 
-    await saveUserStateAsUser(user)
-    await hb.db.emoteStats.save({
-      user: {
-        id: Number(user['user-id'])
-      },
-      emotes_guessed: emotes,
-      letters_guessed: letters,
-      incorrect_guesses: incorrect
+      await hb.db.emoteStats.save({
+        emotes_guessed: 1,
+        incorrect_guesses,
+        letters_guessed,
+        user: userEntity,
+      })
+
+      await hb.db.emoteStats.save({
+        user: user2,
+        emotes_guessed: guessedEmotes + 1,
+        letters_guessed,
+        incorrect_guesses
+      })
     })
 
-    const { response, success } = await stats.execute({
-      channel,
-      user,
-      message
+    it('user is on second place return position 2', async () => {
+      const guessedEmotes = 1
+      const letters_guessed = 0
+      const incorrect_guesses = 0
+
+      const user2 = getExampleTwitchUserEntity({
+        name: 'user2',
+        id: 2
+      })
+
+      await hb.db.user.save(user2)
+
+      await hb.db.emoteStats.save({
+        emotes_guessed: 1,
+        incorrect_guesses,
+        letters_guessed,
+        user: user2,
+      })
+
+      await hb.db.emoteStats.save({
+        user: userEntity,
+        emotes_guessed: guessedEmotes + 1,
+        letters_guessed,
+        incorrect_guesses
+      })
     })
-
-    const expectedResponse = [
-      `${user.username} guessed ${letters} letters`,
-      `${emotes} emotes`,
-      `${incorrect} times incorrect`
-    ]
-
-    expect(response).toEqual(expectedResponse)
-    expect(success).toBeTrue()
-  })
-
-  it('user is given as param has no stats return error', async () => {
-    const lookupUser = 'lookup'
-    const message = [StatsType.EMOTEGAME, lookupUser]
-
-    const { response, success } = await stats.execute({
-      channel,
-      user,
-      message
-    })
-
-    expect(response).toBe(`${lookupUser} has no stats recorded`)
-    expect(success).toBeFalse()
-  })
-
-  it('user is given as param has no stats but other user has return error', async () => {
-    const lookupUser = 'lookup'
-    const message = [StatsType.EMOTEGAME, lookupUser]
-
-    await saveUserStateAsUser(user)
-    await hb.db.emoteStats.save({
-      user: {
-        id: Number(user['user-id'])
-      },
-      emotes_guessed: 1,
-      letters_guessed: 1,
-      incorrect_guesses: 1
-    })
-
-    const { response, success } = await stats.execute({
-      channel,
-      user,
-      message
-    })
-
-    expect(response).toBe(`${lookupUser} has no stats recorded`)
-    expect(success).toBeFalse()
-  })
-
-  it('user is given and has stats return stats', async () => {
-    const lookupUser = getExampleTwitchUserEntity({ name: 'lookup' })
-    const message = [StatsType.EMOTEGAME, lookupUser.name]
-    const letters_guessed = 1
-    const emotes_guessed = 1
-    const incorrect_guesses = 2
-
-    await hb.db.user.save(lookupUser)
-    await hb.db.emoteStats.save({
-      user: {
-        id: lookupUser.id
-      },
-      emotes_guessed,
-      incorrect_guesses,
-      letters_guessed
-    })
-
-    const { response, success } = await stats.execute({
-      channel,
-      user,
-      message
-    })
-
-    const expectedResponse = [
-      `${lookupUser.name} guessed ${letters_guessed} letters`,
-      `${emotes_guessed} emotes`,
-      `${incorrect_guesses} times incorrect`
-    ]
-
-    expect(response).toEqual(expectedResponse)
-    expect(success).toBeTrue()
   })
 })
