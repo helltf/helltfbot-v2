@@ -31,16 +31,23 @@ export class SetLevelCommand implements Command {
                 response: 'level is missing or not existing',
                 success: false
             }
-        await this.methods.updateRole(GlobalPermissionLevel[])
+        const success = await this.methods.updateRole(providedUser, GlobalPermissionLevel[level as keyof typeof GlobalPermissionLevel])
 
         return {
-            response: '',
-            success: false
+            response: success ? 'Succesfully updated permissions' : 'User not found',
+            success: success
         }
     }
-    methods: {
-        updateRole: (level: GlobalPermissionLevel) => {
-
+    methods = {
+        updateRole: async (username: string, level: GlobalPermissionLevel): Promise<boolean> => {
+            const result = await hb.db.user.update(
+                {
+                    name: username
+                },
+                {
+                    permission: level
+                })
+            return result.affected !== 0
         }
     }
 }
