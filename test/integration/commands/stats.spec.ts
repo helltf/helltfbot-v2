@@ -8,7 +8,7 @@ import {
 import { saveUserStateAsUser } from '@test-utils/save-user'
 import { setupDatabase } from '@test-utils/setup-db'
 
-fdescribe('stats command', () => {
+describe('stats command', () => {
   let stats: StatsCommand
 
 
