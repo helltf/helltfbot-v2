@@ -4,7 +4,6 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  AfterUpdate
 } from 'typeorm'
 import { TwitchUserEntity } from './user.entity'
 
