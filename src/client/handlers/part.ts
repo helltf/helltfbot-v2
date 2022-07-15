@@ -1,5 +1,5 @@
 function handlePart(channel: string) {
-  hb.db.channelRepo.update(
+  hb.db.channel.update(
     {
       channel: channel
     },

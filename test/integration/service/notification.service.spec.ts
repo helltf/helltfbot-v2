@@ -77,7 +77,7 @@ describe('test notification service', () => {
     const id = 1
     spyOn(hb.pubSub, 'unlistenStreamerTopic')
 
-    await hb.db.notificationChannelRepo.save({
+    await hb.db.notificationChannel.save({
       setting: true,
       status: true,
       name: 'exampleStreamer',
@@ -86,7 +86,7 @@ describe('test notification service', () => {
 
     await service.clean(id, event)
 
-    const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+    const updatedEntity = await hb.db.notificationChannel.findOneBy({
       id: id
     })
 
@@ -99,7 +99,7 @@ describe('test notification service', () => {
     const id = 1
     spyOn(hb.pubSub, 'unlistenStreamerTopic')
 
-    await hb.db.notificationChannelRepo.save({
+    await hb.db.notificationChannel.save({
       setting: true,
       status: true,
       name: 'streamer',
@@ -108,7 +108,7 @@ describe('test notification service', () => {
 
     await service.clean(id, event)
 
-    const updatedEntity = await hb.db.notificationChannelRepo.findOneBy({
+    const updatedEntity = await hb.db.notificationChannel.findOneBy({
       id: id
     })
 

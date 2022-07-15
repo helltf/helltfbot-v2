@@ -67,7 +67,7 @@ export class LeaveCommand implements Command {
     },
 
     async updateChannelProperty(channel: string) {
-      await hb.db.channelRepo.update(
+      await hb.db.channel.update(
         {
           channel: channel
         },
@@ -79,7 +79,7 @@ export class LeaveCommand implements Command {
 
     async isNotConnectedToChannel(channel: string): Promise<boolean> {
       return (
-        (await hb.db.channelRepo.countBy({
+        (await hb.db.channel.countBy({
           channel: channel,
           joined: true
         })) === 0

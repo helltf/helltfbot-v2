@@ -56,7 +56,7 @@ export class JoinCommand implements Command {
 
   methods = {
     isAlreadyConnected: async (channel: string): Promise<number> => {
-      return hb.db.channelRepo.countBy({
+      return hb.db.channel.countBy({
         joined: true,
         channel: channel
       })
@@ -83,12 +83,12 @@ export class JoinCommand implements Command {
     },
 
     updateChannelInDb: async (channel: string) => {
-      const channelExsisting = await hb.db.channelRepo.countBy({
+      const channelExsisting = await hb.db.channel.countBy({
         channel: channel
       })
 
       if (channelExsisting) {
-        return await hb.db.channelRepo.update(
+        return await hb.db.channel.update(
           {
             channel: channel
           },
@@ -97,7 +97,7 @@ export class JoinCommand implements Command {
           }
         )
       }
-      return await hb.db.channelRepo.save({
+      return await hb.db.channel.save({
         channel: channel,
         allowed: true,
         allowed_live: true,

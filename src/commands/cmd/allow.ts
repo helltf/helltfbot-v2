@@ -43,7 +43,7 @@ export class AllowCommand implements Command {
   methods = {
     updateChannelAllowSettings: async (channel: string): Promise<boolean> => {
       if (!(await this.methods.IsChannelExisting(channel))) return false
-      await hb.db.channelRepo.update(
+      await hb.db.channel.update(
         {
           channel: channel
         },
@@ -56,7 +56,7 @@ export class AllowCommand implements Command {
 
     IsChannelExisting: async (channel: string): Promise<boolean> => {
       return (
-        (await hb.db.channelRepo.countBy({
+        (await hb.db.channel.countBy({
           channel: channel
         })) !== 0
       )

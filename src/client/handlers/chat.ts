@@ -141,7 +141,7 @@ function userHasCooldown(
 }
 
 async function incrementCommandCounter(command: Command) {
-  await hb.db.commandRepo.increment(
+  await hb.db.command.increment(
     {
       name: command.name
     },

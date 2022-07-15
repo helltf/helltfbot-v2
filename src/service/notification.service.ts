@@ -5,7 +5,7 @@ export class NotificationService {
   async cleanAllNotifications() {
     let notificationChannels: NotificationChannelEntity[] = []
     try {
-      notificationChannels = await hb.db.notificationChannelRepo.find()
+      notificationChannels = await hb.db.notificationChannel.find()
     } catch (e) {
       console.log(e)
     }
@@ -27,7 +27,7 @@ export class NotificationService {
   }
 
   async clean(id: number, event: NotifyEventType) {
-    await hb.db.notificationChannelRepo.update(
+    await hb.db.notificationChannel.update(
       {
         id: id
       },
@@ -69,7 +69,7 @@ export class NotificationService {
 
     return (
       (
-        await hb.db.notificationRepo.find({
+        await hb.db.notification.find({
           where: queryParams
         })
       ).length !== 0

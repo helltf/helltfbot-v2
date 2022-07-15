@@ -23,7 +23,7 @@ export class Permission {
   async getDbPermissions(id: number): Promise<GlobalPermissionLevel> {
     return (
       (
-        await hb.db.userRepo.findOneBy({
+        await hb.db.user.findOneBy({
           id: id
         })
       )?.permission ?? GlobalPermissionLevel.USER
@@ -44,6 +44,5 @@ export class Permission {
       return ChatPermissionLevel[level].toLowerCase()
     if (GlobalPermissionLevel[level])
       return GlobalPermissionLevel[level].toLowerCase()
-
   }
 }

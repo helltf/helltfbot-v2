@@ -43,7 +43,7 @@ export class ColorHistoryCommand implements Command {
     getColorHistory: async (
       username: string
     ): Promise<{ history: string[]; lastChange: number } | undefined> => {
-      const entity = await hb.db.colorRepo.findOneBy({
+      const entity = await hb.db.color.findOneBy({
         user: {
           name: username
         }

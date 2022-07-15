@@ -69,7 +69,7 @@ describe('test leave command', () => {
       channel: leaveChannel
     })
 
-    await hb.db.channelRepo.save(channelEntity)
+    await hb.db.channel.save(channelEntity)
 
     const { response, success } = await leave.execute({
       channel: messageChannel,
@@ -110,7 +110,7 @@ describe('test leave command', () => {
     const message = [channelToLeave]
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         joined: true,
         channel: channelToLeave
@@ -132,7 +132,7 @@ describe('test leave command', () => {
     const message = [channelToLeave]
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         joined: true,
         channel: channelToLeave
@@ -141,7 +141,7 @@ describe('test leave command', () => {
 
     await leave.execute({ channel: messageChannel, user, message })
 
-    const savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channel.findOneBy({
       channel: channelToLeave
     })
 
@@ -151,7 +151,7 @@ describe('test leave command', () => {
   it('update channel property sets joined to false', async () => {
     const channelToLeave = 'leaveChannel'
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         joined: true,
         channel: channelToLeave
@@ -160,7 +160,7 @@ describe('test leave command', () => {
 
     await leave.methods.updateChannelProperty(channelToLeave)
 
-    const savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channel.findOneBy({
       channel: channelToLeave
     })
 
@@ -171,14 +171,14 @@ describe('test leave command', () => {
     const channelToLeave = 'leaveChannel'
     const otherChannel = 'otherChannel'
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         joined: true,
         channel: channelToLeave
       })
     )
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         joined: true,
         channel: otherChannel
@@ -187,11 +187,11 @@ describe('test leave command', () => {
 
     await leave.methods.updateChannelProperty(channelToLeave)
 
-    const updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channel.findOneBy({
       channel: channelToLeave
     })
 
-    const otherEntity = await hb.db.channelRepo.findOneBy({
+    const otherEntity = await hb.db.channel.findOneBy({
       channel: otherChannel
     })
 
@@ -205,7 +205,7 @@ describe('test leave command', () => {
 
     spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         joined: true,
         channel: user.username
@@ -214,7 +214,7 @@ describe('test leave command', () => {
 
     await leave.execute({ channel: messageChannel, user, message })
 
-    const updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channel.findOneBy({
       channel: user.username
     })
     expect(updatedEntity!.joined).toBeFalsy()
@@ -226,7 +226,11 @@ describe('test leave command', () => {
 
     const message = [channelToLeave]
     user.permission = ChatPermissionLevel.USER
-    const response = await leave.execute({ channel: messageChannel, user, message })
+    const response = await leave.execute({
+      channel: messageChannel,
+      user,
+      message
+    })
 
     expect(response.success).toBeFalse()
     expect(response.response).toBe(

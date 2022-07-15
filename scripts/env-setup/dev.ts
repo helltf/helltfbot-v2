@@ -15,7 +15,7 @@ async function permitMainUser(user: string) {
 
   if (!user_id) return
 
-  await hb.db.userRepo.save({
+  await hb.db.user.save({
     color: '',
     display_name: user,
     id: Number(user_id),
@@ -29,13 +29,13 @@ async function permitMainUser(user: string) {
 }
 
 const addMainUserChannel = async (user: string) => {
-  const existing = await hb.db.channelRepo.findOneBy({
+  const existing = await hb.db.channel.findOneBy({
     channel: user
   })
 
   if (existing) return
 
-  await hb.db.channelRepo.save({
+  await hb.db.channel.save({
     allowed: true,
     allowed_live: true,
     channel: user,

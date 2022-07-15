@@ -121,7 +121,7 @@ describe('join command tests', () => {
 
     await join.execute({ channel, user, message })
 
-    const savedChannel = await hb.db.channelRepo.findOneBy({
+    const savedChannel = await hb.db.channel.findOneBy({
       channel: joinChannel
     })
 
@@ -148,7 +148,7 @@ describe('join command tests', () => {
     const channelToJoin = 'joinChannel'
     spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         joined: false,
         channel: channelToJoin
@@ -157,7 +157,7 @@ describe('join command tests', () => {
 
     await join.execute({ channel, user, message: [channelToJoin] })
 
-    const updatedEntity = await hb.db.channelRepo.findOneBy({
+    const updatedEntity = await hb.db.channel.findOneBy({
       channel: channelToJoin
     })
 
@@ -171,7 +171,7 @@ describe('join command tests', () => {
 
     await join.execute({ channel, user, message })
 
-    const savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channel.findOneBy({
       channel: user.username
     })
 
@@ -183,7 +183,7 @@ describe('join command tests', () => {
     const message = [channelToJoin]
     spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
 
-    await hb.db.channelRepo.save(
+    await hb.db.channel.save(
       getExampleChannel({
         channel: user.username,
         joined: false
@@ -192,7 +192,7 @@ describe('join command tests', () => {
 
     await join.execute({ channel, user, message })
 
-    const savedEntity = await hb.db.channelRepo.findOneBy({
+    const savedEntity = await hb.db.channel.findOneBy({
       channel: user.username
     })
 
@@ -214,7 +214,7 @@ describe('join command tests', () => {
   describe('save channel function', () => {
     it('saves new channel if not existing', async () => {
       await join.methods.updateChannelInDb(channel)
-      const savedEntitiesLength = await hb.db.channelRepo.count()
+      const savedEntitiesLength = await hb.db.channel.count()
 
       expect(savedEntitiesLength).toBe(1)
     })
@@ -222,7 +222,7 @@ describe('join command tests', () => {
     it('updates new channel if not existing', async () => {
       await join.methods.updateChannelInDb(channel)
 
-      const savedEntitiy = await hb.db.channelRepo.findOneBy({
+      const savedEntitiy = await hb.db.channel.findOneBy({
         channel: channel
       })
 
@@ -232,7 +232,7 @@ describe('join command tests', () => {
 })
 
 async function saveExampleChannel(channelName: string) {
-  await hb.db.channelRepo.save({
+  await hb.db.channel.save({
     allowed: true,
     allowed_live: true,
     channel: channelName,

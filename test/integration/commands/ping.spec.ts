@@ -1,8 +1,8 @@
 import { PingCommand } from "@commands/cmd/ping"
 import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from "@test-utils/disconnect"
-import { getExampleChannel, getExampleCommand } from "@test-utils/example"
-import { setupDatabase } from "@test-utils/setup-db"
+import { getExampleChannel, getExampleCommand } from '@test-utils/example'
+import { setupDatabase } from '@test-utils/setup-db'
 
 describe('test ping command', () => {
   let ping: PingCommand
@@ -52,10 +52,9 @@ describe('test ping command', () => {
     const commands = ['cmd1', 'cmd2']
 
     for await (const cmd of commands) {
-      await hb.db.commandRepo.save({
+      await hb.db.command.save({
         ...getExampleCommand({
-          name: cmd,
-
+          name: cmd
         }),
         counter: counter
       })
@@ -74,8 +73,8 @@ describe('test ping command', () => {
       channel: 'channel2'
     })
 
-    await hb.db.channelRepo.save(channel1)
-    await hb.db.channelRepo.save(channel2)
+    await hb.db.channel.save(channel1)
+    await hb.db.channel.save(channel2)
 
     const amount = await ping.methods.getChannels()
 

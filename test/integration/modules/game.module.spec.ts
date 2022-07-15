@@ -2,12 +2,16 @@ import { EmoteStatsEntity } from "@db/entities"
 import { Emotegame } from "@games/emotegame"
 import { EmoteGameInputResult } from "@games/types"
 import { GameModule } from "@modules/game.module"
-import { GameService } from "@src/service/game.service"
-import { clearDb } from "@test-utils/clear"
-import { disconnectDatabase } from "@test-utils/disconnect"
-import { saveUserStateAsUser } from "@test-utils/save-user"
-import { setupDatabase } from "@test-utils/setup-db"
-import { getExampleEmoteStatsEntity, getExampleTwitchUserEntity, getExampleTwitchUserState } from '../../test-utils/example'
+import { GameService } from '@src/service/game.service'
+import { clearDb } from '@test-utils/clear'
+import { disconnectDatabase } from '@test-utils/disconnect'
+import { saveUserStateAsUser } from '@test-utils/save-user'
+import { setupDatabase } from '@test-utils/setup-db'
+import {
+  getExampleEmoteStatsEntity,
+  getExampleTwitchUserEntity,
+  getExampleTwitchUserState
+} from '../../test-utils/example'
 
 describe('test game module', () => {
   let module: GameModule
@@ -64,8 +68,9 @@ describe('test game module', () => {
 
       await module.input(channel, user, message)
 
-      const expectedMesage = `${user.username
-        } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
+      const expectedMesage = `${
+        user.username
+      } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
 
       expect(hb.sendMessage).toHaveBeenCalledWith(channel, expectedMesage)
     })
@@ -83,20 +88,19 @@ describe('test game module', () => {
 
       expect(hb.games.eg).toHaveSize(0)
     })
-
   })
 
   describe('save functions', () => {
     results.forEach(([result, value]) => {
       it(`user is new save ${EmoteGameInputResult[result]} result to database`, async () => {
         const user = getExampleTwitchUserState({})
-        const userId = Number(user["user-id"])
+        const userId = Number(user['user-id'])
 
         await saveUserStateAsUser(user)
 
         await module.saveEmotegameEventStats(userId, result)
 
-        const savedEntity = await hb.db.emoteStatsRepo.findOneBy({
+        const savedEntity = await hb.db.emoteStats.findOneBy({
           user: {
             id: userId
           }
@@ -113,13 +117,13 @@ describe('test game module', () => {
           user: user
         })
 
-        await hb.db.userRepo.save(user)
+        await hb.db.user.save(user)
 
-        await hb.db.emoteStatsRepo.save(emotegameStats)
+        await hb.db.emoteStats.save(emotegameStats)
 
         await module.saveEmotegameEventStats(user.id, result)
 
-        const savedEntity = await hb.db.emoteStatsRepo.findOneBy({
+        const savedEntity = await hb.db.emoteStats.findOneBy({
           user: {
             id: user.id
           }
