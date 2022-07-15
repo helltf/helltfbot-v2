@@ -38,7 +38,7 @@ export class StatsCommand implements Command {
     },
 
     getEmotegameStats: async (username: string): Promise<BotResponse> => {
-      const stats = await hb.db.emoteStatsRepo.findOneBy({
+      const stats = await hb.db.emoteStats.findOneBy({
         user: {
           name: username
         }

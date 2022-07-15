@@ -65,7 +65,7 @@ export class RemoveCommand implements Command {
       streamer: string,
       event: UserNotificationType
     ): Promise<UpdateResult> {
-      return await hb.db.notificationRepo.update(
+      return await hb.db.notification.update(
         {
           user: {
             id: userId

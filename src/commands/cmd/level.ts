@@ -34,7 +34,7 @@ export class LevelCommand implements Command {
   methods = {
     getDatabasePermissions: async (id: number): Promise<number> => {
       const permissions = (
-        await hb.db.userRepo.findOneBy({
+        await hb.db.user.findOneBy({
           id: id
         })
       )?.permission

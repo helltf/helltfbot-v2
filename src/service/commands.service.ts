@@ -45,11 +45,11 @@ export class CommandService {
   }
 
   async updateDeletedCommands() {
-    const commandNames = await hb.db.commandRepo.find()
+    const commandNames = await hb.db.command.find()
 
     for await (const { name } of commandNames) {
       if (!this.findCommand(name)) {
-        await hb.db.commandRepo.update(
+        await hb.db.command.update(
           {
             name: name
           },
@@ -63,7 +63,7 @@ export class CommandService {
 
   async addCommandsToDb() {
     for await (const command of this.getAll()) {
-      await hb.db.commandRepo.save({
+      await hb.db.command.save({
         ...command,
         deleted: false
       })

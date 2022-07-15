@@ -121,8 +121,8 @@ describe('colorhistory command', () => {
       const history = ['abc']
       const change = Date.now()
 
-      await hb.db.userRepo.save(userEntity)
-      await hb.db.colorRepo.save({
+      await hb.db.user.save(userEntity)
+      await hb.db.color.save({
         change_timestamp: change,
         history: history,
         register_timestamp: Date.now(),

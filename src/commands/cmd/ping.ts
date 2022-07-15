@@ -46,7 +46,7 @@ export class PingCommand implements Command {
     getCommandsIssued: async (): Promise<number> => {
       return Number(
         (
-          await hb.db.commandRepo
+          await hb.db.command
             .createQueryBuilder('commands')
             .select('SUM(commands.counter)', 'sum')
             .getRawOne()
@@ -55,7 +55,7 @@ export class PingCommand implements Command {
     },
 
     getChannels: async (): Promise<number> => {
-      return hb.db.channelRepo.countBy({
+      return hb.db.channel.countBy({
         joined: true
       })
     },
