@@ -37,12 +37,28 @@ export class StatsCommand implements Command {
       return hb.utils.enumContains(StatsType, type)
     },
 
+    async getLeaderboardPosition(username: string): Promise<number> {
+      const userStats = await hb.db.emoteStats.find({
+        order: { emotes_guessed: "DESC" },
+        relations: {
+          user: true
+        }
+      })
+
+
+      return userStats?.findIndex((v => v.user.name === username)) + 1
+    },
+
     getEmotegameStats: async (username: string): Promise<BotResponse> => {
-      const stats = await hb.db.emoteStats.findOneBy({
+      const statsPromise = await hb.db.emoteStats.findOneBy({
         user: {
           name: username
         }
       })
+
+      const [stats, position] = await Promise.all(
+        [statsPromise,
+          this.methods.getLeaderboardPosition(username)])
 
       if (!stats)
         return {
@@ -50,13 +66,16 @@ export class StatsCommand implements Command {
           response: `${username} has no stats recorded`
         }
 
+      console.log(position)
+
       const { emotes_guessed, incorrect_guesses, letters_guessed } = stats
 
       return {
         response: [
           `${username} guessed ${letters_guessed} letters`,
           `${emotes_guessed} emotes`,
-          `${incorrect_guesses} times incorrect`
+          `${incorrect_guesses} times incorrect`,
+          `Position: ${position}`
         ],
         success: true
       }
