@@ -66,8 +66,6 @@ export class StatsCommand implements Command {
           response: `${username} has no stats recorded`
         }
 
-      console.log(position)
-
       const { emotes_guessed, incorrect_guesses, letters_guessed } = stats
 
       return {

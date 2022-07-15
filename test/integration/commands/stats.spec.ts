@@ -198,5 +198,58 @@ fdescribe('stats command', () => {
 
       expect(position).toBe(1)
     })
+
+    it('user is on second place return position 2', async () => {
+      const guessedEmotes = 1
+      const letters_guessed = 0
+      const incorrect_guesses = 0
+      const user2 = getExampleTwitchUserEntity({
+        name: 'user2',
+        id: 2
+      })
+
+      await hb.db.user.save(user2)
+
+      await hb.db.emoteStats.save({
+        emotes_guessed: 1,
+        incorrect_guesses,
+        letters_guessed,
+        user: userEntity,
+      })
+
+      await hb.db.emoteStats.save({
+        user: user2,
+        emotes_guessed: guessedEmotes + 1,
+        letters_guessed,
+        incorrect_guesses
+      })
+    })
+
+    it('user is on second place return position 2', async () => {
+      const guessedEmotes = 1
+      const letters_guessed = 0
+      const incorrect_guesses = 0
+
+      const user2 = getExampleTwitchUserEntity({
+        name: 'user2',
+        id: 2
+      })
+
+      await hb.db.user.save(user2)
+
+      await hb.db.emoteStats.save({
+        emotes_guessed: 1,
+        incorrect_guesses,
+        letters_guessed,
+        user: user2,
+      })
+
+      await hb.db.emoteStats.save({
+        user: userEntity,
+        emotes_guessed: guessedEmotes + 1,
+        letters_guessed,
+        incorrect_guesses
+      })
+    })
   })
 })
