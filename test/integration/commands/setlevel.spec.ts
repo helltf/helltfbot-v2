@@ -6,7 +6,7 @@ import { getExampleTwitchUserEntity, getExampleTwitchUserState } from "@test-uti
 import { setup } from "@test-utils/setup"
 import { setupDatabase } from "@test-utils/setup-db"
 
-fdescribe('setlevel command', () => {
+describe('setlevel command', () => {
     let setlevel: SetLevelCommand
     setup()
     beforeAll(async () => {
