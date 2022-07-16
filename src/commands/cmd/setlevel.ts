@@ -12,7 +12,8 @@ export class SetLevelCommand implements Command {
     alias = ['setlvl']
     flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE];
     cooldown = 5000
-    execute = async ({ user, message: [providedUser, level] }: CommandContext): Promise<BotResponse> => {
+    execute = async ({ user, message: [providedUser, providedLevel] }: CommandContext): Promise<BotResponse> => {
+        const level = providedLevel?.toUpperCase() as keyof typeof GlobalPermissionLevel
 
         if (!providedUser)
             return {
@@ -26,12 +27,12 @@ export class SetLevelCommand implements Command {
             }
         }
 
-        if (!level || !(level.toUpperCase() in GlobalPermissionLevel))
+        if (!level || !(level in GlobalPermissionLevel))
             return {
                 response: 'level is missing or not existing',
                 success: false
             }
-        const success = await this.methods.updateRole(providedUser, GlobalPermissionLevel[level as keyof typeof GlobalPermissionLevel])
+        const success = await this.methods.updateRole(providedUser, GlobalPermissionLevel[level])
 
         return {
             response: success ? 'Succesfully updated permissions' : 'User not found',

@@ -1,12 +1,14 @@
 import { SetLevelCommand } from "@src/commands/cmd/setlevel"
+import { GlobalPermissionLevel } from "@src/utilities/permission/types"
 import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from "@test-utils/disconnect"
-import { getExampleTwitchUserState } from "@test-utils/example"
+import { getExampleTwitchUserEntity, getExampleTwitchUserState } from "@test-utils/example"
+import { setup } from "@test-utils/setup"
 import { setupDatabase } from "@test-utils/setup-db"
 
 fdescribe('setlevel command', () => {
     let setlevel: SetLevelCommand
-
+    setup()
     beforeAll(async () => {
         await setupDatabase()
     })
@@ -76,7 +78,7 @@ fdescribe('setlevel command', () => {
 
 
         it('user is not existing return error', async () => {
-            const message = ['not existing']
+            const message = ['not existing', 'dev']
 
             const { response, success } = await setlevel.execute({
                 channel,
@@ -85,7 +87,33 @@ fdescribe('setlevel command', () => {
             })
 
             expect(success).toBeFalse()
-            expect(response).toBe('User does not exist')
+            expect(response).toBe('User not found')
+        })
+    })
+
+    describe('methods', () => {
+        const globalPermissions = hb.utils.getEnumValues(GlobalPermissionLevel)
+        const user = getExampleTwitchUserEntity({})
+
+        globalPermissions.forEach(perm => {
+            it(`update role updates user for ${perm} and return success`, async () => {
+                await hb.db.user.save(user)
+
+                const success = await setlevel.methods.updateRole(user.name, perm)
+
+                const updatedEntity = await hb.db.user.findOneBy({
+                    name: user.name
+                })!
+
+                expect(success).toBeTrue()
+                expect(updatedEntity?.permission).toBe(perm)
+            })
+        })
+
+        it('user does not exist return false', async () => {
+            const successs = await setlevel.methods.updateRole('user', GlobalPermissionLevel.ADMIN)
+
+            expect(successs).toBeFalse()
         })
     })
 })
