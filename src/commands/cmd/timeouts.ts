@@ -23,6 +23,11 @@ export class TimeoutsCommand implements Command {
         getTimeouts: async (username: string, channel?: string): Promise<BotResponse> => {
             if (channel)
                 return await this.methods.getTimeoutForChannel(username, channel)
+
+            return this.methods.getTimeout(username)
+        },
+
+        getTimeout: async (username: string): Promise<BotResponse> => {
             return this.methods.getNotFoundResponse()
         },
 

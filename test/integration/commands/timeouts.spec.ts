@@ -60,6 +60,36 @@ describe('test suggest command', () => {
             expect(success).toBeTrue()
             expect(response).toEqual(expectedResponse)
         })
+
+
+        it('no params message user has two bans in channel', async () => {
+            const currentTime = Date.now()
+            const times = 2
+
+            await hb.db.ban.save({
+                at: currentTime,
+                channel: channel,
+                user: messageUser.username
+            })
+
+            await hb.db.ban.save({
+                at: currentTime - 5000,
+                channel: channel,
+                user: messageUser.username
+            })
+
+            const { response, success } = await timeouts.execute({
+
+                channel: channel,
+                message: [],
+                user: messageUser
+            })
+            const expectedResponse = [
+                `${messageUser.username} has been timeouted ${times} times in channel ${channel}`,
+                `Last ban: ${hb.utils.humanizeNow(currentTime)} ago`]
+            expect(success).toBeTrue()
+            expect(response).toEqual(expectedResponse)
+        })
     })
 })
 
