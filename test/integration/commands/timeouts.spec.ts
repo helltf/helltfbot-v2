@@ -25,7 +25,7 @@ describe('test suggest command', () => {
         await disconnectDatabase()
     })
 
-    describe('execute', () => {
+    fdescribe('execute', () => {
         it('no param given return no bans because user has no bans', async () => {
             const { response, success } = await timeouts.execute({
 
@@ -35,20 +35,36 @@ describe('test suggest command', () => {
             })
 
             expect(success).toBeTrue()
-            expect(response).toBe('No bans found')
+            expect(response).toBe('No timeout found')
         })
 
         it('no params message user has ban in channel', async () => {
+            const currentTime = Date.now()
+            const times = 1
+
+            await hb.db.ban.save({
+                at: currentTime,
+                channel: channel,
+                user: messageUser.username
+            })
+
             const { response, success } = await timeouts.execute({
 
                 channel: channel,
                 message: [],
                 user: messageUser
             })
-
-            const expectedResponse = [`${messageUser.username} `]
+            const expectedResponse = [
+                `${messageUser.username} has been timeouted ${times} times in channel ${channel}`,
+                `Last ban: ${hb.utils.humanizeNow(currentTime)} ago`]
             expect(success).toBeTrue()
-            expect(response).toBe(expectedResponse)
+            expect(response).toEqual(expectedResponse)
         })
     })
 })
+
+// const expectedResponse = [
+    //     `${messageUser.username} has been timeouted ${times}`,
+    //     `${channels} different channels`,
+    //     `last timeout ${time_ago} ago in ${last_channel}`
+    // ]

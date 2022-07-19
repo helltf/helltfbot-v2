@@ -38,7 +38,7 @@ const commands: Command[] = [
   new StatsCommand(),
   new EvalCommand(),
   new ColorHistoryCommand(),
-  new SetLevelCommand()
+  new SetLevelCommand(),
   new TimeoutsCommand()
 ]
 
