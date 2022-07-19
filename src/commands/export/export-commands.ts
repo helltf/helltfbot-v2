@@ -18,6 +18,7 @@ import { StatsCommand } from '@src/commands/cmd/stats'
 import { EvalCommand } from '@src/commands/cmd/eval'
 import { ColorHistoryCommand } from '@src/commands/cmd/colorhistory'
 import { SetLevelCommand } from "@src/commands/cmd/setlevel"
+import { TimeoutsCommand } from "@src/commands/cmd/timeouts"
 
 const commands: Command[] = [
   new PingCommand(),
@@ -38,6 +39,7 @@ const commands: Command[] = [
   new EvalCommand(),
   new ColorHistoryCommand(),
   new SetLevelCommand()
+  new TimeoutsCommand()
 ]
 
 export default commands
