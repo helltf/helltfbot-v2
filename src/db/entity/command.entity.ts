@@ -16,10 +16,10 @@ export class CommandEntity extends BaseEntity {
   @Column('varchar')
   description: string
 
-  @Column('varchar', { array: true })
+  @Column('text', { array: true })
   requiredParams?: string[]
 
-  @Column('varchar', { array: true })
+  @Column('text', { array: true })
   optionalParams?: string[]
 
   @Column('int')
