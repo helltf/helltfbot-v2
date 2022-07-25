@@ -5,6 +5,8 @@ import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from "@test-utils/disconnect"
 import { getExampleTwitchUserEntity, getExampleTwitchUserState } from "@test-utils/example"
 import { setupDatabase } from "@test-utils/setup-db"
+import { time } from "console"
+import { hkdf } from "crypto"
 
 describe('test suggest command', () => {
     let messageUser: TwitchUserState
@@ -79,22 +81,48 @@ describe('test suggest command', () => {
             })
 
             const { response, success } = await timeouts.execute({
-
                 channel: channel,
                 message: [],
                 user: messageUser
             })
+
             const expectedResponse = [
                 `${messageUser.username} has been timeouted ${times} times in channel ${channel}`,
                 `Last ban: ${hb.utils.humanizeNow(currentTime)} ago`]
+
             expect(success).toBeTrue()
             expect(response).toEqual(expectedResponse)
+        })
+
+        it('user is given return overall bans for user', async () => {
+            const username = 'givenUser'
+            const timeoutChannel = 'timeoutChannel'
+            const channels = 1
+            const amount = 1
+            const currentTime = Date.now()
+            const time_ago = hb.utils.humanizeNow(currentTime)
+
+            await hb.db.ban.save({
+                at: currentTime,
+                channel: timeoutChannel,
+                user: username
+            })
+
+            const { response, success } = await timeouts.execute({
+                user: messageUser,
+                channel: channel,
+                message: [username]
+            })
+
+            const expectedResponse = [
+                `${username} has been timeouted ${amount}`,
+                `${channels} different channels`,
+                `last timeout ${time_ago} ago in ${timeoutChannel}`
+            ]
+
+            expect(response).toEqual(expectedResponse)
+            expect(success).toBeTrue()
         })
     })
 })
 
-// const expectedResponse = [
-    //     `${messageUser.username} has been timeouted ${times}`,
-    //     `${channels} different channels`,
-    //     `last timeout ${time_ago} ago in ${last_channel}`
-    // ]

@@ -1,6 +1,7 @@
 import { BotResponse } from "@src/client/types";
 import { Command, CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { time } from "console";
 
 export class TimeoutsCommand implements Command {
     name = 'timeouts'
@@ -11,24 +12,50 @@ export class TimeoutsCommand implements Command {
     alias = ['timeoutcheck', 'timeoutstats', 'tms']
     flags = [CommandFlag.LOWERCASE, CommandFlag.WHISPER]
     cooldown = 30000
-    execute = async ({ user, channel }: CommandContext): Promise<BotResponse> => {
-        const username = user.username!
-        const banChannel = channel
+    execute = async ({ user, channel, message: [providedUser] }: CommandContext): Promise<BotResponse> => {
+        const username = providedUser ?? user.username!
+        const banChannel = !providedUser ? channel : undefined
 
-        const response = this.methods.getTimeouts(username, banChannel)
-        return response
+        return this.methods.getTimeoutInfo(username, banChannel)
     }
 
     methods = {
-        getTimeouts: async (username: string, channel?: string): Promise<BotResponse> => {
+        getTimeoutInfo: async (username: string, channel?: string): Promise<BotResponse> => {
             if (channel)
                 return await this.methods.getTimeoutForChannel(username, channel)
 
-            return this.methods.getTimeout(username)
+            return this.methods.getAllTimeouts(username)
         },
 
-        getTimeout: async (username: string): Promise<BotResponse> => {
-            return this.methods.getNotFoundResponse()
+        getAllTimeouts: async (username: string): Promise<BotResponse> => {
+            const timeouts = await hb.db.ban.find({
+                where: {
+                    user: username
+                },
+                order: {
+                    at: 'DESC'
+                }
+            })
+
+            if (!timeouts.length)
+                return this.methods.getNotFoundResponse()
+
+            const [lastTimeout] = timeouts
+
+            const channels = timeouts.reduce((countedChannels: string[], { channel }) => {
+                if (!countedChannels.includes(channel))
+                    countedChannels.push(channel)
+                return countedChannels
+            }, [] as string[])
+
+            return {
+                success: true,
+                response: [
+                    `${username} has been timeouted ${timeouts.length}`,
+                    `${channels.length} different channels`,
+                    `last timeout ${hb.utils.humanizeNow(lastTimeout.at)} ago in ${lastTimeout.channel}`
+                ]
+            }
         },
 
         getTimeoutForChannel: async (username: string, channel: string): Promise<BotResponse> => {
