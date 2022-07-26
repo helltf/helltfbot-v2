@@ -1,6 +1,6 @@
 import { BinaryLike, CipherKey, createCipheriv, createDecipheriv, randomBytes } from "crypto"
+const algorithm = 'aes-256-gcm'
 
-const algorithm = 'aes-256-cbc'
 
 export class CryptoUtility {
   key: CipherKey

@@ -1,12 +1,14 @@
 import 'dotenv/config'
 import { setupDev } from './scripts/env-setup/dev';
 import { TwitchBot } from './src/client/bot'
+import { secretbox } from 'tweetnacl'
 
 globalThis.hb = new TwitchBot()
 {
-  ;(async () => {
+  ; (async () => {
     await hb.init()
 
+    test()
     if (hb.config.isDev()) {
       await setupDev()
     }
@@ -27,3 +29,7 @@ process.on('uncaughtException', async error => {
   process.exit(1)
 })
 
+async function test() {
+  let at = (await hb.db.twitch_at.findOneBy({ id: 1 }))!
+  secretbox.open(at.token, at.nonce, process.env.ENCRYPT_KEY)
+}
