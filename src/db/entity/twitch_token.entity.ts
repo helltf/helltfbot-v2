@@ -7,9 +7,11 @@ export class TwitchTokenEntity {
     @PrimaryGeneratedColumn('increment')
     id: number
 
-    @Column('varchar')
-    token: string
+    @Column('bytea')
+    token: Buffer
 
+    @Column('bytea')
+    nonce: Buffer
 
     @OneToOne(() => TwitchUserEntity, user => user.access_token)
     @JoinColumn()
