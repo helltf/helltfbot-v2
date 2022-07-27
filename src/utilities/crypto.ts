@@ -1,3 +1,4 @@
+import'dotenv/config'
 import { secretbox } from "tweetnacl"
 
 
@@ -6,8 +7,8 @@ export class CryptoUtility {
   private encoder = new TextEncoder()
   private decoder = new TextDecoder()
 
-  constructor(key: string = process.env.ENCRYPT_KEY) {
-    this.key = this.encoder.encode(process.env.ENCRYPT_KEY)
+  constructor(key: string | undefined = process.env.ENCRYPT_KEY) {
+    this.key = this.encoder.encode(key)
   }
   openBox(message: Uint8Array, nonce: Buffer): string {
     const token = secretbox.open(message, nonce, this.key)!

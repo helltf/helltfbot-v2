@@ -1,19 +1,29 @@
 import { TwitchUserEntity } from "./user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CryptoUtility } from '../../utilities/crypto'
 
 @Entity('twitch_tokens')
 export class TwitchTokenEntity {
+  @PrimaryGeneratedColumn('increment')
+  id: number
 
-    @PrimaryGeneratedColumn('increment')
-    id: number
+  @Column('bytea')
+  token: Buffer
 
-    @Column('bytea')
-    token: Buffer
+  access_token: string
 
-    @Column('bytea')
-    nonce: Buffer
+  @Column('bytea')
+  nonce: Buffer
 
-    @OneToOne(() => TwitchUserEntity, user => user.access_token)
-    @JoinColumn()
-    user: TwitchUserEntity
+  @Column('varchar')
+  refresh_token: string
+
+  @OneToOne(() => TwitchUserEntity, user => user.access_token)
+  @JoinColumn()
+  user: TwitchUserEntity
+
+  @AfterLoad()
+  setToken() {
+    this.access_token = new CryptoUtility().openBox(this.token, this.nonce)
+  }
 }
