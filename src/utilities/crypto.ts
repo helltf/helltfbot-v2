@@ -1,21 +1,20 @@
-import { BinaryLike, CipherKey, createCipheriv, createDecipheriv, randomBytes } from "crypto"
-const algorithm = 'aes-256-gcm'
+import { secretbox } from "tweetnacl"
 
 
 export class CryptoUtility {
-  key: CipherKey
-  iv: BinaryLike
+  key: Uint8Array
+  private encoder = new TextEncoder()
+  private decoder = new TextDecoder()
+
   constructor(key: string = process.env.ENCRYPT_KEY) {
-    this.key = key
+    this.key = this.encoder.encode(process.env.ENCRYPT_KEY)
   }
-  encrypt(message: string, iv: BinaryLike): string {
-    const cipher = createCipheriv(algorithm, this.key, iv)
-    return cipher.update(message, 'utf-8', 'hex') + cipher.final('hex')
+  openBox(message: Uint8Array, nonce: Buffer): string {
+    const token = secretbox.open(message, nonce, this.key)!
+    return this.decoder.decode(token)
   }
 
-  decrypt(message: string, iv: BinaryLike): string {
-    const decipher = createDecipheriv(algorithm, this.key, iv)
-
-    return decipher.update(message, 'hex', 'utf-8') + decipher.final('utf8')
+  closeBox(message: string, nonce: Buffer): Uint8Array {
+    return secretbox(this.encoder.encode(message), nonce, this.key)
   }
 }

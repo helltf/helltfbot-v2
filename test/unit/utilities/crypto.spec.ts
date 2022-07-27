@@ -5,15 +5,15 @@ fdescribe('cryptoUtil utilities', () => {
   let cryptoUtil: CryptoUtility
 
   beforeEach(() => {
-    cryptoUtil = new CryptoUtility()
+    cryptoUtil = new CryptoUtility('q3t6w9z$C&F)J@NcRfUjXnZr4u7x!A%D')
   })
 
   it('cryptoUtil encrypts file with key and decrypts to same result', () => {
     const exampleMessage = 'Hello World'
-    const iv = randomBytes(16)
+    const nonce = randomBytes(24)
 
-    const encryptedMessage = cryptoUtil.encrypt(exampleMessage, iv)
-    const resultMessage = cryptoUtil.decrypt(encryptedMessage, iv)
+    const encryptedMessage = cryptoUtil.closeBox(exampleMessage, nonce)
+    const resultMessage = cryptoUtil.openBox(encryptedMessage, nonce)
 
     expect(exampleMessage).toBe(resultMessage)
   })
