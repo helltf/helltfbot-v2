@@ -1,7 +1,7 @@
 import { CryptoUtility } from "@src/utilities/crypto"
 import { randomBytes } from "crypto"
 
-fdescribe('cryptoUtil utilities', () => {
+describe('cryptoUtil utilities', () => {
   let cryptoUtil: CryptoUtility
 
   beforeEach(() => {
