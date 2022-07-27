@@ -1,7 +1,6 @@
 import 'dotenv/config'
 import { setupDev } from './scripts/env-setup/dev';
 import { TwitchBot } from './src/client/bot'
-import { secretbox } from 'tweetnacl'
 
 globalThis.hb = new TwitchBot()
 {
