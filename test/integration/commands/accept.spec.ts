@@ -2,10 +2,13 @@ import { TwitchUserState } from "@src/client/types"
 import { AcceptCommand } from "@src/commands/cmd/accept"
 import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from '@test-utils/disconnect'
-import { getExampleTwitchUserState } from '@test-utils/example'
+import {
+  getExampleTwitchUserEntity,
+  getExampleTwitchUserState
+} from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
-describe('accept command', () => {
+fdescribe('accept command', () => {
   let user: TwitchUserState
   let accept: AcceptCommand
   const channel = 'messageChannel'
@@ -24,7 +27,7 @@ describe('accept command', () => {
   })
 
   describe('execute', () => {
-    it('id is not defined return error resonse', async () => {
+    it('id is not defined return error response', async () => {
       const { response, success } = await accept.execute({
         channel: channel,
         message: [],
@@ -33,6 +36,46 @@ describe('accept command', () => {
 
       expect(response).toBe('id missing')
       expect(success).toBeFalse()
+    })
+
+    it('id does not exist return error response', async () => {
+      const id = 1
+
+      const { response, success } = await accept.execute({
+        channel: channel,
+        message: [`${id}`],
+        user: user
+      })
+
+      expect(response).toBe('suggestion does not exist')
+      expect(success).toBeFalse()
+    })
+  })
+
+  describe('update suggestion', () => {
+    fit('no suggestion existing return false', async () => {
+      const id = 1
+
+      const success = await accept.methods.updateSuggestion(id.toString(), '')
+
+      expect(success).toBeTrue()
+    })
+
+    it('suggestion existing return true', async () => {
+      const id = 1
+      const user = getExampleTwitchUserEntity({})
+
+      await hb.db.user.save(user)
+      await hb.db.suggestion.save({
+        id: id,
+        date: Date.now(),
+        suggestion: '',
+        user: user
+      })
+
+      const success = await accept.methods.updateSuggestion(id.toString(), '')
+
+      expect(success).toBeTrue()
     })
   })
 })
