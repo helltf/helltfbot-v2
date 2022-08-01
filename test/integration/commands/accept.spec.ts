@@ -53,12 +53,12 @@ fdescribe('accept command', () => {
   })
 
   describe('update suggestion', () => {
-    fit('no suggestion existing return false', async () => {
+    it('no suggestion existing return false', async () => {
       const id = 1
 
       const success = await accept.methods.updateSuggestion(id.toString(), '')
 
-      expect(success).toBeTrue()
+      expect(success).toBeFalse()
     })
 
     it('suggestion existing return true', async () => {
