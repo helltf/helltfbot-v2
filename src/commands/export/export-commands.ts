@@ -13,12 +13,14 @@ import { WebsiteCommand } from '../cmd/website'
 import { EmoteCommand } from '../cmd/emote'
 
 import { Command } from '../types'
-import { HelpCommmand } from "@src/commands/cmd/help"
-import { StatsCommand } from "@src/commands/cmd/stats"
-import { EvalCommand } from "@src/commands/cmd/eval"
+import { HelpCommmand } from '@src/commands/cmd/help'
+import { StatsCommand } from '@src/commands/cmd/stats'
+import { EvalCommand } from '@src/commands/cmd/eval'
+import { RemoveCommand } from '@src/commands/cmd/remove'
 
 const commands: Command[] = [
   new PingCommand(),
+  new RemoveCommand(),
   new GithubCommand(),
   new WebsiteCommand(),
   new NotifyCommand(),
