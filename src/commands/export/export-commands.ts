@@ -16,12 +16,14 @@ import { Command } from '../types'
 import { HelpCommmand } from '@src/commands/cmd/help'
 import { StatsCommand } from '@src/commands/cmd/stats'
 import { EvalCommand } from '@src/commands/cmd/eval'
+import { RemoveCommand } from '@src/commands/cmd/remove'
 import { ColorHistoryCommand } from '@src/commands/cmd/colorhistory'
 import { SetLevelCommand } from "@src/commands/cmd/setlevel"
 import { TimeoutsCommand } from "@src/commands/cmd/timeouts"
 
 const commands: Command[] = [
   new PingCommand(),
+  new RemoveCommand(),
   new GithubCommand(),
   new WebsiteCommand(),
   new NotifyCommand(),

@@ -18,6 +18,7 @@ declare global {
       MAIN_USER_ID: string
       DATABASE_URI: string
       TEST_DATABASE_URI: string
+      ENCRYPT_KEY: string
     }
   }
 }

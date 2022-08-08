@@ -1,10 +1,13 @@
+import { CryptoUtility } from '@src/utilities/crypto'
 import { Permission } from '@src/utilities/permission/permission'
 import { HumanizeDuration, HumanizeDurationLanguage } from 'humanize-duration-ts'
 export class Utility {
   permission: Permission
+  crypto: CryptoUtility
 
   constructor() {
     this.permission = new Permission()
+    this.crypto = new CryptoUtility()
   }
 
   random = (lowerLimit = 0, upperLimit = 1): number => {
