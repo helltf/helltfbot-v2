@@ -1,6 +1,7 @@
 import { TwitchUserState } from "@src/client/types"
 import { AcceptCommand } from "@src/commands/cmd/accept"
-import { clearDb } from "@test-utils/clear"
+import { SuggestionStatus } from "@src/db/entity/suggestion.entity"
+import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import {
   getExampleTwitchUserEntity,
@@ -8,7 +9,7 @@ import {
 } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
-fdescribe('accept command', () => {
+describe('accept command', () => {
   let user: TwitchUserState
   let accept: AcceptCommand
   const channel = 'messageChannel'
@@ -76,6 +77,34 @@ fdescribe('accept command', () => {
       const success = await accept.methods.updateSuggestion(id.toString(), '')
 
       expect(success).toBeTrue()
+    })
+
+    it('multiple suggestions existing update correct', async () => {
+      const id = 1
+      const user = getExampleTwitchUserEntity({})
+
+      await hb.db.user.save(user)
+      await hb.db.suggestion.save({
+        id: id,
+        date: Date.now(),
+        suggestion: '',
+        user: user
+      })
+
+      await hb.db.suggestion.save({
+        id: id + 1,
+        date: Date.now(),
+        suggestion: '',
+        user: user
+      })
+
+      const success = await accept.methods.updateSuggestion(id.toString(), '')
+
+      expect(success).toBeTrue()
+
+      const updatedEntity = await hb.db.suggestion.findOneBy({ id: id })
+
+      expect(updatedEntity?.status).toBe(SuggestionStatus.ACCEPTED)
     })
   })
 })
