@@ -4,10 +4,11 @@ import { Userstate, Badges } from 'tmi.js'
 
 export class Permission {
   getChatPermissions = (badges: Badges): ChatPermissionLevel => {
-    if (badges.broadcaster !== undefined) return ChatPermissionLevel.BROADCASTER
-    if (badges.moderator !== undefined) return ChatPermissionLevel.MOD
-    if (badges.vip !== undefined) return ChatPermissionLevel.VIP
-    if (badges.subscriber !== undefined || badges.founder !== undefined)
+    if (badges?.broadcaster !== undefined)
+      return ChatPermissionLevel.BROADCASTER
+    if (badges?.moderator !== undefined) return ChatPermissionLevel.MOD
+    if (badges?.vip !== undefined) return ChatPermissionLevel.VIP
+    if (badges?.subscriber !== undefined || badges.founder !== undefined)
       return ChatPermissionLevel.SUB
     return ChatPermissionLevel.USER
   }
