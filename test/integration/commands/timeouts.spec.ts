@@ -41,7 +41,7 @@ fdescribe('test suggest command', () => {
       const currentTime = Date.now()
       const times = 1
       const duration = 50000
-      const time_ago = hb.utils.humanizeNow(currentTime)
+      const timeAgo = hb.utils.humanizeNow(currentTime)
 
       await saveTimeout({
         at: currentTime,
@@ -56,13 +56,14 @@ fdescribe('test suggest command', () => {
         user: messageUser
       })
 
-      const expectedResponse = [
-        `${messageUser.username} has been timeouted ${times} time(s)`,
-        `${1} different channels`,
-        `Last timeout ${time_ago} ago in ${channel} for ${hb.utils.humanize(
-          duration
-        )}`
-      ]
+      const expectedResponse = getFullResponse({
+        username: messageUser.username!,
+        amount: times,
+        channels: 1,
+        duration: duration,
+        timeAgo: timeAgo,
+        timeoutChannel: channel
+      })
 
       expect(success).toBeTrue()
       expect(response).toEqual(expectedResponse)
@@ -72,7 +73,8 @@ fdescribe('test suggest command', () => {
       const currentTime = Date.now()
       const times = 2
       const duration = 50000
-      const time_ago = hb.utils.humanizeNow(currentTime)
+      const timeAgo = hb.utils.humanizeNow(currentTime)
+      const channels = 1
 
       await saveTimeout({
         at: currentTime,
@@ -94,13 +96,14 @@ fdescribe('test suggest command', () => {
         user: messageUser
       })
 
-      const expectedResponse = [
-        `${messageUser.username} has been timeouted ${times} time(s)`,
-        `${1} different channels`,
-        `Last timeout ${time_ago} ago in ${channel} for ${hb.utils.humanize(
-          duration
-        )}`
-      ]
+      const expectedResponse = getFullResponse({
+        username: messageUser.username!,
+        amount: times,
+        channels: channels,
+        duration: duration,
+        timeAgo: timeAgo,
+        timeoutChannel: channel
+      })
 
       expect(success).toBeTrue()
       expect(response).toEqual(expectedResponse)
@@ -112,7 +115,7 @@ fdescribe('test suggest command', () => {
       const channels = 1
       const amount = 1
       const currentTime = Date.now()
-      const time_ago = hb.utils.humanizeNow(currentTime)
+      const timeAgo = hb.utils.humanizeNow(currentTime)
       const duration = 50000
 
       await saveTimeout({
@@ -149,4 +152,53 @@ async function saveTimeout(timeout: Partial<TimeoutEntity>) {
     at: timeout.at ?? Date.now(),
     user: timeout.user
   })
+}
+
+function getChannelResponse({
+  amount,
+  channel,
+  duration,
+  timeAgo,
+  username
+}: ChannelResponseContext): string[] {
+  return [
+    `${username} has been timeouted ${amount} times in channel ${channel}`,
+    `Last timeout: ${hb.utils.humanizeNow(timeAgo)} ago for ${hb.utils.humanize(
+      duration
+    )}`
+  ]
+}
+
+function getFullResponse({
+  amount,
+  channels,
+  duration,
+  timeAgo,
+  timeoutChannel,
+  username
+}: FullResponseContext): string[] {
+  return [
+    `${username} has been timeouted ${amount} time(s)`,
+    `${channels} different channels`,
+    `Last timeout ${timeAgo} ago in ${timeoutChannel} for ${hb.utils.humanize(
+      duration
+    )}`
+  ]
+}
+
+interface FullResponseContext {
+  username: string
+  amount: number
+  channels: number
+  timeAgo: string
+  timeoutChannel: string
+  duration: number
+}
+
+interface ChannelResponseContext {
+  username: string
+  amount: number
+  channel: string
+  timeAgo: number
+  duration: number
 }
