@@ -131,13 +131,59 @@ fdescribe('test suggest command', () => {
         message: [username]
       })
 
-      const expectedResponse = [
-        `${username} has been timeouted ${amount} time(s)`,
-        `${channels} different channels`,
-        `Last timeout ${time_ago} ago in ${timeoutChannel} for ${hb.utils.humanize(
-          duration
-        )}`
-      ]
+      const expectedResponse = getFullResponse({
+        username: username,
+        amount: amount,
+        channels: channels,
+        duration: duration,
+        timeAgo: timeAgo,
+        timeoutChannel: timeoutChannel
+      })
+
+      expect(response).toEqual(expectedResponse)
+      expect(success).toBeTrue()
+    })
+
+    it('user and channel is given return no timeouts for channel', async () => {
+      const givenUser = 'givenUser'
+      const givenChannel = 'givenChannel'
+
+      const { response, success } = await timeouts.execute({
+        channel: channel,
+        message: [givenUser, givenChannel],
+        user: messageUser
+      })
+
+      expect(response).toBe('No timeout found')
+      expect(success).toBeTrue()
+    })
+
+    it('user and channel is given return 1 timeout for channel', async () => {
+      const givenUser = 'givenUser'
+      const givenChannel = 'givenChannel'
+      const duration = 50000
+      const currentTime = Date.now()
+
+      await saveTimeout({
+        at: currentTime,
+        channel: givenChannel,
+        duration: duration,
+        user: givenUser
+      })
+
+      const { response, success } = await timeouts.execute({
+        channel: channel,
+        message: [givenUser, givenChannel],
+        user: messageUser
+      })
+
+      const expectedResponse = getChannelResponse({
+        amount: 1,
+        channel: givenChannel,
+        duration: duration,
+        timeAgo: currentTime,
+        username: givenUser
+      })
 
       expect(response).toEqual(expectedResponse)
       expect(success).toBeTrue()
