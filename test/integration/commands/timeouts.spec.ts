@@ -1,4 +1,4 @@
-import { BanEntity, TimeoutEntity, TwitchUserEntity } from "@db/entities"
+import { TimeoutEntity } from "@db/entities"
 import { TwitchUserState } from "@src/client/types"
 import { TimeoutsCommand } from "@src/commands/cmd/timeouts"
 import { clearDb } from '@test-utils/clear'
