@@ -1,17 +1,12 @@
-import { BanEntity, TwitchUserEntity } from "@db/entities"
+import { BanEntity, TimeoutEntity, TwitchUserEntity } from "@db/entities"
 import { TwitchUserState } from "@src/client/types"
 import { TimeoutsCommand } from "@src/commands/cmd/timeouts"
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
-import {
-  getExampleTwitchUserEntity,
-  getExampleTwitchUserState
-} from '@test-utils/example'
+import { getExampleTwitchUserState } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
-import { time } from 'console'
-import { hkdf } from 'crypto'
 
-describe('test suggest command', () => {
+fdescribe('test suggest command', () => {
   let messageUser: TwitchUserState
   let timeouts: TimeoutsCommand
   const channel = 'channel'
@@ -45,11 +40,14 @@ describe('test suggest command', () => {
     it('no params message user has ban in channel', async () => {
       const currentTime = Date.now()
       const times = 1
+      const duration = 50000
+      const time_ago = hb.utils.humanizeNow(currentTime)
 
-      await hb.db.ban.save({
+      await saveTimeout({
         at: currentTime,
         channel: channel,
-        user: messageUser.username
+        user: messageUser.username,
+        duration
       })
 
       const { response, success } = await timeouts.execute({
@@ -57,10 +55,15 @@ describe('test suggest command', () => {
         message: [],
         user: messageUser
       })
+
       const expectedResponse = [
-        `${messageUser.username} has been timeouted ${times} times in channel ${channel}`,
-        `Last ban: ${hb.utils.humanizeNow(currentTime)} ago`
+        `${messageUser.username} has been timeouted ${times} time(s)`,
+        `${1} different channels`,
+        `Last timeout ${time_ago} ago in ${channel} for ${hb.utils.humanize(
+          duration
+        )}`
       ]
+
       expect(success).toBeTrue()
       expect(response).toEqual(expectedResponse)
     })
@@ -68,17 +71,21 @@ describe('test suggest command', () => {
     it('no params message user has two bans in channel', async () => {
       const currentTime = Date.now()
       const times = 2
+      const duration = 50000
+      const time_ago = hb.utils.humanizeNow(currentTime)
 
-      await hb.db.ban.save({
+      await saveTimeout({
         at: currentTime,
         channel: channel,
-        user: messageUser.username
+        user: messageUser.username,
+        duration
       })
 
-      await hb.db.ban.save({
+      await saveTimeout({
         at: currentTime - 5000,
         channel: channel,
-        user: messageUser.username
+        user: messageUser.username,
+        duration
       })
 
       const { response, success } = await timeouts.execute({
@@ -88,8 +95,11 @@ describe('test suggest command', () => {
       })
 
       const expectedResponse = [
-        `${messageUser.username} has been timeouted ${times} times in channel ${channel}`,
-        `Last ban: ${hb.utils.humanizeNow(currentTime)} ago`
+        `${messageUser.username} has been timeouted ${times} time(s)`,
+        `${1} different channels`,
+        `Last timeout ${time_ago} ago in ${channel} for ${hb.utils.humanize(
+          duration
+        )}`
       ]
 
       expect(success).toBeTrue()
@@ -103,11 +113,13 @@ describe('test suggest command', () => {
       const amount = 1
       const currentTime = Date.now()
       const time_ago = hb.utils.humanizeNow(currentTime)
+      const duration = 50000
 
-      await hb.db.ban.save({
+      await saveTimeout({
         at: currentTime,
         channel: timeoutChannel,
-        user: username
+        user: username,
+        duration: duration
       })
 
       const { response, success } = await timeouts.execute({
@@ -117,9 +129,11 @@ describe('test suggest command', () => {
       })
 
       const expectedResponse = [
-        `${username} has been timeouted ${amount}`,
+        `${username} has been timeouted ${amount} time(s)`,
         `${channels} different channels`,
-        `last timeout ${time_ago} ago in ${timeoutChannel}`
+        `Last timeout ${time_ago} ago in ${timeoutChannel} for ${hb.utils.humanize(
+          duration
+        )}`
       ]
 
       expect(response).toEqual(expectedResponse)
@@ -128,3 +142,11 @@ describe('test suggest command', () => {
   })
 })
 
+async function saveTimeout(timeout: Partial<TimeoutEntity>) {
+  await hb.db.timeout.save({
+    channel: timeout.channel,
+    duration: timeout.duration,
+    at: timeout.at ?? Date.now(),
+    user: timeout.user
+  })
+}
