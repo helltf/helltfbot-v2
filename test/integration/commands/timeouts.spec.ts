@@ -6,7 +6,7 @@ import { disconnectDatabase } from '@test-utils/disconnect'
 import { getExampleTwitchUserState } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
-fdescribe('test suggest command', () => {
+describe('test suggest command', () => {
   let messageUser: TwitchUserState
   let timeouts: TimeoutsCommand
   const channel = 'channel'
