@@ -1,7 +1,7 @@
 import { Emote } from "../../commands/cmd/emotegame"
 import { Resource, ResourceError, ResourceSuccess } from "../types"
 import fetch from "node-fetch"
-import { request, gql, GraphQLClient } from 'graphql-request'
+import { request } from 'graphql-request'
 import distance from 'jaro-winkler'
 
 export class SevenTvApi {
@@ -133,7 +133,6 @@ export class SevenTvApi {
       return new ResourceError('Error while running the request')
     }
   }
-
   async queryEmotes(emote: string): Promise<string | undefined> {
     const query = this.getQueryEmoteQuery()
 
@@ -145,8 +144,12 @@ export class SevenTvApi {
     )) as EmoteQueryData
 
     for (const foundEmote of response.search_emotes) {
-      //@ts-ignore
-      if (distance(emote, foundEmote.name, { caseSensitive: false }) === 1) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const resultDistance = distance(emote, foundEmote.name, {
+        caseSensitive: false
+      })
+      if (resultDistance === 1) {
         return foundEmote.id
       }
     }
