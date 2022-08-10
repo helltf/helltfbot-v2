@@ -1,6 +1,6 @@
 import { getOrmConf } from '../../ormconfig'
-import { TwitchBot } from '@client/bot'
-import { CacheService } from '@service/cache.service'
+import { TwitchBot } from 'bot'
+import { CacheService } from '@src/services/cache.service'
 import { DB } from '@src/db/export-repositories'
 
 export const setupDatabase = async () => {

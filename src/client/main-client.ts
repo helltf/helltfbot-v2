@@ -1,5 +1,5 @@
+import { LogType } from '@src/logger/logger-export'
 import { ChatUserstate, Client } from 'tmi.js'
-import { LogType } from '../logger/log-type'
 import { handleChat, handleWhisper } from './handlers/chat'
 import { handleConnect } from './handlers/connect'
 import { handleJoin } from './handlers/join'
@@ -63,7 +63,7 @@ client.on('connected', () => {
 
 client.on('whisper', (from, user, message, self) => {
   from = from.replace('#', '')
-  
+
   handleWhisper(from, user, message, self)
 })
 

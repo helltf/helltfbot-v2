@@ -1,6 +1,6 @@
 import { BotResponse } from "@src/client/types";
 import { Command, CommandContext, CommandFlag } from "@src/commands/types";
-import { SuggestionStatus } from "@src/db/entity/suggestion.entity";
+import { SuggestionStatus } from "@src/db/entities/suggestion.entity";
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 
 export class AcceptCommand implements Command {

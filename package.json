@@ -9,15 +9,14 @@
     "test:unit": "ts-node -r tsconfig-paths/register scripts/test-setup/test-unit-run.ts",
     "test:integration": "ts-node -r tsconfig-paths/register scripts/test-setup/test-integration-run.ts",
     "test:no-output": "ts-node -r tsconfig-paths/register scripts/test-setup/test-no-output.ts",
-    "build": "tsc",
-    "deploy": "sh deploy.sh",
     "prettier-format": "prettier --config .prettierrc ./**/*.ts --write",
     "lint": "eslint . --ext .ts",
+    "build": "tsc",
     "lint:fix": "eslint . --ext .ts --fix",
-    "start": "ts-node -r tsconfig-paths/register helltfbot.ts",
+    "start": "ts-node -r tsconfig-paths/register index.ts",
     "migration": "npx typeorm-ts-node-commonjs migration:run -d migration-datasource.ts",
     "migration:generate": "npx typeorm-ts-node-commonjs migration:generate -d migration-datasource.ts ./src/db/migration/migration",
-    "serve": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only helltfbot.ts "
+    "serve": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only index.ts "
   },
   "repository": {
     "type": "git",

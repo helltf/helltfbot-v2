@@ -1,25 +1,25 @@
 import { LevelCommand } from "@src/commands/cmd/level"
 import { UidCommand } from "@src/commands/cmd/uid"
-import { AllowCommand } from "../cmd/allow"
-import { EmotegameCommand } from '../cmd/emotegame'
-import { GithubCommand } from '../cmd/github'
-import { JoinCommand } from '../cmd/join'
-import { LeaveCommand } from '../cmd/leave'
-import { NotifyCommand } from '../cmd/notify'
-import { PingCommand } from '../cmd/ping'
-import { RemoveSuggestCommand } from '../cmd/rmsuggestion'
-import { SuggestCommand } from '../cmd/suggest'
-import { WebsiteCommand } from '../cmd/website'
-import { EmoteCommand } from '../cmd/emote'
 
-import { Command } from '../types'
 import { HelpCommmand } from '@src/commands/cmd/help'
 import { StatsCommand } from '@src/commands/cmd/stats'
 import { EvalCommand } from '@src/commands/cmd/eval'
 import { RemoveCommand } from '@src/commands/cmd/remove'
 import { ColorHistoryCommand } from '@src/commands/cmd/colorhistory'
-import { SetLevelCommand } from "@src/commands/cmd/setlevel"
-import { TimeoutsCommand } from "@src/commands/cmd/timeouts"
+import { SetLevelCommand } from '@src/commands/cmd/setlevel'
+import { TimeoutsCommand } from '@src/commands/cmd/timeouts'
+import { AllowCommand } from '@src/commands/cmd/allow'
+import { EmoteCommand } from '@src/commands/cmd/emote'
+import { EmotegameCommand } from '@src/commands/cmd/emotegame'
+import { GithubCommand } from '@src/commands/cmd/github'
+import { JoinCommand } from '@src/commands/cmd/join'
+import { LeaveCommand } from '@src/commands/cmd/leave'
+import { NotifyCommand } from '@src/commands/cmd/notify'
+import { PingCommand } from '@src/commands/cmd/ping'
+import { RemoveSuggestCommand } from '@src/commands/cmd/rmsuggestion'
+import { SuggestCommand } from '@src/commands/cmd/suggest'
+import { WebsiteCommand } from '@src/commands/cmd/website'
+import { Command } from '@src/commands/types'
 
 const commands: Command[] = [
   new PingCommand(),

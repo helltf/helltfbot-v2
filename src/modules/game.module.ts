@@ -1,6 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { EmoteGameInputResult } from '../games/types'
-import { Module } from './export/module'
+import { Module } from './types'
 
 export class GameModule implements Module {
   name = 'Game'

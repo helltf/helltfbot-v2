@@ -1,7 +1,7 @@
 import { Emotegame } from "@games/emotegame"
-import { GameService } from "@service/game.service"
-import { TwitchBot } from "@src/client/bot"
+import { GameService } from "@src/services/game.service"
 import { EmoteGameInputResult } from "@src/games/types"
+import { TwitchBot } from "bot"
 
 describe('test game service', () => {
   let service: GameService
@@ -77,7 +77,8 @@ describe('test game service', () => {
     expect(gameExisting).toBeFalse()
     expect(hb.sendMessage).toHaveBeenCalledWith(
       game.channel,
-      `The running emotegame has been cancelled, because the time limit of ${game.EXPIRING_AFTER / 1000 / 60
+      `The running emotegame has been cancelled, because the time limit of ${
+        game.EXPIRING_AFTER / 1000 / 60
       } minutes is over`
     )
     jasmine.clock().uninstall()

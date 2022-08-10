@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
-@Entity('command')
+@Entity('commands')
 export class CommandEntity extends BaseEntity {
   @PrimaryColumn('varchar')
   name: string

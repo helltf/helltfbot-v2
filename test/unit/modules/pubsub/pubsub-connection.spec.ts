@@ -1,8 +1,8 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
-import { TwitchBot } from '@client/bot'
 import { PubSubConnection } from '@modules/pubsub/pubsub-connection'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
 import { createMockedWSConnection } from '@test-utils/mocks'
+import { TwitchBot } from 'bot'
 
 describe('test pubsub connection class', () => {
   let connection: PubSubConnection

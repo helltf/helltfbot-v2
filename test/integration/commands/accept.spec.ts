@@ -1,6 +1,6 @@
 import { TwitchUserState } from "@src/client/types"
 import { AcceptCommand } from "@src/commands/cmd/accept"
-import { SuggestionStatus } from "@src/db/entity/suggestion.entity"
+import { SuggestionStatus } from "@src/db/entities/suggestion.entity"
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import {
