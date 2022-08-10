@@ -60,7 +60,7 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
   if (!hasPrefix(message)) return
 
   const [commandLookup, ...data] = getMessageInfo(message)
-  let contextMessage = data
+  const contextMessage = data
 
   const command = hb.getCommand(commandLookup)
 
@@ -70,7 +70,7 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
 
   user.permission = await hb.utils.permission.get(user)
 
-  let context: InputContext = evaluateFlags(command, {
+  const context: InputContext = evaluateFlags(command, {
     channel: where,
     message: contextMessage,
     type: type,
