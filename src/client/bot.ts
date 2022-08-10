@@ -1,6 +1,5 @@
 import { Client } from 'tmi.js'
 import { Cooldown } from '../service/cooldown.service'
-import commands from '../commands/export/export-commands'
 import { DB } from '../db/export-repositories'
 import jobs from '../jobs/jobs-export'
 import { LogType } from '../logger/log-type'
@@ -15,6 +14,7 @@ import { Command } from '../commands/types'
 import { GameService } from '../service/game.service'
 import { CacheService } from '../service/cache.service'
 import { Utility } from '@src/utilities/utility'
+import commands from '@src/commands/export-commands'
 
 export class TwitchBot {
   client: Client
