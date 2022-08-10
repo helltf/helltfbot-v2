@@ -1,8 +1,7 @@
+import { ResourceError } from '@api/types';
 import { BotResponse } from '@src/client/types';
 import { Command, CommandContext } from '@src/commands/types'
-import {
-  ChatPermissionLevel,
-} from '@src/utilities/permission/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class AddCommand implements Command {
   name = 'add'
@@ -17,11 +16,18 @@ export class AddCommand implements Command {
     message: [emote],
     channel
   }: CommandContext): Promise<BotResponse> => {
-    const { success, error } = await hb.api.seventv.addEmote(emote, channel)
+    const result = await hb.api.seventv.addEmote(emote, channel)
+
+    if (result instanceof ResourceError) {
+      return {
+        response: result.error,
+        success: false
+      }
+    }
 
     return {
-      response: success ? `Succesfully added ${emote}` : `${error}`,
-      success: success
+      response: `Succesfully added ${result.data}`,
+      success: true
     }
   }
 }

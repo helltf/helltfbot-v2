@@ -22,6 +22,7 @@ import { WebsiteCommand } from '@src/commands/cmd/website'
 import { Command } from '@src/commands/types'
 import { AddCommand } from '@src/commands/cmd/add'
 import { RemovemeCommand } from '@src/commands/cmd/removeme'
+import { YoinkCommand } from '@src/commands/cmd/yoink'
 
 const commands: Command[] = [
   new PingCommand(),
@@ -45,7 +46,8 @@ const commands: Command[] = [
   new SetLevelCommand(),
   new TimeoutsCommand(),
   new AddCommand(),
-  new RemoveCommand()
+  new RemoveCommand(),
+  new YoinkCommand()
 ]
 
 export default commands
