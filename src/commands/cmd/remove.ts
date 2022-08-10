@@ -2,7 +2,6 @@ import { BotResponse } from "@src/client/types";
 import { Command, CommandContext, CommandFlag } from "@src/commands/types";
 import {
   ChatPermissionLevel,
-  GlobalPermissionLevel
 } from '@src/utilities/permission/types'
 
 export class RemoveCommand implements Command {

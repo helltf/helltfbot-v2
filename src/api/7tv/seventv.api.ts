@@ -106,11 +106,31 @@ export class SevenTvApi {
     const query = this.getAddEmoteQuery()
     const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
+    const response = await this.runGqlRequest(query, variables)
+
+    return response instanceof ResourceSuccess
+      ? { success: true }
+      : {
+          success: false,
+          error:
+            'Could not add emote. You may forgot to add me as an editor of your channel :)'
+        }
+  }
+
+  private async runGqlRequest<T>(
+    query: string,
+    variables: { [key: string]: string }
+  ): Promise<Resource<T>> {
     try {
-      await request(this.gql_url, query, variables, this.getGqlAuthorization())
-      return { success: true }
-    } catch (e) {
-      return { success: false, error: 'Error while adding emote' }
+      const response = (await request(
+        this.gql_url,
+        query,
+        variables,
+        this.getGqlAuthorization()
+      )) as T
+      return new ResourceSuccess(response)
+    } catch (e: any) {
+      return new ResourceError('Error while running the request')
     }
   }
 
@@ -160,12 +180,15 @@ export class SevenTvApi {
     const query = this.getRemoveEmoteQuery()
     const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
-    try {
-      await request(this.gql_url, query, variables, this.getGqlAuthorization())
-      return { success: true }
-    } catch (e) {
-      return { success: false, error: 'Error while removing emote' }
-    }
+    const response = this.runGqlRequest(query, variables)
+
+    return response instanceof ResourceSuccess
+      ? { success: true }
+      : {
+          success: false,
+          error:
+            'Could not add emote. You may forgot to add me as an editor of your channel :)'
+        }
   }
 }
 
