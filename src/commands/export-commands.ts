@@ -21,10 +21,11 @@ import { SuggestCommand } from '@src/commands/cmd/suggest'
 import { WebsiteCommand } from '@src/commands/cmd/website'
 import { Command } from '@src/commands/types'
 import { AddCommand } from '@src/commands/cmd/add'
+import { RemovemeCommand } from '@src/commands/cmd/removeme'
 
 const commands: Command[] = [
   new PingCommand(),
-  new RemoveCommand(),
+  new RemovemeCommand(),
   new GithubCommand(),
   new WebsiteCommand(),
   new NotifyCommand(),
@@ -43,7 +44,8 @@ const commands: Command[] = [
   new ColorHistoryCommand(),
   new SetLevelCommand(),
   new TimeoutsCommand(),
-  new AddCommand()
+  new AddCommand(),
+  new RemoveCommand()
 ]
 
 export default commands
