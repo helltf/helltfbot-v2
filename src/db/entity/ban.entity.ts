@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('ban')
+@Entity('bans')
 export class BanEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number

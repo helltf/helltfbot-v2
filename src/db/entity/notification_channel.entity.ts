@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
-@Entity('notification_channel')
+@Entity('notification_channels')
 export class NotificationChannelEntity extends BaseEntity {
   @PrimaryColumn('int')
   id: number

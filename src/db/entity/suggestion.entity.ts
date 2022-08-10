@@ -13,7 +13,7 @@ export enum SuggestionStatus {
   PENDING = 'pending'
 }
 
-@Entity('suggestion')
+@Entity('suggestions')
 export class SuggestionEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number

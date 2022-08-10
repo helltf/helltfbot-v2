@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('timeout')
+@Entity('timeouts')
 export class TimeoutEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
