@@ -1,8 +1,7 @@
+import { ResourceError } from "@api/types";
 import { BotResponse } from "@src/client/types";
 import { Command, CommandContext } from "@src/commands/types";
-import {
-  ChatPermissionLevel,
-} from '@src/utilities/permission/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class RemoveCommand implements Command {
   name = 'remove'
@@ -12,16 +11,23 @@ export class RemoveCommand implements Command {
   optionalParams = []
   alias = ['removeemote']
   flags = []
-  cooldown: 10000
+  cooldown = 10000
   execute = async ({
     message: [emote],
     channel
   }: CommandContext): Promise<BotResponse> => {
-    const { success, error } = await hb.api.seventv.removeEmote(emote, channel)
+    const result = await hb.api.seventv.removeEmote(emote, channel)
+
+    if (result instanceof ResourceError) {
+      return {
+        response: result.error,
+        success: false
+      }
+    }
 
     return {
-      response: success ? `Succesfully removed ${emote}` : `${error}`,
-      success: success
+      response: `Succesfully removed ${result.data}`,
+      success: true
     }
   }
 }
