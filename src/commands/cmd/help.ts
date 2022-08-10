@@ -18,7 +18,7 @@ export class HelpCommmand implements Command {
       return {
         response: [
           'Bot created by @helltf',
-          'All commands are listed here (coming soon)'
+          'All commands are listed here https://github.com/helltf/helltfbot-v2/blob/master/Commands.md'
         ],
         success: true
       }
