@@ -1,5 +1,5 @@
 import { Emotegame } from "@games/emotegame"
-import { GameService } from "@service/game.service"
+import { GameService } from "@src/services/game.service"
 import { EmoteGameInputResult } from "@src/games/types"
 import { TwitchBot } from "bot"
 

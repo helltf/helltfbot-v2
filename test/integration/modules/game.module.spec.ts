@@ -2,7 +2,7 @@ import { EmoteStatsEntity } from "@db/entities"
 import { Emotegame } from "@games/emotegame"
 import { EmoteGameInputResult } from "@games/types"
 import { GameModule } from "@modules/game.module"
-import { GameService } from '@src/service/game.service'
+import { GameService } from '@src/services/game.service'
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import { saveUserStateAsUser } from '@test-utils/save-user'

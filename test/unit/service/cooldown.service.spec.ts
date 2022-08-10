@@ -1,6 +1,6 @@
 import { TwitchUserState } from "@client/types"
 import { Command } from "@commands/types"
-import { Cooldown } from "@service/cooldown.service"
+import { Cooldown } from "@src/services/cooldown.service"
 import {
   getExampleCommand,
   getExampleTwitchUserState

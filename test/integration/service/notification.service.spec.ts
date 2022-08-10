@@ -1,5 +1,5 @@
 import { NotifyEventType, UserNotificationType } from "@modules/pubsub/types"
-import { NotificationService } from "@service/notification.service"
+import { NotificationService } from "@src/services/notification.service"
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import { getExampleNotificationEntity } from '../../test-utils/example'

@@ -6,8 +6,8 @@ import {
   EmoteType
 } from '@commands/cmd/emotegame'
 import { Emotegame } from '@games/emotegame'
-import { GameService } from '@service/game.service'
-import { mockEmoteApis } from "@test-utils/mocks"
+import { GameService } from '@src/services/game.service'
+import { mockEmoteApis } from '@test-utils/mocks'
 import { clearDb, clearRedis } from '../../test-utils/clear'
 import {
   disconnectDatabase,
@@ -105,8 +105,7 @@ describe('test emotegame', () => {
         channel: messageChannel,
         user,
         message
-      }
-      )
+      })
 
       expect(response).toBe(
         'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
