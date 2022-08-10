@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - command to get color history
+- command to show timeout stats
+- decryption of saved access token
+- command to set level of user
+- command to update status of suggestion
+- save current status of suggestions
+
+### Changed 
+- Removing repo from global db object
 
 ## [1.2.2](https://github.com/helltf/helltfbot-v2/releases/tag/v1.2.2) - 2022-07-01
 
