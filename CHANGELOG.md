@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - save current status of suggestions
 - adding 7tv emotes
 - removing 7tv emotes
+- yoinking 7tv emotes
+- commands.md to show commands 
 
 ### Changed 
 - Removing repo from global db object
