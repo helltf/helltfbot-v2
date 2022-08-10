@@ -65,6 +65,20 @@ export class SevenTvApi {
     }
   }
 
+  private getEmoteUpdateVariablesWithData(
+    emoteId: string,
+    channelId: string,
+    re: string,
+    data?: { [key: string]: string }
+  ) {
+    return {
+      em: emoteId,
+      ch: channelId,
+      re: re,
+      data: data
+    }
+  }
+
   private getQueryEmoteQuery() {
     return `query($query: String!,$page: Int,$pageSize: Int,$globalState: String,$sortBy: String,$sortOrder: Int,$channel: String,$submitted_by: String,$filter: EmoteFilter) {search_emotes(query: $query,limit: $pageSize,page: $page,pageSize: $pageSize,globalState: $globalState,sortBy: $sortBy,sortOrder: $sortOrder,channel: $channel,submitted_by: $submitted_by,filter: $filter) {id,visibility,urls,owner {id,display_name,role {id,name,color},banned}urls,name,tags}}`
   }
@@ -89,37 +103,36 @@ export class SevenTvApi {
     }
   }
 
-  async addEmote(
-    emoteName: string,
-    channel: string
-  ): Promise<{ success: boolean; error?: string }> {
-    const channelIdResponse = await this.getUserId(channel)
+  async addEmote(emote: string, channel: string): Promise<Resource<string>> {
+    const channelId = await this.getUserId(channel)
 
-    if (channelIdResponse instanceof ResourceError)
-      return { success: false, error: 'could not fetch channel id' }
+    if (channelId instanceof ResourceError) return channelId
 
-    const channelId = channelIdResponse.data
-    const emoteId = await this.queryEmotes(emoteName)
+    const emoteResource = await this.queryEmotes(emote)
 
-    if (!emoteId) return { success: false, error: 'no emote match' }
+    if (emoteResource instanceof ResourceError) {
+      return emoteResource
+    }
+
+    const [emoteId, emoteName] = emoteResource.data
 
     const query = this.getAddEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId.data, '')
 
     const response = await this.runGqlRequest(query, variables)
 
-    return response instanceof ResourceSuccess
-      ? { success: true }
-      : {
-          success: false,
-          error:
-            'Could not add emote. You may forgot to add me as an editor of your channel :)'
-        }
+    if (response instanceof ResourceError) {
+      return new ResourceError(
+        'Could not add emote. You may forgot to add me as an editor of your channel :) '
+      )
+    }
+
+    return new ResourceSuccess(emoteName)
   }
 
   private async runGqlRequest<T>(
     query: string,
-    variables: { [key: string]: string }
+    variables: { [key: string]: any }
   ): Promise<Resource<T>> {
     try {
       const response = (await request(
@@ -130,10 +143,16 @@ export class SevenTvApi {
       )) as T
       return new ResourceSuccess(response)
     } catch (e: any) {
-      return new ResourceError('Error while running the request')
+      const gqlError: SeventvErrorResponse = JSON.parse(
+        JSON.stringify(e, undefined, 2)
+      ) as SeventvErrorResponse
+      return new ResourceError(
+        String(gqlError.response?.errors[0]?.extensions.code)
+      )
     }
   }
-  async queryEmotes(emote: string): Promise<string | undefined> {
+
+  async queryEmotes(emote: string): Promise<Resource<string[]>> {
     const query = this.getQueryEmoteQuery()
 
     const response = (await request(
@@ -150,48 +169,122 @@ export class SevenTvApi {
         caseSensitive: false
       })
       if (resultDistance === 1) {
-        return foundEmote.id
+        return new ResourceSuccess([foundEmote.id, foundEmote.name])
       }
     }
+    return new ResourceError('no matching emote found')
   }
 
-  async getEmoteId(
-    emote: string,
+  async getEmoteIdAndName(
+    givenEmote: string,
     channel: string
-  ): Promise<string | undefined> {
+  ): Promise<Resource<string[]>> {
     const emotes = await this.fetchEmotesWithData(channel)
-    if (emotes instanceof ResourceError) return
+    if (emotes instanceof ResourceError)
+      return new ResourceError('Could not fetch emotes')
 
-    return emotes.data.find(e => e.name === emote)?.id
+    const emote = emotes.data.find(e => e.name === givenEmote)
+
+    return !emote
+      ? new ResourceError('emote not found')
+      : new ResourceSuccess([emote.id, emote.name])
   }
 
-  async removeEmote(
-    emote: string,
-    channel: string
-  ): Promise<{ success: boolean; error?: string }> {
+  async removeEmote(emote: string, channel: string): Promise<Resource<string>> {
     const channelIdResponse = await this.getUserId(channel)
 
-    if (channelIdResponse instanceof ResourceError)
-      return { success: false, error: 'could not fetch channel id' }
+    if (channelIdResponse instanceof ResourceError) return channelIdResponse
 
     const channelId = channelIdResponse.data
 
-    const emoteId = await this.getEmoteId(emote, channel)
+    const emoteResource = await this.getEmoteIdAndName(emote, channel)
+    if (emoteResource instanceof ResourceError) {
+      return new ResourceError(emoteResource.error)
+    }
+    const [emoteId, emoteName] = emoteResource.data
 
-    if (!emoteId) return { success: false, error: 'Could not find that emote' }
+    if (!emoteId) return new ResourceError('Could not find that emote')
 
     const query = this.getRemoveEmoteQuery()
     const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
-    const response = this.runGqlRequest(query, variables)
+    const response = await this.runGqlRequest(query, variables)
 
-    return response instanceof ResourceSuccess
-      ? { success: true }
-      : {
-          success: false,
-          error:
-            'Could not add emote. You may forgot to add me as an editor of your channel :)'
-        }
+    if (response instanceof ResourceError) {
+      return new ResourceError(
+        'Could not add emote. You may forgot to add me as an editor of your channel :) '
+      )
+    }
+
+    return new ResourceSuccess(emoteName)
+  }
+
+  async yoink(
+    emote: string,
+    channel: string,
+    newChannel: string
+  ): Promise<Resource<string[]>> {
+    const channelId = await this.getUserId(newChannel)
+
+    if (channelId instanceof ResourceError) return channelId
+
+    const emoteResource = await this.getEmoteIdAndName(emote, channel)
+
+    if (emoteResource instanceof ResourceError) {
+      return emoteResource
+    }
+
+    const [emoteId, emoteName] = emoteResource.data
+
+    if (!emoteId) return new ResourceError('Could not find that emote')
+
+    const query = this.getAddEmoteQuery()
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId.data, '')
+
+    const response = await this.runGqlRequest(query, variables)
+
+    if (response instanceof ResourceError) {
+      return this.getErrorMessage(response.error)
+    }
+
+    return new ResourceSuccess([emoteId, emoteName])
+  }
+
+  private getErrorMessage(code?: string): ResourceError {
+    if (code === '70403')
+      return new ResourceError('Please add me as an editor of your channel :)')
+    if (code === '704611') return new ResourceError('Emote is already enabled')
+
+    return new ResourceError('Unknown Error')
+  }
+
+  async setAlias(
+    emoteId: string,
+    emoteName: string,
+    yoinkChannel: string
+  ): Promise<Resource<undefined>> {
+    const channelId = await this.getUserId(yoinkChannel)
+
+    if (channelId instanceof ResourceError) return channelId
+
+    const query = this.getEditEmoteQuery()
+    const variables = this.getEmoteUpdateVariablesWithData(
+      emoteId,
+      channelId.data,
+      '',
+      { alias: emoteName }
+    )
+
+    const response = await this.runGqlRequest(query, variables)
+
+    if (response instanceof ResourceError) {
+      return this.getErrorMessage(response.error)
+    }
+
+    return new ResourceSuccess(undefined)
+  }
+  getEditEmoteQuery() {
+    return `mutation EditChannelEmote($ch: String!, $em: String!, $data: ChannelEmoteInput!, $re: String) {editChannelEmote(channel_id: $ch, emote_id: $em, data: $data, reason: $re) {id,emote_aliases}}`
   }
 }
 
@@ -241,4 +334,22 @@ export interface SearchEmote {
 export interface EmoteQueryData {
   search_emotes: SearchEmote[]
 }
+
+export interface Extensions {
+  code: number
+  message: string
+}
+
+export interface SeventvGqlError {
+  message: string
+  path: string[]
+  extensions: Extensions
+}
+
+export interface SeventvErrorResponse {
+  response: {
+    errors: SeventvGqlError[]
+  }
+}
+
 
