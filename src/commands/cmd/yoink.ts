@@ -1,6 +1,6 @@
-import { ResourceError, ResourceSuccess } from "@api/types";
+import { ResourceError } from "@api/types";
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import { Command, CommandContext } from "@src/commands/types";
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 
 export class YoinkCommand implements Command {
