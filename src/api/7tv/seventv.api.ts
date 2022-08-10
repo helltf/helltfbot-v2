@@ -9,13 +9,22 @@ export class SevenTvApi {
   gql_url = 'https://7tv.io/v2/gql'
 
   async fetchEmotes(channel: string): Promise<Resource<Emote[]>> {
+    const emotes = await this.fetchEmotesWithData(channel)
+
+    if (emotes instanceof ResourceError) return emotes
+    return new ResourceSuccess(emotes.data.map(emote => emote.name))
+  }
+
+  async fetchEmotesWithData(
+    channel: string
+  ): Promise<Resource<SeventvEmoteResponse[]>> {
     const error = new ResourceError('Error fetching 7tv emotes')
 
     try {
       const emotes = (await (
         await fetch(this.url + channel + '/emotes')
       ).json()) as SeventvEmoteResponse[]
-      return new ResourceSuccess(emotes.map(e => e.name))
+      return new ResourceSuccess(emotes)
     } catch (e) {
       return error
     }
@@ -40,11 +49,19 @@ export class SevenTvApi {
     return `mutation AddChannelEmote($ch: String!, $em: String!, $re: String!) {addChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emote_ids}}`
   }
 
-  private getAddVariables(emoteId: string, channelId: string, re: string) {
+  private getRemoveEmoteQuery(): string {
+    return `mutation RemoveChannelEmote($ch: String!, $em: String!, $re: String!) {removeChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emote_ids}}`
+  }
+
+  private getEmoteUpdateVariables(
+    emoteId: string,
+    channelId: string,
+    re: string
+  ) {
     return {
       em: emoteId,
       ch: channelId,
-      re: ''
+      re: re
     }
   }
 
@@ -87,7 +104,7 @@ export class SevenTvApi {
     if (!emoteId) return { success: false, error: 'no emote match' }
 
     const query = this.getAddEmoteQuery()
-    const variables = this.getAddVariables(emoteId, channelId, '')
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
     try {
       await request(this.gql_url, query, variables, this.getGqlAuthorization())
@@ -112,6 +129,42 @@ export class SevenTvApi {
       if (distance(emote, foundEmote.name, { caseSensitive: false }) === 1) {
         return foundEmote.id
       }
+    }
+  }
+
+  async getEmoteId(
+    emote: string,
+    channel: string
+  ): Promise<string | undefined> {
+    const emotes = await this.fetchEmotesWithData(channel)
+    if (emotes instanceof ResourceError) return
+
+    return emotes.data.find(e => e.name === emote)?.id
+  }
+
+  async removeEmote(
+    emote: string,
+    channel: string
+  ): Promise<{ success: boolean; error?: string }> {
+    const channelIdResponse = await this.getUserId(channel)
+
+    if (channelIdResponse instanceof ResourceError)
+      return { success: false, error: 'could not fetch channel id' }
+
+    const channelId = channelIdResponse.data
+
+    const emoteId = await this.getEmoteId(emote, channel)
+
+    if (!emoteId) return { success: false, error: 'Could not find that emote' }
+
+    const query = this.getRemoveEmoteQuery()
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
+
+    try {
+      await request(this.gql_url, query, variables, this.getGqlAuthorization())
+      return { success: true }
+    } catch (e) {
+      return { success: false, error: 'Error while removing emote' }
     }
   }
 }
