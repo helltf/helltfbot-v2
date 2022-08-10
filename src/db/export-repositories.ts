@@ -12,7 +12,7 @@ import {
   ErrorEntity,
   EmoteStatsEntity
 } from '@db/entities'
-import { TwitchTokenEntity } from '@src/db/entity/twitch_token.entity'
+import { TwitchTokenEntity } from '@src/db/entities/twitch_token.entity'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { getOrmConf } from '../../ormconfig'
