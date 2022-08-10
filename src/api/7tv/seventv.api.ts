@@ -154,15 +154,16 @@ export class SevenTvApi {
 
   async queryEmotes(emote: string): Promise<Resource<string[]>> {
     const query = this.getQueryEmoteQuery()
-
-    const response = (await request(
-      this.gql_url,
+    const response = await this.runGqlRequest<EmoteQueryData>(
       query,
-      this.getQuerySettings(emote),
-      this.getGqlAuthorization()
-    )) as EmoteQueryData
+      this.getQuerySettings(emote)
+    )
 
-    for (const foundEmote of response.search_emotes) {
+    if (response instanceof ResourceError) {
+      return new ResourceError('No emote found')
+    }
+
+    for (const foundEmote of response.data.search_emotes) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const resultDistance = distance(emote, foundEmote.name, {
