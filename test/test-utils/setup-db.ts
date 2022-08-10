@@ -1,5 +1,5 @@
 import { getOrmConf } from '../../ormconfig'
-import { TwitchBot } from '@client/bot'
+import { TwitchBot } from 'bot'
 import { CacheService } from '@service/cache.service'
 import { DB } from '@src/db/export-repositories'
 
