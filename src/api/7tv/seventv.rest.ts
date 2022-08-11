@@ -3,7 +3,7 @@ import { Emote } from "@src/commands/cmd/emotegame"
 import fetch from "node-fetch"
 
 export class SevenTvRest {
-  url = 'https://api.7tv.app/v2/users/'
+  url = 'https://api.7tv.app/v2/'
 
   async fetchEmotes(channel: string): Promise<Resource<Emote[]>> {
     const emotes = await this.fetchEmotesWithData(channel)
@@ -19,7 +19,7 @@ export class SevenTvRest {
 
     try {
       const emotes = (await (
-        await fetch(this.url + channel + '/emotes')
+        await fetch(this.url + 'users/' + channel + '/emotes')
       ).json()) as SeventvEmoteResponse[]
       return new ResourceSuccess(emotes)
     } catch (e) {
@@ -34,7 +34,7 @@ export class SevenTvRest {
   async getUserId(username: string) {
     try {
       const user = (await (
-        await fetch(this.url + username)
+        await fetch(this.url + 'users/' + username)
       ).json()) as SevenTvUserResponse
       return new ResourceSuccess(user.id)
     } catch (e) {
@@ -55,6 +55,17 @@ export class SevenTvRest {
     return !emote
       ? new ResourceError('emote not found')
       : new ResourceSuccess([emote.id, emote.name])
+  }
+
+  async getEmoteById(emoteId: string): Promise<Resource<SevenTvEmote>> {
+    try {
+      const response = await (
+        await fetch(this.url + 'emotes/' + emoteId)
+      ).json()
+      return new ResourceSuccess(response as SevenTvEmote)
+    } catch (e: any) {
+      return new ResourceError('Could not get emote')
+    }
   }
 }
 
@@ -78,3 +89,35 @@ interface SevenTvUserResponse {
   }
   profile_picture_id: string
 }
+
+export interface Role {
+  id: string
+  name: string
+  position: number
+  color: number
+  allowed: number
+  denied: number
+}
+
+export interface Owner {
+  id: string
+  twitch_id: string
+  login: string
+  display_name: string
+  role: Role
+}
+
+export interface SevenTvEmote {
+  id: string
+  name: string
+  owner: Owner
+  visibility: number
+  visibility_simple: any[]
+  mime: string
+  status: number
+  tags: any[]
+  width: number[]
+  height: number[]
+  urls: string[][]
+}
+
