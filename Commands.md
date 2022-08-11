@@ -18,6 +18,7 @@
 |remove|removes a 7tv emote from channel|
 |removeme|removes your notification for the given streamer on the event|
 |rmsuggest|removes your suggestion|
+|setalias|sets a the given alias for the emote|
 |setlevel|sets the permissions of a given user|
 |stats|displays your stats|
 |suggest|suggest a feature you want to see|
