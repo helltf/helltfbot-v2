@@ -148,6 +148,7 @@ export class SevenTvGQL {
     if (code === '704610') return new ResourceError('Emote is not enabled')
     if (code === '704612')
       return new ResourceError('Emote with this name already exists')
+    if (code === '704620') return new ResourceError('No slot available')
     return new ResourceError('Unknown Error')
   }
 
