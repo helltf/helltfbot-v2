@@ -33,47 +33,40 @@ export class YoinkCommand implements Command {
 
     const [emoteId, emoteName] = emoteResult.data
 
-    if (emoteName.toLowerCase() === emote.toLowerCase())
-      return {
-        response: `Succesfully added ${emoteName} to your channel`,
-        success: true
-      }
+    const emoteData = await hb.api.seventv.rest.getEmoteById(emoteId)
 
-    const success = await this.methods.setAlias(
+    if (emoteData instanceof ResourceError) {
+      return { response: 'unknown error' }
+    }
+
+    const emoteDefaultName = emoteData.data.name
+
+    if (emoteDefaultName === emoteName) {
+      return this.methods.getSuccessResponse(emoteName)
+    }
+
+    const aliasResult = await hb.api.seventv.gql.setAlias(
       emoteId,
       emoteName,
       yoinkChannel
     )
 
-    if (success) {
+    if (aliasResult instanceof ResourceError) {
       return {
-        response: `Succesfully added ${emoteName} to your channel`,
+        response: `Succesfully added ${emoteName} but could not set alias`,
         success: true
       }
     }
 
-    return {
-      response: `Added emote but could not set alias`,
-      success: true
-    }
+    return this.methods.getSuccessResponse(emoteName)
   }
+
   methods = {
-    setAlias: async (
-      emoteId: string,
-      emoteName: string,
-      yoinkChannel: string
-    ): Promise<boolean> => {
-      const aliasResult = await hb.api.seventv.gql.setAlias(
-        emoteId,
-        emoteName,
-        yoinkChannel
-      )
-
-      if (aliasResult instanceof ResourceError) {
-        return false
+    getSuccessResponse: (emote: string): BotResponse => {
+      return {
+        response: `Succesfully added ${emote} to your channel`,
+        success: true
       }
-
-      return true
     }
   }
 }
