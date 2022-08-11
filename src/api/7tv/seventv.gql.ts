@@ -177,6 +177,38 @@ export class SevenTvGQL {
     return new ResourceSuccess(null)
   }
 
+  private getUserEditorsQuery() {
+    return `query GetUser($id: String!) {user(id: $id) {...FullUser}}fragment FullUser on User {id,email, display_name, login,description,editor_ids,editors {id, display_name, login}}`
+  }
+
+  private getUserEditorsVariables(id: string) {
+    return {
+      id: id
+    }
+  }
+
+  async getUserEditors(username: string): Promise<Resource<Editor[]>> {
+    const userId = await hb.api.seventv.rest.getUserId(username)
+
+    if (userId instanceof ResourceError) {
+      return userId
+    }
+
+    const query = this.getUserEditorsQuery()
+    const variables = this.getUserEditorsVariables(userId.data)
+
+    const response = await this.runGqlRequest<SevenTvUserResponse>(
+      query,
+      variables
+    )
+
+    if (response instanceof ResourceError) {
+      return this.getErrorMessage(response.error)
+    }
+
+    return new ResourceSuccess(response.data.user.editors)
+  }
+
   private getAddEmoteQuery(): string {
     return `mutation AddChannelEmote($ch: String!, $em: String!, $re: String!) {addChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emote_ids}}`
   }
@@ -283,4 +315,22 @@ export interface SeventvErrorResponse {
   }
 }
 
+export interface Editor {
+  id: string
+  display_name: string
+  login: string
+}
 
+export interface User {
+  id: string
+  email?: any
+  display_name: string
+  login: string
+  description: string
+  editor_ids: string[]
+  editors: Editor[]
+}
+
+export interface SevenTvUserResponse {
+  user: User
+}
