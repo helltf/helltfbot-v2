@@ -23,6 +23,7 @@ import { Command } from '@src/commands/types'
 import { AddCommand } from '@src/commands/cmd/add'
 import { RemovemeCommand } from '@src/commands/cmd/removeme'
 import { YoinkCommand } from '@src/commands/cmd/yoink'
+import { SetAliasCommand } from '@src/commands/cmd/setalias'
 
 const commands: Command[] = [
   new PingCommand(),
@@ -47,7 +48,8 @@ const commands: Command[] = [
   new TimeoutsCommand(),
   new AddCommand(),
   new RemoveCommand(),
-  new YoinkCommand()
+  new YoinkCommand(),
+  new SetAliasCommand()
 ]
 
 export default commands

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - removing 7tv emotes
 - yoinking 7tv emotes
 - commands.md to show commands 
+- command to set alias for emote
 
 ### Changed 
 - Removing repo from global db object

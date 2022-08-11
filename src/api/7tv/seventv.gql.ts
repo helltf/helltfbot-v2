@@ -154,9 +154,9 @@ export class SevenTvGQL {
   async setAlias(
     emoteId: string,
     emoteName: string,
-    yoinkChannel: string
+    channel: string
   ): Promise<Resource<null>> {
-    const channelId = await hb.api.seventv.rest.getUserId(yoinkChannel)
+    const channelId = await hb.api.seventv.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
 

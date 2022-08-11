@@ -5,7 +5,7 @@ import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class RemoveCommand implements Command {
   name = 'remove'
-  permissions = ChatPermissionLevel.MOD
+  permissions = ChatPermissionLevel.USER
   description = 'removes a 7tv emote from channel'
   requiredParams = ['emote_name']
   optionalParams = []
