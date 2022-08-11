@@ -33,22 +33,47 @@ export class YoinkCommand implements Command {
 
     const [emoteId, emoteName] = emoteResult.data
 
-    const aliasResult = await hb.api.seventv.gql.setAlias(
+    if (emoteName.toLowerCase() === emote.toLowerCase())
+      return {
+        response: `Succesfully added ${emoteName} to your channel`,
+        success: true
+      }
+
+    const success = await this.methods.setAlias(
       emoteId,
       emoteName,
       yoinkChannel
     )
 
-    if (aliasResult instanceof ResourceError) {
+    if (success) {
       return {
-        response: `Succesfully added ${emoteName} but could not set alias`,
+        response: `Succesfully added ${emoteName} to your channel`,
         success: true
       }
     }
 
     return {
-      response: `Succesfully added ${emoteName} to your channel`,
+      response: `Added emote but could not set alias`,
       success: true
+    }
+  }
+  methods = {
+    setAlias: async (
+      emoteId: string,
+      emoteName: string,
+      yoinkChannel: string
+    ): Promise<boolean> => {
+      const aliasResult = await hb.api.seventv.gql.setAlias(
+        emoteId,
+        emoteName,
+        yoinkChannel
+      )
+
+      if (aliasResult instanceof ResourceError) {
+        return false
+      }
+
+      return true
     }
   }
 }
