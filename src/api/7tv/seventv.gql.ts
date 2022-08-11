@@ -155,7 +155,7 @@ export class SevenTvGQL {
     emoteId: string,
     emoteName: string,
     yoinkChannel: string
-  ): Promise<Resource<{}>> {
+  ): Promise<Resource<null>> {
     const channelId = await hb.api.seventv.rest.getUserId(yoinkChannel)
 
     if (channelId instanceof ResourceError) return channelId
@@ -174,7 +174,7 @@ export class SevenTvGQL {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess({})
+    return new ResourceSuccess(null)
   }
 
   private getAddEmoteQuery(): string {
