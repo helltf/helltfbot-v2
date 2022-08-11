@@ -141,17 +141,6 @@ export class SevenTvGQL {
     return new ResourceSuccess([emoteId, emoteName])
   }
 
-  private getErrorMessage(code?: string): ResourceError {
-    if (code === '70403')
-      return new ResourceError('Please add me as an editor of your channel :)')
-    if (code === '704611') return new ResourceError('Emote is already enabled')
-    if (code === '704610') return new ResourceError('Emote is not enabled')
-    if (code === '704612')
-      return new ResourceError('Emote with this name already exists')
-    if (code === '704620') return new ResourceError('No slot available')
-    return new ResourceError('Unknown Error')
-  }
-
   async setAlias(
     emoteId: string,
     emoteName: string,
@@ -176,16 +165,6 @@ export class SevenTvGQL {
     }
 
     return new ResourceSuccess(null)
-  }
-
-  private getUserEditorsQuery() {
-    return `query GetUser($id: String!) {user(id: $id) {...FullUser}}fragment FullUser on User {id,email, display_name, login,description,editor_ids,editors {id, display_name, login}}`
-  }
-
-  private getUserEditorsVariables(id: string) {
-    return {
-      id: id
-    }
   }
 
   async getUserEditors(username: string): Promise<Resource<Editor[]>> {
@@ -218,6 +197,17 @@ export class SevenTvGQL {
     return `mutation RemoveChannelEmote($ch: String!, $em: String!, $re: String!) {removeChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emote_ids}}`
   }
 
+  getErrorMessage(code?: string): ResourceError {
+    if (code === '70403')
+      return new ResourceError('Please add me as an editor of your channel :)')
+    if (code === '704611') return new ResourceError('Emote is already enabled')
+    if (code === '704610') return new ResourceError('Emote is not enabled')
+    if (code === '704612')
+      return new ResourceError('Emote with this name already exists')
+    if (code === '704620') return new ResourceError('No slot available')
+    return new ResourceError('Unknown Error')
+  }
+
   private getEmoteUpdateVariables(
     emoteId: string,
     channelId: string,
@@ -241,6 +231,16 @@ export class SevenTvGQL {
       ch: channelId,
       re: re,
       data: data
+    }
+  }
+
+  private getUserEditorsQuery() {
+    return `query GetUser($id: String!) {user(id: $id) {...FullUser}}fragment FullUser on User {id,email, display_name, login,description,editor_ids,editors {id, display_name, login}}`
+  }
+
+  private getUserEditorsVariables(id: string) {
+    return {
+      id: id
     }
   }
 
