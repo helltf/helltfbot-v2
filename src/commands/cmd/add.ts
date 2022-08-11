@@ -5,7 +5,7 @@ import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class AddCommand implements Command {
   name = 'add'
-  permissions = ChatPermissionLevel.MOD
+  permissions = ChatPermissionLevel.USER
   description = 'adds an 7tv emote'
   requiredParams = ['emote_name']
   optionalParams = []
