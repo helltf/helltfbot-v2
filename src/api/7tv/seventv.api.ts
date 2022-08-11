@@ -17,7 +17,7 @@ export class SevenTvApi {
     if (username === channel) {
       return new ResourceSuccess(true)
     }
-    const editors = await this.gql.getUserEditors(username)
+    const editors = await this.gql.getUserEditors(channel)
 
     if (editors instanceof ResourceError) {
       return editors
