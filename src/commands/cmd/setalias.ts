@@ -46,6 +46,9 @@ export class SetAliasCommand implements Command {
       return { response: result.error, success: false }
     }
 
-    return { response: `Successfully set ${alias} as alias for ${emote}` }
+    return {
+      response: `Successfully set ${alias} as alias for ${emote}`,
+      success: true
+    }
   }
 }
