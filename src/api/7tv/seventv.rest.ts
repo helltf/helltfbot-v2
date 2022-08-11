@@ -5,14 +5,7 @@ import fetch from "node-fetch"
 export class SevenTvRest {
   url = 'https://api.7tv.app/v2/'
 
-  async fetchEmotes(channel: string): Promise<Resource<Emote[]>> {
-    const emotes = await this.fetchEmotesWithData(channel)
-
-    if (emotes instanceof ResourceError) return emotes
-    return new ResourceSuccess(emotes.data.map(emote => emote.name))
-  }
-
-  async fetchEmotesWithData(
+  async fetchEmotes(
     channel: string
   ): Promise<Resource<SeventvEmoteResponse[]>> {
     const error = new ResourceError('Error fetching 7tv emotes')
@@ -28,7 +21,10 @@ export class SevenTvRest {
   }
 
   async getEmotesForChannel(channel: string): Promise<Resource<Emote[]>> {
-    return await this.fetchEmotes(channel)
+    const emotes = await this.fetchEmotes(channel)
+
+    if (emotes instanceof ResourceError) return emotes
+    return new ResourceSuccess(emotes.data.map(emote => emote.name))
   }
 
   async getUserId(username: string) {
@@ -46,7 +42,7 @@ export class SevenTvRest {
     givenEmote: string,
     channel: string
   ): Promise<Resource<string[]>> {
-    const emotes = await this.fetchEmotesWithData(channel)
+    const emotes = await this.fetchEmotes(channel)
     if (emotes instanceof ResourceError)
       return new ResourceError('Could not fetch emotes')
 
