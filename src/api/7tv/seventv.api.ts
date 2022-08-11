@@ -252,9 +252,6 @@ export class SevenTvApi {
   }
 
   private getErrorMessage(code?: string): ResourceError {
-    if (code === '70403')
-      return new ResourceError('Please add me as an editor of your channel :)')
-    if (code === '704611') return new ResourceError('Emote is already enabled')
 
     return new ResourceError('Unknown Error')
   }

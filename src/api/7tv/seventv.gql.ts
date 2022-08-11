@@ -1,0 +1,7 @@
+    if (code === '70403')
+      return new ResourceError('Please add me as an editor of your channel :)')
+    if (code === '704611') return new ResourceError('Emote is already enabled')
+    if (code === '704610') return new ResourceError('Emote is not enabled')
+    if (code === '704612')
+      return new ResourceError('Emote with this name already exists')
+    return new ResourceError('Unknown Error')
