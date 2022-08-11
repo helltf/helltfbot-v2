@@ -14,8 +14,21 @@ export class AddCommand implements Command {
   cooldown = 10000
   execute = async ({
     message: [emote],
-    channel
+    channel,
+    user
   }: CommandContext): Promise<BotResponse> => {
+    const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
+
+    if (isEditor instanceof ResourceError) {
+      return { response: 'could not fetch editors', success: false }
+    }
+
+    if (!isEditor.data)
+      return {
+        response: 'You are not an editor of this channel :\\',
+        success: false
+      }
+
     const result = await hb.api.seventv.gql.addEmote(emote, channel)
 
     if (result instanceof ResourceError) {
