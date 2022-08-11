@@ -16,7 +16,7 @@ export class AddCommand implements Command {
     message: [emote],
     channel
   }: CommandContext): Promise<BotResponse> => {
-    const result = await hb.api.seventv.addEmote(emote, channel)
+    const result = await hb.api.seventv.gql.addEmote(emote, channel)
 
     if (result instanceof ResourceError) {
       return {

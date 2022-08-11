@@ -18,7 +18,11 @@ export class YoinkCommand implements Command {
     channel
   }: CommandContext): Promise<BotResponse> => {
     const yoinkChannel = user.username!
-    const emoteResult = await hb.api.seventv.yoink(emote, channel, yoinkChannel)
+    const emoteResult = await hb.api.seventv.gql.yoink(
+      emote,
+      channel,
+      yoinkChannel
+    )
 
     if (emoteResult instanceof ResourceError) {
       return {
@@ -29,7 +33,7 @@ export class YoinkCommand implements Command {
 
     const [emoteId, emoteName] = emoteResult.data
 
-    const aliasResult = await hb.api.seventv.setAlias(
+    const aliasResult = await hb.api.seventv.gql.setAlias(
       emoteId,
       emoteName,
       yoinkChannel
