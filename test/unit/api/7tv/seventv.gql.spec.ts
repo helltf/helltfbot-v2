@@ -28,7 +28,7 @@ describe('7tv gql', () => {
     })
   })
 
-  fdescribe('add emote', () => {
+  describe('add emote', () => {
     const channel = 'channel'
     const emote = 'emote'
     beforeEach(() => {
@@ -66,7 +66,7 @@ describe('7tv gql', () => {
     it('add request returns error return error message', async () => {
       const errorCode = '200'
       spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
-      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess(['1', 'name']))
+      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: 'emoteName' }))
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorCode))
 
       const response = await gql.addEmote(emote, channel)
@@ -81,7 +81,7 @@ describe('7tv gql', () => {
     it('add request returns success return emotename', async () => {
       const emoteName = 'EmoteName'
       spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
-      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess(['1', emoteName]))
+      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: emoteName }))
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(''))
 
       const response = await gql.addEmote(emote, channel)

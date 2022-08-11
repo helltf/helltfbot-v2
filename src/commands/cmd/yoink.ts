@@ -31,7 +31,7 @@ export class YoinkCommand implements Command {
       }
     }
 
-    const [emoteId, emoteName] = emoteResult.data
+    const { id: emoteId, name: emoteName } = emoteResult.data
 
     const emoteData = await hb.api.seventv.rest.getEmoteById(emoteId)
 

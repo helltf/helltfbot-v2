@@ -39,7 +39,7 @@ export class SevenTvGQL {
       return emoteResource
     }
 
-    const [emoteId, emoteName] = emoteResource.data
+    const { id: emoteId, name: emoteName } = emoteResource.data
 
     const query = this.getAddEmoteQuery()
     const variables = this.getEmoteUpdateVariables(emoteId, channelId.data, '')
@@ -53,7 +53,7 @@ export class SevenTvGQL {
     return new ResourceSuccess(emoteName)
   }
 
-  async queryEmotes(emote: string): Promise<Resource<string[]>> {
+  async queryEmotes(emote: string): Promise<Resource<EmoteData>> {
     const query = this.getQueryEmoteQuery()
     const response = await this.runGqlRequest<EmoteQueryData>(
       query,
@@ -119,7 +119,7 @@ export class SevenTvGQL {
     emote: string,
     channel: string,
     newChannel: string
-  ): Promise<Resource<string[]>> {
+  ): Promise<Resource<EmoteData>> {
     const channelId = await hb.api.seventv.rest.getUserId(newChannel)
 
     if (channelId instanceof ResourceError) return channelId
@@ -146,7 +146,7 @@ export class SevenTvGQL {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess([emoteId, emoteName])
+    return new ResourceSuccess({ id: emoteId, name: emoteName })
   }
 
   async setAlias(
@@ -342,4 +342,9 @@ export interface User {
 
 export interface SevenTvUserResponse {
   user: User
+}
+
+export interface EmoteData {
+  id: string
+  name: string
 }
