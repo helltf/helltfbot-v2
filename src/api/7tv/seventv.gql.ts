@@ -5,7 +5,7 @@ import distance from 'jaro-winkler'
 export class SevenTvGQL {
   url = 'https://7tv.io/v2/gql'
 
-  private async runGqlRequest<T>(
+  async runGqlRequest<T>(
     query: string,
     variables: { [key: string]: any }
   ): Promise<Resource<T>> {

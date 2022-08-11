@@ -1,7 +1,8 @@
 import { SevenTvGQL } from '@api/7tv/seventv.gql'
-import { ResourceError } from '@api/types'
+import { ResourceError, ResourceSuccess } from '@api/types'
+import { setup } from '@test-utils/setup'
 
-fdescribe('7tv gql', () => {
+describe('7tv gql', () => {
   let gql: SevenTvGQL
 
   beforeEach(() => {
@@ -24,6 +25,72 @@ fdescribe('7tv gql', () => {
 
         expect(errorMessage).toEqual(new ResourceError(message))
       })
+    })
+  })
+
+  fdescribe('add emote', () => {
+    const channel = 'channel'
+    const emote = 'emote'
+    beforeEach(() => {
+      setup()
+    })
+
+    it('channel does not exist return resource error', async () => {
+      const channelError = new ResourceError('Error')
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(channelError)
+
+      const response = await gql.addEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error } = response as ResourceError
+
+      expect(error).toBe(channelError.error)
+    })
+
+    it('emote could not be found return error resource', async () => {
+      const userId = '1'
+      const queryError = new ResourceError('emote not found')
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess(userId))
+      spyOn(gql, 'queryEmotes').and.resolveTo(queryError)
+
+      const response = await gql.addEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error } = response as ResourceError
+
+      expect(error).toBe(queryError.error)
+    })
+
+    it('add request returns error return error message', async () => {
+      const errorCode = '200'
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
+      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess(['1', 'name']))
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorCode))
+
+      const response = await gql.addEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error } = response as ResourceError
+
+      expect(error).toBe(gql.getErrorMessage(errorCode).error)
+    })
+
+    it('add request returns success return emotename', async () => {
+      const emoteName = 'EmoteName'
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
+      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess(['1', emoteName]))
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(''))
+
+      const response = await gql.addEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<string>
+
+      expect(data).toBe(emoteName)
     })
   })
 })
