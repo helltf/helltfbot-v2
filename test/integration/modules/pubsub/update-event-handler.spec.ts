@@ -39,8 +39,8 @@ describe('Test event handler to return the correct messages', () => {
     const notification = getExampleNotificationEntity({})
     notification[type] = true
 
-    await hb.db.userRepo.save(notification.user)
-    await hb.db.notificationRepo.save(notification)
+    await hb.db.user.save(notification.user)
+    await hb.db.notification.save(notification)
 
     const result = await eventHandler.getNotifiedUsers(streamer, type)
 
@@ -91,6 +91,6 @@ describe('Test event handler to return the correct messages', () => {
 async function saveNotificationWithUser(
   notification: Partial<NotificationEntity>
 ) {
-  await hb.db.userRepo.save(notification.user!)
-  await hb.db.notificationRepo.save(notification)
+  await hb.db.user.save(notification.user!)
+  await hb.db.notification.save(notification)
 }

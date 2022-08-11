@@ -8,7 +8,7 @@ import {
 } from 'typeorm'
 import { TwitchUserEntity } from './user.entity'
 
-@Entity('notification')
+@Entity('notifications')
 @Index(['streamer', 'user'], { unique: true })
 export class NotificationEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')

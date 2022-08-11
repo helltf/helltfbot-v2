@@ -87,7 +87,7 @@ export class NotifyCommand implements Command {
       event: UserNotificationType
     ): Promise<boolean> {
       return (
-        (await hb.db.notificationRepo.findOne({
+        (await hb.db.notification.findOne({
           where: {
             user: {
               id: userId
@@ -107,7 +107,7 @@ export class NotifyCommand implements Command {
       id: number,
       topicType: NotifyEventType
     ) {
-      await hb.db.notificationChannelRepo.save({
+      await hb.db.notificationChannel.save({
         name: channel,
         [topicType]: true,
         id: id
@@ -120,7 +120,7 @@ export class NotifyCommand implements Command {
     ): Promise<boolean> {
       const event = this.mapEventTypeToNotifyType(eventType)
       return (
-        (await hb.db.notificationChannelRepo.countBy({
+        (await hb.db.notificationChannel.countBy({
           name: streamer,
           [event]: true
         })) === 1
@@ -149,7 +149,7 @@ export class NotifyCommand implements Command {
       id: number
     ) {
       if (await this.userNotificationIsExisting(id, streamer)) {
-        await hb.db.notificationRepo.update(
+        await hb.db.notification.update(
           {
             streamer: streamer,
             user: {
@@ -161,7 +161,7 @@ export class NotifyCommand implements Command {
           }
         )
       } else {
-        await hb.db.notificationRepo.save({
+        await hb.db.notification.save({
           channel: channel,
           streamer: streamer,
           [event]: true,
@@ -177,7 +177,7 @@ export class NotifyCommand implements Command {
       streamer: string
     ): Promise<boolean> {
       return (
-        (await hb.db.notificationRepo.findOneBy({
+        (await hb.db.notification.findOneBy({
           user: {
             id: userId
           },

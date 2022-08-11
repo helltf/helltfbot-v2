@@ -1,6 +1,6 @@
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { ChatUserstate } from 'tmi.js'
-import { Module } from './export/module'
+import { Module } from './types'
 
 export class ColorTracking implements Module {
   name = 'Color'
@@ -22,7 +22,7 @@ export class ColorTracking implements Module {
     const id = Number(userId)
 
     const savedColors = (
-      await hb.db.userRepo.findOne({
+      await hb.db.user.findOne({
         where: {
           id: id
         },
@@ -46,7 +46,7 @@ export class ColorTracking implements Module {
   }
 
   updateDatabaseColors(userId: number, colors: string[]) {
-    hb.db.colorRepo.update(
+    hb.db.color.update(
       {
         user: {
           id: userId
@@ -60,7 +60,7 @@ export class ColorTracking implements Module {
   }
 
   async saveNewHistory(userId: number, color: string) {
-    await hb.db.colorRepo.save({
+    await hb.db.color.save({
       user: {
         id: userId
       },
@@ -103,12 +103,12 @@ export class ColorTracking implements Module {
   async updateUser(user: ChatUserstate) {
     const id = parseInt(user['user-id']!)
 
-    const userEntry = await hb.db.userRepo.findOneBy({
+    const userEntry = await hb.db.user.findOneBy({
       id: id
     })
 
     if (userEntry) {
-      return await hb.db.userRepo.update(
+      return await hb.db.user.update(
         {
           id: id
         },
@@ -120,7 +120,7 @@ export class ColorTracking implements Module {
       )
     }
 
-    await hb.db.userRepo.save({
+    await hb.db.user.save({
       color: user.color,
       display_name: user['display-name'],
       name: user.username,

@@ -49,7 +49,7 @@ describe('test suggest command', () => {
 
     const response = await suggest.execute({ channel, user, message })
 
-    const savedEntity = await hb.db.suggestionRepo.find()
+    const savedEntity = await hb.db.suggestion.find()
     const expectedLength = 1
     const id = 1
     const expectedMessage = `Succesfully saved your suggestion with id ${id}`
@@ -67,7 +67,7 @@ describe('test suggest command', () => {
 
     const response = await suggest.execute({ channel, user, message })
 
-    const savedEntity = await hb.db.suggestionRepo.findOneBy({
+    const savedEntity = await hb.db.suggestion.findOneBy({
       id: id
     })
 
@@ -82,7 +82,7 @@ describe('test suggest command', () => {
     const message = ['add', 'this', 'do', 'this']
     await saveUserStateAsUser(user)
 
-    await hb.db.suggestionRepo.save({
+    await hb.db.suggestion.save({
       date: 1,
       suggestion: 'a',
       user: {
@@ -93,7 +93,7 @@ describe('test suggest command', () => {
     const response = await suggest.execute({ channel, user, message })
     const expectedId = 2
 
-    const savedEntity = await hb.db.suggestionRepo.findOneBy({
+    const savedEntity = await hb.db.suggestion.findOneBy({
       id: expectedId
     })
 

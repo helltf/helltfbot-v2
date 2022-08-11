@@ -12,55 +12,59 @@ import {
   ErrorEntity,
   EmoteStatsEntity
 } from '@db/entities'
+import { TwitchTokenEntity } from '@src/db/entities/twitch_token.entity'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { getOrmConf } from '../../ormconfig'
 
 export interface DbRepositories {
-  wordleRepo: Repository<WordleWordEntity>
-  colorRepo: Repository<ColorHistoryEntity>
-  channelRepo: Repository<ChannelEntity>
-  userRepo: Repository<TwitchUserEntity>
-  banRepo: Repository<BanEntity>
-  timeoutRepo: Repository<TimeoutEntity>
-  commandRepo: Repository<CommandEntity>
-  notificationRepo: Repository<NotificationEntity>
-  notificationChannelRepo: Repository<NotificationChannelEntity>
-  suggestionRepo: Repository<SuggestionEntity>
-  errorRepo: Repository<ErrorEntity>
+  wordle: Repository<WordleWordEntity>
+  color: Repository<ColorHistoryEntity>
+  channel: Repository<ChannelEntity>
+  user: Repository<TwitchUserEntity>
+  ban: Repository<BanEntity>
+  timeout: Repository<TimeoutEntity>
+  command: Repository<CommandEntity>
+  notification: Repository<NotificationEntity>
+  notificationChannel: Repository<NotificationChannelEntity>
+  suggestion: Repository<SuggestionEntity>
+  error: Repository<ErrorEntity>
+  twitch_at: Repository<TwitchTokenEntity>
 }
 
 export class DB implements DbRepositories {
-  wordleRepo: Repository<WordleWordEntity>
-  colorRepo: Repository<ColorHistoryEntity>
-  channelRepo: Repository<ChannelEntity>
-  userRepo: Repository<TwitchUserEntity>
-  banRepo: Repository<BanEntity>
-  timeoutRepo: Repository<TimeoutEntity>
-  commandRepo: Repository<CommandEntity>
-  notificationRepo: Repository<NotificationEntity>
-  notificationChannelRepo: Repository<NotificationChannelEntity>
-  suggestionRepo: Repository<SuggestionEntity>
+  wordle: Repository<WordleWordEntity>
+  color: Repository<ColorHistoryEntity>
+  channel: Repository<ChannelEntity>
+  user: Repository<TwitchUserEntity>
+  ban: Repository<BanEntity>
+  timeout: Repository<TimeoutEntity>
+  command: Repository<CommandEntity>
+  notification: Repository<NotificationEntity>
+  notificationChannel: Repository<NotificationChannelEntity>
+  suggestion: Repository<SuggestionEntity>
   dataSource: DataSource
-  errorRepo: Repository<ErrorEntity>
-  emoteStatsRepo: Repository<EmoteStatsEntity>
+  error: Repository<ErrorEntity>
+  emoteStats: Repository<EmoteStatsEntity>
+  twitch_at: Repository<TwitchTokenEntity>
 
   constructor(config: PostgresConnectionOptions = getOrmConf()) {
     const dataSource = new DataSource(config)
-    this.wordleRepo = dataSource.getRepository(WordleWordEntity)
-    this.colorRepo = dataSource.getRepository(ColorHistoryEntity)
-    this.channelRepo = dataSource.getRepository(ChannelEntity)
-    this.userRepo = dataSource.getRepository(TwitchUserEntity)
-    this.banRepo = dataSource.getRepository(BanEntity)
-    this.timeoutRepo = dataSource.getRepository(TimeoutEntity)
-    this.commandRepo = dataSource.getRepository(CommandEntity)
-    this.notificationRepo = dataSource.getRepository(NotificationEntity)
-    this.suggestionRepo = dataSource.getRepository(SuggestionEntity)
-    this.notificationChannelRepo = dataSource.getRepository(
+    this.wordle = dataSource.getRepository(WordleWordEntity)
+    this.color = dataSource.getRepository(ColorHistoryEntity)
+    this.channel = dataSource.getRepository(ChannelEntity)
+    this.user = dataSource.getRepository(TwitchUserEntity)
+    this.ban = dataSource.getRepository(BanEntity)
+    this.timeout = dataSource.getRepository(TimeoutEntity)
+    this.command = dataSource.getRepository(CommandEntity)
+    this.notification = dataSource.getRepository(NotificationEntity)
+    this.suggestion = dataSource.getRepository(SuggestionEntity)
+    this.notificationChannel = dataSource.getRepository(
       NotificationChannelEntity
     )
-    this.errorRepo = dataSource.getRepository(ErrorEntity)
-    this.emoteStatsRepo = dataSource.getRepository(EmoteStatsEntity)
+    this.error = dataSource.getRepository(ErrorEntity)
+    this.emoteStats = dataSource.getRepository(EmoteStatsEntity)
+    this.twitch_at = dataSource.getRepository(TwitchTokenEntity)
     this.dataSource = dataSource
   }
   async initialize(): Promise<DB> {

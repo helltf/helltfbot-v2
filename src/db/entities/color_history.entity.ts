@@ -8,7 +8,7 @@ import {
 } from 'typeorm'
 import { TwitchUserEntity } from './user.entity'
 
-@Entity('color_history')
+@Entity('color_histories')
 export class ColorHistoryEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number

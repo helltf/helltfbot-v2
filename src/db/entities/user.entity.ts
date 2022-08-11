@@ -11,8 +11,9 @@ import { GlobalPermissionLevel } from '../../utilities/permission/types'
 import { ColorHistoryEntity } from './color_history.entity'
 import { NotificationEntity } from './notification.entity'
 import { SuggestionEntity } from './suggestion.entity'
+import { TwitchTokenEntity } from './twitch_token.entity'
 
-@Entity('user')
+@Entity('users')
 export class TwitchUserEntity extends BaseEntity {
   @PrimaryColumn('int')
   id: number
@@ -47,4 +48,7 @@ export class TwitchUserEntity extends BaseEntity {
 
   @OneToOne(() => EmoteStatsEntity, stats => stats.user)
   emotegameStats: EmoteStatsEntity
+
+  @OneToOne(() => TwitchTokenEntity, token => token.user)
+  access_token: TwitchTokenEntity
 }

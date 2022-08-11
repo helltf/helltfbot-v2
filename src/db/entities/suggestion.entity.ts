@@ -3,11 +3,17 @@ import {
   Column,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm'
 import { TwitchUserEntity } from './user.entity'
 
-@Entity('suggestion')
+export enum SuggestionStatus {
+  DENIED = 'denied',
+  ACCEPTED = 'accepted',
+  PENDING = 'pending'
+}
+
+@Entity('suggestions')
 export class SuggestionEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
@@ -20,4 +26,14 @@ export class SuggestionEntity extends BaseEntity {
 
   @Column('bigint')
   date: number
+
+  @Column({
+    type: 'enum',
+    enum: SuggestionStatus,
+    default: SuggestionStatus.PENDING
+  })
+  status: SuggestionStatus
+
+  @Column('varchar', { default: null, nullable: true })
+  reason: string
 }

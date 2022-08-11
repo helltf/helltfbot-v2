@@ -1,5 +1,5 @@
 import { Command } from "@commands/types"
-import { CommandService } from "@service/commands.service"
+import { CommandService } from "@src/services/commands.service"
 import { clearDb } from "../../test-utils/clear"
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import { getExampleCommand } from '../../test-utils/example'
@@ -26,7 +26,7 @@ describe('test updating commands', () => {
 
       await commandsService.addCommandsToDb()
 
-      const savedCommands = await hb.db.commandRepo.find()
+      const savedCommands = await hb.db.command.find()
 
       expect(savedCommands).toHaveSize(0)
     })
@@ -38,7 +38,7 @@ describe('test updating commands', () => {
 
       await commandsService.addCommandsToDb()
 
-      const savedCommands = await hb.db.commandRepo.find()
+      const savedCommands = await hb.db.command.find()
 
       expect(savedCommands).toHaveSize(1)
     })
@@ -55,7 +55,7 @@ describe('test updating commands', () => {
 
       await commandsService.addCommandsToDb()
 
-      const savedCommands = await hb.db.commandRepo.find()
+      const savedCommands = await hb.db.command.find()
 
       expect(savedCommands).toHaveSize(2)
     })
@@ -63,7 +63,7 @@ describe('test updating commands', () => {
     it('command already exists in db and will set deleted to false', async () => {
       const exampleCommand = getExampleCommand({})
 
-      await hb.db.commandRepo.save({
+      await hb.db.command.save({
         ...exampleCommand,
         deleted: true
       })
@@ -72,7 +72,7 @@ describe('test updating commands', () => {
 
       await commandService.addCommandsToDb()
 
-      const { deleted } = (await hb.db.commandRepo.findOneBy({
+      const { deleted } = (await hb.db.command.findOneBy({
         name: exampleCommand.name
       }))!
 
@@ -88,7 +88,7 @@ describe('test updating commands', () => {
 
       await commandsService.addCommandsToDb()
 
-      const { deleted } = (await hb.db.commandRepo.findOneBy({
+      const { deleted } = (await hb.db.command.findOneBy({
         name: exampleCommand.name
       }))!
 
@@ -97,13 +97,13 @@ describe('test updating commands', () => {
     it('command no longer exists deleted will be set to true', async () => {
       const exampleCommand = getExampleCommand({})
 
-      await hb.db.commandRepo.save(exampleCommand)
+      await hb.db.command.save(exampleCommand)
 
       const commandsService = new CommandService([])
 
       await commandsService.updateDeletedCommands()
 
-      const { deleted } = (await hb.db.commandRepo.findOneBy({
+      const { deleted } = (await hb.db.command.findOneBy({
         name: exampleCommand.name
       }))!
 

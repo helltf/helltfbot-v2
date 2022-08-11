@@ -1,87 +1,46 @@
-import { ChatPermissionLevel } from "@src/utilities/permission/types"
-import { UpdateResult } from "typeorm"
-import { BotResponse } from "../../client/types"
-import { UserNotificationType } from '../../modules/pubsub/types'
-import { NotificationService } from '../../service/notification.service'
-import { Command, CommandContext, CommandFlag } from '../types'
+import { ResourceError } from "@api/types";
+import { BotResponse } from "@src/client/types";
+import { Command, CommandContext } from "@src/commands/types";
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class RemoveCommand implements Command {
   name = 'remove'
-  alias = ['rmn', 'removenotify', 'removeme', 'removenotification']
-  cooldown = 5000
-  description = 'removes your notification for the given streamer on the event'
-  optionalParams = []
-  requiredParams = ['streamer', 'event']
   permissions = ChatPermissionLevel.USER
-  flags: CommandFlag[] = [CommandFlag.WHISPER]
-  async execute({
+  description = 'removes a 7tv emote from channel'
+  requiredParams = ['emote_name']
+  optionalParams = []
+  alias = ['removeemote']
+  flags = []
+  cooldown = 10000
+  execute = async ({
+    message: [emote],
     channel,
-    user: { 'user-id': unparsedUserId },
-    message: [streamer, event]
-  }: CommandContext): Promise<BotResponse> {
-    const userId = Number(unparsedUserId)
-    const eventType = event as UserNotificationType
+    user
+  }: CommandContext): Promise<BotResponse> => {
+    const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
 
-    const errorResponse = {
-      success: false,
-      channel,
-      response: ''
+    if (isEditor instanceof ResourceError) {
+      return { response: 'could not fetch editors', success: false }
     }
 
-    if (!streamer) {
-      errorResponse.response = 'No streamer specified'
-      return errorResponse
+    if (!isEditor.data)
+      return {
+        response: 'You are not an editor of this channel :\\',
+        success: false
+      }
+
+    const result = await hb.api.seventv.gql.removeEmote(emote, channel)
+
+    if (result instanceof ResourceError) {
+      return {
+        response: result.error,
+        success: false
+      }
     }
-
-    if (this.methods.eventIsNotValid(eventType)) {
-      errorResponse.response = `Event unknown. Valid events are ${Object.values(
-        UserNotificationType
-      ).join(' ')}`
-
-      return errorResponse
-    }
-
-    const { affected } = await this.methods.removeEventNotification(
-      userId,
-      streamer,
-      eventType
-    )
-
-    if (!affected) {
-      errorResponse.response = 'No matching notification found'
-      return errorResponse
-    }
-
-    await new NotificationService().cleanAllNotifications()
 
     return {
-      success: true,
-      response: 'Successfully removed your notification'
-    }
-  }
-  methods = {
-    async removeEventNotification(
-      userId: number,
-      streamer: string,
-      event: UserNotificationType
-    ): Promise<UpdateResult> {
-      return await hb.db.notificationRepo.update(
-        {
-          user: {
-            id: userId
-          },
-          streamer: streamer
-        },
-        {
-          [event]: false
-        }
-      )
-    },
-
-    eventIsNotValid(event: string) {
-      return !Object.values(UserNotificationType).includes(
-        event as UserNotificationType
-      )
+      response: `Succesfully removed ${result.data}`,
+      success: true
     }
   }
 }

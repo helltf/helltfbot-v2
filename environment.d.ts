@@ -1,4 +1,4 @@
-import { TwitchBot } from './src/client/bot'
+import { TwitchBot } from './bot'
 declare global {
   var hb: TwitchBot
   namespace NodeJS {
@@ -18,6 +18,8 @@ declare global {
       MAIN_USER_ID: string
       DATABASE_URI: string
       TEST_DATABASE_URI: string
+      ENCRYPT_KEY: string
+      SEVENTV_GQL_TOKEN: string
     }
   }
 }
@@ -38,4 +40,3 @@ export interface Environment {
   MAIN_USER_ID: string
   TEST_DATABASE_URI: string
 }
-

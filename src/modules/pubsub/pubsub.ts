@@ -1,9 +1,9 @@
-import { LogType } from '../../logger/log-type'
 import { NotificationHandler } from './notification-handler'
 import { PubSubConnection } from './pubsub-connection'
 import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types'
 import { PubSubEventHandler } from './pubsub-event-handler'
 import { NotificationChannelEntity } from '@db/entities'
+import { LogType } from '@src/logger/logger-export'
 
 export class PubSub {
   pubSubEventHandler: PubSubEventHandler
@@ -38,7 +38,7 @@ export class PubSub {
   }
 
   connect = async () => {
-    const channels = await hb.db.notificationChannelRepo.find()
+    const channels = await hb.db.notificationChannel.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
     hb.log(LogType.PUBSUB, `Connecting to ${channels.length} topics ...`)
 
@@ -113,7 +113,7 @@ export class PubSub {
   async getStreamerForTopic(topic: string): Promise<string> {
     const id = this.getIdForTopic(topic)
 
-    return (await hb.db.notificationChannelRepo.findOneBy({
+    return (await hb.db.notificationChannel.findOneBy({
       id: parseInt(id)
     }))!.name
   }

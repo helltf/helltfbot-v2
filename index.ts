@@ -1,8 +1,9 @@
 import 'dotenv/config'
 import { setupDev } from './scripts/env-setup/dev';
-import { TwitchBot } from './src/client/bot'
+import { TwitchBot } from './bot'
 
 globalThis.hb = new TwitchBot()
+
 {
   ;(async () => {
     await hb.init()
@@ -17,7 +18,7 @@ globalThis.hb = new TwitchBot()
 }
 
 process.on('uncaughtException', async error => {
-  await hb.db.errorRepo.save({
+  await hb.db.error.save({
     message: error.message,
     stack_trace: error.stack,
     timestamp: Date.now()
@@ -26,3 +27,5 @@ process.on('uncaughtException', async error => {
 
   process.exit(1)
 })
+
+

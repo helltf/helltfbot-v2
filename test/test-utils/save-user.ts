@@ -10,7 +10,7 @@ export async function saveUserStateAsUser(user: TwitchUserState) {
     permission = user.permission as GlobalPermissionLevel
   }
 
-  await hb.db.userRepo.save({
+  await hb.db.user.save({
     color: user.color,
     display_name: user['display-name'],
     id: parseInt(user['user-id']!),

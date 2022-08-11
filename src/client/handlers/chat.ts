@@ -1,8 +1,18 @@
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { wait } from '@src/utilities/wait'
 import { ChatUserstate } from 'tmi.js'
-import { Command, CommandFlag, MessageType } from '../../commands/types'
-import { ChatContext, ResponseContext, TwitchUserState } from '../types'
+import {
+  Command,
+  CommandContext,
+  CommandFlag,
+  MessageType
+} from '../../commands/types'
+import {
+  ChatContext,
+  InputContext,
+  ResponseContext,
+  TwitchUserState
+} from '../types'
 
 const prefix = process.env.PREFIX
 
@@ -50,43 +60,62 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
   if (!hasPrefix(message)) return
 
   const [commandLookup, ...data] = getMessageInfo(message)
-  let contextMessage = data
+  const contextMessage = data
+
   const command = hb.getCommand(commandLookup)
 
   if (!command) return
 
-  user.permission = await hb.utils.permission.get(user)
-
-  if (
-    type === MessageType.WHISPER &&
-    !command.flags.includes(CommandFlag.WHISPER)
-  )
-    return sendResponse({
-      where,
-      response: {
-        response: 'This command is not available via whispers',
-        success: true
-      },
-      type
-    })
-
   if (userHasCooldown(command, user)) return
 
-  if (command.flags.includes(CommandFlag.LOWERCASE))
-    contextMessage = contextMessage.map(m => m.toLowerCase())
+  user.permission = await hb.utils.permission.get(user)
 
-  setCooldown(command, user)
-
-  const response = await command.execute({
+  const context: InputContext = evaluateFlags(command, {
     channel: where,
     message: contextMessage,
     type: type,
     user: user
   })
 
+  if (context.failed) {
+    return sendResponse({
+      response: { response: context.error!, success: false },
+      type: type,
+      where: where
+    })
+  }
+
+  setCooldown(command, user)
+
+  const response = await command.execute(context.commandContext)
+
   incrementCommandCounter(command)
 
   sendResponse({ where, type, response })
+}
+
+function evaluateFlags(
+  command: Command,
+  context: CommandContext
+): InputContext {
+  const resultContext: InputContext = {
+    failed: false,
+    commandContext: context
+  }
+
+  if (
+    context.type === MessageType.WHISPER &&
+    !command.flags.includes(CommandFlag.WHISPER)
+  ) {
+    resultContext.failed = true
+    resultContext.error = 'This command is not available via whispers'
+  }
+
+  if (command.flags.includes(CommandFlag.LOWERCASE))
+    resultContext.commandContext.message =
+      resultContext.commandContext.message.map(m => m.toLowerCase())
+
+  return resultContext
 }
 
 function getMessageInfo(message: string): string[] {
@@ -141,7 +170,7 @@ function userHasCooldown(
 }
 
 async function incrementCommandCounter(command: Command) {
-  await hb.db.commandRepo.increment(
+  await hb.db.command.increment(
     {
       name: command.name
     },

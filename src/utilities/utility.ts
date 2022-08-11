@@ -1,10 +1,13 @@
+import { CryptoUtility } from '@src/utilities/crypto'
 import { Permission } from '@src/utilities/permission/permission'
 import { HumanizeDuration, HumanizeDurationLanguage } from 'humanize-duration-ts'
 export class Utility {
   permission: Permission
+  crypto: CryptoUtility
 
   constructor() {
     this.permission = new Permission()
+    this.crypto = new CryptoUtility()
   }
 
   random = (lowerLimit = 0, upperLimit = 1): number => {
@@ -28,6 +31,11 @@ export class Utility {
   humanize(time: number): string {
     const formatter = new HumanizeDuration(new HumanizeDurationLanguage())
     return this.shortenTimeString(formatter.humanize(time, { round: true }))
+  }
+
+  humanizeNow(time: number): string {
+    const difference = Date.now() - time
+    return this.humanize(difference)
   }
 
   shortenTimeString(timeString: string) {

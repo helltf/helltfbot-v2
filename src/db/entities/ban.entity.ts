@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('timeout')
-export class TimeoutEntity extends BaseEntity {
+@Entity('bans')
+export class BanEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
@@ -14,6 +14,10 @@ export class TimeoutEntity extends BaseEntity {
   @Column('bigint')
   at: number
 
-  @Column('bigint')
-  duration: number
+  constructor(opts?: Partial<BanEntity>) {
+    super()
+    this.at = opts?.at ?? Date.now()
+    this.channel = opts?.channel ?? ''
+    this.user = opts?.channel ?? ''
+  }
 }

@@ -1,4 +1,4 @@
-import { Module } from './export/module'
+import { Module } from './types'
 
 export class TimeoutTracking implements Module {
   name = 'Timeout'
@@ -8,7 +8,7 @@ export class TimeoutTracking implements Module {
       (channel: string, username: string, _, duration: number) => {
         channel = channel.replace('#', '')
 
-        hb.db.timeoutRepo.save({
+        hb.db.timeout.save({
           at: Date.now(),
           channel: channel,
           duration: duration,

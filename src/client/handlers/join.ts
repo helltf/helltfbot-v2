@@ -1,10 +1,10 @@
-import { LogType } from '../../logger/log-type'
+import { LogType } from '@src/logger/logger-export'
 import { wait } from '../../utilities/wait'
 
 const TWITCH_ERROR_MESSAGE = ['msg_channel_suspended']
 
 const incrementConnection = async (channel: string) => {
-  await hb.db.channelRepo.increment(
+  await hb.db.channel.increment(
     {
       channel: channel
     },
@@ -23,7 +23,7 @@ const mainJoinChannel = async (channel: string) => {
     await hb.client.join(channel)
   } catch (e: any) {
     if (TWITCH_ERROR_MESSAGE.includes(e)) {
-      hb.db.channelRepo.update(
+      hb.db.channel.update(
         {
           channel: channel
         },
@@ -36,7 +36,7 @@ const mainJoinChannel = async (channel: string) => {
 }
 
 const mainJoinAllChannels = async () => {
-  const joinedChannels = await hb.db.channelRepo.findBy({
+  const joinedChannels = await hb.db.channel.findBy({
     joined: true
   })
 

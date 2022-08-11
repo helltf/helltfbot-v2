@@ -1,6 +1,6 @@
 import { ChatUserstate } from 'tmi.js'
 import { EmoteGameInputResult } from '../games/types'
-import { Module } from './export/module'
+import { Module } from './types'
 
 export class GameModule implements Module {
   name = 'Game'
@@ -40,7 +40,8 @@ export class GameModule implements Module {
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
       hb.sendMessage(
         channel,
-        `${user.username
+        `${
+          user.username
         } has guessed the letter ${message}. The missing letters are ${game.getLetterString()}`
       )
     }
@@ -51,8 +52,7 @@ export class GameModule implements Module {
   async saveEmotegameEventStats(userId: number, result: EmoteGameInputResult) {
     const value = hb.games.mapResultToValue(result)
 
-    if (!value)
-      return
+    if (!value) return
 
     await this.saveNotExistingStats(userId)
 
@@ -60,23 +60,28 @@ export class GameModule implements Module {
   }
 
   async incrementStats(userId: number, value: string) {
-    await hb.db.emoteStatsRepo.increment({
-      user: { id: userId }
-    }, value, 1)
+    await hb.db.emoteStats.increment(
+      {
+        user: { id: userId }
+      },
+      value,
+      1
+    )
   }
 
   async saveNotExistingStats(userId: number) {
-    const userExists = (await hb.db.emoteStatsRepo.countBy({
-      user: {
-        id: userId
-      }
-    })) !== 0
-
-    if (!userExists)
-      await hb.db.emoteStatsRepo.save({
+    const userExists =
+      (await hb.db.emoteStats.countBy({
         user: {
           id: userId
-        },
+        }
+      })) !== 0
+
+    if (!userExists)
+      await hb.db.emoteStats.save({
+        user: {
+          id: userId
+        }
       })
   }
 }

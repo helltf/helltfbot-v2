@@ -1,29 +1,30 @@
-import { Emote } from "../../commands/cmd/emotegame"
 import { Resource, ResourceError, ResourceSuccess } from "../types"
-import fetch from "node-fetch"
+import { SevenTvGQL } from '@api/7tv/seventv.gql'
+import { SevenTvRest } from '@api/7tv/seventv.rest'
 
 export class SevenTvApi {
-  url = 'https://api.7tv.app/v2/users/'
+  gql: SevenTvGQL = new SevenTvGQL()
+  rest: SevenTvRest = new SevenTvRest()
 
-  async fetchEmotes(channel: string): Promise<Resource<Emote[]>> {
-    const error = new ResourceError('Error fetching 7tv emotes')
+  async getEmotesForChannel(channel: string): Promise<Resource<string[]>> {
+    return this.rest.getEmotesForChannel(channel)
+  }
 
-    try {
-      const emotes = (await (
-        await fetch(this.url + channel + '/emotes')
-      ).json()) as SeventvEmoteResponse[]
-      return new ResourceSuccess(emotes.map(e => e.name))
-    } catch (e) {
-      return error
+  async isEditor(
+    username: string,
+    channel: string
+  ): Promise<Resource<boolean>> {
+    if (username === channel) {
+      return new ResourceSuccess(true)
     }
-  }
+    const editors = await this.gql.getUserEditors(username)
 
-  async getEmotesForChannel(channel: string): Promise<Resource<Emote[]>> {
-    return await this.fetchEmotes(channel)
+    if (editors instanceof ResourceError) {
+      return editors
+    }
+    return new ResourceSuccess(
+      editors.data.some(editor => editor.login === username.toLowerCase())
+    )
   }
 }
 
-interface SeventvEmoteResponse {
-  id: string
-  name: string
-}

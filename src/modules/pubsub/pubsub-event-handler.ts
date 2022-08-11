@@ -90,7 +90,7 @@ export class PubSubEventHandler {
     streamer: string,
     event: UserNotificationType
   ): Promise<NotificationEntity[]> {
-    const users = hb.db.notificationRepo.find({
+    const users = hb.db.notification.find({
       where: {
         streamer: streamer,
         [event]: true

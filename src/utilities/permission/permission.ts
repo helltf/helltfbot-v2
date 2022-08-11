@@ -8,7 +8,7 @@ export class Permission {
       return ChatPermissionLevel.BROADCASTER
     if (badges?.moderator !== undefined) return ChatPermissionLevel.MOD
     if (badges?.vip !== undefined) return ChatPermissionLevel.VIP
-    if (badges?.subscriber !== undefined || badges.founder !== undefined)
+    if (badges?.subscriber !== undefined || badges?.founder !== undefined)
       return ChatPermissionLevel.SUB
     return ChatPermissionLevel.USER
   }
@@ -24,7 +24,7 @@ export class Permission {
   async getDbPermissions(id: number): Promise<GlobalPermissionLevel> {
     return (
       (
-        await hb.db.userRepo.findOneBy({
+        await hb.db.user.findOneBy({
           id: id
         })
       )?.permission ?? GlobalPermissionLevel.USER

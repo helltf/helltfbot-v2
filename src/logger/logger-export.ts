@@ -1,6 +1,5 @@
 import chalk from 'chalk'
 import { format } from 'date-fns'
-import { LogType } from './log-type'
 
 const getEnumKey = (type: LogType) =>
   Object.keys(LogType)[Object.values(LogType).indexOf(type)]
@@ -16,6 +15,14 @@ const log = (type: LogType, ...args: any) => {
       `[${typeName}]`
     )} -> ${args}`
   )
+}
+
+export enum LogType {
+  TWITCHBOT = '#FF00FF',
+  MODULE = '#eb4034',
+  JOBS = '#34ebc6',
+  PUBSUB = '#00ad9c',
+  ERROR = '#ff3333'
 }
 
 export { log as customLogMessage }

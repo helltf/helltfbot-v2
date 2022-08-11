@@ -47,7 +47,7 @@ export class RemoveSuggestCommand implements Command {
       const parsedUserId = parseInt(userId)
       const parsedSuggestionId = parseInt(suggestionId)
 
-      const entity = await hb.db.suggestionRepo.findOne({
+      const entity = await hb.db.suggestion.findOne({
         where: {
           id: parsedSuggestionId,
           user: {
@@ -64,7 +64,7 @@ export class RemoveSuggestCommand implements Command {
     async deleteSuggestion(suggestionId: string) {
       const parsedSuggestionId = parseInt(suggestionId)
 
-      await hb.db.suggestionRepo.delete({
+      await hb.db.suggestion.delete({
         id: parsedSuggestionId
       })
     }

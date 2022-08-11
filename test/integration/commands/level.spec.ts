@@ -39,7 +39,7 @@ describe('test level command', () => {
           permission: lvl
         })
 
-        await hb.db.userRepo.save(user)
+        await hb.db.user.save(user)
 
         const permission = await level.methods.getDatabasePermissions(user.id)
 
