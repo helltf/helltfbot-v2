@@ -64,17 +64,25 @@ export class SevenTvGQL {
       return new ResourceError('No emote found')
     }
 
-    for (const foundEmote of response.data.search_emotes) {
+    const match = this.findMatch(response.data.search_emotes, emote)
+
+    if (!match)
+      return new ResourceError('no matching emote found')
+
+    return new ResourceSuccess(match)
+  }
+
+  private findMatch(emotes: SearchEmote[], emoteName: string): EmoteData | undefined {
+    for (const { id, name } of emotes) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const resultDistance = distance(emote, foundEmote.name, {
+      const resultDistance = distance(emoteName, name, {
         caseSensitive: false
       })
       if (resultDistance === 1) {
-        return new ResourceSuccess([foundEmote.id, foundEmote.name])
+        return { id, name }
       }
     }
-    return new ResourceError('no matching emote found')
   }
 
   async removeEmote(emote: string, channel: string): Promise<Resource<string>> {
