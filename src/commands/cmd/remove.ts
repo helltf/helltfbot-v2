@@ -16,7 +16,7 @@ export class RemoveCommand implements Command {
     message: [emote],
     channel
   }: CommandContext): Promise<BotResponse> => {
-    const result = await hb.api.seventv.removeEmote(emote, channel)
+    const result = await hb.api.seventv.gql.removeEmote(emote, channel)
 
     if (result instanceof ResourceError) {
       return {
