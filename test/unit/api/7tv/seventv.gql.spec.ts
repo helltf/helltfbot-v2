@@ -1,4 +1,4 @@
-import { EmoteData, SevenTvGQL } from '@api/7tv/seventv.gql'
+import { Editor, EmoteData, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { setup } from '@test-utils/setup'
 
@@ -66,7 +66,7 @@ fdescribe('7tv gql', () => {
     it('add request returns error return error message', async () => {
       const errorCode = '200'
       spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
-      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: 'emoteName' }))
+      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: 'emoteName' }))
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorCode))
 
       const response = await gql.addEmote(emote, channel)
@@ -81,7 +81,7 @@ fdescribe('7tv gql', () => {
     it('add request returns success return emotename', async () => {
       const emoteName = 'EmoteName'
       spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
-      spyOn(gql, 'queryEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: emoteName }))
+      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: emoteName }))
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(''))
 
       const response = await gql.addEmote(emote, channel)
@@ -91,6 +91,122 @@ fdescribe('7tv gql', () => {
       const { data } = response as ResourceSuccess<EmoteData>
 
       expect(data.name).toBe(emoteName)
+    })
+  })
+
+  describe('remove emote by id', () => {
+    const emote = { id: '1', name: 'name' }
+    const channelId = '1'
+
+    it('request returns error return error resource', async () => {
+      const errorResponse = new ResourceError('Error')
+      spyOn(gql, 'runGqlRequest').and.resolveTo(errorResponse)
+      const response = await gql.removeEmoteById(emote, channelId)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error } = response as ResourceError
+
+      expect(error).toBeDefined()
+    })
+
+    it('request returns data return emote data', async () => {
+      const emoteData = { id: '1', name: 'name' }
+      const channelId = '1'
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(undefined))
+
+      const response = await gql.removeEmoteById(emoteData, channelId)
+
+      expect(response).toBeInstanceOf(ResourceSuccess)
+    })
+
+    it('get variables returns object with set variables', () => {
+      const emoteId = '1'
+      const channelId = '1'
+      const reason = ''
+
+      const variables = gql.getEmoteUpdateVariables(emoteId, channelId, reason)
+
+      const expectedVariables = {
+        em: emoteId,
+        ch: channelId,
+        re: reason
+      }
+
+      expect(variables).toEqual(expectedVariables)
+    })
+  })
+
+  describe('set alias by id', () => {
+    const emoteName = 'name'
+    const emoteId = '1'
+    const channelId = '1'
+
+    it('request returns error return resource error', async () => {
+      const errorMessage = 'Error'
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorMessage))
+
+      const response = await gql.setAliasByEmoteId(emoteId, emoteName, channelId)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error } = response as ResourceError
+
+      expect(error).toBeDefined()
+    })
+
+    it('request is successful return resource success', async () => {
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(null))
+
+      const response = await gql.setAliasByEmoteId(emoteId, emoteName, channelId)
+
+      expect(response).toBeInstanceOf(ResourceSuccess)
+    })
+  })
+
+  describe('get user editors by id', () => {
+    it('request returns error return resource error', async () => {
+      const userId = '1'
+      const error = 'error'
+
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(error))
+
+      const response = await gql.getUserEditorsByUserId(userId)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error: errorMessage } = response as ResourceError
+
+      expect(errorMessage).toBeDefined()
+    })
+
+    it('request is successful return success response', async () => {
+      const userId = '1'
+      const responseData: SevenTvUserResponse = {
+        user: {
+          id: '1',
+          email: '',
+          display_name: '',
+          description: '',
+          editor_ids: [''],
+          editors: [{
+            display_name: 'name',
+            id: '1',
+            login: 'login'
+          }],
+          login: ''
+        }
+      }
+
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(responseData))
+
+      const response = await gql.getUserEditorsByUserId(userId)
+
+      expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<Editor[]>
+
+      expect(data).toEqual(responseData.user.editors)
     })
   })
 })
