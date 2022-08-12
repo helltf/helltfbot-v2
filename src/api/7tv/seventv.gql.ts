@@ -72,16 +72,6 @@ export class SevenTvGQL {
     return new ResourceSuccess(match)
   }
 
-  private findMatch(emotes: SearchEmote[], emoteName: string): EmoteData | undefined {
-    for (const { id, name } of emotes) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const resultDistance = distance(emoteName, name, {
-        caseSensitive: false
-      })
-      if (resultDistance === 1) {
-        return { id, name }
-      }
     }
   }
 
@@ -279,6 +269,20 @@ export class SevenTvGQL {
   private getEditEmoteQuery() {
     return `mutation EditChannelEmote($ch: String!, $em: String!, $data: ChannelEmoteInput!, $re: String) {editChannelEmote(channel_id: $ch, emote_id: $em, data: $data, reason: $re) {id,emote_aliases}}`
   }
+
+  private findMatch(emotes: SearchEmote[], emoteName: string): EmoteData | undefined {
+    for (const { id, name } of emotes) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const resultDistance = distance(emoteName, name, {
+        caseSensitive: false
+      })
+      if (resultDistance === 1) {
+        return { id, name }
+      }
+    }
+  }
+
 }
 
 export interface Role {
