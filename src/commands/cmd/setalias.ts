@@ -38,7 +38,7 @@ export class SetAliasCommand implements Command {
       return { response: emoteData.error, success: false }
     }
 
-    const [emoteId] = emoteData.data
+    const { id: emoteId } = emoteData.data
 
     const result = await hb.api.seventv.gql.setAlias(emoteId, alias, channel)
 

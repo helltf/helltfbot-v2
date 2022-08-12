@@ -1,3 +1,4 @@
+import { EmoteData } from "@api/7tv/seventv.gql"
 import { Resource, ResourceError, ResourceSuccess } from "@api/types"
 import { Emote } from "@src/commands/cmd/emotegame"
 import fetch from "node-fetch"
@@ -41,7 +42,7 @@ export class SevenTvRest {
   async getEmoteIdAndName(
     givenEmote: string,
     channel: string
-  ): Promise<Resource<string[]>> {
+  ): Promise<Resource<EmoteData>> {
     const emotes = await this.fetchEmotes(channel)
     if (emotes instanceof ResourceError)
       return new ResourceError('Could not fetch emotes')
@@ -50,7 +51,7 @@ export class SevenTvRest {
 
     return !emote
       ? new ResourceError('emote not found')
-      : new ResourceSuccess([emote.id, emote.name])
+      : new ResourceSuccess({ id: emote.id, name: emote.name })
   }
 
   async getEmoteById(emoteId: string): Promise<Resource<SevenTvEmote>> {

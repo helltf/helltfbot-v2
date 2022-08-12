@@ -39,7 +39,7 @@ export class AddCommand implements Command {
     }
 
     return {
-      response: `Succesfully added ${result.data}`,
+      response: `Succesfully added ${result.data.name}`,
       success: true
     }
   }

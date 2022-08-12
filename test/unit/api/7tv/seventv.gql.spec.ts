@@ -1,8 +1,8 @@
-import { SevenTvGQL } from '@api/7tv/seventv.gql'
+import { EmoteData, SevenTvGQL } from '@api/7tv/seventv.gql'
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { setup } from '@test-utils/setup'
 
-describe('7tv gql', () => {
+fdescribe('7tv gql', () => {
   let gql: SevenTvGQL
 
   beforeEach(() => {
@@ -88,9 +88,9 @@ describe('7tv gql', () => {
 
       expect(response).toBeInstanceOf(ResourceSuccess)
 
-      const { data } = response as ResourceSuccess<string>
+      const { data } = response as ResourceSuccess<EmoteData>
 
-      expect(data).toBe(emoteName)
+      expect(data.name).toBe(emoteName)
     })
   })
 })
