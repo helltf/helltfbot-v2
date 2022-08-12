@@ -182,22 +182,7 @@ fdescribe('7tv gql', () => {
 
     it('request is successful return success response', async () => {
       const userId = '1'
-      const responseData: SevenTvUserResponse = {
-        user: {
-          id: '1',
-          email: '',
-          display_name: '',
-          description: '',
-          editor_ids: [''],
-          editors: [{
-            display_name: 'name',
-            id: '1',
-            login: 'login'
-          }],
-          login: ''
-        }
-      }
-
+      const responseData: SevenTvUserResponse = getExampleSevenTvUserResponse()
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(responseData))
 
       const response = await gql.getUserEditorsByUserId(userId)
@@ -209,4 +194,52 @@ fdescribe('7tv gql', () => {
       expect(data).toEqual(responseData.user.editors)
     })
   })
+
+  describe('add emote by id', () => {
+    const emote = { id: '1', name: 'name' }
+    const channelId = '2'
+
+    it('request is not successful return error resource', async () => {
+      const error = ''
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(error))
+
+      const response = await gql.addEmoteById(emote, channelId)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error: errorResponse } = response as ResourceError
+
+      expect(errorResponse).toBeDefined()
+    })
+
+    it('request is successful return added emote name and id', async () => {
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(undefined))
+
+      const response = await gql.addEmoteById(emote, channelId)
+
+      expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<EmoteData>
+
+      expect(data).toEqual(emote)
+    })
+  })
 })
+
+function getExampleSevenTvUserResponse() {
+  return {
+    user: {
+      id: '1',
+      email: 'ab',
+      display_name: 'user',
+      description: 'abc',
+      editor_ids: ['2'],
+      editors: [{
+        display_name: 'name',
+        id: '2',
+        login: 'login'
+      }],
+      login: 'user'
+    }
+  }
+}
