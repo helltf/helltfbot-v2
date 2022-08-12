@@ -1,4 +1,5 @@
 import { Resource, ResourceSuccess, ResourceError } from "@api/types"
+import { Emote } from "@src/commands/cmd/emotegame"
 import request from "graphql-request"
 import distance from 'jaro-winkler'
 
@@ -28,7 +29,7 @@ export class SevenTvGQL {
     }
   }
 
-  async addEmote(emote: string, channel: string): Promise<Resource<string>> {
+  async addEmote(emote: string, channel: string): Promise<Resource<EmoteData>> {
     const channelId = await hb.api.seventv.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
@@ -39,18 +40,7 @@ export class SevenTvGQL {
       return emoteResource
     }
 
-    const { id: emoteId, name: emoteName } = emoteResource.data
-
-    const query = this.getAddEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emoteId, channelId.data, '')
-
-    const response = await this.runGqlRequest(query, variables)
-
-    if (response instanceof ResourceError) {
-      return this.getErrorMessage(response.error)
-    }
-
-    return new ResourceSuccess(emoteName)
+    return this.addEmoteById(emoteResource.data, channelId.data)
   }
 
   async queryEmotes(emote: string): Promise<Resource<EmoteData>> {
@@ -72,29 +62,9 @@ export class SevenTvGQL {
     return new ResourceSuccess(match)
   }
 
-    }
-  }
-
-  async removeEmote(emote: string, channel: string): Promise<Resource<string>> {
-    const channelIdResponse = await hb.api.seventv.rest.getUserId(channel)
-
-    if (channelIdResponse instanceof ResourceError) return channelIdResponse
-
-    const channelId = channelIdResponse.data
-
-    const emoteResource = await hb.api.seventv.rest.getEmoteIdAndName(
-      emote,
-      channel
-    )
-    if (emoteResource instanceof ResourceError) {
-      return new ResourceError(emoteResource.error)
-    }
-    const [emoteId, emoteName] = emoteResource.data
-
-    if (!emoteId) return new ResourceError('Could not find that emote')
-
+  async removeEmoteById(emote: EmoteData, channelId: string): Promise<Resource<EmoteData>> {
     const query = this.getRemoveEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
+    const variables = this.getEmoteUpdateVariables(emote.id, channelId, '')
 
     const response = await this.runGqlRequest(query, variables)
 
@@ -102,7 +72,28 @@ export class SevenTvGQL {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess(emoteName)
+    return new ResourceSuccess(emote)
+
+  }
+
+
+  async removeEmote(emote: string, channel: string): Promise<Resource<EmoteData>> {
+    const channelId = await hb.api.seventv.rest.getUserId(channel)
+
+    if (channelId instanceof ResourceError) return channelId
+
+    const emoteResource = await hb.api.seventv.rest.getEmoteIdAndName(
+      emote,
+      channel
+    )
+
+    if (emoteResource instanceof ResourceError) {
+      return new ResourceError(emoteResource.error)
+    }
+
+    if (!emoteResource.data.id) return new ResourceError('Could not find that emote')
+
+    return await this.removeEmoteById(emoteResource.data, channelId.data)
   }
 
   async yoink(
@@ -123,12 +114,17 @@ export class SevenTvGQL {
       return emoteResource
     }
 
-    const [emoteId, emoteName] = emoteResource.data
+    const { id: emoteId } = emoteResource.data
 
     if (!emoteId) return new ResourceError('Could not find that emote')
 
+    return this.addEmoteById(emoteResource.data, channelId.data)
+  }
+
+  async addEmoteById({ id, name }: EmoteData, channelId: string): Promise<Resource<EmoteData>> {
+
     const query = this.getAddEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emoteId, channelId.data, '')
+    const variables = this.getEmoteUpdateVariables(id, channelId, '')
 
     const response = await this.runGqlRequest(query, variables)
 
@@ -136,7 +132,7 @@ export class SevenTvGQL {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess({ id: emoteId, name: emoteName })
+    return new ResourceSuccess({ id, name })
   }
 
   async setAlias(
