@@ -1,6 +1,7 @@
-import { Editor, EmoteData, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
+import { AliasResponse, Editor, EmoteData, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { setup } from '@test-utils/setup'
+import exp from 'constants'
 
 fdescribe('7tv gql', () => {
   let gql: SevenTvGQL
@@ -145,6 +146,90 @@ fdescribe('7tv gql', () => {
     })
   })
 
+  describe('remove emote', () => {
+    const emote = 'emote'
+    const channel = 'channel'
+
+    it('user does not exist return error resource', async () => {
+      const error = 'Error'
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceError(error)
+      )
+
+      const response = await gql.removeEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error: errorMessage } = response as ResourceError
+
+      expect(errorMessage).toEqual(error)
+    })
+
+    it('emote request failes return error resource', async () => {
+      const error = 'Emote error'
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceSuccess('1')
+      )
+      spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
+        new ResourceError(error)
+      )
+
+      const response = await gql.removeEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error: errorMessage } = response as ResourceError
+
+      expect(errorMessage).toBe(error)
+    })
+
+    it('channel and emote are defined invoke remove by id method', async () => {
+      const userId = '1'
+      const emoteData = { id: '2', name: 'emote' }
+      const error = 'Error'
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceSuccess(userId)
+      )
+      spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
+        new ResourceSuccess(emoteData)
+      )
+      spyOn(gql, 'removeEmoteById')
+        .withArgs(emoteData, userId)
+        .and.resolveTo(new ResourceError(error))
+
+      const response = await gql.removeEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error: errorMessage } = response as ResourceError
+
+      expect(errorMessage).toBe(error)
+    })
+
+    it('channel and emote are defined invoke remove by id method', async () => {
+      const userId = '1'
+      const emoteData = { id: '2', name: 'emote' }
+
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceSuccess(userId)
+      )
+      spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
+        new ResourceSuccess(emoteData)
+      )
+      spyOn(gql, 'removeEmoteById')
+        .withArgs(emoteData, userId)
+        .and.resolveTo(new ResourceSuccess(emoteData))
+
+      const response = await gql.removeEmote(emote, channel)
+
+      expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<EmoteData>
+
+      expect(data).toEqual(emoteData)
+    })
+  })
+
   describe('set alias by id', () => {
     const emoteName = 'name'
     const emoteId = '1'
@@ -168,7 +253,12 @@ fdescribe('7tv gql', () => {
     })
 
     it('request is successful return resource success', async () => {
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(null))
+      const emoteId = '1'
+      spyOn(gql, 'runGqlRequest').and.resolveTo(
+        new ResourceSuccess<AliasResponse>({
+          editChannelEmote: { id: emoteId }
+        })
+      )
 
       const response = await gql.setAliasByEmoteId(
         emoteId,
@@ -177,6 +267,10 @@ fdescribe('7tv gql', () => {
       )
 
       expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<string>
+
+      expect(data).toBe(emoteId)
     })
   })
 
