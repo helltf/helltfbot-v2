@@ -1,14 +1,13 @@
 import { AliasResponse, Editor, EmoteData, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { setup } from '@test-utils/setup'
-import exp from 'constants'
 
-fdescribe('7tv gql', () => {
+describe('7tv gql', () => {
   let gql: SevenTvGQL
 
   beforeEach(() => {
-    gql = new SevenTvGQL()
     setup()
+    gql = new SevenTvGQL()
   })
 
   describe('get error', () => {

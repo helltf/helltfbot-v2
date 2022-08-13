@@ -1,8 +1,9 @@
 import { Resource, ResourceSuccess, ResourceError } from "@api/types"
-import { Emote } from "@src/commands/cmd/emotegame"
-import { ExecSyncOptionsWithStringEncoding } from "child_process"
+import { TwitchBot } from "bot"
 import request from 'graphql-request'
 import distance from 'jaro-winkler'
+
+declare var hb: TwitchBot
 
 export class SevenTvGQL {
   url = 'https://7tv.io/v2/gql'
