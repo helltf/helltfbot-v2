@@ -3,7 +3,7 @@ import { TwitchBot } from "bot"
 import request from 'graphql-request'
 import distance from 'jaro-winkler'
 
-declare var hb: TwitchBot
+declare let hb: TwitchBot
 
 export class SevenTvGQL {
   url = 'https://7tv.io/v2/gql'
