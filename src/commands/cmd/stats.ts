@@ -39,14 +39,13 @@ export class StatsCommand implements Command {
 
     async getLeaderboardPosition(username: string): Promise<number> {
       const userStats = await hb.db.emoteStats.find({
-        order: { emotes_guessed: "DESC" },
+        order: { emotes_guessed: 'DESC' },
         relations: {
           user: true
         }
       })
 
-
-      return userStats?.findIndex((v => v.user.name === username)) + 1
+      return userStats?.findIndex(v => v.user.name === username) + 1
     },
 
     getEmotegameStats: async (username: string): Promise<BotResponse> => {
@@ -56,9 +55,10 @@ export class StatsCommand implements Command {
         }
       })
 
-      const [stats, position] = await Promise.all(
-        [statsPromise,
-          this.methods.getLeaderboardPosition(username)])
+      const [stats, position] = await Promise.all([
+        statsPromise,
+        this.methods.getLeaderboardPosition(username)
+      ])
 
       if (!stats)
         return {
