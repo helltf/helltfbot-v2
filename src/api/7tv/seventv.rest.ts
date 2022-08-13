@@ -4,7 +4,7 @@ import { Emote } from "@src/commands/cmd/emotegame"
 import fetch from 'node-fetch'
 
 export class SevenTvRest {
-  url = 'https://api.7tv.app/v2/'
+  url = 'https://api.7tv.app/v2'
 
   async fetchEmotes(
     channel: string
@@ -13,7 +13,7 @@ export class SevenTvRest {
 
     try {
       const emotes = (await (
-        await fetch(this.url + 'users/' + channel + '/emotes')
+        await fetch(`${this.url}/users/${channel}/emotes`)
       ).json()) as SeventvEmoteResponse[]
       return new ResourceSuccess(emotes)
     } catch (e) {
@@ -31,7 +31,7 @@ export class SevenTvRest {
   async getUserId(username: string) {
     try {
       const user = (await (
-        await fetch(this.url + 'users/' + username)
+        await fetch(`${this.url}/users/${username}`)
       ).json()) as SevenTvUserResponse
       return new ResourceSuccess(user.id)
     } catch (e) {
@@ -49,15 +49,15 @@ export class SevenTvRest {
 
     const emote = emotes.data.find(e => e.name === givenEmote)
 
-    return !emote
-      ? new ResourceError('emote not found')
-      : new ResourceSuccess({ id: emote.id, name: emote.name })
+    return emote
+      ? new ResourceSuccess({ id: emote.id, name: emote.name })
+      : new ResourceError('emote not found')
   }
 
   async getEmoteById(emoteId: string): Promise<Resource<SevenTvEmote>> {
     try {
       const response = await (
-        await fetch(this.url + 'emotes/' + emoteId)
+        await fetch(`${this.url}/emotes/${emoteId}`)
       ).json()
       return new ResourceSuccess(response as SevenTvEmote)
     } catch (e: any) {
