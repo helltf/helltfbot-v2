@@ -7,6 +7,10 @@ export class ResourceSuccess<T> {
   constructor(data: T) {
     this.data = data
   }
+
+  unwrap(): T {
+    return this.data
+  }
 }
 
 export class ResourceError {
