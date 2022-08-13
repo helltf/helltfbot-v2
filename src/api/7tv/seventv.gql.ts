@@ -1,6 +1,7 @@
 import { Resource, ResourceSuccess, ResourceError } from "@api/types"
 import { Emote } from "@src/commands/cmd/emotegame"
-import request from "graphql-request"
+import { ExecSyncOptionsWithStringEncoding } from "child_process"
+import request from 'graphql-request'
 import distance from 'jaro-winkler'
 
 export class SevenTvGQL {
@@ -101,11 +102,8 @@ export class SevenTvGQL {
     )
 
     if (emoteResource instanceof ResourceError) {
-      return new ResourceError(emoteResource.error)
+      return emoteResource
     }
-
-    if (!emoteResource.data.id)
-      return new ResourceError('Could not find that emote')
 
     return await this.removeEmoteById(emoteResource.data, channelId.data)
   }
@@ -155,7 +153,7 @@ export class SevenTvGQL {
     emoteId: string,
     emoteName: string,
     channelId: string
-  ): Promise<Resource<null>> {
+  ): Promise<Resource<string>> {
     const query = this.getEditEmoteQuery()
     const variables = this.getEmoteUpdateVariablesWithData(
       emoteId,
@@ -164,20 +162,20 @@ export class SevenTvGQL {
       { alias: emoteName }
     )
 
-    const response = await this.runGqlRequest(query, variables)
+    const response = await this.runGqlRequest<AliasResponse>(query, variables)
 
     if (response instanceof ResourceError) {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess(null)
+    return new ResourceSuccess(response.data.editChannelEmote.id)
   }
 
   async setAlias(
     emoteId: string,
     emoteName: string,
     channel: string
-  ): Promise<Resource<null>> {
+  ): Promise<Resource<string>> {
     const channelId = await hb.api.seventv.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
@@ -286,7 +284,7 @@ export class SevenTvGQL {
   }
 
   private getEditEmoteQuery() {
-    return `mutation EditChannelEmote($ch: String!, $em: String!, $data: ChannelEmoteInput!, $re: String) {editChannelEmote(channel_id: $ch, emote_id: $em, data: $data, reason: $re) {id,emote_aliases}}`
+    return `mutation EditChannelEmote($ch: String!, $em: String!, $data: ChannelEmoteInput!, $re: String) {editChannelEmote(channel_id: $ch, emote_id: $em, data: $data, reason: $re) {id}}`
   }
 
   private findMatch(
@@ -306,6 +304,11 @@ export class SevenTvGQL {
   }
 }
 
+export interface AliasResponse {
+  editChannelEmote: {
+    id: string
+  }
+}
 export interface Role {
   id: string
   name: string
