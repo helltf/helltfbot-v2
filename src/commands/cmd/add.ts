@@ -29,18 +29,63 @@ export class AddCommand implements Command {
         success: false
       }
 
-    const result = await hb.api.seventv.gql.addEmote(emote, channel)
+    const idFromUrl = this.methods.getIdFromUrl(emote)
 
-    if (result instanceof ResourceError) {
-      return {
-        response: result.error,
-        success: false
-      }
+    if (idFromUrl) {
+      return this.methods.addEmoteById(idFromUrl, channel)
     }
 
-    return {
-      response: `Succesfully added ${result.data.name}`,
-      success: true
+    return this.methods.addEmote(emote, channel)
+  }
+
+  methods = {
+    addEmote: async (emote: string, channel: string): Promise<BotResponse> => {
+      const result = await hb.api.seventv.gql.addEmote(emote, channel)
+
+      if (result instanceof ResourceError) {
+        return {
+          response: result.error,
+          success: false
+        }
+      }
+
+      return {
+        response: `Succesfully added ${result.data.name}`,
+        success: true
+      }
+    },
+
+    addEmoteById: async (
+      emoteId: string,
+      channel: string
+    ): Promise<BotResponse> => {
+      const channelId = await hb.api.seventv.rest.getUserId(channel)
+
+      if (channelId instanceof ResourceError) {
+        return { response: channelId.error, success: false }
+      }
+
+      const response = await hb.api.seventv.gql.addEmoteById(
+        {
+          id: emoteId,
+          name: ''
+        },
+        channelId.data
+      )
+
+      if (response instanceof ResourceError) {
+        return { response: response.error, success: false }
+      }
+
+      return { response: `Succesfully added the emote`, success: true }
+    },
+
+    getIdFromUrl: (emoteUrl: string): string | undefined => {
+      const match = emoteUrl.match(
+        /(?<=(7tv\.app\/emotes\/))(\w*|\d*)(?=$|\/.*)/gim
+      )
+
+      return match ? match[0] : undefined
     }
   }
 }
