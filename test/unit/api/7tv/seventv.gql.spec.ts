@@ -203,6 +203,7 @@ describe('7tv gql', () => {
       const { error: errorMessage } = response as ResourceError
 
       expect(errorMessage).toBe(error)
+      expect(gql.removeEmoteById).toHaveBeenCalledWith(emoteData, userId)
     })
 
     it('channel and emote are defined invoke remove by id method', async () => {
@@ -226,6 +227,50 @@ describe('7tv gql', () => {
       const { data } = response as ResourceSuccess<EmoteData>
 
       expect(data).toEqual(emoteData)
+    })
+  })
+
+  describe('set alias', () => {
+    const emoteId = '1'
+    const emoteName = 'emote'
+    const channel = 'channel'
+
+    it('channel does not exist return error', async () => {
+      const error = 'Error'
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceError(error)
+      )
+
+      const response = await gql.setAlias(emoteId, emoteName, channel)
+
+      expect(response).toBeInstanceOf(ResourceError)
+
+      const { error: errorMessage } = response as ResourceError
+
+      expect(errorMessage).toBe(error)
+    })
+
+    it('user exists invoke set alias by emote id', async () => {
+      const userId = '2'
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceSuccess(userId)
+      )
+      spyOn(gql, 'setAliasByEmoteId')
+        .withArgs(emoteId, emoteName, userId)
+        .and.resolveTo(new ResourceSuccess(emoteId))
+
+      const response = await gql.setAlias(emoteId, emoteName, channel)
+
+      expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<string>
+
+      expect(data).toBe(emoteId)
+      expect(gql.setAliasByEmoteId).toHaveBeenCalledWith(
+        emoteId,
+        emoteName,
+        userId
+      )
     })
   })
 
