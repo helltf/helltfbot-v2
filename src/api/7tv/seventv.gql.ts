@@ -52,11 +52,9 @@ export class SevenTvGQL {
 
     const match = this.findMatch(queriedEmotes.data, emote)
 
-    if (!match)
-      return new ResourceError('no matching emote found')
+    if (!match) return new ResourceError('no matching emote found')
 
     return new ResourceSuccess(match)
-
   }
 
   async queryEmotes(emote: string): Promise<Resource<SearchEmote[]>> {
@@ -73,7 +71,10 @@ export class SevenTvGQL {
     return new ResourceSuccess(response.data.search_emotes)
   }
 
-  async removeEmoteById(emote: EmoteData, channelId: string): Promise<Resource<EmoteData>> {
+  async removeEmoteById(
+    emote: EmoteData,
+    channelId: string
+  ): Promise<Resource<EmoteData>> {
     const query = this.getRemoveEmoteQuery()
     const variables = this.getEmoteUpdateVariables(emote.id, channelId, '')
 
@@ -86,7 +87,10 @@ export class SevenTvGQL {
     return new ResourceSuccess(emote)
   }
 
-  async removeEmote(emote: string, channel: string): Promise<Resource<EmoteData>> {
+  async removeEmote(
+    emote: string,
+    channel: string
+  ): Promise<Resource<EmoteData>> {
     const channelId = await hb.api.seventv.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
@@ -100,7 +104,8 @@ export class SevenTvGQL {
       return new ResourceError(emoteResource.error)
     }
 
-    if (!emoteResource.data.id) return new ResourceError('Could not find that emote')
+    if (!emoteResource.data.id)
+      return new ResourceError('Could not find that emote')
 
     return await this.removeEmoteById(emoteResource.data, channelId.data)
   }
@@ -130,7 +135,10 @@ export class SevenTvGQL {
     return this.addEmoteById(emoteResource.data, channelId.data)
   }
 
-  async addEmoteById({ id, name }: EmoteData, channelId: string): Promise<Resource<EmoteData>> {
+  async addEmoteById(
+    { id, name }: EmoteData,
+    channelId: string
+  ): Promise<Resource<EmoteData>> {
     const query = this.getAddEmoteQuery()
     const variables = this.getEmoteUpdateVariables(id, channelId, '')
 
@@ -143,7 +151,11 @@ export class SevenTvGQL {
     return new ResourceSuccess({ id, name })
   }
 
-  async setAliasByEmoteId(emoteId: string, emoteName: string, channelId: string): Promise<Resource<null>> {
+  async setAliasByEmoteId(
+    emoteId: string,
+    emoteName: string,
+    channelId: string
+  ): Promise<Resource<null>> {
     const query = this.getEditEmoteQuery()
     const variables = this.getEmoteUpdateVariablesWithData(
       emoteId,
@@ -187,7 +199,6 @@ export class SevenTvGQL {
     }
 
     return new ResourceSuccess(response.data.user.editors)
-
   }
 
   async getUserEditors(username: string): Promise<Resource<Editor[]>> {
@@ -218,11 +229,7 @@ export class SevenTvGQL {
     return new ResourceError('Unknown Error')
   }
 
-  getEmoteUpdateVariables(
-    emoteId: string,
-    channelId: string,
-    re: string
-  ) {
+  getEmoteUpdateVariables(emoteId: string, channelId: string, re: string) {
     return {
       em: emoteId,
       ch: channelId,
@@ -282,7 +289,10 @@ export class SevenTvGQL {
     return `mutation EditChannelEmote($ch: String!, $em: String!, $data: ChannelEmoteInput!, $re: String) {editChannelEmote(channel_id: $ch, emote_id: $em, data: $data, reason: $re) {id,emote_aliases}}`
   }
 
-  private findMatch(emotes: SearchEmote[], emoteName: string): EmoteData | undefined {
+  private findMatch(
+    emotes: SearchEmote[],
+    emoteName: string
+  ): EmoteData | undefined {
     for (const { id, name } of emotes) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -294,7 +304,6 @@ export class SevenTvGQL {
       }
     }
   }
-
 }
 
 export interface Role {

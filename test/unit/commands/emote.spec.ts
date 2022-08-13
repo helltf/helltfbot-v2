@@ -1,103 +1,118 @@
 import { ResourceError, ResourceSuccess } from "@api/types"
 import { TwitchUserState } from "@src/client/types"
 import { EmoteCommand } from "@src/commands/cmd/emote"
-import { getExampleTwitchUserState } from "@test-utils/example"
-import { mockEmoteApis } from "@test-utils/mocks"
-import { setup } from "@test-utils/setup"
+import { getExampleTwitchUserState } from '@test-utils/example'
+import { mockEmoteApis } from '@test-utils/mocks'
+import { setup } from '@test-utils/setup'
 
 describe('emote command', () => {
-    let messageChannel: string
-    let user: TwitchUserState
-    let emote: EmoteCommand
+  let messageChannel: string
+  let user: TwitchUserState
+  let emote: EmoteCommand
 
-    beforeAll(() => {
-        setup()
+  beforeAll(() => {
+    setup()
+  })
+
+  beforeEach(() => {
+    messageChannel = 'messageChannel'
+    user = getExampleTwitchUserState({})
+    emote = new EmoteCommand()
+  })
+
+  it('no emotes existing return error for channel', async () => {
+    const emotes: string[] = []
+    mockEmoteApis(emotes)
+
+    const { success, response } = await emote.execute({
+      channel: messageChannel,
+      message: [],
+      user: user
     })
 
-    beforeEach(() => {
-        messageChannel = 'messageChannel'
-        user = getExampleTwitchUserState({})
-        emote = new EmoteCommand()
+    expect(response).toBe('No emotes found')
+    expect(success).toBeFalse()
+  })
+
+  it('no params given return all emotes for channel', async () => {
+    const emotes = ['emote1']
+
+    mockEmoteApis(emotes)
+
+    const { success, response } = await emote.execute({
+      channel: messageChannel,
+      message: [],
+      user: user
     })
 
-    it('no emotes existing return error for channel', async () => {
-        const emotes: string[] = []
-        mockEmoteApis(emotes)
+    const expectedResponse = [
+      `FFZ: ${emotes.join(' ')}`,
+      `BTTV: ${emotes.join(' ')}`,
+      `7TV: ${emotes.join(' ')}`
+    ]
 
-        const { success, response } = await emote.execute({
-            channel: messageChannel,
-            message: [],
-            user: user
-        })
+    expect(response).toEqual(expectedResponse)
+    expect(success).toBeTrue()
+  })
 
-        expect(response).toBe('No emotes found')
-        expect(success).toBeFalse()
+  it('no params given ffz cannot be fetched return only seventv and bttv', async () => {
+    const emotes = ['emote']
+    const successResponse = new ResourceSuccess(emotes)
+    const errorResponse = new ResourceError('error')
+
+    spyOn(hb.api.bttv, 'getEmotesForChannel')
+      .withArgs(messageChannel)
+      .and.resolveTo(successResponse)
+    spyOn(hb.api.ffz, 'getEmotesForChannel')
+      .withArgs(messageChannel)
+      .and.resolveTo(errorResponse)
+    spyOn(hb.api.seventv, 'getEmotesForChannel')
+      .withArgs(messageChannel)
+      .and.resolveTo(successResponse)
+
+    const { success, response } = await emote.execute({
+      channel: messageChannel,
+      message: [],
+      user: user
     })
 
-    it('no params given return all emotes for channel', async () => {
-        const emotes = ['emote1']
+    const expectedResponse = [
+      `BTTV: ${emotes.join(' ')}`,
+      `7TV: ${emotes.join(' ')}`
+    ]
 
-        mockEmoteApis(emotes)
+    expect(success).toBeTrue()
+    expect(response).toEqual(expectedResponse)
+  })
 
-        const { success, response } = await emote.execute({
-            channel: messageChannel,
-            message: [],
-            user: user
-        })
+  it('channel is given return emotes for channel', async () => {
+    const emotes = ['emote']
+    const channelParam = 'paramChannel'
+    const successResponse = new ResourceSuccess(emotes)
 
-        const expectedResponse = [
-            `FFZ: ${emotes.join(' ')}`,
-            `BTTV: ${emotes.join(' ')}`,
-            `7TV: ${emotes.join(' ')}`]
+    spyOn(hb.api.bttv, 'getEmotesForChannel')
+      .withArgs(channelParam)
+      .and.resolveTo(successResponse)
+    spyOn(hb.api.ffz, 'getEmotesForChannel')
+      .withArgs(channelParam)
+      .and.resolveTo(successResponse)
+    spyOn(hb.api.seventv, 'getEmotesForChannel')
+      .withArgs(channelParam)
+      .and.resolveTo(successResponse)
 
-        expect(response).toEqual(expectedResponse)
-        expect(success).toBeTrue()
+    const { success, response } = await emote.execute({
+      channel: messageChannel,
+      message: [channelParam],
+      user: user
     })
 
-    it('no params given ffz cannot be fetched return only seventv and bttv', async () => {
-        const emotes = ['emote']
-        const successResponse = new ResourceSuccess(emotes)
-        const errorResponse = new ResourceError('error')
+    const expectedResponse = [
+      `FFZ: ${emotes.join(' ')}`,
+      `BTTV: ${emotes.join(' ')}`,
+      `7TV: ${emotes.join(' ')}`
+    ]
 
-        spyOn(hb.api.bttv, 'getEmotesForChannel').withArgs(messageChannel).and.resolveTo(successResponse)
-        spyOn(hb.api.ffz, 'getEmotesForChannel').withArgs(messageChannel).and.resolveTo(errorResponse)
-        spyOn(hb.api.seventv, 'getEmotesForChannel').withArgs(messageChannel).and.resolveTo(successResponse)
-
-        const { success, response } = await emote.execute({
-            channel: messageChannel,
-            message: [],
-            user: user
-        })
-
-        const expectedResponse = [
-            `BTTV: ${emotes.join(' ')}`,
-            `7TV: ${emotes.join(' ')}`]
-
-        expect(success).toBeTrue()
-        expect(response).toEqual(expectedResponse)
-    })
-
-    it('channel is given return emotes for channel', async () => {
-        const emotes = ['emote']
-        const channelParam = 'paramChannel'
-        const successResponse = new ResourceSuccess(emotes)
-
-        spyOn(hb.api.bttv, 'getEmotesForChannel').withArgs(channelParam).and.resolveTo(successResponse)
-        spyOn(hb.api.ffz, 'getEmotesForChannel').withArgs(channelParam).and.resolveTo(successResponse)
-        spyOn(hb.api.seventv, 'getEmotesForChannel').withArgs(channelParam).and.resolveTo(successResponse)
-
-        const { success, response } = await emote.execute({
-            channel: messageChannel,
-            message: [channelParam],
-            user: user
-        })
-
-        const expectedResponse = [
-            `FFZ: ${emotes.join(' ')}`,
-            `BTTV: ${emotes.join(' ')}`,
-            `7TV: ${emotes.join(' ')}`]
-
-        expect(success).toBeTrue()
-        expect(response).toEqual(expectedResponse)
-    })
+    expect(success).toBeTrue()
+    expect(response).toEqual(expectedResponse)
+  })
 })

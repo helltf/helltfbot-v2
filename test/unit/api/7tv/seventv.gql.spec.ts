@@ -7,6 +7,7 @@ fdescribe('7tv gql', () => {
 
   beforeEach(() => {
     gql = new SevenTvGQL()
+    setup()
   })
 
   describe('get error', () => {
@@ -31,9 +32,6 @@ fdescribe('7tv gql', () => {
   describe('add emote', () => {
     const channel = 'channel'
     const emote = 'emote'
-    beforeEach(() => {
-      setup()
-    })
 
     it('channel does not exist return resource error', async () => {
       const channelError = new ResourceError('Error')
@@ -51,7 +49,9 @@ fdescribe('7tv gql', () => {
     it('emote could not be found return error resource', async () => {
       const userId = '1'
       const queryError = new ResourceError('emote not found')
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess(userId))
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceSuccess(userId)
+      )
       spyOn(gql, 'queryEmotes').and.resolveTo(queryError)
 
       const response = await gql.addEmote(emote, channel)
@@ -65,8 +65,12 @@ fdescribe('7tv gql', () => {
 
     it('add request returns error return error message', async () => {
       const errorCode = '200'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
-      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: 'emoteName' }))
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceSuccess('1')
+      )
+      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(
+        new ResourceSuccess({ id: '1', name: 'emoteName' })
+      )
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorCode))
 
       const response = await gql.addEmote(emote, channel)
@@ -80,8 +84,12 @@ fdescribe('7tv gql', () => {
 
     it('add request returns success return emotename', async () => {
       const emoteName = 'EmoteName'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(new ResourceSuccess('1'))
-      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(new ResourceSuccess({ id: '1', name: emoteName }))
+      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
+        new ResourceSuccess('1')
+      )
+      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(
+        new ResourceSuccess({ id: '1', name: emoteName })
+      )
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(''))
 
       const response = await gql.addEmote(emote, channel)
@@ -146,7 +154,11 @@ fdescribe('7tv gql', () => {
       const errorMessage = 'Error'
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorMessage))
 
-      const response = await gql.setAliasByEmoteId(emoteId, emoteName, channelId)
+      const response = await gql.setAliasByEmoteId(
+        emoteId,
+        emoteName,
+        channelId
+      )
 
       expect(response).toBeInstanceOf(ResourceError)
 
@@ -158,7 +170,11 @@ fdescribe('7tv gql', () => {
     it('request is successful return resource success', async () => {
       spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(null))
 
-      const response = await gql.setAliasByEmoteId(emoteId, emoteName, channelId)
+      const response = await gql.setAliasByEmoteId(
+        emoteId,
+        emoteName,
+        channelId
+      )
 
       expect(response).toBeInstanceOf(ResourceSuccess)
     })
@@ -183,7 +199,9 @@ fdescribe('7tv gql', () => {
     it('request is successful return success response', async () => {
       const userId = '1'
       const responseData: SevenTvUserResponse = getExampleSevenTvUserResponse()
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(responseData))
+      spyOn(gql, 'runGqlRequest').and.resolveTo(
+        new ResourceSuccess(responseData)
+      )
 
       const response = await gql.getUserEditorsByUserId(userId)
 
@@ -234,11 +252,13 @@ function getExampleSevenTvUserResponse() {
       display_name: 'user',
       description: 'abc',
       editor_ids: ['2'],
-      editors: [{
-        display_name: 'name',
-        id: '2',
-        login: 'login'
-      }],
+      editors: [
+        {
+          display_name: 'name',
+          id: '2',
+          login: 'login'
+        }
+      ],
       login: 'user'
     }
   }

@@ -1,7 +1,7 @@
 import { EmoteData } from "@api/7tv/seventv.gql"
 import { Resource, ResourceError, ResourceSuccess } from "@api/types"
 import { Emote } from "@src/commands/cmd/emotegame"
-import fetch from "node-fetch"
+import fetch from 'node-fetch'
 
 export class SevenTvRest {
   url = 'https://api.7tv.app/v2/'

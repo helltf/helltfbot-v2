@@ -11,7 +11,6 @@ import { setupDatabase } from '@test-utils/setup-db'
 describe('stats command', () => {
   let stats: StatsCommand
 
-
   beforeAll(async () => {
     await setupDatabase()
   })
@@ -172,18 +171,14 @@ describe('stats command', () => {
       expect(response).toEqual(expectedResponse)
       expect(success).toBeTrue()
     })
-
   })
-
 
   describe('leaderboard position', () => {
     let userEntity = getExampleTwitchUserEntity({})
 
-
     beforeEach(async () => {
       userEntity = getExampleTwitchUserEntity({})
       await hb.db.user.save(userEntity)
-
     })
 
     it('one entry has position of 1', async () => {
@@ -191,10 +186,12 @@ describe('stats command', () => {
         emotes_guessed: 1,
         incorrect_guesses: 2,
         letters_guessed: 2,
-        user: userEntity,
+        user: userEntity
       })
 
-      const position = await stats.methods.getLeaderboardPosition(userEntity.name)
+      const position = await stats.methods.getLeaderboardPosition(
+        userEntity.name
+      )
 
       expect(position).toBe(1)
     })
@@ -214,7 +211,7 @@ describe('stats command', () => {
         emotes_guessed: 1,
         incorrect_guesses,
         letters_guessed,
-        user: userEntity,
+        user: userEntity
       })
 
       await hb.db.emoteStats.save({
@@ -241,7 +238,7 @@ describe('stats command', () => {
         emotes_guessed: 1,
         incorrect_guesses,
         letters_guessed,
-        user: user2,
+        user: user2
       })
 
       await hb.db.emoteStats.save({
