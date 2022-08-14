@@ -56,13 +56,24 @@ export class RemoveCommand implements Command {
       }
 
       return {
-        response: `Succesfully removed ${result.data}`,
+        response: `Successfully removed ${result.data.name}`,
         success: true
       }
     },
 
-    addEmoteById: async (emote: string, channel: string): Promise<BotResponse> => {
-      return { response: '', success: false }
+    addEmoteById: async (emoteId: string, channel: string): Promise<BotResponse> => {
+      const channelId = await hb.api.seventv.rest.getUserId(channel)
+
+      if (channelId instanceof ResourceError)
+        return { response: channelId.error, success: false }
+
+      const response = await hb.api.seventv.gql.removeEmoteById(emoteId, channelId.data)
+
+      if (response instanceof ResourceError) {
+        return { response: response.error, success: false }
+      }
+
+      return { response: `Successfully remove ${response.data.name}`, success: false }
     }
   }
 }
