@@ -74,11 +74,11 @@ export class SevenTvGQL {
   }
 
   async removeEmoteById(
-    emote: EmoteData,
+    emoteId: string,
     channelId: string
   ): Promise<Resource<EmoteData>> {
     const query = this.getRemoveEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emote.id, channelId, '')
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
     const response = await this.runGqlRequest(query, variables)
 
@@ -86,7 +86,7 @@ export class SevenTvGQL {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess(emote)
+    return new ResourceSuccess({ id: emoteId, name: '' })
   }
 
   async removeEmote(
@@ -106,7 +106,7 @@ export class SevenTvGQL {
       return emoteResource
     }
 
-    return await this.removeEmoteById(emoteResource.data, channelId.data)
+    return await this.removeEmoteById(emoteResource.data.id, channelId.data)
   }
 
   async yoink(
