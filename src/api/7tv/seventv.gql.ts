@@ -42,7 +42,7 @@ export class SevenTvGQL {
       return emoteResource
     }
 
-    return this.addEmoteById(emoteResource.data, channelId.data)
+    return this.addEmoteById(emoteResource.data.id, channelId.data)
   }
 
   async matchQueriedEmotes(emote: string): Promise<Resource<EmoteData>> {
@@ -131,23 +131,30 @@ export class SevenTvGQL {
 
     if (!emoteId) return new ResourceError('Could not find that emote')
 
-    return this.addEmoteById(emoteResource.data, channelId.data)
+    return this.addEmoteById(emoteResource.data.id, channelId.data)
   }
 
   async addEmoteById(
-    { id, name }: EmoteData,
+    emoteId: string,
     channelId: string
   ): Promise<Resource<EmoteData>> {
     const query = this.getAddEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(id, channelId, '')
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
-    const response = await this.runGqlRequest(query, variables)
+    const response = await this.runGqlRequest<AddEmoteResponse>(
+      query,
+      variables
+    )
 
     if (response instanceof ResourceError) {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess({ id, name })
+    const addedEmote = response.data.addChannelEmote.emotes.find(({ id }) => {
+      return id === emoteId
+    })
+
+    return new ResourceSuccess({ id: emoteId, name: addedEmote!.name })
   }
 
   async setAliasByEmoteId(
@@ -210,7 +217,7 @@ export class SevenTvGQL {
   }
 
   private getAddEmoteQuery(): string {
-    return `mutation AddChannelEmote($ch: String!, $em: String!, $re: String!) {addChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emote_ids}}`
+    return `mutation AddChannelEmote($ch: String!, $em: String!, $re: String!) {addChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emotes{id, name}}}`
   }
 
   private getRemoveEmoteQuery(): string {
@@ -310,6 +317,13 @@ export interface AliasResponse {
     id: string
   }
 }
+
+export interface AddEmoteResponse {
+  addChannelEmote: {
+    emotes: EmoteData[]
+  }
+}
+
 export interface Role {
   id: string
   name: string

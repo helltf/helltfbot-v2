@@ -74,4 +74,31 @@ describe('7tv api', () => {
       expect(data).toBeTrue()
     })
   })
+  describe('get url method', () => {
+    it('no url given return undefined', () => {
+      const url = 'a'
+
+      const result = api.getIdFromUrl(url)
+
+      expect(result).toBeUndefined()
+    })
+
+    it('7tv url link is given return id', () => {
+      const id = '60e0ec549db74f240c4c0c5B'
+      const url = `https://7tv.app/emotes/${id}`
+
+      const result = api.getIdFromUrl(url)
+
+      expect(result).toBe(id)
+    })
+
+    it('7tv link is img url return id', () => {
+      const id = '60e0ec549db74f240c4c0c5B'
+      const url = `https://7tv.app/emotes/${id}/4x`
+
+      const result = api.getIdFromUrl(url)
+
+      expect(result).toBe(id)
+    })
+  })
 })

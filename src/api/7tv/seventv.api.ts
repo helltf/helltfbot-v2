@@ -10,6 +10,14 @@ export class SevenTvApi {
     return this.rest.getEmotesForChannel(channel)
   }
 
+  getIdFromUrl = (emoteUrl: string): string | undefined => {
+    const match = emoteUrl.match(
+      /(?<=(7tv\.app\/emotes\/))(\w*|\d*)(?=$|\/.*)/gim
+    )
+
+    return match ? match[0] : undefined
+  }
+
   async isEditor(
     username: string,
     channel: string
