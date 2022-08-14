@@ -4,6 +4,6 @@ WORKDIR /usr/helltfbot-v2
 
 COPY . .
 
-RUN npm install
+RUN yarn install
 
-CMD ["npm", "run", "start"]
+CMD ["yarn", "start"]
