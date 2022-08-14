@@ -1,4 +1,4 @@
-import { AddEmoteResponse, AliasResponse, Editor, EmoteData, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
+import { AddEmoteResponse, AliasResponse, Editor, EmoteData, RemoveEmoteResponse, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { setup } from '@test-utils/setup'
 
@@ -124,13 +124,18 @@ describe('7tv gql', () => {
     })
 
     it('request returns data return emote data', async () => {
-      const emoteId = '1'
       const channelId = '1'
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(undefined))
+      const emoteData = { id: emoteId, name: 'emote' }
+      const emotes = [emoteData]
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess<RemoveEmoteResponse>({ removeChannelEmote: { emotes } }))
 
-      const response = await gql.removeEmoteById(emoteId, channelId)
+      const response = await gql.removeEmoteById(emoteData.id, channelId)
 
       expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<EmoteData>
+
+      expect(data).toEqual(emoteData)
     })
 
     it('get variables returns object with set variables', () => {
@@ -398,7 +403,7 @@ describe('7tv gql', () => {
   })
 })
 
-function getExampleSevenTvUserResponse() {
+function getExampleSevenTvUserResponse(): SevenTvUserResponse {
   return {
     user: {
       id: '1',
@@ -413,7 +418,8 @@ function getExampleSevenTvUserResponse() {
           login: 'login'
         }
       ],
-      login: 'user'
+      login: 'user',
+      emotes: []
     }
   }
 }
