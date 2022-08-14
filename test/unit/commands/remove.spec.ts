@@ -4,7 +4,7 @@ import { BotResponse } from "@src/client/types"
 import { RemoveCommand } from "@src/commands/cmd/remove"
 import { getExampleTwitchUserState } from "@test-utils/example"
 
-fdescribe('remove command', () => {
+describe('remove command', () => {
     let remove: RemoveCommand
     const emote = 'emote'
     const channel = 'channel'
