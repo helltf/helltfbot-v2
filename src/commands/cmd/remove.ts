@@ -73,7 +73,7 @@ export class RemoveCommand implements Command {
         return { response: response.error, success: false }
       }
 
-      return { response: `Successfully remove ${response.data.name}`, success: false }
+      return { response: `Successfully removed ${response.data.name}`, success: false }
     }
   }
 }
