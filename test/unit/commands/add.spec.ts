@@ -1,8 +1,10 @@
 import { ResourceError, ResourceSuccess } from "@api/types"
+import { BotResponse } from "@src/client/types"
 import { AddCommand } from "@src/commands/cmd/add"
-import { setup } from "@test-utils/setup"
+import { getExampleTwitchUserState } from '@test-utils/example'
+import { setup } from '@test-utils/setup'
 
-fdescribe('add command', () => {
+describe('add command', () => {
   let add: AddCommand
 
   beforeEach(() => {
@@ -10,31 +12,86 @@ fdescribe('add command', () => {
     add = new AddCommand()
   })
 
-  describe('get url method', () => {
-    it('no url given return undefined', () => {
-      const url = 'a'
+  describe('execute', () => {
+    const user = getExampleTwitchUserState({})
+    const channel = 'channel'
 
-      const result = add.methods.getIdFromUrl(url)
+    it('no emote is given return error', async () => {
+      const { response, success } = await add.execute({
+        channel,
+        message: [],
+        user: user
+      })
 
-      expect(result).toBeUndefined()
+      expect(response).toBe('emote as parameter is required')
+      expect(success).toBeFalse()
     })
 
-    it('7tv url link is given return id', () => {
-      const id = '60e0ec549db74f240c4c0c5B'
-      const url = `https://7tv.app/emotes/${id}`
+    it('editor request fails return fetch editor error', async () => {
+      const error = 'Error'
+      const emote = 'emote'
+      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(new ResourceError(error))
 
-      const result = add.methods.getIdFromUrl(url)
+      const { response, success } = await add.execute({
+        user,
+        channel,
+        message: [emote]
+      })
 
-      expect(result).toBe(id)
+      expect(response).toBe('could not fetch editors')
+      expect(success).toBeFalse()
     })
 
-    it('7tv link is img url return id', () => {
+    it('user is no editor return error', async () => {
+      const emote = 'emote'
+
+      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(
+        new ResourceSuccess(false)
+      )
+
+      const { response, success } = await add.execute({
+        message: [emote],
+        channel,
+        user
+      })
+
+      expect(response).toBe('You are not an editor of this channel :\\')
+      expect(success).toBeFalse()
+    })
+
+    it('emote is url invoke addEmoteById and return result', async () => {
       const id = '60e0ec549db74f240c4c0c5B'
-      const url = `https://7tv.app/emotes/${id}/4x`
+      const emote = `https://7tv.app/emotes/${id}`
+      const returnedResponse: BotResponse = {
+        response: 'successful',
+        success: true
+      }
+      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(new ResourceSuccess(true))
+      spyOn(add.methods, 'addEmoteById').and.resolveTo(returnedResponse)
 
-      const result = add.methods.getIdFromUrl(url)
+      const result = await add.execute({
+        message: [emote],
+        channel,
+        user
+      })
 
-      expect(result).toBe(id)
+      expect(result).toEqual(returnedResponse)
+      expect(add.methods.addEmoteById).toHaveBeenCalledWith(id, channel)
+    })
+
+    it('emote is a name invoke addEmote method', async () => {
+      const emote = 'emote'
+      const returnedResponse: BotResponse = {
+        response: 'successful',
+        success: true
+      }
+      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(new ResourceSuccess(true))
+      spyOn(add.methods, 'addEmote').and.resolveTo(returnedResponse)
+
+      const result = await add.execute({ message: [emote], channel, user })
+
+      expect(result).toEqual(returnedResponse)
+      expect(add.methods.addEmote).toHaveBeenCalledWith(emote, channel)
     })
   })
 
@@ -78,11 +135,12 @@ fdescribe('add command', () => {
 
     it('request is successful return success response', async () => {
       const userId = '1'
+      const emoteName = 'emote'
       spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
         new ResourceSuccess(userId)
       )
       spyOn(hb.api.seventv.gql, 'addEmoteById').and.resolveTo(
-        new ResourceSuccess({ id: '1', name: '' })
+        new ResourceSuccess({ id: emoteId, name: emoteName })
       )
 
       const { response, success } = await add.methods.addEmoteById(
@@ -91,7 +149,7 @@ fdescribe('add command', () => {
       )
 
       expect(success).toBeTrue()
-      expect(response).toBe('Succesfully added the emote')
+      expect(response).toBe(`Succesfully added ${emoteName}`)
     })
   })
 })

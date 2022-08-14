@@ -17,6 +17,12 @@ export class AddCommand implements Command {
     channel,
     user
   }: CommandContext): Promise<BotResponse> => {
+    if (!emote)
+      return {
+        response: 'emote as parameter is required',
+        success: false
+      }
+
     const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
 
     if (isEditor instanceof ResourceError) {
@@ -29,7 +35,7 @@ export class AddCommand implements Command {
         success: false
       }
 
-    const idFromUrl = this.methods.getIdFromUrl(emote)
+    const idFromUrl = hb.api.seventv.getIdFromUrl(emote)
 
     if (idFromUrl) {
       return this.methods.addEmoteById(idFromUrl, channel)
@@ -66,10 +72,7 @@ export class AddCommand implements Command {
       }
 
       const response = await hb.api.seventv.gql.addEmoteById(
-        {
-          id: emoteId,
-          name: ''
-        },
+        emoteId,
         channelId.data
       )
 
@@ -77,15 +80,10 @@ export class AddCommand implements Command {
         return { response: response.error, success: false }
       }
 
-      return { response: `Succesfully added the emote`, success: true }
-    },
-
-    getIdFromUrl: (emoteUrl: string): string | undefined => {
-      const match = emoteUrl.match(
-        /(?<=(7tv\.app\/emotes\/))(\w*|\d*)(?=$|\/.*)/gim
-      )
-
-      return match ? match[0] : undefined
+      return {
+        response: `Succesfully added ${response.data.name}`,
+        success: true
+      }
     }
   }
 }
