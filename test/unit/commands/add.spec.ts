@@ -152,4 +152,34 @@ describe('add command', () => {
       expect(response).toBe(`Succesfully added ${emoteName}`)
     })
   })
+
+  describe('add emote', () => {
+    const emote = 'emote'
+    const channel = 'channel'
+
+    it('add emote request fails return error response', async () => {
+      const error = 'Error'
+      spyOn(hb.api.seventv.gql, 'addEmote').and.resolveTo(
+        new ResourceError(error)
+      )
+
+      const { response, success } = await add.methods.addEmote(emote, channel)
+
+      expect(response).toBe(error)
+      expect(success).toBeFalse()
+    })
+
+    it('add emote is successful return success', async () => {
+      const emoteData = { id: '1', name: emote }
+
+      spyOn(hb.api.seventv.gql, 'addEmote').and.resolveTo(
+        new ResourceSuccess(emoteData)
+      )
+
+      const { response, success } = await add.methods.addEmote(emote, channel)
+
+      expect(response).toBe(`Successfully added ${emoteData.name}`)
+      expect(success).toBeTrue()
+    })
+  })
 })
