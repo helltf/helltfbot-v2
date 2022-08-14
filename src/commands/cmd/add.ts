@@ -56,7 +56,7 @@ export class AddCommand implements Command {
       }
 
       return {
-        response: `Succesfully added ${result.data.name}`,
+        response: `Successfully added ${result.data.name}`,
         success: true
       }
     },
