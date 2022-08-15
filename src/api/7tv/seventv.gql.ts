@@ -74,19 +74,23 @@ export class SevenTvGQL {
   }
 
   async removeEmoteById(
-    emote: EmoteData,
+    emoteId: string,
     channelId: string
   ): Promise<Resource<EmoteData>> {
     const query = this.getRemoveEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emote.id, channelId, '')
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
-    const response = await this.runGqlRequest(query, variables)
+    const response = await this.runGqlRequest<RemoveEmoteResponse>(query, variables)
 
     if (response instanceof ResourceError) {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess(emote)
+    const removeEmote = response.data.removeChannelEmote.emotes?.find(({ id }) => {
+      return id === emoteId
+    })
+
+    return new ResourceSuccess({ id: emoteId, name: removeEmote!.name })
   }
 
   async removeEmote(
@@ -106,7 +110,7 @@ export class SevenTvGQL {
       return emoteResource
     }
 
-    return await this.removeEmoteById(emoteResource.data, channelId.data)
+    return await this.removeEmoteById(emoteResource.data.id, channelId.data)
   }
 
   async yoink(
@@ -150,7 +154,7 @@ export class SevenTvGQL {
       return this.getErrorMessage(response.error)
     }
 
-    const addedEmote = response.data.addChannelEmote.emotes.find(({ id }) => {
+    const addedEmote = response.data.addChannelEmote.emotes?.find(({ id }) => {
       return id === emoteId
     })
 
@@ -319,9 +323,11 @@ export interface AliasResponse {
 }
 
 export interface AddEmoteResponse {
-  addChannelEmote: {
-    emotes: EmoteData[]
-  }
+  addChannelEmote: Partial<User>
+}
+
+export interface RemoveEmoteResponse {
+  removeChannelEmote: Partial<User>
 }
 
 export interface Role {
@@ -380,7 +386,8 @@ export interface User {
   login: string
   description: string
   editor_ids: string[]
-  editors: Editor[]
+  editors: Editor[],
+  emotes: EmoteData[]
 }
 
 export interface SevenTvUserResponse {

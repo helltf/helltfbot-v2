@@ -1,4 +1,4 @@
-import { AddEmoteResponse, AliasResponse, Editor, EmoteData, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
+import { AddEmoteResponse, AliasResponse, Editor, EmoteData, RemoveEmoteResponse, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { setup } from '@test-utils/setup'
 
@@ -108,13 +108,13 @@ describe('7tv gql', () => {
   })
 
   describe('remove emote by id', () => {
-    const emote = { id: '1', name: 'name' }
+    const emoteId = '1'
     const channelId = '1'
 
     it('request returns error return error resource', async () => {
       const errorResponse = new ResourceError('Error')
       spyOn(gql, 'runGqlRequest').and.resolveTo(errorResponse)
-      const response = await gql.removeEmoteById(emote, channelId)
+      const response = await gql.removeEmoteById(emoteId, channelId)
 
       expect(response).toBeInstanceOf(ResourceError)
 
@@ -124,13 +124,18 @@ describe('7tv gql', () => {
     })
 
     it('request returns data return emote data', async () => {
-      const emoteData = { id: '1', name: 'name' }
       const channelId = '1'
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess(undefined))
+      const emoteData = { id: emoteId, name: 'emote' }
+      const emotes = [emoteData]
+      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess<RemoveEmoteResponse>({ removeChannelEmote: { emotes } }))
 
-      const response = await gql.removeEmoteById(emoteData, channelId)
+      const response = await gql.removeEmoteById(emoteData.id, channelId)
 
       expect(response).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = response as ResourceSuccess<EmoteData>
+
+      expect(data).toEqual(emoteData)
     })
 
     it('get variables returns object with set variables', () => {
@@ -189,16 +194,17 @@ describe('7tv gql', () => {
 
     it('channel and emote are defined invoke remove by id method', async () => {
       const userId = '1'
-      const emoteData = { id: '2', name: 'emote' }
+      const emoteId = '2'
       const error = 'Error'
+
       spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
         new ResourceSuccess(userId)
       )
       spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
-        new ResourceSuccess(emoteData)
+        new ResourceSuccess({ id: emoteId, name: emote })
       )
       spyOn(gql, 'removeEmoteById')
-        .withArgs(emoteData, userId)
+        .withArgs(emoteId, userId)
         .and.resolveTo(new ResourceError(error))
 
       const response = await gql.removeEmote(emote, channel)
@@ -208,22 +214,22 @@ describe('7tv gql', () => {
       const { error: errorMessage } = response as ResourceError
 
       expect(errorMessage).toBe(error)
-      expect(gql.removeEmoteById).toHaveBeenCalledWith(emoteData, userId)
+      expect(gql.removeEmoteById).toHaveBeenCalledWith(emoteId, userId)
     })
 
     it('channel and emote are defined invoke remove by id method', async () => {
       const userId = '1'
-      const emoteData = { id: '2', name: 'emote' }
+      const emoteId = '2'
 
       spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
         new ResourceSuccess(userId)
       )
       spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
-        new ResourceSuccess(emoteData)
+        new ResourceSuccess({ id: emoteId, name: emote })
       )
       spyOn(gql, 'removeEmoteById')
-        .withArgs(emoteData, userId)
-        .and.resolveTo(new ResourceSuccess(emoteData))
+        .withArgs(emoteId, userId)
+        .and.resolveTo(new ResourceSuccess({ id: emoteId, name: emote }))
 
       const response = await gql.removeEmote(emote, channel)
 
@@ -231,7 +237,7 @@ describe('7tv gql', () => {
 
       const { data } = response as ResourceSuccess<EmoteData>
 
-      expect(data).toEqual(emoteData)
+      expect(data).toEqual({ id: emoteId, name: emote })
     })
   })
 
@@ -397,7 +403,7 @@ describe('7tv gql', () => {
   })
 })
 
-function getExampleSevenTvUserResponse() {
+function getExampleSevenTvUserResponse(): SevenTvUserResponse {
   return {
     user: {
       id: '1',
@@ -412,7 +418,8 @@ function getExampleSevenTvUserResponse() {
           login: 'login'
         }
       ],
-      login: 'user'
+      login: 'user',
+      emotes: []
     }
   }
 }
