@@ -14,7 +14,7 @@ describe('pluralize', () => {
 describe('pluralize if', () => {
     it('value is not 1 return input in plural', () => {
         const input = 'test'
-        const someNumber = 1
+        const someNumber = 0
         const result = hb.utils.plularizeIf(input, someNumber)
 
         expect(result).toBe(input + 's')
@@ -22,7 +22,7 @@ describe('pluralize if', () => {
 
     it('value is 1 return same input', () => {
         const input = 'Test'
-        const someNumber = 0
+        const someNumber = 1
 
         const result = hb.utils.plularizeIf(input, someNumber)
 

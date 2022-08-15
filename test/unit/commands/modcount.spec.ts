@@ -2,7 +2,7 @@ import { ModCountCommand } from "@src/commands/cmd/modcount"
 import { getExampleTwitchUserState } from "@test-utils/example"
 import { setup } from "@test-utils/setup"
 
-fdescribe('mod count', () => {
+describe('mod count', () => {
     let modcount: ModCountCommand
     const user = getExampleTwitchUserState({})
     const channel = 'channel'
@@ -39,7 +39,7 @@ fdescribe('mod count', () => {
             })
 
             expect(success).toBeTrue()
-            expect(response).toBe(`@${givenChannel} has ${count} moderator`)
+            expect(response).toBe(`@${givenChannel} has ${count} moderators`)
         })
 
         it('channel does not exist return error response', async () => {

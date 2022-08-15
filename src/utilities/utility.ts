@@ -22,7 +22,7 @@ export class Utility {
   }
 
   plularizeIf(input: string, someNumber: number) {
-    return someNumber === 1 ? input + 's' : input
+    return someNumber === 1 ? input : this.plularize(input)
   }
 
   getEnumValues(anyEnum: any): any[] {
