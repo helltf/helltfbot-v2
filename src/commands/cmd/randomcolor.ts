@@ -20,10 +20,13 @@ export class RandomColorCommand implements Command {
 
   methods = {
     generateHex: (): string => {
-      const chars = Array(6).map(
-        () => this.static.chars[hb.utils.random(0, this.static.chars.length)]
-      )
-      return '#'
+      const chars = Array(6)
+        .fill('1')
+        .map(() => {
+          return this.static.chars[hb.utils.random(0, this.static.chars.length)]
+        })
+
+      return '#' + chars.join('')
     }
   }
 
