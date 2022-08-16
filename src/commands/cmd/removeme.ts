@@ -13,7 +13,7 @@ export class RemovemeCommand implements Command {
   optionalParams = []
   requiredParams = ['streamer', 'event']
   permissions = ChatPermissionLevel.USER
-  flags: CommandFlag[] = [CommandFlag.WHISPER]
+  flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   async execute({
     channel,
     user: { 'user-id': unparsedUserId },
