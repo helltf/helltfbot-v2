@@ -24,6 +24,7 @@ import { AddCommand } from '@src/commands/cmd/add'
 import { RemovemeCommand } from '@src/commands/cmd/removeme'
 import { YoinkCommand } from '@src/commands/cmd/yoink'
 import { SetAliasCommand } from '@src/commands/cmd/setalias'
+import { ModCountCommand } from '@src/commands/cmd/modcount'
 
 const commands: Command[] = [
   new PingCommand(),
@@ -49,7 +50,8 @@ const commands: Command[] = [
   new AddCommand(),
   new RemoveCommand(),
   new YoinkCommand(),
-  new SetAliasCommand()
+  new SetAliasCommand(),
+  new ModCountCommand()
 ]
 
 export default commands
