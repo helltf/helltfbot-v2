@@ -15,6 +15,9 @@ export interface Command {
     [key: string]: (...args: any) => Promise<any> | any
   }
   execute: (context: CommandContext) => Promise<BotResponse>
+  static?: {
+    [key: string]: any
+  }
 }
 
 export interface CommandContext {
