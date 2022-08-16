@@ -1,11 +1,8 @@
 import { RandomColorCommand } from "@src/commands/cmd/randomcolor"
-import { getExampleTwitchUserState } from "@test-utils/example"
 import { setup } from "@test-utils/setup"
 
 describe('random color', () => {
   let randomColor: RandomColorCommand
-  const user = getExampleTwitchUserState({})
-  const channel = 'channel'
 
   beforeEach(() => {
     setup()
