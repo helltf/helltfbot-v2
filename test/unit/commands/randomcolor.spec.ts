@@ -17,11 +17,7 @@ describe('random color', () => {
 
     spyOn(randomColor.methods, 'generateHex').and.returnValue(returnedCode)
 
-    const { response, success } = await randomColor.execute({
-      channel,
-      user,
-      message: []
-    })
+    const { response, success } = await randomColor.execute()
 
     expect(response).toBe(`${returnedCode}`)
     expect(success).toBeTrue()

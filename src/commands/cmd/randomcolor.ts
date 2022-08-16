@@ -14,7 +14,9 @@ export class RandomColorCommand implements Command {
   alias = ['rc']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000
-  execute = async (context: CommandContext): Promise<BotResponse> => {}
+  execute = async (): Promise<BotResponse> => {
+    return { response: this.methods.generateHex(), success: true }
+  }
 
   methods = {
     generateHex: (): string => {
