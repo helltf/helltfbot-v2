@@ -28,6 +28,7 @@ describe('test ping command', () => {
     const joinedChannels = 1
     const latency = 190
     const commit = `master@1 v1.3.1`
+
     spyOn(ping.methods, 'getUptime').and.returnValue(uptime)
     spyOn(ping.methods, 'getMemory').and.returnValue(memoryUsage)
     spyOn(ping.methods, 'getCommandsIssued').and.resolveTo(commandsIssued)
@@ -89,13 +90,15 @@ describe('test ping command', () => {
       const branch = 'main'
       const commit = '124535'
       const tag = 'v1.3.2'
+      const commitCount = '1000'
 
       spyOn(ping.methods, 'getCurrentBranch').and.resolveTo(branch)
       spyOn(ping.methods, 'getTag').and.resolveTo(tag)
       spyOn(ping.methods, 'getRev').and.resolveTo(commit)
+      spyOn(ping.methods, 'getCommitCount').and.resolveTo(commitCount)
 
       const result = await ping.methods.getCommitInfo()
-      const expectedResult = `${branch}@${commit} ${tag}`
+      const expectedResult = `${branch}@${commit} ${tag} with ${commitCount} commits`
 
       expect(result).toBe(expectedResult)
     })
@@ -149,6 +152,23 @@ describe('test ping command', () => {
       const result = await ping.methods.getTag()
 
       expect(result).toBe('no-tag')
+    })
+
+    it('get commit count returns tag', async () => {
+      const amount = '1000'
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(amount))
+
+      const result = await ping.methods.getCommitCount()
+
+      expect(result).toBe(amount)
+    })
+
+    it('get commit count failes returns no-tag', async () => {
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+
+      const result = await ping.methods.getCommitCount()
+
+      expect(result).toBe('no-commit-count')
     })
   })
 })
