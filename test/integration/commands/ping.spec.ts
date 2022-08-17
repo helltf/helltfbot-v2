@@ -1,10 +1,12 @@
+import { ResourceError, ResourceSuccess } from "@api/types"
 import { PingCommand } from "@commands/cmd/ping"
 import { clearDb } from "@test-utils/clear"
-import { disconnectDatabase } from "@test-utils/disconnect"
+import { disconnectDatabase } from '@test-utils/disconnect'
 import { getExampleChannel, getExampleCommand } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
+import exp from 'constants'
 
-describe('test ping command', () => {
+fdescribe('test ping command', () => {
   let ping: PingCommand
 
   beforeAll(async () => {
@@ -26,12 +28,13 @@ describe('test ping command', () => {
     const commandsIssued = 400
     const joinedChannels = 1
     const latency = 190
-
+    const commit = `master@1 v1.3.1`
     spyOn(ping.methods, 'getUptime').and.returnValue(uptime)
     spyOn(ping.methods, 'getMemory').and.returnValue(memoryUsage)
     spyOn(ping.methods, 'getCommandsIssued').and.resolveTo(commandsIssued)
     spyOn(ping.methods, 'getChannels').and.resolveTo(joinedChannels)
     spyOn(ping.methods, 'getLatency').and.resolveTo(latency)
+    spyOn(ping.methods, 'getCommitInfo').and.resolveTo(commit)
 
     const { success, response } = await ping.execute()
 
@@ -40,8 +43,9 @@ describe('test ping command', () => {
       `Latency: ${latency}ms`,
       `Uptime: ${uptime}`,
       `Memory used: ${memoryUsage}`,
+      `Commit ${commit}`,
       `Commands issued: ${commandsIssued}`,
-      `Connected to ${joinedChannels} channels`
+      `Joined ${joinedChannels} channels`
     ]
     expect(success).toBeTrue()
     expect(response).toEqual(expectedResponse)
@@ -79,5 +83,54 @@ describe('test ping command', () => {
     const amount = await ping.methods.getChannels()
 
     expect(amount).toBe(2)
+  })
+
+  describe('commit info', () => {
+    it('get commit info returns branch with commit ref and tags', async () => {
+      const branch = 'main'
+      const commit = '124535'
+      const tags = ['v1.3.2']
+
+      spyOn(ping.methods, 'getCurrentBranch').and.resolveTo(branch)
+
+      const result = await ping.methods.getCommitInfo()
+      const expectedResult = `${branch}@${commit} ${tags.join(',')}`
+
+      expect(result).toBe(expectedResult)
+    })
+
+    it('get branch returns current branch', async () => {
+      const branch = 'master'
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(branch))
+
+      const result = await ping.methods.getCurrentBranch()
+
+      expect(result).toBe(branch)
+    })
+
+    it('get branch failes return no-branch', async () => {
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+
+      const result = await ping.methods.getCurrentBranch()
+
+      expect(result).toBe('no-branch')
+    })
+
+    it('get commit returns short rev', async () => {
+      const rev = 'abcdefg'
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(rev))
+
+      const result = await ping.methods.getRev()
+
+      expect(result).toBe(rev)
+    })
+
+    it('get rev failes returns no-rev', async () => {
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+
+      const result = await ping.methods.getRev()
+
+      expect(result).toBe('no-rev')
+    })
   })
 })
