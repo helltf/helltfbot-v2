@@ -4,9 +4,8 @@ import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from '@test-utils/disconnect'
 import { getExampleChannel, getExampleCommand } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
-import exp from 'constants'
 
-fdescribe('test ping command', () => {
+describe('test ping command', () => {
   let ping: PingCommand
 
   beforeAll(async () => {
@@ -43,7 +42,7 @@ fdescribe('test ping command', () => {
       `Latency: ${latency}ms`,
       `Uptime: ${uptime}`,
       `Memory used: ${memoryUsage}`,
-      `Commit ${commit}`,
+      `Commit: ${commit}`,
       `Commands issued: ${commandsIssued}`,
       `Joined ${joinedChannels} channels`
     ]
@@ -89,12 +88,14 @@ fdescribe('test ping command', () => {
     it('get commit info returns branch with commit ref and tags', async () => {
       const branch = 'main'
       const commit = '124535'
-      const tags = ['v1.3.2']
+      const tag = 'v1.3.2'
 
       spyOn(ping.methods, 'getCurrentBranch').and.resolveTo(branch)
+      spyOn(ping.methods, 'getTag').and.resolveTo(tag)
+      spyOn(ping.methods, 'getRev').and.resolveTo(commit)
 
       const result = await ping.methods.getCommitInfo()
-      const expectedResult = `${branch}@${commit} ${tags.join(',')}`
+      const expectedResult = `${branch}@${commit} ${tag}`
 
       expect(result).toBe(expectedResult)
     })
@@ -116,7 +117,7 @@ fdescribe('test ping command', () => {
       expect(result).toBe('no-branch')
     })
 
-    it('get commit returns short rev', async () => {
+    it('get rev returns short rev', async () => {
       const rev = 'abcdefg'
       spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(rev))
 
@@ -131,6 +132,23 @@ fdescribe('test ping command', () => {
       const result = await ping.methods.getRev()
 
       expect(result).toBe('no-rev')
+    })
+
+    it('get tag returns tag', async () => {
+      const tag = 'v1.3.1'
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(tag))
+
+      const result = await ping.methods.getTag()
+
+      expect(result).toBe(tag)
+    })
+
+    it('get tag failes returns no-tag', async () => {
+      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+
+      const result = await ping.methods.getTag()
+
+      expect(result).toBe('no-tag')
     })
   })
 })
