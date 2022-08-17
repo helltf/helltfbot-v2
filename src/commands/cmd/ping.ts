@@ -1,6 +1,7 @@
 import { Command, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { ResourceError } from '@api/types'
 export class PingCommand implements Command {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   name = 'ping'
@@ -13,11 +14,14 @@ export class PingCommand implements Command {
   async execute(): Promise<BotResponse> {
     const uptime = this.methods.getUptime()
     const memoryUsage = this.methods.getMemory()
-    const [commandsIssued, joinedChannels, latency] = await Promise.all([
-      this.methods.getCommandsIssued(),
-      this.methods.getChannels(),
-      this.methods.getLatency()
-    ])
+    const [commandsIssued, joinedChannels, latency, commit] = await Promise.all(
+      [
+        this.methods.getCommandsIssued(),
+        this.methods.getChannels(),
+        this.methods.getLatency(),
+        this.methods.getCommitInfo()
+      ]
+    )
 
     return {
       response: [
@@ -25,8 +29,9 @@ export class PingCommand implements Command {
         `Latency: ${latency}ms`,
         `Uptime: ${uptime}`,
         `Memory used: ${memoryUsage}`,
+        `Commit: ${commit}`,
         `Commands issued: ${commandsIssued}`,
-        `Connected to ${joinedChannels} channels`
+        `Joined ${joinedChannels} channels`
       ],
       success: true
     }
@@ -62,8 +67,60 @@ export class PingCommand implements Command {
 
     getLatency: async (): Promise<number> => {
       return (await hb.client.ping())[0] * 1000
+    },
+
+    getCommitInfo: async (): Promise<string> => {
+      const [branch, commit, tag, commitCount] = await Promise.all([
+        this.methods.getCurrentBranch(),
+        this.methods.getRev(),
+        this.methods.getTag(),
+        this.methods.getCommitCount()
+      ])
+
+      return `${branch}@${commit} ${tag} with ${commitCount} commits`
+    },
+
+    getCurrentBranch: async (): Promise<string> => {
+      const branch = await hb.utils.exec('git branch --show-current')
+
+      if (branch instanceof ResourceError) {
+        return 'no-branch'
+      }
+
+      return branch.data
+    },
+
+    getRev: async (): Promise<string> => {
+      const rev = await hb.utils.exec('git rev-parse --short HEAD')
+
+      if (rev instanceof ResourceError) {
+        return 'no-rev'
+      }
+
+      return rev.data
+    },
+
+    getTag: async (): Promise<string> => {
+      const tag = await hb.utils.exec('git tag --points-at HEAD')
+
+      if (tag instanceof ResourceError) {
+        return 'no-tag'
+      }
+
+      return tag.data
+    },
+
+    getCommitCount: async (): Promise<string> => {
+      const commitCount = await hb.utils.exec('git rev-list --count HEAD')
+
+      if (commitCount instanceof ResourceError) {
+        return 'no-commit-count'
+      }
+
+      return commitCount.data
     }
   }
 }
 
 
+  

@@ -1,9 +1,15 @@
+import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { CryptoUtility } from '@src/utilities/crypto'
 import { Permission } from '@src/utilities/permission/permission'
+import { exec } from 'child_process'
 import {
   HumanizeDuration,
   HumanizeDurationLanguage
 } from 'humanize-duration-ts'
+import { promisify } from 'util'
+
+const execute = promisify(exec)
+
 export class Utility {
   permission: Permission
   crypto: CryptoUtility
@@ -15,6 +21,16 @@ export class Utility {
 
   random = (lowerLimit = 0, upperLimit = 1): number => {
     return Math.floor(Math.random() * (upperLimit + lowerLimit + 1))
+  }
+
+  async exec(command: string): Promise<Resource<string>> {
+    const { stdout, stderr } = await execute(command)
+
+    if (stderr) {
+      return new ResourceError(stderr)
+    }
+
+    return new ResourceSuccess(stdout)
   }
 
   generateAllCombinations<T, U>(arr1: T[], arr2: U[]): (T | U)[][] {
