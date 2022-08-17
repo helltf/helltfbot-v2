@@ -1,7 +1,6 @@
 import { Command, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
-import { InstanceChecker } from 'typeorm'
 import { ResourceError } from '@api/types'
 export class PingCommand implements Command {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
@@ -30,7 +29,7 @@ export class PingCommand implements Command {
         `Latency: ${latency}ms`,
         `Uptime: ${uptime}`,
         `Memory used: ${memoryUsage}`,
-        `Commit ${commit}`,
+        `Commit: ${commit}`,
         `Commands issued: ${commandsIssued}`,
         `Joined ${joinedChannels} channels`
       ],
@@ -71,8 +70,13 @@ export class PingCommand implements Command {
     },
 
     getCommitInfo: async (): Promise<string> => {
-      const [branch] = await Promise.all([this.methods.getCurrentBranch()])
-      return `${branch}@`
+      const [branch, commit, tag] = await Promise.all([
+        this.methods.getCurrentBranch(),
+        this.methods.getRev(),
+        this.methods.getTag()
+      ])
+
+      return `${branch}@${commit} ${tag}`
     },
 
     getCurrentBranch: async (): Promise<string> => {
@@ -93,8 +97,19 @@ export class PingCommand implements Command {
       }
 
       return rev.data
+    },
+
+    getTag: async (): Promise<string> => {
+      const tag = await hb.utils.exec('git tag --points-at HEAD')
+
+      if (tag instanceof ResourceError) {
+        return 'no-tag'
+      }
+
+      return tag.data
     }
   }
 }
 
 
+  
