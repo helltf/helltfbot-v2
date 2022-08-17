@@ -70,13 +70,14 @@ export class PingCommand implements Command {
     },
 
     getCommitInfo: async (): Promise<string> => {
-      const [branch, commit, tag] = await Promise.all([
+      const [branch, commit, tag, commitCount] = await Promise.all([
         this.methods.getCurrentBranch(),
         this.methods.getRev(),
-        this.methods.getTag()
+        this.methods.getTag(),
+        this.methods.getCommitCount()
       ])
 
-      return `${branch}@${commit} ${tag}`
+      return `${branch}@${commit} ${tag} with ${commitCount} commits`
     },
 
     getCurrentBranch: async (): Promise<string> => {
@@ -107,6 +108,16 @@ export class PingCommand implements Command {
       }
 
       return tag.data
+    },
+
+    getCommitCount: async (): Promise<string> => {
+      const commitCount = await hb.utils.exec('git rev-list --count HEAD')
+
+      if (commitCount instanceof ResourceError) {
+        return 'no-commit-count'
+      }
+
+      return commitCount.data
     }
   }
 }
