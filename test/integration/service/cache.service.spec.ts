@@ -71,7 +71,7 @@ describe('test redis service', () => {
 
       await hb.cache.saveEmoteSet(emotes, channel, eType)
 
-      await wait`1s`
+      await wait`2s`
 
       const result = await hb.cache.getEmoteSet(channel, eType)
 

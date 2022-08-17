@@ -56,31 +56,28 @@ Copy the following snippet into that file and fill in your own values:
 NODE_ENV=<env>
 MAIN_USER=<your_username>
 MAIN_USER_ID=<your_user_id>
-DEBUG=false
+DEBUG=<bool>
 PREFIX=<bot_prefix>
 START_UP_MESSAGE=[message]
-DB_PORT=<db_port>
-DB_HOST=<db_host>
 DB_USERNAME=<db_username>
 DB_PASSWORD=<db_password>
 DB_DATABASE=<db_table>
-TEST_DB_PORT=<test_db_port>
-TEST_DB_HOST=<test_db_host>
-TEST_DB_USERNAME=<test_db_username>
-TEST_DB_PASSWORD=<test_db_password>
-TEST_DB_DATABASE=<test_db_database>
+DATABASE_URI=<db_connection_uri>
+TEST_DATABASE_URI=<test_db_connection_uri>
 CLIENT_ID=<twitch_client_id>
 CLIENT_SECRET=<twitch_client_secret>
 TWITCH_OAUTH=<twitch_client_oauth>
 BEARERTOKEN_STREAMELEMENTS=<streamelements_api_key>
 GITHUB_TOKEN=<github_api_key>
 REDIS_URL=<redis_db_url>
+SEVENTV_GQL_TOKEN= <7tv-Bearer>
+ENCRYPT_KEY=<key_to_encrypt>
 ```
 
-Install all dependencies using ```npm install``` and build the project with ```npm run build```, then if nothing went wrong, you can now run the bot:
+Install all dependencies using ```yarn install``` and build the project with ```yarn build```, then if nothing went wrong, you can now run the bot:
 
 ```
-node .
+yarn start
 ```
 You might encounter an error while querying the GitHub API, since you are not permitted to see details of GitHub Actions on my other projects.
 
@@ -91,7 +88,7 @@ The bot will listen to every chat message starting with the prefix ```~```, ther
 
 ### Commands
 
-Right now there is no list containing all available commands.
+Right now there is a small list containing all available commands. See [here](https://github.com/helltf/helltfbot-v2/blob/master/Commands.md)
 In the future there will be a documented list of commands on the [associated website](#website).
 
 Every existing command has its own separate configuration and can be called either by its name or a registered alias. Some commands are exclusive to roles with higher [permission levels](#permissions).
@@ -159,7 +156,7 @@ These are some of the important libraries used, changing how this project is dev
 
 ### Website
 
-The bot will have an associated website used for things like a command list. There is a [repository](https://github.com/helltf/bot-v2-website) created for it already, but the entire project is still being planned.
+The bot will have an associated website used for things like a command list. There is a [repository](https://github.com/helltf/bot-v2-website) created for it already, but the entire project is still in progress.
 
 ### Backend API
 

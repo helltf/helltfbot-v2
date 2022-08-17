@@ -22,7 +22,9 @@ export class RandomColorCommand implements Command {
       const chars = Array(6)
         .fill('1')
         .map(() => {
-          return this.static.chars[hb.utils.random(0, this.static.chars.length)]
+          return this.static.chars[
+            hb.utils.random(0, this.static.chars.length - 1)
+          ]
         })
 
       return '#' + chars.join('')
@@ -31,6 +33,7 @@ export class RandomColorCommand implements Command {
 
   static = {
     chars: [
+      '0',
       '1',
       '2',
       '3',
