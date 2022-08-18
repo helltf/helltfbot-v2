@@ -4,7 +4,7 @@
     "target": "ES2022",
     "outDir": "./dist",
     "baseUrl": ".",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "lib": ["dom", "ES2022"],
     "skipLibCheck": true,
     "moduleResolution": "node",
@@ -27,7 +27,8 @@
     "removeComments": true,
     "strictPropertyInitialization": false,
     "importHelpers": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules"]
-}
+}  
