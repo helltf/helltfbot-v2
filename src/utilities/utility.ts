@@ -24,13 +24,17 @@ export class Utility {
   }
 
   async exec(command: string): Promise<Resource<string>> {
-    const { stdout, stderr } = await execute(command)
+    try {
+      const { stdout, stderr } = await execute(command)
 
-    if (stderr) {
-      return new ResourceError(stderr)
+      if (stderr) {
+        return new ResourceError(stderr)
+      }
+
+      return new ResourceSuccess(stdout)
+    } catch (e: any) {
+      return new ResourceError('error')
     }
-
-    return new ResourceSuccess(stdout)
   }
 
   generateAllCombinations<T, U>(arr1: T[], arr2: U[]): (T | U)[][] {
