@@ -107,7 +107,7 @@ export class PingCommand implements Command {
 
       if (tag instanceof ResourceError) {
         return 'no-tag'
-      
+      }
 
       return tag.data
     },
