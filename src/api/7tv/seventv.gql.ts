@@ -1,11 +1,14 @@
 import { Resource, ResourceSuccess, ResourceError } from "@api/types"
-import request from "graphql-request"
+import { TwitchBot } from "bot"
+import request from 'graphql-request'
 import distance from 'jaro-winkler'
+
+declare let hb: TwitchBot
 
 export class SevenTvGQL {
   url = 'https://7tv.io/v2/gql'
 
-  private async runGqlRequest<T>(
+  async runGqlRequest<T>(
     query: string,
     variables: { [key: string]: any }
   ): Promise<Resource<T>> {
@@ -28,32 +31,35 @@ export class SevenTvGQL {
     }
   }
 
-  async addEmote(emote: string, channel: string): Promise<Resource<string>> {
+  async addEmote(emote: string, channel: string): Promise<Resource<EmoteData>> {
     const channelId = await hb.api.seventv.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
 
-    const emoteResource = await this.queryEmotes(emote)
+    const emoteResource = await this.matchQueriedEmotes(emote)
 
     if (emoteResource instanceof ResourceError) {
       return emoteResource
     }
 
-    const [emoteId, emoteName] = emoteResource.data
-
-    const query = this.getAddEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emoteId, channelId.data, '')
-
-    const response = await this.runGqlRequest(query, variables)
-
-    if (response instanceof ResourceError) {
-      return this.getErrorMessage(response.error)
-    }
-
-    return new ResourceSuccess(emoteName)
+    return this.addEmoteById(emoteResource.data.id, channelId.data)
   }
 
-  async queryEmotes(emote: string): Promise<Resource<string[]>> {
+  async matchQueriedEmotes(emote: string): Promise<Resource<EmoteData>> {
+    const queriedEmotes = await this.queryEmotes(emote)
+
+    if (queriedEmotes instanceof ResourceError) {
+      return queriedEmotes
+    }
+
+    const match = this.findMatch(queriedEmotes.data, emote)
+
+    if (!match) return new ResourceError('no matching emote found')
+
+    return new ResourceSuccess(match)
+  }
+
+  async queryEmotes(emote: string): Promise<Resource<SearchEmote[]>> {
     const query = this.getQueryEmoteQuery()
     const response = await this.runGqlRequest<EmoteQueryData>(
       query,
@@ -64,54 +70,54 @@ export class SevenTvGQL {
       return new ResourceError('No emote found')
     }
 
-    for (const foundEmote of response.data.search_emotes) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const resultDistance = distance(emote, foundEmote.name, {
-        caseSensitive: false
-      })
-      if (resultDistance === 1) {
-        return new ResourceSuccess([foundEmote.id, foundEmote.name])
-      }
-    }
-    return new ResourceError('no matching emote found')
+    return new ResourceSuccess(response.data.search_emotes)
   }
 
-  async removeEmote(emote: string, channel: string): Promise<Resource<string>> {
-    const channelIdResponse = await hb.api.seventv.rest.getUserId(channel)
-
-    if (channelIdResponse instanceof ResourceError) return channelIdResponse
-
-    const channelId = channelIdResponse.data
-
-    const emoteResource = await hb.api.seventv.rest.getEmoteIdAndName(
-      emote,
-      channel
-    )
-    if (emoteResource instanceof ResourceError) {
-      return new ResourceError(emoteResource.error)
-    }
-    const [emoteId, emoteName] = emoteResource.data
-
-    if (!emoteId) return new ResourceError('Could not find that emote')
-
+  async removeEmoteById(
+    emoteId: string,
+    channelId: string
+  ): Promise<Resource<EmoteData>> {
     const query = this.getRemoveEmoteQuery()
     const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
-    const response = await this.runGqlRequest(query, variables)
+    const response = await this.runGqlRequest<RemoveEmoteResponse>(query, variables)
 
     if (response instanceof ResourceError) {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess(emoteName)
+    const removeEmote = response.data.removeChannelEmote.emotes?.find(({ id }) => {
+      return id === emoteId
+    })
+
+    return new ResourceSuccess({ id: emoteId, name: removeEmote!.name })
+  }
+
+  async removeEmote(
+    emote: string,
+    channel: string
+  ): Promise<Resource<EmoteData>> {
+    const channelId = await hb.api.seventv.rest.getUserId(channel)
+
+    if (channelId instanceof ResourceError) return channelId
+
+    const emoteResource = await hb.api.seventv.rest.getEmoteIdAndName(
+      emote,
+      channel
+    )
+
+    if (emoteResource instanceof ResourceError) {
+      return emoteResource
+    }
+
+    return await this.removeEmoteById(emoteResource.data.id, channelId.data)
   }
 
   async yoink(
     emote: string,
     channel: string,
     newChannel: string
-  ): Promise<Resource<string[]>> {
+  ): Promise<Resource<EmoteData>> {
     const channelId = await hb.api.seventv.rest.getUserId(newChannel)
 
     if (channelId instanceof ResourceError) return channelId
@@ -125,78 +131,73 @@ export class SevenTvGQL {
       return emoteResource
     }
 
-    const [emoteId, emoteName] = emoteResource.data
+    const { id: emoteId } = emoteResource.data
 
     if (!emoteId) return new ResourceError('Could not find that emote')
 
-    const query = this.getAddEmoteQuery()
-    const variables = this.getEmoteUpdateVariables(emoteId, channelId.data, '')
+    return this.addEmoteById(emoteResource.data.id, channelId.data)
+  }
 
-    const response = await this.runGqlRequest(query, variables)
+  async addEmoteById(
+    emoteId: string,
+    channelId: string
+  ): Promise<Resource<EmoteData>> {
+    const query = this.getAddEmoteQuery()
+    const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
+
+    const response = await this.runGqlRequest<AddEmoteResponse>(
+      query,
+      variables
+    )
 
     if (response instanceof ResourceError) {
       return this.getErrorMessage(response.error)
     }
 
-    return new ResourceSuccess([emoteId, emoteName])
+    const addedEmote = response.data.addChannelEmote.emotes?.find(({ id }) => {
+      return id === emoteId
+    })
+
+    return new ResourceSuccess({ id: emoteId, name: addedEmote!.name })
   }
 
-  private getErrorMessage(code?: string): ResourceError {
-    if (code === '70403')
-      return new ResourceError('Please add me as an editor of your channel :)')
-    if (code === '704611') return new ResourceError('Emote is already enabled')
-    if (code === '704610') return new ResourceError('Emote is not enabled')
-    if (code === '704612')
-      return new ResourceError('Emote with this name already exists')
-    if (code === '704620') return new ResourceError('No slot available')
-    return new ResourceError('Unknown Error')
+  async setAliasByEmoteId(
+    emoteId: string,
+    emoteName: string,
+    channelId: string
+  ): Promise<Resource<string>> {
+    const query = this.getEditEmoteQuery()
+    const variables = this.getEmoteUpdateVariablesWithData(
+      emoteId,
+      channelId,
+      '',
+      { alias: emoteName }
+    )
+
+    const response = await this.runGqlRequest<AliasResponse>(query, variables)
+
+    if (response instanceof ResourceError) {
+      return this.getErrorMessage(response.error)
+    }
+
+    return new ResourceSuccess(response.data.editChannelEmote.id)
   }
 
   async setAlias(
     emoteId: string,
     emoteName: string,
     channel: string
-  ): Promise<Resource<null>> {
+  ): Promise<Resource<string>> {
     const channelId = await hb.api.seventv.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
 
-    const query = this.getEditEmoteQuery()
-    const variables = this.getEmoteUpdateVariablesWithData(
-      emoteId,
-      channelId.data,
-      '',
-      { alias: emoteName }
-    )
-
-    const response = await this.runGqlRequest(query, variables)
-
-    if (response instanceof ResourceError) {
-      return this.getErrorMessage(response.error)
-    }
-
-    return new ResourceSuccess(null)
+    return this.setAliasByEmoteId(emoteId, emoteName, channelId.data)
   }
 
-  private getUserEditorsQuery() {
-    return `query GetUser($id: String!) {user(id: $id) {...FullUser}}fragment FullUser on User {id,email, display_name, login,description,editor_ids,editors {id, display_name, login}}`
-  }
-
-  private getUserEditorsVariables(id: string) {
-    return {
-      id: id
-    }
-  }
-
-  async getUserEditors(username: string): Promise<Resource<Editor[]>> {
-    const userId = await hb.api.seventv.rest.getUserId(username)
-
-    if (userId instanceof ResourceError) {
-      return userId
-    }
-
+  async getUserEditorsByUserId(userId: string): Promise<Resource<Editor[]>> {
     const query = this.getUserEditorsQuery()
-    const variables = this.getUserEditorsVariables(userId.data)
+    const variables = this.getUserEditorsVariables(userId)
 
     const response = await this.runGqlRequest<SevenTvUserResponse>(
       query,
@@ -210,19 +211,35 @@ export class SevenTvGQL {
     return new ResourceSuccess(response.data.user.editors)
   }
 
+  async getUserEditors(username: string): Promise<Resource<Editor[]>> {
+    const userId = await hb.api.seventv.rest.getUserId(username)
+
+    if (userId instanceof ResourceError) {
+      return userId
+    }
+    return this.getUserEditorsByUserId(userId.data)
+  }
+
   private getAddEmoteQuery(): string {
-    return `mutation AddChannelEmote($ch: String!, $em: String!, $re: String!) {addChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emote_ids}}`
+    return `mutation AddChannelEmote($ch: String!, $em: String!, $re: String!) {addChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emotes{id, name}}}`
   }
 
   private getRemoveEmoteQuery(): string {
     return `mutation RemoveChannelEmote($ch: String!, $em: String!, $re: String!) {removeChannelEmote(channel_id: $ch, emote_id: $em, reason: $re) {emote_ids}}`
   }
 
-  private getEmoteUpdateVariables(
-    emoteId: string,
-    channelId: string,
-    re: string
-  ) {
+  getErrorMessage(code?: string): ResourceError {
+    if (code === '70403')
+      return new ResourceError('Please add me as an editor of your channel :)')
+    if (code === '704611') return new ResourceError('Emote is already enabled')
+    if (code === '704610') return new ResourceError('Emote is not enabled')
+    if (code === '704612')
+      return new ResourceError('Emote with this name already exists')
+    if (code === '704620') return new ResourceError('No slot available')
+    return new ResourceError('Unknown Error')
+  }
+
+  getEmoteUpdateVariables(emoteId: string, channelId: string, re: string) {
     return {
       em: emoteId,
       ch: channelId,
@@ -241,6 +258,16 @@ export class SevenTvGQL {
       ch: channelId,
       re: re,
       data: data
+    }
+  }
+
+  private getUserEditorsQuery() {
+    return `query GetUser($id: String!) {user(id: $id) {...FullUser}}fragment FullUser on User {id,email, display_name, login,description,editor_ids,editors {id, display_name, login}}`
+  }
+
+  private getUserEditorsVariables(id: string) {
+    return {
+      id: id
     }
   }
 
@@ -269,8 +296,38 @@ export class SevenTvGQL {
   }
 
   private getEditEmoteQuery() {
-    return `mutation EditChannelEmote($ch: String!, $em: String!, $data: ChannelEmoteInput!, $re: String) {editChannelEmote(channel_id: $ch, emote_id: $em, data: $data, reason: $re) {id,emote_aliases}}`
+    return `mutation EditChannelEmote($ch: String!, $em: String!, $data: ChannelEmoteInput!, $re: String) {editChannelEmote(channel_id: $ch, emote_id: $em, data: $data, reason: $re) {id}}`
   }
+
+  private findMatch(
+    emotes: SearchEmote[],
+    emoteName: string
+  ): EmoteData | undefined {
+    for (const { id, name } of emotes) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const resultDistance = distance(emoteName, name, {
+        caseSensitive: false
+      })
+      if (resultDistance === 1) {
+        return { id, name }
+      }
+    }
+  }
+}
+
+export interface AliasResponse {
+  editChannelEmote: {
+    id: string
+  }
+}
+
+export interface AddEmoteResponse {
+  addChannelEmote: Partial<User>
+}
+
+export interface RemoveEmoteResponse {
+  removeChannelEmote: Partial<User>
 }
 
 export interface Role {
@@ -329,9 +386,15 @@ export interface User {
   login: string
   description: string
   editor_ids: string[]
-  editors: Editor[]
+  editors: Editor[],
+  emotes: EmoteData[]
 }
 
 export interface SevenTvUserResponse {
   user: User
+}
+
+export interface EmoteData {
+  id: string
+  name: string
 }

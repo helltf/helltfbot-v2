@@ -21,8 +21,8 @@ jobs:
           cache: 'npm'
       - name: Run lint script
         run: |
-          npm install
-          npm run lint
+          yarn install
+          yarn lint
 
   build:
     runs-on: ubuntu-latest
@@ -38,8 +38,8 @@ jobs:
           cache: 'npm'
       - name: Run build script
         run: |
-          npm install typescript
-          npm run build
+          yarn install
+          yarn build
   unit-tests:
     runs-on: ubuntu-latest
     strategy:
@@ -53,11 +53,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: install dependencies
-        run: npm install
+        run: yarn install
       - name: Run unit tests
         env:
           NODE_ENV: test
-        run: npm run test:unit
+        run: yarn test:unit
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -94,9 +94,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install 
+          yarn install 
       - name: Run integrations tests
-        run: npm run test:integration
+        run: yarn test:integration
 
         env:
           NODE_ENV: test

@@ -10,7 +10,7 @@ import { Command, CommandContext, CommandFlag } from '../types'
 
 export class NotifyCommand implements Command {
   name = 'notify'
-  flags: CommandFlag[] = []
+  flags: CommandFlag[] = [CommandFlag.LOWERCASE]
   description = 'create a notification for any event'
   permissions = ChatPermissionLevel.USER
   requiredParams = ['streamer', 'event']

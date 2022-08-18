@@ -1,6 +1,15 @@
+import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { CryptoUtility } from '@src/utilities/crypto'
 import { Permission } from '@src/utilities/permission/permission'
-import { HumanizeDuration, HumanizeDurationLanguage } from 'humanize-duration-ts'
+import { exec } from 'child_process'
+import {
+  HumanizeDuration,
+  HumanizeDurationLanguage
+} from 'humanize-duration-ts'
+import { promisify } from 'util'
+
+const execute = promisify(exec)
+
 export class Utility {
   permission: Permission
   crypto: CryptoUtility
@@ -14,8 +23,22 @@ export class Utility {
     return Math.floor(Math.random() * (upperLimit + lowerLimit + 1))
   }
 
-  generateAllCombinations(arr1: any[], arr2: any[]): any[][] {
-    return arr1.flatMap(d => arr2.map(v => [d, v]))
+  async exec(command: string): Promise<Resource<string>> {
+    const { stdout, stderr } = await execute(command)
+
+    if (stderr) {
+      return new ResourceError(stderr)
+    }
+
+    return new ResourceSuccess(stdout)
+  }
+
+  generateAllCombinations<T, U>(arr1: T[], arr2: U[]): (T | U)[][] {
+    return arr1.flatMap(val1 => arr2.map(val2 => [val1, val2]))
+  }
+
+  plularizeIf(input: string, someNumber: number) {
+    return someNumber === 1 ? input : this.plularize(input)
   }
 
   getEnumValues(anyEnum: any): any[] {
@@ -37,6 +60,8 @@ export class Utility {
     const difference = Date.now() - time
     return this.humanize(difference)
   }
+
+  plularize = (input: string): string => input + 's'
 
   shortenTimeString(timeString: string) {
     return timeString

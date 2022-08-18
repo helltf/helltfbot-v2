@@ -13,8 +13,10 @@
 |join|join a channel|
 |leave|leave a channel|
 |level|displays your current level|
+|modcount|get amout of moderators in channel|
 |notify|create a notification for any event|
 |ping|just a ping command|
+|randomcolor|generate a random hex code|
 |remove|removes a 7tv emote from channel|
 |removeme|removes your notification for the given streamer on the event|
 |rmsuggest|removes your suggestion|

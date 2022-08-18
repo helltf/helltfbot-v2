@@ -17,6 +17,12 @@ export class RemoveCommand implements Command {
     channel,
     user
   }: CommandContext): Promise<BotResponse> => {
+    if (!emote)
+      return {
+        response: 'emote as parameter is required',
+        success: false
+      }
+
     const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
 
     if (isEditor instanceof ResourceError) {
@@ -29,18 +35,46 @@ export class RemoveCommand implements Command {
         success: false
       }
 
-    const result = await hb.api.seventv.gql.removeEmote(emote, channel)
+    const idFromUrl = hb.api.seventv.getIdFromUrl(emote)
 
-    if (result instanceof ResourceError) {
-      return {
-        response: result.error,
-        success: false
-      }
+    if (idFromUrl) {
+      return this.methods.addEmoteById(idFromUrl, channel)
     }
 
-    return {
-      response: `Succesfully removed ${result.data}`,
-      success: true
+    return this.methods.addEmoteByName(emote, channel)
+  }
+
+  methods = {
+    addEmoteByName: async (emote: string, channel: string): Promise<BotResponse> => {
+      const result = await hb.api.seventv.gql.removeEmote(emote, channel)
+
+      if (result instanceof ResourceError) {
+        return {
+          response: result.error,
+          success: false
+        }
+      }
+
+      return {
+        response: `Successfully removed ${result.data.name}`,
+        success: true
+      }
+    },
+
+    addEmoteById: async (emoteId: string, channel: string): Promise<BotResponse> => {
+      const channelId = await hb.api.seventv.rest.getUserId(channel)
+
+      if (channelId instanceof ResourceError)
+        return { response: channelId.error, success: false }
+
+      const response = await hb.api.seventv.gql.removeEmoteById(emoteId, channelId.data)
+
+      if (response instanceof ResourceError) {
+        return { response: response.error, success: false }
+      }
+
+      return { response: `Successfully removed ${response.data.name}`, success: false }
     }
   }
 }
+
