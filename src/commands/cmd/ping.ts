@@ -81,7 +81,7 @@ export class PingCommand implements Command {
     },
 
     getCurrentBranch: async (): Promise<string> => {
-      const branch = await hb.utils.exec('git branch --show-current')
+      const branch = await hb.utils.exec("git branch | grep * | cut -d ' ' -f2")
 
       if (branch instanceof ResourceError) {
         return 'no-branch'
