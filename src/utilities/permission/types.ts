@@ -9,7 +9,6 @@ export enum ChatPermissionLevel {
 export enum GlobalPermissionLevel {
   USER = 0,
   BLOCKED = -1,
-  BROADCASTER = 4,
   DEV = 5,
   ADMIN = 100
 }
