@@ -81,13 +81,15 @@ export class PingCommand implements Command {
     },
 
     getCurrentBranch: async (): Promise<string> => {
-      const branch = await hb.utils.exec("git branch | grep * | cut -d ' ' -f2")
+      const branch = await hb.utils.exec(
+        "git branch | grep \\* | cut -d ' ' -f2"
+      )
 
       if (branch instanceof ResourceError) {
         return 'no-branch'
       }
 
-      return branch.data
+      return branch.data.trim()
     },
 
     getRev: async (): Promise<string> => {
@@ -105,7 +107,7 @@ export class PingCommand implements Command {
 
       if (tag instanceof ResourceError) {
         return 'no-tag'
-      }
+      
 
       return tag.data
     },
