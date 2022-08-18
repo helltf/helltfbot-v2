@@ -1,6 +1,7 @@
 import { PubSubConnection } from '@modules/pubsub/pubsub-connection'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
 import { TwitchBot } from 'bot'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 
 describe('test pubsub connection class', () => {
   let connection: PubSubConnection
