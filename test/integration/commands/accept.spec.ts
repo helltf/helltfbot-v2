@@ -51,6 +51,21 @@ describe('accept command', () => {
       expect(response).toBe('suggestion does not exist')
       expect(success).toBe(false)
     })
+
+    it('update suggestion is successful return success', async () => {
+      jest.spyOn(accept.methods, 'updateSuggestion').mockResolvedValue(true)
+
+      const id = 1
+
+      const { response, success } = await accept.execute({
+        channel: channel,
+        message: [`${id}`],
+        user: user
+      })
+
+      expect(response).toBe('Updated suggestion')
+      expect(success).toBe(true)
+    })
   })
 
   describe('update suggestion', () => {

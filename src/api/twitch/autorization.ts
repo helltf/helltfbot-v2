@@ -1,6 +1,6 @@
 import { Headers, HeadersInit } from 'node-fetch'
 
-const getAuthorizationHeader = (): HeadersInit => {
+export const getAuthorizationHeader = (): HeadersInit => {
   const headers = new Headers()
 
   headers.set('Authorization', 'Bearer ' + hb.api.twitch.accessToken)
@@ -9,4 +9,4 @@ const getAuthorizationHeader = (): HeadersInit => {
   return headers
 }
 
-export { getAuthorizationHeader }
+
