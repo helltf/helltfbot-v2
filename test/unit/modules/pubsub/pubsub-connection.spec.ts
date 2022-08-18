@@ -1,8 +1,6 @@
-import ReconnectingWebSocket, * as RWS from 'reconnecting-websocket'
 import { PubSubConnection } from '@modules/pubsub/pubsub-connection'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
 import { TwitchBot } from 'bot'
-import * as WS from 'ws'
 
 describe('test pubsub connection class', () => {
   let connection: PubSubConnection

@@ -1,6 +1,5 @@
 import { ResourceSuccess } from "@api/types"
 import { Emote } from "@src/commands/cmd/emotegame"
-import ReconnectingWebSocket from "reconnecting-websocket"
 
 export function mockEmoteApis(resolveTo: Emote[] = ['emote']) {
   const result = new ResourceSuccess(resolveTo)
