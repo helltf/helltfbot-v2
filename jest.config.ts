@@ -26,6 +26,7 @@ export default async (): Promise<Config.InitialOptions> => {
     testEnvironment: 'node',
     detectOpenHandles: true,
     collectCoverage: true,
+    coveragePathIgnorePatterns: ['test/test-utils', 'src/db/migration '],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
     modulePaths: ['<rootDir>'],
     forceExit: true,
