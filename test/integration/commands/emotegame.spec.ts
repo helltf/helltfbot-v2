@@ -29,7 +29,7 @@ describe('test emotegame', () => {
 
   beforeEach(async () => {
     hb.games = new GameService()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+
     user = getExampleTwitchUserState({})
     messageChannel = 'messageChannel'
     emotegame = new EmotegameCommand()
@@ -42,64 +42,35 @@ describe('test emotegame', () => {
     await disconnectRedis()
   })
 
-  it('no action given return error response', async () => {
-    const { response, success } = await emotegame.execute({
-      channel: messageChannel,
-      user,
-      message: []
+  describe('execute', () => {
+    it('no action given return error response', async () => {
+      const { response, success } = await emotegame.execute({
+        channel: messageChannel,
+        user,
+        message: []
+      })
+
+      expect(success).toBe(false)
+      expect(response).toBe('Action has to be either start or stop')
     })
 
-    expect(success).toBeFalse()
-    expect(response).toBe('Action has to be either start or stop')
-  })
-
-  it('emote type is not ffz, bttv oder 7tv return error response', async () => {
-    const type = 'otherType'
-    const message = ['start', type]
-
-    const { response, success } = await emotegame.execute({
-      channel: messageChannel,
-      user,
-      message
-    })
-
-    expect(response).toBe('type has to be ffz, bttv or seventv')
-    expect(success).toBeFalse()
-  })
-
-  it('action is start return successful response', async () => {
-    const message = ['start']
-    mockEmoteApis()
-
-    const { response, success } = await emotegame.execute({
-      channel: messageChannel,
-      user,
-      message
-    })
-
-    expect(response).toBe(
-      'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
-    )
-    expect(success).toBeTrue()
-  })
-
-  it('action is not start or stop return error response', async () => {
-    const message = ['b']
-
-    const { response, success } = await emotegame.execute({
-      channel: messageChannel,
-      user,
-      message
-    })
-
-    expect(response).toBe('Action has to be either start or stop')
-    expect(success).toBeFalse()
-  })
-
-  emoteTypes.forEach(type => {
-    it('action is start with set emotetype return successful response', async () => {
-      mockEmoteApis()
+    it('emote type is not ffz, bttv oder 7tv return error response', async () => {
+      const type = 'otherType'
       const message = ['start', type]
+
+      const { response, success } = await emotegame.execute({
+        channel: messageChannel,
+        user,
+        message
+      })
+
+      expect(response).toBe('type has to be ffz, bttv or seventv')
+      expect(success).toBe(false)
+    })
+
+    it('action is start return successful response', async () => {
+      const message = ['start']
+      mockEmoteApis()
 
       const { response, success } = await emotegame.execute({
         channel: messageChannel,
@@ -110,58 +81,92 @@ describe('test emotegame', () => {
       expect(response).toBe(
         'An emotegame has started, the word is ' + Array(5).fill('_').join(' ')
       )
-      expect(success).toBeTrue()
-    })
-  })
-
-  it('action is stop return successful response', async () => {
-    const message = ['stop']
-    mockEmoteApis()
-    hb.games.add(new Emotegame(messageChannel, 'emote'))
-    const { response, success } = await emotegame.execute({
-      channel: messageChannel,
-      user,
-      message
+      expect(success).toBe(true)
     })
 
-    expect(response).toBe('The emotegame has been stopped')
-    expect(success).toBeTrue()
-  })
+    it('action is not start or stop return error response', async () => {
+      const message = ['b']
 
-  it('action is start create new game for channel', async () => {
-    const message = ['start']
-    mockEmoteApis()
+      const { response, success } = await emotegame.execute({
+        channel: messageChannel,
+        user,
+        message
+      })
 
-    await emotegame.execute({ channel: messageChannel, user, message })
-
-    expect(hb.games.eg).toHaveSize(1)
-    expect(hb.games.eg[0].channel).toBe(messageChannel)
-  })
-
-  it('action is start but game already exists return error response', async () => {
-    const message = ['start']
-    const emote = 'emote'
-    mockEmoteApis()
-
-    hb.games.eg.push(new Emotegame(messageChannel, emote))
-
-    const { response, success } = await emotegame.execute({
-      channel: messageChannel,
-      user,
-      message
+      expect(response).toBe('Action has to be either start or stop')
+      expect(success).toBe(false)
     })
 
-    expect(success).toBeFalse()
-    expect(response).toBe('An emotegame is already running')
+    emoteTypes.forEach(type => {
+      it('action is start with set emotetype return successful response', async () => {
+        mockEmoteApis()
+        const message = ['start', type]
+
+        const { response, success } = await emotegame.execute({
+          channel: messageChannel,
+          user,
+          message
+        })
+
+        expect(response).toBe(
+          'An emotegame has started, the word is ' +
+            Array(5).fill('_').join(' ')
+        )
+        expect(success).toBe(true)
+      })
+    })
+
+    it('action is stop return successful response', async () => {
+      const message = ['stop']
+      mockEmoteApis()
+      jest.spyOn(hb.games, 'removeAfterTime').mockImplementation(jest.fn())
+      hb.games.add(new Emotegame(messageChannel, 'emote'))
+
+      const { response, success } = await emotegame.execute({
+        channel: messageChannel,
+        user,
+        message
+      })
+
+      expect(response).toBe('The emotegame has been stopped')
+      expect(success).toBe(true)
+    })
+
+    it('action is start create new game for channel', async () => {
+      const message = ['start']
+      mockEmoteApis()
+
+      await emotegame.execute({ channel: messageChannel, user, message })
+
+      expect(hb.games.eg).toHaveLength(1)
+      expect(hb.games.eg[0].channel).toBe(messageChannel)
+    })
+
+    it('action is start but game already exists return error response', async () => {
+      const message = ['start']
+      const emote = 'emote'
+      mockEmoteApis()
+
+      hb.games.eg.push(new Emotegame(messageChannel, emote))
+
+      const { response, success } = await emotegame.execute({
+        channel: messageChannel,
+        user,
+        message
+      })
+
+      expect(success).toBe(false)
+      expect(response).toBe('An emotegame is already running')
+    })
   })
 
   describe('start method', () => {
     emoteTypes.forEach(type => {
       it('get emote returns ResourceError return error response', async () => {
         const error = 'error message'
-        spyOn(emotegame.methods, 'getEmote').and.resolveTo(
-          new ResourceError(error)
-        )
+        jest
+          .spyOn(emotegame.methods, 'getEmote')
+          .mockResolvedValue(new ResourceError(error))
 
         const { response, success } = await emotegame.methods.start(
           messageChannel,
@@ -169,7 +174,7 @@ describe('test emotegame', () => {
         )
 
         expect(response).toBe(error)
-        expect(success).toBeFalse()
+        expect(success).toBe(false)
       })
     })
   })
@@ -179,26 +184,18 @@ describe('test emotegame', () => {
       const { response, success } = await emotegame.methods.stop(messageChannel)
 
       expect(response).toBe('There is no game running at the moment')
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('game is running return successful response', async () => {
+      jest.spyOn(hb.games, 'removeAfterTime').mockImplementation(jest.fn())
       hb.games.add(new Emotegame(messageChannel, 'emote'))
 
       const { response, success } = await emotegame.methods.stop(messageChannel)
 
       expect(response).toBe('The emotegame has been stopped')
-      expect(success).toBeTrue()
-    })
-
-    it('game is running stops removes the game', async () => {
-      spyOn(hb.games, 'removeGameForChannel')
-
-      hb.games.add(new Emotegame(messageChannel, 'emote'))
-
-      await emotegame.methods.stop(messageChannel)
-
-      expect(hb.games.removeGameForChannel).toHaveBeenCalledWith(messageChannel)
+      expect(success).toBe(true)
+      expect(hb.games.removeAfterTime).toHaveBeenCalled()
     })
   })
 
@@ -243,9 +240,9 @@ describe('test emotegame', () => {
       })
 
       it("emotes are not cached but error is returned from api emotes don't get cached", async () => {
-        spyOn(hb.api[type], 'getEmotesForChannel').and.resolveTo(
-          new ResourceError('error')
-        )
+        jest
+          .spyOn(hb.api[type], 'getEmotesForChannel')
+          .mockResolvedValue(new ResourceError('error'))
         await emotegame.methods.getEmotes(messageChannel, type)
 
         const cachedEmotes = await hb.cache.getEmoteSet(messageChannel, type)
@@ -254,9 +251,9 @@ describe('test emotegame', () => {
       })
 
       it("emotes are not cached but empty array is returned don't cache emotes", async () => {
-        spyOn(hb.api[type], 'getEmotesForChannel').and.resolveTo(
-          new ResourceSuccess([])
-        )
+        jest
+          .spyOn(hb.api[type], 'getEmotesForChannel')
+          .mockResolvedValue(new ResourceSuccess([]))
         await emotegame.methods.getEmotes(messageChannel, type)
 
         const cachedEmotes = await hb.cache.getEmoteSet(messageChannel, type)
@@ -269,9 +266,9 @@ describe('test emotegame', () => {
       emoteTypes.forEach(type => {
         it('returns resource error return error message', async () => {
           const error = 'Error message'
-          spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
-            new ResourceError(error)
-          )
+          jest
+            .spyOn(emotegame.methods, 'getEmotes')
+            .mockResolvedValue(new ResourceError(error))
 
           const result = (await emotegame.methods.getEmote(
             messageChannel,
@@ -283,9 +280,9 @@ describe('test emotegame', () => {
         })
 
         it('returns empty array return resource error', async () => {
-          spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
-            new ResourceSuccess([])
-          )
+          jest
+            .spyOn(emotegame.methods, 'getEmotes')
+            .mockResolvedValue(new ResourceSuccess([]))
           const result = (await emotegame.methods.getEmote(
             messageChannel,
             type
@@ -297,9 +294,9 @@ describe('test emotegame', () => {
 
         it('get emotes resolves to array return element from that array', async () => {
           const emotes = ['emote1', 'emote2', 'emote3']
-          spyOn(emotegame.methods, 'getEmotes').and.resolveTo(
-            new ResourceSuccess(emotes)
-          )
+          jest
+            .spyOn(emotegame.methods, 'getEmotes')
+            .mockResolvedValue(new ResourceSuccess(emotes))
 
           const result = (await emotegame.methods.getEmote(
             messageChannel,

@@ -25,7 +25,7 @@ describe('7tv api', () => {
 
       const { data } = isEditor as ResourceSuccess<boolean>
 
-      expect(data).toBeTrue()
+      expect(data).toBe(true)
     })
 
     it('editor request returns error return those error resource', async () => {
@@ -33,7 +33,7 @@ describe('7tv api', () => {
       const channel = 'channel'
       const errorResponse = new ResourceError('Error')
 
-      spyOn(api.gql, 'getUserEditors').and.resolveTo(errorResponse)
+      jest.spyOn(api.gql, 'getUserEditors').mockResolvedValue(errorResponse)
 
       const isEditor = await api.isEditor(user, channel)
 
@@ -45,7 +45,7 @@ describe('7tv api', () => {
       const channel = 'channel'
 
       const successResponse = new ResourceSuccess([] as Editor[])
-      spyOn(api.gql, 'getUserEditors').and.resolveTo(successResponse)
+      jest.spyOn(api.gql, 'getUserEditors').mockResolvedValue(successResponse)
 
       const isEditor = await api.isEditor(user, channel)
 
@@ -53,7 +53,7 @@ describe('7tv api', () => {
 
       const { data } = isEditor as ResourceSuccess<boolean>
 
-      expect(data).toBeFalse()
+      expect(data).toBe(false)
     })
 
     it('editor is response return success with true', async () => {
@@ -63,7 +63,7 @@ describe('7tv api', () => {
         { display_name: 'user', id: '1', login: 'user' }
       ]
       const successResponse = new ResourceSuccess(editors)
-      spyOn(api.gql, 'getUserEditors').and.resolveTo(successResponse)
+      jest.spyOn(api.gql, 'getUserEditors').mockResolvedValue(successResponse)
 
       const isEditor = await api.isEditor(user, channel)
 
@@ -71,7 +71,7 @@ describe('7tv api', () => {
 
       const { data } = isEditor as ResourceSuccess<boolean>
 
-      expect(data).toBeTrue()
+      expect(data).toBe(true)
     })
   })
   describe('get url method', () => {

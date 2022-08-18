@@ -20,7 +20,6 @@ describe('join command tests', () => {
   })
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     user = getExampleTwitchUserState({
       permission: 100
     })
@@ -40,7 +39,7 @@ describe('join command tests', () => {
 
     const expectedResponse = 'Channel has to be defined'
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe(expectedResponse)
   })
 
@@ -51,7 +50,7 @@ describe('join command tests', () => {
 
     const expectedResponse = 'Channel has to be defined'
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe(expectedResponse)
   })
 
@@ -63,7 +62,7 @@ describe('join command tests', () => {
     const { success, response } = await join.execute({ channel, user, message })
     const expectedResponse = 'Already connected to that channel'
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe(expectedResponse)
   })
 
@@ -81,19 +80,19 @@ describe('join command tests', () => {
   })
 
   it('connectToChannel is successful return true', async () => {
-    spyOn(hb.client, 'join').and.resolveTo([channel])
+    jest.spyOn(hb.client, 'join').mockResolvedValue([channel])
     const { success, message } = await join.methods.connectToChannel(channel)
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(message).toBe('Successfully joined the channel')
   })
 
   it('connectToChannel is not successful return false', async () => {
     const errorMessage = 'Error'
-    spyOn(hb.client, 'join').and.rejectWith(errorMessage)
+    jest.spyOn(hb.client, 'join').mockRejectedValue(errorMessage)
     const { success, message } = await join.methods.connectToChannel(channel)
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(message).toBe(errorMessage)
   })
 
@@ -101,7 +100,7 @@ describe('join command tests', () => {
     const joinChannel = 'joinChannel'
     const message = [joinChannel]
 
-    spyOn(hb.client, 'join').and.resolveTo([joinChannel])
+    jest.spyOn(hb.client, 'join').mockResolvedValue([joinChannel])
 
     const {
       response,
@@ -109,7 +108,7 @@ describe('join command tests', () => {
       success
     } = await join.execute({ channel, user, message })
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toBeDefined()
   })
 
@@ -117,7 +116,7 @@ describe('join command tests', () => {
     const joinChannel = 'joinChannel'
     const message = [joinChannel]
 
-    spyOn(hb.client, 'join').and.resolveTo([joinChannel])
+    jest.spyOn(hb.client, 'join').mockResolvedValue([joinChannel])
 
     await join.execute({ channel, user, message })
 
@@ -132,7 +131,7 @@ describe('join command tests', () => {
     const error = ''
     const joinChannel = 'joinChannel'
     const message = [joinChannel]
-    spyOn(hb.client, 'join').and.rejectWith(error)
+    jest.spyOn(hb.client, 'join').mockRejectedValue(error)
 
     const {
       response,
@@ -140,13 +139,13 @@ describe('join command tests', () => {
       success
     } = await join.execute({ channel, user, message })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBeDefined()
   })
 
   it('connect to channel sets joined to true', async () => {
     const channelToJoin = 'joinChannel'
-    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+    jest.spyOn(hb.client, 'join').mockResolvedValue([channelToJoin])
 
     await hb.db.channel.save(
       getExampleChannel({
@@ -167,7 +166,7 @@ describe('join command tests', () => {
   it('use me as param join the users channel and save to db', async () => {
     const channelToJoin = 'me'
     const message = [channelToJoin]
-    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+    jest.spyOn(hb.client, 'join').mockResolvedValue([channelToJoin])
 
     await join.execute({ channel, user, message })
 
@@ -181,7 +180,7 @@ describe('join command tests', () => {
   it('use me as param join the users channel and update it in db', async () => {
     const channelToJoin = 'me'
     const message = [channelToJoin]
-    spyOn(hb.client, 'join').and.resolveTo([channelToJoin])
+    jest.spyOn(hb.client, 'join').mockResolvedValue([channelToJoin])
 
     await hb.db.channel.save(
       getExampleChannel({
@@ -207,7 +206,7 @@ describe('join command tests', () => {
 
     const { success, response } = await join.execute({ channel, user, message })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe('You are not permitted to issue this command')
   })
 

@@ -18,7 +18,6 @@ describe('test suggest command', () => {
     messageUser = getExampleTwitchUserState({})
     timeouts = new TimeoutsCommand()
     await clearDb(hb.db.dataSource)
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   })
 
   afterAll(async () => {
@@ -33,7 +32,7 @@ describe('test suggest command', () => {
         user: messageUser
       })
 
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
       expect(response).toBe('No timeout found')
     })
 
@@ -65,7 +64,7 @@ describe('test suggest command', () => {
         timeoutChannel: channel
       })
 
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
       expect(response).toEqual(expectedResponse)
     })
 
@@ -105,7 +104,7 @@ describe('test suggest command', () => {
         timeoutChannel: channel
       })
 
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
       expect(response).toEqual(expectedResponse)
     })
 
@@ -141,7 +140,7 @@ describe('test suggest command', () => {
       })
 
       expect(response).toEqual(expectedResponse)
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
 
     it('user and channel is given return no timeouts for channel', async () => {
@@ -155,7 +154,7 @@ describe('test suggest command', () => {
       })
 
       expect(response).toBe('No timeout found')
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
 
     it('user and channel is given return 1 timeout for channel', async () => {
@@ -186,7 +185,7 @@ describe('test suggest command', () => {
       })
 
       expect(response).toEqual(expectedResponse)
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
   })
 })

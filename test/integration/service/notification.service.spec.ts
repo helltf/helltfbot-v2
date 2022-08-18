@@ -14,7 +14,6 @@ describe('test notification service', () => {
   })
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     service = new NotificationService()
     await clearDb(hb.db.dataSource)
   })
@@ -51,7 +50,7 @@ describe('test notification service', () => {
       updateEvents
     )
 
-    expect(isExisting).toBeFalse()
+    expect(isExisting).toBe(false)
   })
 
   it('notification exists return true', async () => {
@@ -70,12 +69,12 @@ describe('test notification service', () => {
       updateEvents
     )
 
-    expect(isExisting).toBeTrue()
+    expect(isExisting).toBe(true)
   })
   it('clean function sets streamer notification for status to false', async () => {
     const event = NotifyEventType.STATUS
     const id = 1
-    spyOn(hb.pubSub, 'unlistenStreamerTopic')
+    jest.spyOn(hb.pubSub, 'unlistenStreamerTopic')
 
     await hb.db.notificationChannel.save({
       setting: true,
@@ -91,13 +90,13 @@ describe('test notification service', () => {
     })
 
     expect(hb.pubSub.unlistenStreamerTopic).toHaveBeenCalledWith(id, event)
-    expect(updatedEntity![event]).toBeFalse()
+    expect(updatedEntity![event]).toBe(false)
   })
 
   it('clean function sets streamer notification for setting to false', async () => {
     const event = NotifyEventType.SETTING
     const id = 1
-    spyOn(hb.pubSub, 'unlistenStreamerTopic')
+    jest.spyOn(hb.pubSub, 'unlistenStreamerTopic')
 
     await hb.db.notificationChannel.save({
       setting: true,
@@ -113,6 +112,6 @@ describe('test notification service', () => {
     })
 
     expect(hb.pubSub.unlistenStreamerTopic).toHaveBeenCalledWith(id, event)
-    expect(updatedEntity![event]).toBeFalse()
+    expect(updatedEntity![event]).toBe(false)
   })
 })

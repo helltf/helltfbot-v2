@@ -31,7 +31,7 @@ describe('emote command', () => {
     })
 
     expect(response).toBe('No emotes found')
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('no params given return all emotes for channel', async () => {
@@ -52,7 +52,7 @@ describe('emote command', () => {
     ]
 
     expect(response).toEqual(expectedResponse)
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('no params given ffz cannot be fetched return only seventv and bttv', async () => {
@@ -60,15 +60,15 @@ describe('emote command', () => {
     const successResponse = new ResourceSuccess(emotes)
     const errorResponse = new ResourceError('error')
 
-    spyOn(hb.api.bttv, 'getEmotesForChannel')
-      .withArgs(messageChannel)
-      .and.resolveTo(successResponse)
-    spyOn(hb.api.ffz, 'getEmotesForChannel')
-      .withArgs(messageChannel)
-      .and.resolveTo(errorResponse)
-    spyOn(hb.api.seventv, 'getEmotesForChannel')
-      .withArgs(messageChannel)
-      .and.resolveTo(successResponse)
+    jest
+      .spyOn(hb.api.bttv, 'getEmotesForChannel')
+      .mockResolvedValue(successResponse)
+    jest
+      .spyOn(hb.api.ffz, 'getEmotesForChannel')
+      .mockResolvedValue(errorResponse)
+    jest
+      .spyOn(hb.api.seventv, 'getEmotesForChannel')
+      .mockResolvedValue(successResponse)
 
     const { success, response } = await emote.execute({
       channel: messageChannel,
@@ -81,7 +81,7 @@ describe('emote command', () => {
       `7TV: ${emotes.join(' ')}`
     ]
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toEqual(expectedResponse)
   })
 
@@ -90,15 +90,15 @@ describe('emote command', () => {
     const channelParam = 'paramChannel'
     const successResponse = new ResourceSuccess(emotes)
 
-    spyOn(hb.api.bttv, 'getEmotesForChannel')
-      .withArgs(channelParam)
-      .and.resolveTo(successResponse)
-    spyOn(hb.api.ffz, 'getEmotesForChannel')
-      .withArgs(channelParam)
-      .and.resolveTo(successResponse)
-    spyOn(hb.api.seventv, 'getEmotesForChannel')
-      .withArgs(channelParam)
-      .and.resolveTo(successResponse)
+    jest
+      .spyOn(hb.api.bttv, 'getEmotesForChannel')
+      .mockResolvedValue(successResponse)
+    jest
+      .spyOn(hb.api.ffz, 'getEmotesForChannel')
+      .mockResolvedValue(successResponse)
+    jest
+      .spyOn(hb.api.seventv, 'getEmotesForChannel')
+      .mockResolvedValue(successResponse)
 
     const { success, response } = await emote.execute({
       channel: messageChannel,
@@ -112,7 +112,7 @@ describe('emote command', () => {
       `7TV: ${emotes.join(' ')}`
     ]
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toEqual(expectedResponse)
   })
 })

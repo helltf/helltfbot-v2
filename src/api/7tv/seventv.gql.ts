@@ -80,15 +80,20 @@ export class SevenTvGQL {
     const query = this.getRemoveEmoteQuery()
     const variables = this.getEmoteUpdateVariables(emoteId, channelId, '')
 
-    const response = await this.runGqlRequest<RemoveEmoteResponse>(query, variables)
+    const response = await this.runGqlRequest<RemoveEmoteResponse>(
+      query,
+      variables
+    )
 
     if (response instanceof ResourceError) {
       return this.getErrorMessage(response.error)
     }
 
-    const removeEmote = response.data.removeChannelEmote.emotes?.find(({ id }) => {
-      return id === emoteId
-    })
+    const removeEmote = response.data.removeChannelEmote.emotes?.find(
+      ({ id }) => {
+        return id === emoteId
+      }
+    )
 
     return new ResourceSuccess({ id: emoteId, name: removeEmote!.name })
   }
@@ -386,7 +391,7 @@ export interface User {
   login: string
   description: string
   editor_ids: string[]
-  editors: Editor[],
+  editors: Editor[]
   emotes: EmoteData[]
 }
 

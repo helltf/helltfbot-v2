@@ -1,4 +1,3 @@
-import 'jasmine'
 import { ColorTracking } from '@modules/user.module'
 
 describe('color tracking tests', () => {

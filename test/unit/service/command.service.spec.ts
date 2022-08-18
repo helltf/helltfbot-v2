@@ -5,14 +5,14 @@ describe('testing commands class', () => {
   it('input no command should have no command', () => {
     const commands = new CommandService([])
 
-    expect(commands.commands).toHaveSize(0)
+    expect(commands.commands).toHaveLength(0)
   })
 
   it('input one command should have one command', () => {
     const command = getExampleCommand({})
     const commands = new CommandService([command])
 
-    expect(commands.commands).toHaveSize(1)
+    expect(commands.commands).toHaveLength(1)
   })
   it('input one command should activate should have name and alias in activate', () => {
     const command = getExampleCommand({
@@ -143,7 +143,7 @@ describe('testing commands class', () => {
 
     const allCommands = commands.getAll()
 
-    expect(allCommands).toHaveSize(0)
+    expect(allCommands).toHaveLength(0)
   })
 
   it('commands contains one command get all returns this command', () => {
@@ -153,7 +153,7 @@ describe('testing commands class', () => {
 
     const givenCommand = allCommands[0]
 
-    expect(allCommands).toHaveSize(1)
+    expect(allCommands).toHaveLength(1)
 
     expect(givenCommand).toEqual(exampleCommand)
   })
@@ -169,7 +169,7 @@ describe('testing commands class', () => {
     const commands = new CommandService([command1, command2])
     const allCommands = commands.getAll()
 
-    expect(allCommands).toHaveSize(2)
+    expect(allCommands).toHaveLength(2)
 
     expect(allCommands).toContain(command1)
     expect(allCommands).toContain(command2)

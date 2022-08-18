@@ -19,7 +19,6 @@ describe('test rmsuggest command', () => {
     rmsuggest = new RemoveSuggestCommand()
     user = getExampleTwitchUserState({})
     await clearDb(hb.db.dataSource)
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   })
 
   afterAll(async () => {
@@ -31,7 +30,7 @@ describe('test rmsuggest command', () => {
 
     const response = await rmsuggest.execute({ channel, user, message })
 
-    expect(response.success).toBeFalse()
+    expect(response.success).toBe(false)
     expect(response.response).toBe(
       'You need to specify an id to delete your suggestion'
     )
@@ -42,7 +41,7 @@ describe('test rmsuggest command', () => {
 
     const response = await rmsuggest.execute({ channel, user, message })
 
-    expect(response.success).toBeFalse()
+    expect(response.success).toBe(false)
     expect(response.response).toBe('id has to be a number')
   })
 
@@ -52,7 +51,7 @@ describe('test rmsuggest command', () => {
 
     const response = await rmsuggest.execute({ channel, user, message })
 
-    expect(response.success).toBeFalse()
+    expect(response.success).toBe(false)
     expect(response.response).toBe(
       `Id ${id} does not exist or the suggestion is created by somebody else`
     )
@@ -78,7 +77,7 @@ describe('test rmsuggest command', () => {
       id: id
     })
 
-    expect(response.success).toBeTrue()
+    expect(response.success).toBe(true)
     expect(response.response).toBe(
       `Succesfully removed your suggestion with id ${id}`
     )
@@ -106,7 +105,7 @@ describe('test rmsuggest command', () => {
       id: savedEntity.id
     })
 
-    expect(response.success).toBeFalse()
+    expect(response.success).toBe(false)
     expect(response.response).toBe(
       `Id ${id} does not exist or the suggestion is created by somebody else`
     )

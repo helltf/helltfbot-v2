@@ -23,7 +23,7 @@ describe('help command', () => {
       'All commands are listed here https://github.com/helltf/helltfbot-v2/blob/master/Commands.md'
     ]
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toEqual(expectedResponse)
   })
 
@@ -36,7 +36,7 @@ describe('help command', () => {
       user
     })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe('This command does not exist')
   })
 
@@ -60,7 +60,7 @@ describe('help command', () => {
       `Optional params: ${command.optionalParams.join(',')}`
     ]
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toEqual(expectedResponse)
   })
 })

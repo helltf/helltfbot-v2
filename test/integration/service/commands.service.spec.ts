@@ -11,7 +11,6 @@ describe('test updating commands', () => {
   })
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
     await clearDb(hb.db.dataSource)
   })
 
@@ -28,7 +27,7 @@ describe('test updating commands', () => {
 
       const savedCommands = await hb.db.command.find()
 
-      expect(savedCommands).toHaveSize(0)
+      expect(savedCommands).toHaveLength(0)
     })
 
     it('one command existing and one command will be save to db', async () => {
@@ -40,7 +39,7 @@ describe('test updating commands', () => {
 
       const savedCommands = await hb.db.command.find()
 
-      expect(savedCommands).toHaveSize(1)
+      expect(savedCommands).toHaveLength(1)
     })
 
     it('two commands existing and two commands will be saved to db', async () => {
@@ -57,7 +56,7 @@ describe('test updating commands', () => {
 
       const savedCommands = await hb.db.command.find()
 
-      expect(savedCommands).toHaveSize(2)
+      expect(savedCommands).toHaveLength(2)
     })
 
     it('command already exists in db and will set deleted to false', async () => {
@@ -76,7 +75,7 @@ describe('test updating commands', () => {
         name: exampleCommand.name
       }))!
 
-      expect(deleted).toBeFalse()
+      expect(deleted).toBe(false)
     })
   })
 
@@ -92,7 +91,7 @@ describe('test updating commands', () => {
         name: exampleCommand.name
       }))!
 
-      expect(deleted).toBeFalse()
+      expect(deleted).toBe(false)
     })
     it('command no longer exists deleted will be set to true', async () => {
       const exampleCommand = getExampleCommand({})
@@ -107,7 +106,7 @@ describe('test updating commands', () => {
         name: exampleCommand.name
       }))!
 
-      expect(deleted).toBeTrue()
+      expect(deleted).toBe(true)
     })
   })
 })

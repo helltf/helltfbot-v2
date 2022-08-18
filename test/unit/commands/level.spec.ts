@@ -55,8 +55,10 @@ describe('test level command', () => {
       const user = getExampleTwitchUserState({
         permission: userPerm
       })
-      spyOn(level.methods, 'getUserPermissions').and.returnValue(userPerm)
-      spyOn(level.methods, 'getDatabasePermissions').and.resolveTo(dbPerm)
+      jest.spyOn(level.methods, 'getUserPermissions').mockReturnValue(userPerm)
+      jest
+        .spyOn(level.methods, 'getDatabasePermissions')
+        .mockResolvedValue(dbPerm)
 
       const { response, success } = await level.execute({
         channel,
@@ -73,7 +75,7 @@ describe('test level command', () => {
       )} overall`
 
       expect(response).toBe(expectedResponse)
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
   })
 })

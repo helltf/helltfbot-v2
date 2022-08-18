@@ -18,30 +18,30 @@ describe('test uid command', () => {
     const { response, success } = await uid.execute({ channel, user, message })
 
     expect(response).toBe(`${user.username}👉${id}`)
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('user is given return user id from api', async () => {
     const searchedUser = 'searchedUser'
     const message = [searchedUser]
     const id = 300
-    spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(id)
+    jest.spyOn(hb.api.twitch, 'getUserIdByName').mockResolvedValue(id)
 
     const { response, success } = await uid.execute({ channel, user, message })
 
     expect(response).toBe(`${searchedUser}👉${id}`)
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it("user can't be found return error response", async () => {
     const searchedUser = 'searchedUser'
     const message = [searchedUser]
     const id = undefined
-    spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(id)
+    jest.spyOn(hb.api.twitch, 'getUserIdByName').mockResolvedValue(id)
 
     const { response, success } = await uid.execute({ channel, user, message })
 
     expect(response).toBe(`Could not find user`)
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 })
