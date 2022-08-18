@@ -19,7 +19,6 @@ describe('test suggest command', () => {
 
   beforeEach(async () => {
     await clearDb(hb.db.dataSource)
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   })
 
   afterAll(async () => {
@@ -31,7 +30,7 @@ describe('test suggest command', () => {
     const message = [suggestion]
     const response = await suggest.execute({ channel, user, message })
 
-    expect(response.success).toBeFalse()
+    expect(response.success).toBe(false)
   })
 
   it('suggestion is defined and response is successful', async () => {
@@ -40,7 +39,7 @@ describe('test suggest command', () => {
 
     const response = await suggest.execute({ channel, user, message })
 
-    expect(response.success).toBeTrue()
+    expect(response.success).toBe(true)
   })
 
   it('one word suggestion is defined and saved into db', async () => {
@@ -54,9 +53,9 @@ describe('test suggest command', () => {
     const id = 1
     const expectedMessage = `Succesfully saved your suggestion with id ${id}`
 
-    expect(savedEntity).toHaveSize(expectedLength)
+    expect(savedEntity).toHaveLength(expectedLength)
     expect(response.response).toEqual(expectedMessage)
-    expect(response.success).toBeTrue()
+    expect(response.success).toBe(true)
   })
 
   it('save multiple words suggestion return succesfull response', async () => {
@@ -75,7 +74,7 @@ describe('test suggest command', () => {
 
     expect(savedEntity!.suggestion).toBe(`${message.join(' ')}`)
     expect(response.response).toEqual(expectedMessage)
-    expect(response.success).toBeTrue()
+    expect(response.success).toBe(true)
   })
 
   it('save two suggestions returns id 2', async () => {
@@ -100,7 +99,7 @@ describe('test suggest command', () => {
     const expectedMessage = `Succesfully saved your suggestion with id ${expectedId}`
     const expectedSavedSuggestion = `${message.join(' ')}`
 
-    expect(response.success).toBeTrue()
+    expect(response.success).toBe(true)
     expect(response.response).toBe(expectedMessage)
     expect(savedEntity!.suggestion).toBe(expectedSavedSuggestion)
   })

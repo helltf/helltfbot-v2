@@ -12,7 +12,6 @@ import { setupDatabase } from '../../test-utils/setup-db'
 import { saveNotificationWithUser } from '../../test-utils/save-notification'
 
 describe('test remove command', () => {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   let messageChannel = 'testmessageChannel'
   let streamer = 'streamer'
   let user: TwitchUserState
@@ -27,7 +26,7 @@ describe('test remove command', () => {
     streamer = 'streamer'
     remove = new RemovemeCommand()
     user = getExampleTwitchUserState({})
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+
     await clearDb(hb.db.dataSource)
   })
 
@@ -44,7 +43,7 @@ describe('test remove command', () => {
       success
     } = await remove.execute({ channel: messageChannel, user, message })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe('No streamer specified')
   })
 
@@ -57,7 +56,7 @@ describe('test remove command', () => {
       success
     } = await remove.execute({ channel: messageChannel, user, message })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe(
       `Event unknown. Valid events are ${Object.values(
         UserNotificationType
@@ -74,7 +73,7 @@ describe('test remove command', () => {
       success
     } = await remove.execute({ channel: messageChannel, user, message })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe(
       `Event unknown. Valid events are ${Object.values(
         UserNotificationType
@@ -91,7 +90,7 @@ describe('test remove command', () => {
       success
     } = await remove.execute({ channel: messageChannel, user, message })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
 
     expect(response).toBe('No matching notification found')
   })
@@ -117,7 +116,7 @@ describe('test remove command', () => {
       success
     } = await remove.execute({ channel: messageChannel, user, message })
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
 
     expect(response).toBe('Successfully removed your notification')
   })
@@ -146,7 +145,7 @@ describe('test remove command', () => {
       streamer: streamer
     })
 
-    expect(updatedEntity![event]).toBeFalse()
+    expect(updatedEntity![event]).toBe(false)
   })
 
   describe('remove notification', () => {
@@ -179,7 +178,7 @@ describe('test remove command', () => {
         })
 
         expect(affected).toBe(1)
-        expect(updatedEntity![event]).toBeFalse()
+        expect(updatedEntity![event]).toBe(false)
       })
     })
 

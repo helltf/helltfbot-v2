@@ -5,21 +5,7 @@ import ReconnectingWebSocket from "reconnecting-websocket"
 export function mockEmoteApis(resolveTo: Emote[] = ['emote']) {
   const result = new ResourceSuccess(resolveTo)
 
-  spyOn(hb.api.bttv, 'getEmotesForChannel').and.resolveTo(result)
-  spyOn(hb.api.ffz, 'getEmotesForChannel').and.resolveTo(result)
-  spyOn(hb.api.seventv, 'getEmotesForChannel').and.resolveTo(result)
-}
-
-export const createMockedWSConnection = (): ReconnectingWebSocket => {
-  return jasmine.createSpyObj({
-    addEventListener: () => {
-      return {}
-    },
-    send: () => {
-      return {}
-    },
-    reconnect: () => {
-      return {}
-    }
-  })
+  jest.spyOn(hb.api.bttv, 'getEmotesForChannel').mockResolvedValue(result)
+  jest.spyOn(hb.api.ffz, 'getEmotesForChannel').mockResolvedValue(result)
+  jest.spyOn(hb.api.seventv, 'getEmotesForChannel').mockResolvedValue(result)
 }

@@ -18,7 +18,7 @@ describe('eval command', () => {
       user: user
     })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBeDefined()
   })
 
@@ -32,7 +32,7 @@ describe('eval command', () => {
       user: user
     })
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toBe(returnValue)
   })
 
@@ -50,7 +50,7 @@ describe('eval command', () => {
       user: user
     })
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toBe(returnValue)
   })
 })

@@ -12,12 +12,12 @@ describe('random color', () => {
   it('return a random generated hexcode', async () => {
     const returnedCode = '#11111'
 
-    spyOn(randomColor.methods, 'generateHex').and.returnValue(returnedCode)
+    jest.spyOn(randomColor.methods, 'generateHex').mockReturnValue(returnedCode)
 
     const { response, success } = await randomColor.execute()
 
     expect(response).toBe(`${returnedCode}`)
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('generate function returns a string with 7 chars', () => {

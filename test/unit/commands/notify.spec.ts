@@ -49,7 +49,7 @@ describe('unit test notify command functions', () => {
 
     for (const event of events) {
       const isNotValid = notify.methods.eventIsNotValid(event)
-      expect(isNotValid).toBeFalse()
+      expect(isNotValid).toBe(false)
     }
   })
 })

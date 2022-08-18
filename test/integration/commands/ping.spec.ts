@@ -29,12 +29,14 @@ describe('test ping command', () => {
     const latency = 190
     const commit = `master@1 v1.3.1`
 
-    spyOn(ping.methods, 'getUptime').and.returnValue(uptime)
-    spyOn(ping.methods, 'getMemory').and.returnValue(memoryUsage)
-    spyOn(ping.methods, 'getCommandsIssued').and.resolveTo(commandsIssued)
-    spyOn(ping.methods, 'getChannels').and.resolveTo(joinedChannels)
-    spyOn(ping.methods, 'getLatency').and.resolveTo(latency)
-    spyOn(ping.methods, 'getCommitInfo').and.resolveTo(commit)
+    jest.spyOn(ping.methods, 'getUptime').mockReturnValue(uptime)
+    jest.spyOn(ping.methods, 'getMemory').mockReturnValue(memoryUsage)
+    jest
+      .spyOn(ping.methods, 'getCommandsIssued')
+      .mockResolvedValue(commandsIssued)
+    jest.spyOn(ping.methods, 'getChannels').mockResolvedValue(joinedChannels)
+    jest.spyOn(ping.methods, 'getLatency').mockResolvedValue(latency)
+    jest.spyOn(ping.methods, 'getCommitInfo').mockResolvedValue(commit)
 
     const { success, response } = await ping.execute()
 
@@ -47,7 +49,7 @@ describe('test ping command', () => {
       `Commands issued: ${commandsIssued}`,
       `Joined ${joinedChannels} channels`
     ]
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toEqual(expectedResponse)
   })
 
@@ -92,10 +94,10 @@ describe('test ping command', () => {
       const tag = 'v1.3.2'
       const commitCount = '1000'
 
-      spyOn(ping.methods, 'getCurrentBranch').and.resolveTo(branch)
-      spyOn(ping.methods, 'getTag').and.resolveTo(tag)
-      spyOn(ping.methods, 'getRev').and.resolveTo(commit)
-      spyOn(ping.methods, 'getCommitCount').and.resolveTo(commitCount)
+      jest.spyOn(ping.methods, 'getCurrentBranch').mockResolvedValue(branch)
+      jest.spyOn(ping.methods, 'getTag').mockResolvedValue(tag)
+      jest.spyOn(ping.methods, 'getRev').mockResolvedValue(commit)
+      jest.spyOn(ping.methods, 'getCommitCount').mockResolvedValue(commitCount)
 
       const result = await ping.methods.getCommitInfo()
       const expectedResult = `${branch}@${commit} ${tag} with ${commitCount} commits`
@@ -105,7 +107,9 @@ describe('test ping command', () => {
 
     it('get branch returns current branch', async () => {
       const branch = 'master'
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(branch))
+      jest
+        .spyOn(hb.utils, 'exec')
+        .mockResolvedValue(new ResourceSuccess(branch))
 
       const result = await ping.methods.getCurrentBranch()
 
@@ -113,7 +117,7 @@ describe('test ping command', () => {
     })
 
     it('get branch failes return no-branch', async () => {
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getCurrentBranch()
 
@@ -122,7 +126,7 @@ describe('test ping command', () => {
 
     it('get rev returns short rev', async () => {
       const rev = 'abcdefg'
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(rev))
+      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceSuccess(rev))
 
       const result = await ping.methods.getRev()
 
@@ -130,7 +134,7 @@ describe('test ping command', () => {
     })
 
     it('get rev failes returns no-rev', async () => {
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getRev()
 
@@ -139,7 +143,7 @@ describe('test ping command', () => {
 
     it('get tag returns tag', async () => {
       const tag = 'v1.3.1'
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(tag))
+      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceSuccess(tag))
 
       const result = await ping.methods.getTag()
 
@@ -147,7 +151,7 @@ describe('test ping command', () => {
     })
 
     it('get tag failes returns no-tag', async () => {
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getTag()
 
@@ -156,7 +160,9 @@ describe('test ping command', () => {
 
     it('get commit count returns tag', async () => {
       const amount = '1000'
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceSuccess(amount))
+      jest
+        .spyOn(hb.utils, 'exec')
+        .mockResolvedValue(new ResourceSuccess(amount))
 
       const result = await ping.methods.getCommitCount()
 
@@ -164,7 +170,7 @@ describe('test ping command', () => {
     })
 
     it('get commit count failes returns no-tag', async () => {
-      spyOn(hb.utils, 'exec').and.resolveTo(new ResourceError('error'))
+      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getCommitCount()
 

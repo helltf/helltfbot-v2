@@ -35,7 +35,9 @@ describe('7tv gql', () => {
 
     it('channel does not exist return resource error', async () => {
       const channelError = new ResourceError('Error')
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(channelError)
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(channelError)
 
       const response = await gql.addEmote(emote, channel)
 
@@ -49,10 +51,10 @@ describe('7tv gql', () => {
     it('emote could not be found return error resource', async () => {
       const userId = '1'
       const queryError = new ResourceError('emote not found')
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess(userId)
-      )
-      spyOn(gql, 'queryEmotes').and.resolveTo(queryError)
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess(userId))
+      jest.spyOn(gql, 'queryEmotes').mockResolvedValue(queryError)
 
       const response = await gql.addEmote(emote, channel)
 
@@ -65,13 +67,15 @@ describe('7tv gql', () => {
 
     it('add request returns error return error message', async () => {
       const errorCode = '200'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess('1')
-      )
-      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(
-        new ResourceSuccess({ id: '1', name: 'emoteName' })
-      )
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorCode))
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess('1'))
+      jest
+        .spyOn(gql, 'matchQueriedEmotes')
+        .mockResolvedValue(new ResourceSuccess({ id: '1', name: 'emoteName' }))
+      jest
+        .spyOn(gql, 'runGqlRequest')
+        .mockResolvedValue(new ResourceError(errorCode))
 
       const response = await gql.addEmote(emote, channel)
 
@@ -85,13 +89,15 @@ describe('7tv gql', () => {
     it('add request returns success return emotename', async () => {
       const emoteId = '1'
       const emoteName = 'EmoteName'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess('1')
-      )
-      spyOn(gql, 'matchQueriedEmotes').and.resolveTo(
-        new ResourceSuccess({ id: emoteId, name: emoteName })
-      )
-      spyOn(gql, 'runGqlRequest').and.resolveTo(
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess('1'))
+      jest
+        .spyOn(gql, 'matchQueriedEmotes')
+        .mockResolvedValue(
+          new ResourceSuccess({ id: emoteId, name: emoteName })
+        )
+      jest.spyOn(gql, 'runGqlRequest').mockResolvedValue(
         new ResourceSuccess<AddEmoteResponse>({
           addChannelEmote: { emotes: [{ id: emoteId, name: emoteName }] }
         })
@@ -113,7 +119,7 @@ describe('7tv gql', () => {
 
     it('request returns error return error resource', async () => {
       const errorResponse = new ResourceError('Error')
-      spyOn(gql, 'runGqlRequest').and.resolveTo(errorResponse)
+      jest.spyOn(gql, 'runGqlRequest').mockResolvedValue(errorResponse)
       const response = await gql.removeEmoteById(emoteId, channelId)
 
       expect(response).toBeInstanceOf(ResourceError)
@@ -127,7 +133,11 @@ describe('7tv gql', () => {
       const channelId = '1'
       const emoteData = { id: emoteId, name: 'emote' }
       const emotes = [emoteData]
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceSuccess<RemoveEmoteResponse>({ removeChannelEmote: { emotes } }))
+      jest.spyOn(gql, 'runGqlRequest').mockResolvedValue(
+        new ResourceSuccess<RemoveEmoteResponse>({
+          removeChannelEmote: { emotes }
+        })
+      )
 
       const response = await gql.removeEmoteById(emoteData.id, channelId)
 
@@ -161,9 +171,9 @@ describe('7tv gql', () => {
 
     it('user does not exist return error resource', async () => {
       const error = 'Error'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceError(error)
-      )
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceError(error))
 
       const response = await gql.removeEmote(emote, channel)
 
@@ -176,12 +186,12 @@ describe('7tv gql', () => {
 
     it('emote request failes return error resource', async () => {
       const error = 'Emote error'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess('1')
-      )
-      spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
-        new ResourceError(error)
-      )
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess('1'))
+      jest
+        .spyOn(hb.api.seventv.rest, 'getEmoteIdAndName')
+        .mockResolvedValue(new ResourceError(error))
 
       const response = await gql.removeEmote(emote, channel)
 
@@ -197,15 +207,15 @@ describe('7tv gql', () => {
       const emoteId = '2'
       const error = 'Error'
 
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess(userId)
-      )
-      spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
-        new ResourceSuccess({ id: emoteId, name: emote })
-      )
-      spyOn(gql, 'removeEmoteById')
-        .withArgs(emoteId, userId)
-        .and.resolveTo(new ResourceError(error))
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess(userId))
+      jest
+        .spyOn(hb.api.seventv.rest, 'getEmoteIdAndName')
+        .mockResolvedValue(new ResourceSuccess({ id: emoteId, name: emote }))
+      jest
+        .spyOn(gql, 'removeEmoteById')
+        .mockResolvedValue(new ResourceError(error))
 
       const response = await gql.removeEmote(emote, channel)
 
@@ -221,15 +231,15 @@ describe('7tv gql', () => {
       const userId = '1'
       const emoteId = '2'
 
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess(userId)
-      )
-      spyOn(hb.api.seventv.rest, 'getEmoteIdAndName').and.resolveTo(
-        new ResourceSuccess({ id: emoteId, name: emote })
-      )
-      spyOn(gql, 'removeEmoteById')
-        .withArgs(emoteId, userId)
-        .and.resolveTo(new ResourceSuccess({ id: emoteId, name: emote }))
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess(userId))
+      jest
+        .spyOn(hb.api.seventv.rest, 'getEmoteIdAndName')
+        .mockResolvedValue(new ResourceSuccess({ id: emoteId, name: emote }))
+      jest
+        .spyOn(gql, 'removeEmoteById')
+        .mockResolvedValue(new ResourceSuccess({ id: emoteId, name: emote }))
 
       const response = await gql.removeEmote(emote, channel)
 
@@ -248,9 +258,9 @@ describe('7tv gql', () => {
 
     it('channel does not exist return error', async () => {
       const error = 'Error'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceError(error)
-      )
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceError(error))
 
       const response = await gql.setAlias(emoteId, emoteName, channel)
 
@@ -263,12 +273,12 @@ describe('7tv gql', () => {
 
     it('user exists invoke set alias by emote id', async () => {
       const userId = '2'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess(userId)
-      )
-      spyOn(gql, 'setAliasByEmoteId')
-        .withArgs(emoteId, emoteName, userId)
-        .and.resolveTo(new ResourceSuccess(emoteId))
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess(userId))
+      jest
+        .spyOn(gql, 'setAliasByEmoteId')
+        .mockResolvedValue(new ResourceSuccess(emoteId))
 
       const response = await gql.setAlias(emoteId, emoteName, channel)
 
@@ -292,7 +302,9 @@ describe('7tv gql', () => {
 
     it('request returns error return resource error', async () => {
       const errorMessage = 'Error'
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(errorMessage))
+      jest
+        .spyOn(gql, 'runGqlRequest')
+        .mockResolvedValue(new ResourceError(errorMessage))
 
       const response = await gql.setAliasByEmoteId(
         emoteId,
@@ -309,7 +321,7 @@ describe('7tv gql', () => {
 
     it('request is successful return resource success', async () => {
       const emoteId = '1'
-      spyOn(gql, 'runGqlRequest').and.resolveTo(
+      jest.spyOn(gql, 'runGqlRequest').mockResolvedValue(
         new ResourceSuccess<AliasResponse>({
           editChannelEmote: { id: emoteId }
         })
@@ -334,7 +346,9 @@ describe('7tv gql', () => {
       const userId = '1'
       const error = 'error'
 
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(error))
+      jest
+        .spyOn(gql, 'runGqlRequest')
+        .mockResolvedValue(new ResourceError(error))
 
       const response = await gql.getUserEditorsByUserId(userId)
 
@@ -348,9 +362,9 @@ describe('7tv gql', () => {
     it('request is successful return success response', async () => {
       const userId = '1'
       const responseData: SevenTvUserResponse = getExampleSevenTvUserResponse()
-      spyOn(gql, 'runGqlRequest').and.resolveTo(
-        new ResourceSuccess(responseData)
-      )
+      jest
+        .spyOn(gql, 'runGqlRequest')
+        .mockResolvedValue(new ResourceSuccess(responseData))
 
       const response = await gql.getUserEditorsByUserId(userId)
 
@@ -368,7 +382,9 @@ describe('7tv gql', () => {
 
     it('request is not successful return error resource', async () => {
       const error = ''
-      spyOn(gql, 'runGqlRequest').and.resolveTo(new ResourceError(error))
+      jest
+        .spyOn(gql, 'runGqlRequest')
+        .mockResolvedValue(new ResourceError(error))
 
       const response = await gql.addEmoteById(emoteId, channelId)
 
@@ -385,7 +401,7 @@ describe('7tv gql', () => {
         { id: emoteId, name: emoteName },
         { id: '4', name: 'otherName' }
       ]
-      spyOn(gql, 'runGqlRequest').and.resolveTo(
+      jest.spyOn(gql, 'runGqlRequest').mockResolvedValue(
         new ResourceSuccess<AddEmoteResponse>({
           addChannelEmote: { emotes }
         })

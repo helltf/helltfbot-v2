@@ -38,7 +38,7 @@ describe('stats command', () => {
       })
 
       expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('type is not existing return error', async () => {
@@ -51,7 +51,7 @@ describe('stats command', () => {
       })
 
       expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('user has no stats return error', async () => {
@@ -64,7 +64,7 @@ describe('stats command', () => {
       })
 
       expect(response).toBe(`${user.username} has no stats recorded`)
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('type is emotegame return stats for user', async () => {
@@ -97,7 +97,7 @@ describe('stats command', () => {
       ]
 
       expect(response).toEqual(expectedResponse)
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
 
     it('user is given as param has no stats return error', async () => {
@@ -111,7 +111,7 @@ describe('stats command', () => {
       })
 
       expect(response).toBe(`${lookupUser} has no stats recorded`)
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('user is given as param has no stats but other user has return error', async () => {
@@ -135,7 +135,7 @@ describe('stats command', () => {
       })
 
       expect(response).toBe(`${lookupUser} has no stats recorded`)
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('user is given and has stats return stats', async () => {
@@ -169,7 +169,7 @@ describe('stats command', () => {
       ]
 
       expect(response).toEqual(expectedResponse)
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
   })
 

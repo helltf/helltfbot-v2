@@ -50,12 +50,14 @@ describe('api service', () => {
       const successResponse = new ResourceSuccess(emotes)
       const errorResponse = new ResourceError('error')
 
-      spyOn(service[type], 'getEmotesForChannel').and.resolveTo(errorResponse)
+      jest
+        .spyOn(service[type], 'getEmotesForChannel')
+        .mockResolvedValue(errorResponse)
 
       rest.forEach(restType => {
-        spyOn(service[restType], 'getEmotesForChannel').and.resolveTo(
-          successResponse
-        )
+        jest
+          .spyOn(service[restType], 'getEmotesForChannel')
+          .mockResolvedValue(successResponse)
       })
 
       const expectedResult: EmoteInfo = {
@@ -78,7 +80,9 @@ function mockService(
   service: ApiService,
   resolveTo: Resource<Emote[]> = new ResourceSuccess(['emote'])
 ) {
-  spyOn(service.bttv, 'getEmotesForChannel').and.resolveTo(resolveTo)
-  spyOn(service.ffz, 'getEmotesForChannel').and.resolveTo(resolveTo)
-  spyOn(service.seventv, 'getEmotesForChannel').and.resolveTo(resolveTo)
+  jest.spyOn(service.bttv, 'getEmotesForChannel').mockResolvedValue(resolveTo)
+  jest.spyOn(service.ffz, 'getEmotesForChannel').mockResolvedValue(resolveTo)
+  jest
+    .spyOn(service.seventv, 'getEmotesForChannel')
+    .mockResolvedValue(resolveTo)
 }

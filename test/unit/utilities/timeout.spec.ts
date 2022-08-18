@@ -1,4 +1,3 @@
-import 'jasmine'
 import { mapTime } from '@utilities/wait'
 
 describe('test timeout mappings', () => {

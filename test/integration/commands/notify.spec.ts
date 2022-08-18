@@ -15,7 +15,6 @@ import {
 import { setupDatabase } from '@test-utils/setup-db'
 
 describe('test notify command: ', () => {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
   let channel = 'testChannel'
   let streamer = 'streamer'
   let user: TwitchUserEntity
@@ -32,7 +31,7 @@ describe('test notify command: ', () => {
     notification = getExampleNotificationEntity({})
     user = getExampleTwitchUserEntity({})
     notify = new NotifyCommand()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+
     await clearDb(hb.db.dataSource)
   })
 
@@ -49,7 +48,7 @@ describe('test notify command: ', () => {
       message: [streamer, event]
     })
 
-    expect(response.success).toBeFalse()
+    expect(response.success).toBe(false)
     expect(response.response).toEqual(
       `Event unknown. Valid events are ${Object.values(
         UserNotificationType
@@ -73,7 +72,7 @@ describe('test notify command: ', () => {
       message
     })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBeDefined()
   })
 
@@ -90,7 +89,7 @@ describe('test notify command: ', () => {
         UserNotificationType.GAME
       )
 
-      expect(result).toBeFalse()
+      expect(result).toBe(false)
     })
 
     it('pubsub is connected to topic return true', async () => {
@@ -106,7 +105,7 @@ describe('test notify command: ', () => {
         UserNotificationType.LIVE
       )
 
-      expect(result).toBeTrue()
+      expect(result).toBe(true)
     })
 
     it('given streamer does not exist in db return true', async () => {
@@ -122,7 +121,7 @@ describe('test notify command: ', () => {
         UserNotificationType.GAME
       )
 
-      expect(result).toBeTrue()
+      expect(result).toBe(true)
     })
   })
 
@@ -164,7 +163,7 @@ describe('test notify command: ', () => {
         streamer
       )
 
-      expect(result).toBeFalse()
+      expect(result).toBe(false)
     })
 
     it('user has notification for streamer return true', async () => {
@@ -177,7 +176,7 @@ describe('test notify command: ', () => {
         streamer
       )
 
-      expect(result).toBeTrue()
+      expect(result).toBe(true)
     })
   })
 
@@ -193,7 +192,7 @@ describe('test notify command: ', () => {
         UserNotificationType.GAME
       )
 
-      expect(userIsNotified).toBeTrue()
+      expect(userIsNotified).toBe(true)
     })
 
     it('user is not notified return false', async () => {
@@ -203,7 +202,7 @@ describe('test notify command: ', () => {
         UserNotificationType.GAME
       )
 
-      expect(userIsNotified).toBeFalse()
+      expect(userIsNotified).toBe(false)
     })
     it('user is notified for other streamer return not notified for this streamer', async () => {
       await hb.db.user.save(user)
@@ -224,7 +223,7 @@ describe('test notify command: ', () => {
         UserNotificationType.GAME
       )
 
-      expect(isNotified).toBeFalse()
+      expect(isNotified).toBe(false)
     })
   })
 
@@ -294,8 +293,10 @@ describe('test notify command: ', () => {
       const returnedStreamerId = 1
       await hb.db.user.save(user)
 
-      spyOn(hb.api.twitch, 'getUserIdByName').and.resolveTo(returnedStreamerId)
-      spyOn(hb.pubSub, 'listenToTopic')
+      jest
+        .spyOn(hb.api.twitch, 'getUserIdByName')
+        .mockResolvedValue(returnedStreamerId)
+      jest.spyOn(hb.pubSub, 'listenToTopic')
 
       await notify.execute({ channel, user: userState, message })
 

@@ -7,19 +7,15 @@ import {
 } from '@test-utils/example'
 
 describe('testing cooldown class', () => {
+  jest.useFakeTimers()
   let cooldown: Cooldown
   let command: Command
   let user: TwitchUserState
-
-  afterEach(function () {
-    jasmine.clock().uninstall()
-  })
 
   beforeEach(() => {
     cooldown = new Cooldown()
     command = getExampleCommand({})
     user = getExampleTwitchUserState({})
-    jasmine.clock().install()
   })
 
   it('cooldowns should be empty by default', () => {
@@ -58,7 +54,7 @@ describe('testing cooldown class', () => {
 
     const hasCooldown = cooldown.userHasCooldown(command, userId)
 
-    expect(hasCooldown).toBeTrue()
+    expect(hasCooldown).toBe(true)
   })
 
   it('user has cooldown on different command, no cooldown expected', () => {
@@ -69,7 +65,7 @@ describe('testing cooldown class', () => {
 
     const hasCooldown = cooldown.userHasCooldown(otherCommand, userId!)
 
-    expect(hasCooldown).toBeFalse()
+    expect(hasCooldown).toBe(false)
   })
 
   it('get cooldowns array should be empty be default', () => {
@@ -85,7 +81,7 @@ describe('testing cooldown class', () => {
     const result = cooldown.getCooldownsForUser(userId)
     const expectedSize = 1
 
-    expect(result).toHaveSize(expectedSize)
+    expect(result).toHaveLength(expectedSize)
   })
 
   it('get cooldowns array should be 2 after creating 2 entries', () => {
@@ -98,7 +94,7 @@ describe('testing cooldown class', () => {
     const result = cooldown.getCooldownsForUser(userId)
     const expectedSize = 2
 
-    expect(result).toHaveSize(expectedSize)
+    expect(result).toHaveLength(expectedSize)
   })
 
   it('entry should be gone after cooldown is over', () => {
@@ -108,13 +104,13 @@ describe('testing cooldown class', () => {
 
     let userCooldown = cooldown.userHasCooldown(command, userId)
 
-    expect(userCooldown).toBeTrue()
+    expect(userCooldown).toBe(true)
 
-    jasmine.clock().tick(command.cooldown)
+    jest.advanceTimersByTime(command.cooldown)
 
     userCooldown = cooldown.userHasCooldown(command, userId)
 
-    expect(userCooldown).toBeFalse()
+    expect(userCooldown).toBe(false)
   })
 
   it('entry should not be gone after cooldown is not fully over', () => {
@@ -122,11 +118,11 @@ describe('testing cooldown class', () => {
 
     cooldown.setCooldown(command, userId)
 
-    jasmine.clock().tick(command.cooldown - command.cooldown / 2)
+    jest.advanceTimersByTime(command.cooldown - command.cooldown / 2)
 
     const userCooldown = cooldown.userHasCooldown(command, userId)
 
-    expect(userCooldown).toBeTrue()
+    expect(userCooldown).toBe(true)
   })
 })
 

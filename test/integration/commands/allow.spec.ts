@@ -25,7 +25,7 @@ describe('test allow command', () => {
       permission: GlobalPermissionLevel.ADMIN
     })
     allow = new AllowCommand()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+
     await clearDb(hb.db.dataSource)
   })
 
@@ -46,7 +46,7 @@ describe('test allow command', () => {
 
     expect(response).toBe('You are not permitted to execute this command')
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('user has user permissions return error', async () => {
@@ -59,7 +59,7 @@ describe('test allow command', () => {
 
     expect(response).toBe('You are not permitted to execute this command')
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('user has broadcaster permissions but provides no params return successfull resoponse', async () => {
@@ -80,7 +80,7 @@ describe('test allow command', () => {
 
     expect(response).toBe('Successfully updated settings')
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('user is admin and provides no params return successfull response', async () => {
@@ -98,7 +98,7 @@ describe('test allow command', () => {
 
     expect(response).toBe('Successfully updated settings')
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('user is admin and provides a channel return successfull response', async () => {
@@ -120,7 +120,7 @@ describe('test allow command', () => {
 
     expect(response).toBe('Successfully updated settings')
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('given channel param does not exist in database return error response', async () => {
@@ -134,7 +134,7 @@ describe('test allow command', () => {
     })
 
     expect(response).toBe('This channel is not registered')
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('no params provided updates users channel in database', async () => {

@@ -13,7 +13,7 @@ describe('Test event handler to return the correct messages', () => {
   beforeEach(async () => {
     streamer = `streamer`
     eventHandler = new PubSubEventHandler()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+
     await clearDb(hb.db.dataSource)
   })
 
@@ -46,7 +46,7 @@ describe('Test event handler to return the correct messages', () => {
 
     const expectedResult = 1
 
-    expect(result).toHaveSize(expectedResult)
+    expect(result).toHaveLength(expectedResult)
   })
 
   it('get notified user, 2 users have notifications return 2 notification', async () => {
@@ -64,7 +64,7 @@ describe('Test event handler to return the correct messages', () => {
 
     const expectedResult = 2
 
-    expect(result).toHaveSize(expectedResult)
+    expect(result).toHaveLength(expectedResult)
   })
 
   it('get notified user, 2 users have notifications on different events return 1 notification', async () => {
@@ -84,7 +84,7 @@ describe('Test event handler to return the correct messages', () => {
 
     const expectedResult = 1
 
-    expect(result).toHaveSize(expectedResult)
+    expect(result).toHaveLength(expectedResult)
   })
 })
 
