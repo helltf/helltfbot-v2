@@ -5,6 +5,7 @@
 |accept|Accepts the given suggestion with a reason|
 |add|adds an 7tv emote|
 |allow|allows messages from the bot|
+|deny|denies a suggestion|
 |emote|sends all emote for the channel|
 |emotegame|start or stop an emotegame|
 |eval|evaluates the given input|
