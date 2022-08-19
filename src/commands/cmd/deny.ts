@@ -1,10 +1,7 @@
 import { BotResponse } from '@src/client/types';
 import { Command, CommandContext, CommandFlag } from '@src/commands/types'
 import { SuggestionStatus } from '@src/db/entities/suggestion.entity';
-import {
-  ChatPermissionLevel,
-  GlobalPermissionLevel
-} from '@src/utilities/permission/types'
+import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 
 export class DenyCommand implements Command {
   name = 'deny'
