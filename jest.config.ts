@@ -25,7 +25,7 @@ export default async (): Promise<Config.InitialOptions> => {
     testMatch: ['**/**/*.spec.ts'],
     testEnvironment: 'node',
     detectOpenHandles: true,
-    coveragePathIgnorePatterns: ['test/test-utils', 'src/db/migration '],
+    coveragePathIgnorePatterns: ['test/test-utils', 'src/db/migration'],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
     modulePaths: ['<rootDir>'],
     forceExit: true,
