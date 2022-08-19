@@ -3,7 +3,6 @@ import { ResourceError, ResourceSuccess } from '@api/types'
 import { YoinkCommand } from '@src/commands/cmd/yoink'
 import { getExampleTwitchUserState } from '@test-utils/example'
 import { setup } from '@test-utils/setup'
-import exp from 'constants'
 
 describe('yoink', () => {
   let yoink: YoinkCommand
@@ -139,8 +138,8 @@ describe('yoink', () => {
 })
 
 function getExampleSevenTvEmoteResponse(
-  id: string = '1',
-  name: string = 'emote'
+  id = '1',
+  name = 'emote'
 ): SevenTvEmote {
   return {
     height: [1],
