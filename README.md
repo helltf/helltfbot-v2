@@ -125,6 +125,7 @@ Every push to the ```feature``` or ```master``` branches, as well as any pull re
 
 ### Testing (TDD)
 My aim for this is towards building a maintainable and well-developed project, which is why I have chosen to try following test-driven development using [Jasmine](https://www.npmjs.com/package/jasmine) and cover as much of the code as possible with tests. At this point there are only unit and integration tests implemented, something that might change in the future.
+In version [1.4.0](https://github.com/helltf/helltfbot-v2/releases/tag/v1.4.0) Jasmine has been replaced by [Jest](https://jestjs.io), which will be the test framework for the future.  
 
 #### Unit Tests
 
@@ -149,15 +150,15 @@ These are some of the important libraries used, changing how this project is dev
 
 [TypeORM](https://www.npmjs.com/package/typeorm) acts as an abstraction layer between the application and the database, to avoid writing manual SQL queries.
 
-### jasmine
+### Jest
 
-[Jasmine](https://www.npmjs.com/package/jasmine) is, [as mentioned above](#testing-with-jasmine), the test framework used for this project.
+[Jest](https://www.npmjs.com/package/jest) is, [as mentioned above](#Testing-(TDD)), the test framework used for this project.
 
 ## Related repositories
 
 ### Website
 
-The bot will have an associated website used for things like a command list. There is a [repository](https://github.com/helltf/bot-v2-website) created for it already, but the entire project is still in progress.
+  The bot will have an associated website used for things like a command list. The [repository](https://github.com/helltf/bot-v2-website) contains a svelte app for a website.
 
 ### Backend API
 
