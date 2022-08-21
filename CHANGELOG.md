@@ -10,7 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - deny command to deny suggestions
+- unit tests for yoink command
+- unit tests for alias command
 
+### Changed
+- [BREAKING CHANGE] go over to jest instead of jasmine
+### Fixed
+
+- ping no longer sends multiple messages
 ## [1.3.1](https://github.com/helltf/helltfbot-v2/releases/tag/v1.3.1) - 2022-08-18
 
 ### Added
