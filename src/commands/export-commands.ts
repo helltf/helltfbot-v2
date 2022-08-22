@@ -26,6 +26,7 @@ import { YoinkCommand } from '@src/commands/cmd/yoink'
 import { SetAliasCommand } from '@src/commands/cmd/setalias'
 import { ModCountCommand } from '@src/commands/cmd/modcount'
 import { DenyCommand } from '@src/commands/cmd/deny'
+import { RandomColorCommand } from '@src/commands/cmd/randomcolor'
 
 const commands: Command[] = [
   new PingCommand(),
@@ -53,7 +54,8 @@ const commands: Command[] = [
   new YoinkCommand(),
   new SetAliasCommand(),
   new ModCountCommand(),
-  new DenyCommand()
+  new DenyCommand(),
+  new RandomColorCommand()
 ]
 
 export default commands
