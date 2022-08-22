@@ -127,7 +127,7 @@ export class ColorTracking implements Module {
       id: id,
       notifications: [],
       permission: GlobalPermissionLevel.USER,
-      registered_at: Date.now()
+      registered_at: new Date()
     })
   }
 }

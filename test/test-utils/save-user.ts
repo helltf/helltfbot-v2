@@ -18,6 +18,6 @@ export async function saveUserStateAsUser(user: TwitchUserState) {
     notifications: [],
     suggestions: [],
     permission: permission,
-    registered_at: 1
+    registered_at: new Date()
   })
 }

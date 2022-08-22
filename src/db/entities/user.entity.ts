@@ -31,8 +31,8 @@ export class TwitchUserEntity extends BaseEntity {
   })
   permission: GlobalPermissionLevel
 
-  @Column('bigint')
-  registered_at: number
+  @Column('timestamp')
+  registered_at: Date
 
   @Column('varchar')
   display_name: string

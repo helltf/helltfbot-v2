@@ -24,7 +24,7 @@ async function permitMainUser(user: string) {
     suggestions: [] as SuggestionEntity[],
     colors: {} as ColorHistoryEntity,
     notifications: [],
-    registered_at: Date.now()
+    registered_at: new Date()
   })
 }
 
