@@ -27,6 +27,7 @@ import { SetAliasCommand } from '@src/commands/cmd/setalias'
 import { ModCountCommand } from '@src/commands/cmd/modcount'
 import { DenyCommand } from '@src/commands/cmd/deny'
 import { RandomColorCommand } from '@src/commands/cmd/randomcolor'
+import { DisableCommand } from '@src/commands/cmd/disable'
 
 const commands: Command[] = [
   new PingCommand(),
@@ -55,7 +56,8 @@ const commands: Command[] = [
   new SetAliasCommand(),
   new ModCountCommand(),
   new DenyCommand(),
-  new RandomColorCommand()
+  new RandomColorCommand(),
+  new DisableCommand()
 ]
 
 export default commands
