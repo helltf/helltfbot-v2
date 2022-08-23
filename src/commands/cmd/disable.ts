@@ -23,9 +23,9 @@ export class DisableCommand implements Command {
   }
   methods = {
     disable: async (channel: string): Promise<boolean> => {
-      const isDisabled = await hb.db.channel.findOneBy({ channel })
-      console.log(isDisabled)
-      if (isDisabled?.allowed) return false
+      const channelData = await hb.db.channel.findOneBy({ channel })
+
+      if (!channelData?.allowed) return false
 
       const updateResult = await hb.db.channel.update(
         { channel },
