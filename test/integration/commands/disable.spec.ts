@@ -55,7 +55,7 @@ describe('disable', () => {
   describe('disable method', () => {
     const channel = 'channel'
 
-    it.only('channel is already disabled return false', async () => {
+    it('channel is already disabled return false', async () => {
       const savedChannel = getExampleChannel({ channel, allowed: false })
       await hb.db.channel.save(savedChannel)
 
@@ -64,13 +64,17 @@ describe('disable', () => {
       expect(success).toBe(false)
     })
 
-    it('channel is allowed return true', async () => {
+    it('channel is allowed return true and update entity', async () => {
       const savedChannel = getExampleChannel({ channel, allowed: true })
       await hb.db.channel.save(savedChannel)
 
       const success = await disable.methods.disable(channel)
 
       expect(success).toBe(true)
+
+      const updatedEntity = await hb.db.channel.findOneBy({ channel })
+
+      expect(updatedEntity?.allowed).toBe(false)
     })
   })
 })
