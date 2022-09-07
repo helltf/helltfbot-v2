@@ -54,6 +54,49 @@ describe('stats command', () => {
       expect(success).toBe(false)
     })
 
+    it('type is command but no command given return error', async () => {
+      const message = [StatsType.COMMAND]
+      const exampleResponse = {
+        response: 'response',
+        success: true
+      }
+
+      jest
+        .spyOn(stats.methods, 'getCommandStats')
+        .mockResolvedValue(exampleResponse)
+
+      const { response, success } = await stats.execute({
+        channel,
+        message,
+        user
+      })
+
+      expect(response).toBe('command param is required')
+      expect(success).toBe(false)
+      expect(stats.methods.getCommandStats).not.toHaveBeenCalled()
+    })
+
+    it('type is command invoke get command stats function', async () => {
+      const message = [StatsType.COMMAND, 'testcommand']
+      const exampleResponse = {
+        response: 'response',
+        success: true
+      }
+
+      jest
+        .spyOn(stats.methods, 'getCommandStats')
+        .mockResolvedValue(exampleResponse)
+
+      const response = await stats.execute({
+        channel,
+        message,
+        user
+      })
+
+      expect(response).toEqual(exampleResponse)
+      expect(stats.methods.getCommandStats).toHaveBeenCalledWith(message[1])
+    })
+
     it('user has no stats return error', async () => {
       const message = [StatsType.EMOTEGAME]
 
@@ -172,6 +215,8 @@ describe('stats command', () => {
       expect(success).toBe(true)
     })
   })
+
+  describe('emotegame stats', () => {})
 
   describe('leaderboard position', () => {
     let userEntity = getExampleTwitchUserEntity({})
