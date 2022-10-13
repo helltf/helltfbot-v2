@@ -91,7 +91,7 @@ The bot will listen to every chat message starting with the prefix ```~```, ther
 Right now there is a small list containing all available commands. See [here](https://github.com/helltf/helltfbot-v2/blob/master/Commands.md)
 In the future there will be a documented list of commands on the [associated website](#website).
 
-Every existing command has its own separate configuration and can be called either by its name or a registered alias. Some commands are exclusive to roles with higher [permission levels](#permissions).
+Every existing command has its own separate configuration and can be called either by its name or registered aliases. Some commands are exclusive to roles with higher [permission levels](#permissions).
 
 ### Permissions
 Each user has two different permission levels, of which one regulates the users **database permissions** and the other one his **chat permissions**. The level of access is indicated by a numeric value, the higher the number, the more access any given user has. Possible values at the moment are the following:
@@ -116,7 +116,8 @@ Users with the DEV or ADMIN role are permitted to execute most/all commands in a
 
 Mariadb was the initial database for this project but has been changed to postgres.
 Thus allowing to work with the diesel library in rust for the backend.
-In the future there might be an additional Redis layer to store very frequently accessed data in-memory.
+
+An additional Redis layer has been added in v1.2.0 to store very frequently accessed data in-memory.
 
 ### CI-CD
 
@@ -124,6 +125,7 @@ Every push to the ```feature``` or ```master``` branches, as well as any pull re
 
 ### Testing (TDD)
 My aim for this is towards building a maintainable and well-developed project, which is why I have chosen to try following test-driven development using [Jasmine](https://www.npmjs.com/package/jasmine) and cover as much of the code as possible with tests. At this point there are only unit and integration tests implemented, something that might change in the future.
+In version [1.4.0](https://github.com/helltf/helltfbot-v2/releases/tag/v1.4.0) Jasmine has been replaced by [Jest](https://jestjs.io), which will be the test framework for the future.  
 
 #### Unit Tests
 
@@ -148,15 +150,15 @@ These are some of the important libraries used, changing how this project is dev
 
 [TypeORM](https://www.npmjs.com/package/typeorm) acts as an abstraction layer between the application and the database, to avoid writing manual SQL queries.
 
-### jasmine
+### Jest
 
-[Jasmine](https://www.npmjs.com/package/jasmine) is, [as mentioned above](#testing-with-jasmine), the test framework used for this project.
+[Jest](https://www.npmjs.com/package/jest) is, [as mentioned above](#Testing-(TDD)), the test framework used for this project.
 
 ## Related repositories
 
 ### Website
 
-The bot will have an associated website used for things like a command list. There is a [repository](https://github.com/helltf/bot-v2-website) created for it already, but the entire project is still in progress.
+  The bot will have an associated website used for things like a command list. The [repository](https://github.com/helltf/bot-v2-website) contains a svelte app for a website.
 
 ### Backend API
 

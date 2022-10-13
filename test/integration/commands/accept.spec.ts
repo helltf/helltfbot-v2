@@ -36,7 +36,7 @@ describe('accept command', () => {
       })
 
       expect(response).toBe('id missing')
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('id does not exist return error response', async () => {
@@ -49,7 +49,22 @@ describe('accept command', () => {
       })
 
       expect(response).toBe('suggestion does not exist')
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
+    })
+
+    it('update suggestion is successful return success', async () => {
+      jest.spyOn(accept.methods, 'updateSuggestion').mockResolvedValue(true)
+
+      const id = 1
+
+      const { response, success } = await accept.execute({
+        channel: channel,
+        message: [`${id}`],
+        user: user
+      })
+
+      expect(response).toBe('Updated suggestion')
+      expect(success).toBe(true)
     })
   })
 
@@ -59,7 +74,7 @@ describe('accept command', () => {
 
       const success = await accept.methods.updateSuggestion(id.toString(), '')
 
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('suggestion existing return true', async () => {
@@ -76,7 +91,7 @@ describe('accept command', () => {
 
       const success = await accept.methods.updateSuggestion(id.toString(), '')
 
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
 
     it('multiple suggestions existing update correct', async () => {
@@ -100,7 +115,7 @@ describe('accept command', () => {
 
       const success = await accept.methods.updateSuggestion(id.toString(), '')
 
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
 
       const updatedEntity = await hb.db.suggestion.findOneBy({ id: id })
 

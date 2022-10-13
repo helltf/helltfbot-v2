@@ -35,7 +35,7 @@ describe('setlevel command', () => {
         user
       })
 
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
       expect(response).toBe('You need to define a user')
     })
 
@@ -48,7 +48,7 @@ describe('setlevel command', () => {
         user
       })
 
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
       expect(response).toBe('Cannot change your own role')
     })
 
@@ -61,7 +61,7 @@ describe('setlevel command', () => {
         user
       })
 
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
       expect(response).toBe('level is missing or not existing')
     })
 
@@ -74,7 +74,7 @@ describe('setlevel command', () => {
         user
       })
 
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
       expect(response).toBe('level is missing or not existing')
     })
 
@@ -87,7 +87,7 @@ describe('setlevel command', () => {
         user
       })
 
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
       expect(response).toBe('User not found')
     })
   })
@@ -106,7 +106,7 @@ describe('setlevel command', () => {
           name: user.name
         })!
 
-        expect(success).toBeTrue()
+        expect(success).toBe(true)
         expect(updatedEntity?.permission).toBe(perm)
       })
     })
@@ -117,7 +117,7 @@ describe('setlevel command', () => {
         GlobalPermissionLevel.ADMIN
       )
 
-      expect(successs).toBeFalse()
+      expect(successs).toBe(false)
     })
   })
 })

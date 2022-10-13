@@ -24,13 +24,15 @@ describe('add command', () => {
       })
 
       expect(response).toBe('emote as parameter is required')
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('editor request fails return fetch editor error', async () => {
       const error = 'Error'
       const emote = 'emote'
-      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(new ResourceError(error))
+      jest
+        .spyOn(hb.api.seventv, 'isEditor')
+        .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await add.execute({
         user,
@@ -39,15 +41,15 @@ describe('add command', () => {
       })
 
       expect(response).toBe('could not fetch editors')
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('user is no editor return error', async () => {
       const emote = 'emote'
 
-      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(
-        new ResourceSuccess(false)
-      )
+      jest
+        .spyOn(hb.api.seventv, 'isEditor')
+        .mockResolvedValue(new ResourceSuccess(false))
 
       const { response, success } = await add.execute({
         message: [emote],
@@ -56,7 +58,7 @@ describe('add command', () => {
       })
 
       expect(response).toBe('You are not an editor of this channel :\\')
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('emote is url invoke addEmoteById and return result', async () => {
@@ -66,8 +68,12 @@ describe('add command', () => {
         response: 'successful',
         success: true
       }
-      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(new ResourceSuccess(true))
-      spyOn(add.methods, 'addEmoteById').and.resolveTo(returnedResponse)
+      jest
+        .spyOn(hb.api.seventv, 'isEditor')
+        .mockResolvedValue(new ResourceSuccess(true))
+      jest
+        .spyOn(add.methods, 'addEmoteById')
+        .mockResolvedValue(returnedResponse)
 
       const result = await add.execute({
         message: [emote],
@@ -85,8 +91,10 @@ describe('add command', () => {
         response: 'successful',
         success: true
       }
-      spyOn(hb.api.seventv, 'isEditor').and.resolveTo(new ResourceSuccess(true))
-      spyOn(add.methods, 'addEmote').and.resolveTo(returnedResponse)
+      jest
+        .spyOn(hb.api.seventv, 'isEditor')
+        .mockResolvedValue(new ResourceSuccess(true))
+      jest.spyOn(add.methods, 'addEmote').mockResolvedValue(returnedResponse)
 
       const result = await add.execute({ message: [emote], channel, user })
 
@@ -101,9 +109,9 @@ describe('add command', () => {
     const error = 'Error'
 
     it('channel is not existing return error', async () => {
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceError(error)
-      )
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await add.methods.addEmoteById(
         emoteId,
@@ -111,44 +119,46 @@ describe('add command', () => {
       )
 
       expect(response).toBe(error)
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('request returns error return fail response', async () => {
       const error = 'Error'
       const userId = '1'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess(userId)
-      )
-      spyOn(hb.api.seventv.gql, 'addEmoteById').and.resolveTo(
-        new ResourceError(error)
-      )
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess(userId))
+      jest
+        .spyOn(hb.api.seventv.gql, 'addEmoteById')
+        .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await add.methods.addEmoteById(
         emoteId,
         channel
       )
 
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
       expect(response).toBe(error)
     })
 
     it('request is successful return success response', async () => {
       const userId = '1'
       const emoteName = 'emote'
-      spyOn(hb.api.seventv.rest, 'getUserId').and.resolveTo(
-        new ResourceSuccess(userId)
-      )
-      spyOn(hb.api.seventv.gql, 'addEmoteById').and.resolveTo(
-        new ResourceSuccess({ id: emoteId, name: emoteName })
-      )
+      jest
+        .spyOn(hb.api.seventv.rest, 'getUserId')
+        .mockResolvedValue(new ResourceSuccess(userId))
+      jest
+        .spyOn(hb.api.seventv.gql, 'addEmoteById')
+        .mockResolvedValue(
+          new ResourceSuccess({ id: emoteId, name: emoteName })
+        )
 
       const { response, success } = await add.methods.addEmoteById(
         emoteId,
         channel
       )
 
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
       expect(response).toBe(`Succesfully added ${emoteName}`)
     })
   })
@@ -159,27 +169,27 @@ describe('add command', () => {
 
     it('add emote request fails return error response', async () => {
       const error = 'Error'
-      spyOn(hb.api.seventv.gql, 'addEmote').and.resolveTo(
-        new ResourceError(error)
-      )
+      jest
+        .spyOn(hb.api.seventv.gql, 'addEmote')
+        .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await add.methods.addEmote(emote, channel)
 
       expect(response).toBe(error)
-      expect(success).toBeFalse()
+      expect(success).toBe(false)
     })
 
     it('add emote is successful return success', async () => {
       const emoteData = { id: '1', name: emote }
 
-      spyOn(hb.api.seventv.gql, 'addEmote').and.resolveTo(
-        new ResourceSuccess(emoteData)
-      )
+      jest
+        .spyOn(hb.api.seventv.gql, 'addEmote')
+        .mockResolvedValue(new ResourceSuccess(emoteData))
 
       const { response, success } = await add.methods.addEmote(emote, channel)
 
       expect(response).toBe(`Successfully added ${emoteData.name}`)
-      expect(success).toBeTrue()
+      expect(success).toBe(true)
     })
   })
 })

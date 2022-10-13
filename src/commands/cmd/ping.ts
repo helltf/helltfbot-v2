@@ -99,13 +99,13 @@ export class PingCommand implements Command {
         return 'no-rev'
       }
 
-      return rev.data
+      return rev.data.replace(/\s/gim, '')
     },
 
     getTag: async (): Promise<string> => {
       const tag = await hb.utils.exec('git tag --points-at HEAD')
 
-      if (tag instanceof ResourceError) {
+      if (tag instanceof ResourceError || !tag.data) {
         return 'no-tag'
       }
 
@@ -119,7 +119,7 @@ export class PingCommand implements Command {
         return 'no-commit-count'
       }
 
-      return commitCount.data
+      return commitCount.data.replace(/\s/gim, '')
     }
   }
 }

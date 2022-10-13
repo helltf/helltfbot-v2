@@ -1,15 +1,19 @@
-import ReconnectingWebSocket from 'reconnecting-websocket'
 import { PubSubConnection } from '@modules/pubsub/pubsub-connection'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
-import { createMockedWSConnection } from '@test-utils/mocks'
 import { TwitchBot } from 'bot'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 
 describe('test pubsub connection class', () => {
   let connection: PubSubConnection
   let mockedWS: ReconnectingWebSocket
-
+  jest.mock('reconnecting-websocket')
+  jest.useFakeTimers()
   beforeEach(() => {
-    mockedWS = createMockedWSConnection()
+    mockedWS = {
+      addEventListener: jest.fn(),
+      send: jest.fn(),
+      reconnect: jest.fn()
+    } as any
 
     connection = new PubSubConnection(mockedWS)
   })
@@ -21,7 +25,7 @@ describe('test pubsub connection class', () => {
     }
     const result = connection.containsTopic(topic)
 
-    expect(result).toBeFalse()
+    expect(result).toBe(false)
   })
 
   it('connection contains topic return true', () => {
@@ -32,7 +36,7 @@ describe('test pubsub connection class', () => {
     connection.topics.push(topic)
     const result = connection.containsTopic(topic)
 
-    expect(result).toBeTrue()
+    expect(result).toBe(true)
   })
 
   it('listener should be appended on creation', () => {
@@ -40,15 +44,13 @@ describe('test pubsub connection class', () => {
   })
 
   it('set ping interval sends a ping at least in a 5 minute period', () => {
-    jasmine.clock().install()
+    jest.useFakeTimers()
 
     connection.setPingInterval()
 
-    jasmine.clock().tick(1000 * 60 * 5)
+    jest.advanceTimersByTime(1000 * 60 * 5)
 
     expect(connection.connection.send).toHaveBeenCalled()
-
-    jasmine.clock().uninstall()
   })
 
   describe('remove topic', () => {
@@ -85,7 +87,7 @@ describe('test pubsub connection class', () => {
 
       connection.removeTopics([topic])
 
-      expect(connection.topics).toHaveSize(0)
+      expect(connection.topics).toHaveLength(0)
     })
 
     it('two topics existing and removing one', () => {
@@ -131,8 +133,9 @@ describe('test pubsub connection class', () => {
     }
     const topics = [topic]
     connection.topics = topics
-    spyOn(connection, 'sendMessage')
-    spyOn(connection, 'removeTopics')
+    jest.spyOn(connection, 'sendMessage')
+    jest.spyOn(connection, 'removeTopics')
+
     connection.unlisten(topics)
 
     expect(connection.sendMessage).toHaveBeenCalled()

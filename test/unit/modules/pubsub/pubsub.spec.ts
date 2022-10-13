@@ -10,6 +10,7 @@ describe('test pubsub', () => {
   beforeEach(() => {
     module = new PubSub()
   })
+  jest.useFakeTimers()
 
   describe('test chunking function', () => {
     it('array reduce should return 0 entries', () => {
@@ -17,7 +18,7 @@ describe('test pubsub', () => {
       const result = module.chunkTopicsIntoSize(channels)
       const expectedSize = 0
 
-      expect(result).toHaveSize(expectedSize)
+      expect(result).toHaveLength(expectedSize)
     })
 
     it('array reduce should return 0 entries', () => {
@@ -70,7 +71,7 @@ describe('test pubsub', () => {
 
       const result = module.chunkTopicsIntoSize(channels)
 
-      expect(result).toHaveSize(expectedLength)
+      expect(result).toHaveLength(expectedLength)
     })
 
     it('array reduce should return 0 entries', () => {
@@ -99,7 +100,7 @@ describe('test pubsub', () => {
 
       const result = module.chunkTopicsIntoSize(channels, maxArraySize)
 
-      expect(result).toHaveSize(expectedLength)
+      expect(result).toHaveLength(expectedLength)
     })
   })
 
@@ -271,9 +272,9 @@ describe('test pubsub', () => {
         const connection = module.createNewPubSubConnection()
 
         expect(connection).toBeDefined()
-        expect(connection.topics).toHaveSize(0)
+        expect(connection.topics).toHaveLength(0)
 
-        expect(module.connections).toHaveSize(1)
+        expect(module.connections).toHaveLength(1)
 
         expect(module.connections).toContain(connection)
       })
@@ -288,7 +289,7 @@ describe('test pubsub', () => {
 
       it('get open connection returns already existing Connection', () => {
         const connection = new PubSubConnection()
-        spyOn(module, 'createNewPubSubConnection')
+        jest.spyOn(module, 'createNewPubSubConnection')
         module.connections.push(connection)
 
         module.getOpenConnection()
@@ -297,11 +298,11 @@ describe('test pubsub', () => {
       })
       it('get open connection returns new connection because no available', () => {
         const mockedConnection = new PubSubConnection()
-        spyOn(mockedConnection, 'start').and.callThrough()
+        jest.spyOn(mockedConnection, 'start').mockImplementation(jest.fn())
 
-        spyOn(module, 'createNewPubSubConnection').and.returnValue(
-          mockedConnection
-        )
+        jest
+          .spyOn(module, 'createNewPubSubConnection')
+          .mockReturnValue(mockedConnection)
 
         module.getOpenConnection()
 
@@ -312,7 +313,7 @@ describe('test pubsub', () => {
         const connection = new PubSubConnection()
 
         const mockedConnection = new PubSubConnection()
-        spyOn(mockedConnection, 'start').and.callThrough()
+        jest.spyOn(mockedConnection, 'start').mockImplementation(jest.fn())
 
         const topics: Topic[] = Array(50).fill({
           prefix: TopicPrefix.SETTING,
@@ -320,9 +321,9 @@ describe('test pubsub', () => {
         })
         connection.topics.push(...topics)
 
-        spyOn(module, 'createNewPubSubConnection').and.returnValue(
-          mockedConnection
-        )
+        jest
+          .spyOn(module, 'createNewPubSubConnection')
+          .mockReturnValue(mockedConnection)
 
         module.connections.push(connection)
 

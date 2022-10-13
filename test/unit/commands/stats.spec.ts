@@ -1,10 +1,12 @@
 import { StatsCommand, StatsType } from "@src/commands/cmd/stats"
+import { setup } from "@test-utils/setup"
 
 describe('stats command', () => {
   let stats: StatsCommand
   const validTypes = Object.values(StatsType)
 
   beforeEach(() => {
+    setup()
     stats = new StatsCommand()
   })
 
@@ -13,7 +15,7 @@ describe('stats command', () => {
       it(`${type} is valid return true`, () => {
         const result = stats.methods.isValidType(type)
 
-        expect(result).toBeTrue()
+        expect(result).toBe(true)
       })
     })
 
@@ -21,7 +23,7 @@ describe('stats command', () => {
       const type = 'sfds'
       const result = stats.methods.isValidType(type)
 
-      expect(result).toBeFalse()
+      expect(result).toBe(false)
     })
   })
 })

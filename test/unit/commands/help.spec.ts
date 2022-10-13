@@ -1,6 +1,7 @@
 import { HelpCommmand } from "@src/commands/cmd/help"
-import { getExampleTwitchUserState } from "@test-utils/example"
-import { setup } from "@test-utils/setup"
+import {Command} from "@src/commands/types"
+import { getExampleCommand, getExampleTwitchUserState } from "@test-utils/example"
+import { setup } from '@test-utils/setup'
 
 describe('help command', () => {
   let help: HelpCommmand
@@ -23,7 +24,7 @@ describe('help command', () => {
       'All commands are listed here https://github.com/helltf/helltfbot-v2/blob/master/Commands.md'
     ]
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toEqual(expectedResponse)
   })
 
@@ -36,7 +37,7 @@ describe('help command', () => {
       user
     })
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(response).toBe('This command does not exist')
   })
 
@@ -56,11 +57,41 @@ describe('help command', () => {
       `Description: ${command.description}`,
       `Cooldown: ${command.cooldown / 1000}s`,
       `Permissions: ${hb.utils.permission.map(command.permissions)}`,
-      `Required params: ${command.requiredParams.join(',')}`,
-      `Optional params: ${command.optionalParams.join(',')}`
+      ...(command.requiredParams.length
+        ? [`Required params: ${command.requiredParams.join(',')}`]
+        : []),
+      ...(command.optionalParams.length
+        ? [`Optional params: ${command.optionalParams.join(',')}`]
+        : [])
     ]
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('command alias and params are empty do not return them', async () => {
+    const command: Command = getExampleCommand({
+      alias: [],
+      optionalParams: [],
+      requiredParams: []
+    })
+    const message = ['testmessage']
+
+    jest.spyOn(hb, 'getCommand').mockReturnValue(command)
+
+    const { response, success } = await help.execute({
+      channel,
+      user,
+      message
+    })
+    const expectedResponse = [
+      `Name: ${command.name}`,
+      `Description: ${command.description}`,
+      `Cooldown: ${command.cooldown / 1000}s`,
+      `Permissions: ${hb.utils.permission.map(command.permissions)}`
+    ]
+
+    expect(success).toBe(true)
     expect(response).toEqual(expectedResponse)
   })
 })

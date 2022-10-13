@@ -48,8 +48,8 @@ describe('test game module', () => {
 
       await saveUserStateAsUser(user)
 
-      spyOn(hb, 'sendMessage')
-      spyOn(game, 'input').and.returnValue(EmoteGameInputResult.FINISHED)
+      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
+      jest.spyOn(game, 'input').mockReturnValue(EmoteGameInputResult.FINISHED)
 
       await module.input(channel, user, message)
 
@@ -63,8 +63,10 @@ describe('test game module', () => {
 
       await saveUserStateAsUser(user)
 
-      spyOn(hb, 'sendMessage')
-      spyOn(game, 'input').and.returnValue(EmoteGameInputResult.LETTER_CORRECT)
+      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
+      jest
+        .spyOn(game, 'input')
+        .mockReturnValue(EmoteGameInputResult.LETTER_CORRECT)
 
       await module.input(channel, user, message)
 
@@ -81,12 +83,12 @@ describe('test game module', () => {
 
       await saveUserStateAsUser(user)
 
-      spyOn(hb, 'sendMessage')
-      spyOn(game, 'input').and.returnValue(EmoteGameInputResult.FINISHED)
+      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
+      jest.spyOn(game, 'input').mockReturnValue(EmoteGameInputResult.FINISHED)
 
       await module.input(channel, user, message)
 
-      expect(hb.games.eg).toHaveSize(0)
+      expect(hb.games.eg).toHaveLength(0)
     })
   })
 

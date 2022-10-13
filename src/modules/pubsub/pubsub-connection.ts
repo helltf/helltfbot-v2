@@ -24,9 +24,7 @@ export class PubSubConnection {
     })
   ) {
     this.connection = ws
-
     this.interval = this.setPingInterval()
-
     this.connection.addEventListener('message', message => {
       this.handleIncomingMessage(message)
     })

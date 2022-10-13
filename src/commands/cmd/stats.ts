@@ -1,6 +1,6 @@
-import { BotResponse } from "@src/client/types";
+import { BotResponse, TwitchUserState } from "@src/client/types";
 import { Command, CommandContext, CommandFlag } from "@src/commands/types";
-import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class StatsCommand implements Command {
   name = 'stats'
@@ -13,18 +13,23 @@ export class StatsCommand implements Command {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   execute = async ({
     message: [type, lookup],
-    user
+    user,
+    channel
   }: CommandContext): Promise<BotResponse> => {
-    const username = lookup !== undefined ? lookup : user.username!
-
     if (!this.methods.isValidType(type))
       return {
         response: `Valid stats are ${Object.values(StatsType)}`,
         success: false
       }
 
-    if (type === StatsType.EMOTEGAME)
+    if (type === StatsType.EMOTEGAME) {
+      const username = lookup !== undefined ? lookup : user.username!
+
       return await this.methods.getEmotegameStats(username)
+    }
+
+    if (type === StatsType.COMMAND)
+      return await this.methods.getCommandStats(lookup, user, channel)
 
     return {
       response: 'unknown error',
@@ -35,6 +40,15 @@ export class StatsCommand implements Command {
   methods = {
     isValidType(type: string): boolean {
       return hb.utils.enumContains(StatsType, type)
+    },
+
+    async getCommandStats(
+      command: string,
+      user: TwitchUserState,
+      channel: string
+    ): Promise<BotResponse> {
+      const foundCommand = hb.commands.findCommand('help')
+      return foundCommand.execute({ message: [command], user, channel })
     },
 
     async getLeaderboardPosition(username: string): Promise<number> {
@@ -82,5 +96,6 @@ export class StatsCommand implements Command {
 }
 
 export enum StatsType {
-  EMOTEGAME = 'emotegame'
+  EMOTEGAME = 'emotegame',
+  COMMAND = 'command'
 }

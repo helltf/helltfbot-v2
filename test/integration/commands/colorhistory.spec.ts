@@ -18,7 +18,7 @@ describe('colorhistory command', () => {
 
   beforeEach(async () => {
     colorhistory = new ColorHistoryCommand()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+
     user = getExampleTwitchUserState({})
     messageChannel = 'messageChannel'
     await clearDb(hb.db.dataSource)
@@ -36,7 +36,7 @@ describe('colorhistory command', () => {
     })
 
     expect(response).toBe('no history found')
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('user has stats return history of colors', async () => {
@@ -44,8 +44,9 @@ describe('colorhistory command', () => {
       history: ['abc'],
       lastChange: Date.now()
     }
-
-    spyOn(colorhistory.methods, 'getColorHistory').and.resolveTo(historyData)
+    jest
+      .spyOn(colorhistory.methods, 'getColorHistory')
+      .mockResolvedValue(historyData)
 
     const { response, success } = await colorhistory.execute({
       channel: messageChannel,
@@ -57,7 +58,7 @@ describe('colorhistory command', () => {
       `${user.username}s recent colors are ${historyData.history[0]}`,
       `changed ${hb.utils.humanizeNow(historyData.lastChange)} ago`
     ])
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('user has stats return multiple colors', async () => {
@@ -66,7 +67,9 @@ describe('colorhistory command', () => {
       lastChange: Date.now()
     }
 
-    spyOn(colorhistory.methods, 'getColorHistory').and.resolveTo(historyData)
+    jest
+      .spyOn(colorhistory.methods, 'getColorHistory')
+      .mockResolvedValue(historyData)
 
     const { response, success } = await colorhistory.execute({
       channel: messageChannel,
@@ -80,7 +83,7 @@ describe('colorhistory command', () => {
       historyData.history[2],
       `changed ${hb.utils.humanizeNow(historyData.lastChange)} ago`
     ])
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   it('user is provided no stats return error', async () => {
@@ -90,9 +93,9 @@ describe('colorhistory command', () => {
       lastChange: Date.now()
     }
 
-    spyOn(colorhistory.methods, 'getColorHistory')
-      .withArgs(customUser)
-      .and.resolveTo(historyData)
+    jest
+      .spyOn(colorhistory.methods, 'getColorHistory')
+      .mockResolvedValue(historyData)
 
     const { response, success } = await colorhistory.execute({
       channel: messageChannel,
@@ -106,7 +109,7 @@ describe('colorhistory command', () => {
       historyData.history[2],
       `changed ${hb.utils.humanizeNow(historyData.lastChange)} ago`
     ])
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
   })
 
   describe('get color history method', () => {

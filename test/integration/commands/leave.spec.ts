@@ -27,7 +27,7 @@ describe('test leave command', () => {
 
     messageChannel = 'messageChannel'
     leave = new LeaveCommand()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
+
     await clearDb(hb.db.dataSource)
   })
 
@@ -45,7 +45,7 @@ describe('test leave command', () => {
     })
 
     expect(response).toBe('You need to define a channel')
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('client is not connected to channel, channel is not in db return error response', async () => {
@@ -58,7 +58,7 @@ describe('test leave command', () => {
     })
 
     expect(response).toBe('Not connected to channel')
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('client is not connected to channel, channel is in db return error response', async () => {
@@ -78,37 +78,37 @@ describe('test leave command', () => {
     })
 
     expect(response).toBe('Not connected to channel')
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
   })
 
   it('client leaves channel return success true', async () => {
     const channelToLeave = 'leaveChannel'
-    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
+    jest.spyOn(hb.client, 'part').mockResolvedValue([channelToLeave])
 
     const { success, message } = await leave.methods.leaveChannel(
       channelToLeave
     )
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(message).toBe('Successfully left the channel')
   })
 
   it('error occurs return success false', async () => {
     const channelToLeave = 'leaveChannel'
-    spyOn(hb.client, 'part').and.rejectWith('Error')
+    jest.spyOn(hb.client, 'part').mockRejectedValue('Error')
 
     const { success, message } = await leave.methods.leaveChannel(
       channelToLeave
     )
 
-    expect(success).toBeFalse()
+    expect(success).toBe(false)
     expect(message).toBe('Could not leave the channel')
   })
 
   it('client leaves given channel return success response', async () => {
     const channelToLeave = 'leaveChannel'
     const message = [channelToLeave]
-    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
+    jest.spyOn(hb.client, 'part').mockResolvedValue([channelToLeave])
 
     await hb.db.channel.save(
       getExampleChannel({
@@ -123,14 +123,14 @@ describe('test leave command', () => {
       message
     })
 
-    expect(success).toBeTrue()
+    expect(success).toBe(true)
     expect(response).toBe('Successfully left the channel')
   })
 
   it('client leaves given channel and updates joined to falsee', async () => {
     const channelToLeave = 'leaveChannel'
     const message = [channelToLeave]
-    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
+    jest.spyOn(hb.client, 'part').mockResolvedValue([channelToLeave])
 
     await hb.db.channel.save(
       getExampleChannel({
@@ -203,7 +203,7 @@ describe('test leave command', () => {
     const channelToLeave = 'me'
     const message = [channelToLeave]
 
-    spyOn(hb.client, 'part').and.resolveTo([channelToLeave])
+    jest.spyOn(hb.client, 'part').mockResolvedValue([channelToLeave])
 
     await hb.db.channel.save(
       getExampleChannel({
@@ -232,7 +232,7 @@ describe('test leave command', () => {
       message
     })
 
-    expect(response.success).toBeFalse()
+    expect(response.success).toBe(false)
     expect(response.response).toBe(
       'You are not permitted to issue this command'
     )

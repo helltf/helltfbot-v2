@@ -25,6 +25,9 @@ import { RemovemeCommand } from '@src/commands/cmd/removeme'
 import { YoinkCommand } from '@src/commands/cmd/yoink'
 import { SetAliasCommand } from '@src/commands/cmd/setalias'
 import { ModCountCommand } from '@src/commands/cmd/modcount'
+import { DenyCommand } from '@src/commands/cmd/deny'
+import { RandomColorCommand } from '@src/commands/cmd/randomcolor'
+import { DisableCommand } from '@src/commands/cmd/disable'
 
 const commands: Command[] = [
   new PingCommand(),
@@ -51,7 +54,10 @@ const commands: Command[] = [
   new RemoveCommand(),
   new YoinkCommand(),
   new SetAliasCommand(),
-  new ModCountCommand()
+  new ModCountCommand(),
+  new DenyCommand(),
+  new RandomColorCommand(),
+  new DisableCommand()
 ]
 
 export default commands
