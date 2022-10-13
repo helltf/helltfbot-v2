@@ -1,12 +1,14 @@
+import {BotResponse} from "@src/client/types"
 import { StatsCommand, StatsType } from "@src/commands/cmd/stats"
 import { clearDb } from "@test-utils/clear"
-import { disconnectDatabase } from "@test-utils/disconnect"
+import { disconnectDatabase } from '@test-utils/disconnect'
 import {
   getExampleTwitchUserEntity,
   getExampleTwitchUserState
 } from '@test-utils/example'
 import { saveUserStateAsUser } from '@test-utils/save-user'
 import { setupDatabase } from '@test-utils/setup-db'
+import { HelpCommmand } from '@commands/cmd/help'
 
 describe('stats command', () => {
   let stats: StatsCommand
@@ -58,7 +60,7 @@ describe('stats command', () => {
       const message = [StatsType.COMMAND]
       const exampleResponse = {
         response: 'response',
-        success: true
+        success: false
       }
 
       jest
@@ -71,9 +73,9 @@ describe('stats command', () => {
         user
       })
 
-      expect(response).toBe('command param is required')
-      expect(success).toBe(false)
-      expect(stats.methods.getCommandStats).not.toHaveBeenCalled()
+      expect(response).toBe(exampleResponse.response)
+      expect(success).toBe(exampleResponse.success)
+      expect(stats.methods.getCommandStats).toHaveBeenCalled()
     })
 
     it('type is command invoke get command stats function', async () => {
@@ -94,7 +96,7 @@ describe('stats command', () => {
       })
 
       expect(response).toEqual(exampleResponse)
-      expect(stats.methods.getCommandStats).toHaveBeenCalledWith(message[1])
+      expect(stats.methods.getCommandStats).toHaveBeenCalled()
     })
 
     it('user has no stats return error', async () => {
@@ -216,8 +218,6 @@ describe('stats command', () => {
     })
   })
 
-  describe('emotegame stats', () => {})
-
   describe('leaderboard position', () => {
     let userEntity = getExampleTwitchUserEntity({})
 
@@ -292,6 +292,30 @@ describe('stats command', () => {
         letters_guessed,
         incorrect_guesses
       })
+    })
+  })
+
+  describe('command stats method', () => {
+    it('method is invoked execute help command and return response', async () => {
+      const command = new HelpCommmand()
+      const channel = 'testchannel'
+      const user = getExampleTwitchUserState({})
+      const exampleResponse: BotResponse = {
+        response: 'response',
+        success: true
+      }
+
+      jest.spyOn(command, 'execute').mockResolvedValue(exampleResponse)
+      jest.spyOn(hb.commands, 'findCommand').mockReturnValue(command)
+
+      const { response, success } = await stats.methods.getCommandStats(
+        command.name,
+        user,
+        channel
+      )
+
+      expect(response).toBe(exampleResponse.response)
+      expect(success).toBe(true)
     })
   })
 })
