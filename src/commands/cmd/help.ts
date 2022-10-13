@@ -35,12 +35,18 @@ export class HelpCommmand implements Command {
       success: true,
       response: [
         `Name: ${foundCommand.name}`,
-        `Aliases: ${foundCommand.alias.join(',')}`,
+        ...(foundCommand.alias.length
+          ? [`Aliases: ${foundCommand.alias.join(',')}`]
+          : []),
         `Description: ${foundCommand.description}`,
         `Cooldown: ${foundCommand.cooldown / 1000}s`,
         `Permissions: ${hb.utils.permission.map(foundCommand.permissions)}`,
-        `Required params: ${foundCommand.requiredParams.join(',')}`,
-        `Optional params: ${foundCommand.optionalParams.join(',')}`
+        ...(foundCommand.requiredParams.length
+          ? [`Required params: ${foundCommand.requiredParams.join(',')}`]
+          : []),
+        ...(foundCommand.optionalParams.length
+          ? [`Optional params: ${foundCommand.optionalParams.join(',')}`]
+          : [])
       ]
     }
   }
