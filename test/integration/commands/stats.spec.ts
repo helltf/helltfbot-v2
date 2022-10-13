@@ -1,12 +1,14 @@
+import {BotResponse} from "@src/client/types"
 import { StatsCommand, StatsType } from "@src/commands/cmd/stats"
 import { clearDb } from "@test-utils/clear"
-import { disconnectDatabase } from "@test-utils/disconnect"
+import { disconnectDatabase } from '@test-utils/disconnect'
 import {
   getExampleTwitchUserEntity,
   getExampleTwitchUserState
 } from '@test-utils/example'
 import { saveUserStateAsUser } from '@test-utils/save-user'
 import { setupDatabase } from '@test-utils/setup-db'
+import { HelpCommmand } from '@commands/cmd/help'
 
 describe('stats command', () => {
   let stats: StatsCommand
@@ -52,6 +54,49 @@ describe('stats command', () => {
 
       expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
       expect(success).toBe(false)
+    })
+
+    it('type is command but no command given return error', async () => {
+      const message = [StatsType.COMMAND]
+      const exampleResponse = {
+        response: 'response',
+        success: false
+      }
+
+      jest
+        .spyOn(stats.methods, 'getCommandStats')
+        .mockResolvedValue(exampleResponse)
+
+      const { response, success } = await stats.execute({
+        channel,
+        message,
+        user
+      })
+
+      expect(response).toBe(exampleResponse.response)
+      expect(success).toBe(exampleResponse.success)
+      expect(stats.methods.getCommandStats).toHaveBeenCalled()
+    })
+
+    it('type is command invoke get command stats function', async () => {
+      const message = [StatsType.COMMAND, 'testcommand']
+      const exampleResponse = {
+        response: 'response',
+        success: true
+      }
+
+      jest
+        .spyOn(stats.methods, 'getCommandStats')
+        .mockResolvedValue(exampleResponse)
+
+      const response = await stats.execute({
+        channel,
+        message,
+        user
+      })
+
+      expect(response).toEqual(exampleResponse)
+      expect(stats.methods.getCommandStats).toHaveBeenCalled()
     })
 
     it('user has no stats return error', async () => {
@@ -247,6 +292,30 @@ describe('stats command', () => {
         letters_guessed,
         incorrect_guesses
       })
+    })
+  })
+
+  describe('command stats method', () => {
+    it('method is invoked execute help command and return response', async () => {
+      const command = new HelpCommmand()
+      const channel = 'testchannel'
+      const user = getExampleTwitchUserState({})
+      const exampleResponse: BotResponse = {
+        response: 'response',
+        success: true
+      }
+
+      jest.spyOn(command, 'execute').mockResolvedValue(exampleResponse)
+      jest.spyOn(hb.commands, 'findCommand').mockReturnValue(command)
+
+      const { response, success } = await stats.methods.getCommandStats(
+        command.name,
+        user,
+        channel
+      )
+
+      expect(response).toBe(exampleResponse.response)
+      expect(success).toBe(true)
     })
   })
 })

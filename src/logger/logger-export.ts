@@ -22,7 +22,8 @@ export enum LogType {
   MODULE = '#eb4034',
   JOBS = '#34ebc6',
   PUBSUB = '#00ad9c',
-  ERROR = '#ff3333'
+  ERROR = '#ff3333',
+  INFO = '#FFBA01'
 }
 
 export { log as customLogMessage }

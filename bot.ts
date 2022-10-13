@@ -44,7 +44,9 @@ export class TwitchBot {
 
   async init() {
     await this.db.initialize()
+    this.log(LogType.INFO, 'DB connected')
     await this.client.connect()
+    this.log(LogType.INFO, 'Client connected')
     await this.api.init()
     await this.cache.connect()
     this.startPubSub()
