@@ -47,7 +47,7 @@ export class StatsCommand implements Command {
       user: TwitchUserState,
       channel: string
     ): Promise<BotResponse> {
-      const foundCommand = hb.commands.findCommand(command)
+      const foundCommand = hb.commands.findCommand('help')
       return foundCommand.execute({ message: [command], user, channel })
     },
 
