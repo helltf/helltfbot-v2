@@ -1,6 +1,6 @@
-import { BotResponse } from "@src/client/types";
+import { BotResponse, TwitchUserState } from "@src/client/types";
 import { Command, CommandContext, CommandFlag } from "@src/commands/types";
-import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 
 export class StatsCommand implements Command {
   name = 'stats'
@@ -13,7 +13,8 @@ export class StatsCommand implements Command {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   execute = async ({
     message: [type, lookup],
-    user
+    user,
+    channel
   }: CommandContext): Promise<BotResponse> => {
     if (!this.methods.isValidType(type))
       return {
@@ -28,7 +29,7 @@ export class StatsCommand implements Command {
     }
 
     if (type === StatsType.COMMAND)
-      return await this.methods.getCommandStats(lookup)
+      return await this.methods.getCommandStats(lookup, user, channel)
 
     return {
       response: 'unknown error',
@@ -41,8 +42,13 @@ export class StatsCommand implements Command {
       return hb.utils.enumContains(StatsType, type)
     },
 
-    async getCommandStats(command: string): Promise<BotResponse> {
-      return { response: '' }
+    async getCommandStats(
+      command: string,
+      user: TwitchUserState,
+      channel: string
+    ): Promise<BotResponse> {
+      const foundCommand = hb.commands.findCommand(command)
+      return foundCommand.execute({ message: [command], user, channel })
     },
 
     async getLeaderboardPosition(username: string): Promise<number> {
