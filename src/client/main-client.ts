@@ -69,7 +69,7 @@ client.on('whisper', (from, user, message, self) => {
 })
 
 client.on('disconnected', r => {
-  console.log(`Bot has been disconnected because: ${reason}`)
+  console.log(`Bot has been disconnected because: ${r}`)
 })
 
 export { client }

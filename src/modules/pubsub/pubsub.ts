@@ -40,7 +40,10 @@ export class PubSub {
   connect = async () => {
     const channels = await hb.db.notificationChannel.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
-    hb.log(LogType.PUBSUB, `Connecting to ${channels.length} topics ...`)
+    hb.log(
+      LogType.PUBSUB,
+      `Starting ${chunkedChannels.length} connections and connect to ${channels.length} topics ...`
+    )
 
     for (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection().start()
@@ -92,7 +95,7 @@ export class PubSub {
 
   chunkTopicsIntoSize = (
     arr: NotificationChannelEntity[],
-    size = 25
+    size = 50
   ): NotificationChannelEntity[][] => {
     return arr.reduce(
       (resultArray: NotificationChannelEntity[][], item, index) => {
