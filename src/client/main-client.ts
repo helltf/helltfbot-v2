@@ -14,7 +14,8 @@ function createclient(): Client {
       username: 'xdforsenxdlol'
     },
     connection: {
-      reconnect: true
+      reconnect: true,
+      secure: true
     },
     logger: {
       info: msg => {
@@ -65,6 +66,10 @@ client.on('whisper', (from, user, message, self) => {
   from = from.replace('#', '')
 
   handleWhisper(from, user, message, self)
+})
+
+client.on('disconnected', r => {
+  console.log(`Bot has been disconnected because: ${reason}`)
 })
 
 export { client }
