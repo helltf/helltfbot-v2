@@ -19,7 +19,7 @@ function createclient(): Client {
     },
     logger: {
       info: msg => {
-        if (process.env.DEBUG === 'true') hb.log(LogType.TWITCHBOT, msg)
+        if (hb.debug) hb.log(LogType.DEBUG, msg)
       },
       error: msg => {
         hb.log(LogType.TWITCHBOT, msg)

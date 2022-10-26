@@ -1,6 +1,6 @@
-import { Client } from 'tmi.js'
-import { Cooldown } from './src/services/cooldown.service'
-import { DB } from './src/db/export-repositories'
+import {Client} from 'tmi.js'
+import {Cooldown} from './src/services/cooldown.service'
+import {DB} from './src/db/export-repositories'
 import jobs from './src/jobs/jobs-export'
 import { customLogMessage, LogType } from '@src/logger/logger-export'
 import { PubSub } from './src/modules/pubsub/pubsub'
@@ -27,8 +27,10 @@ export class TwitchBot {
   config: ConfigService
   games: GameService
   utils: Utility
+  debug: boolean
 
   constructor() {
+    this.debug = process.env.DEBUG === 'true'
     this.config = new ConfigService()
     this.log = customLogMessage
     this.client = client
