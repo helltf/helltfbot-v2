@@ -39,10 +39,6 @@ describe('test pubsub connection class', () => {
     expect(result).toBe(true)
   })
 
-  it('listener should be appended on creation', () => {
-    expect(mockedWS.addEventListener).toHaveBeenCalled()
-  })
-
   it('set ping interval sends a ping at least in a 5 minute period', () => {
     jest.useFakeTimers()
 
