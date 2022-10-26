@@ -8,7 +8,6 @@ import {
   MessageType
 } from './types'
 import * as WS from 'ws'
-import { LogType } from '@src/logger/logger-export'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
@@ -25,9 +24,6 @@ export class PubSubConnection {
   ) {
     this.connection = ws
     this.interval = this.setPingInterval()
-    this.connection.addEventListener('message', message => {
-      this.handleIncomingMessage(message)
-    })
   }
 
   start() {
@@ -71,27 +67,6 @@ export class PubSubConnection {
   mapNotifyTypeToTopic(notifyType: NotifyEventType): TopicPrefix {
     if (notifyType === NotifyEventType.SETTING) return TopicPrefix.SETTING
     return TopicPrefix.STATUS
-  }
-
-  handleIncomingMessage({ data }: { data: string }) {
-    const parsedData: ParsedPubSubData = JSON.parse(data)
-
-    if (parsedData.type === 'RECONNECT') {
-      this.reconnect()
-    }
-  }
-
-  async reconnect() {
-    hb.log(
-      LogType.PUBSUB,
-      'A Pubsub connection has been closed and will restart'
-    )
-
-    this.connection.reconnect()
-
-    this.listenToTopics(this.topics)
-
-    hb.log(LogType.PUBSUB, 'Connection successfully restartet')
   }
 
   containsTopic(topic: Topic): boolean {
