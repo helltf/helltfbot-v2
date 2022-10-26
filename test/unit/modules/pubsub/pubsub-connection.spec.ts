@@ -10,7 +10,6 @@ describe('test pubsub connection class', () => {
   jest.useFakeTimers()
   beforeEach(() => {
     mockedWS = {
-      addEventListener: jest.fn(),
       send: jest.fn(),
       reconnect: jest.fn()
     } as any
