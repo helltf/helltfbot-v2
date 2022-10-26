@@ -87,6 +87,10 @@ export class PubSub {
 
   handlePubSubMessage = (data: any) => {
     const type: MessageType = data.type
+    hb.log(
+      LogType.DEBUG,
+      `Incoming type: ${data.type} \n data: \n ${JSON.stringify(data)}`
+    )
 
     if (type !== 'MESSAGE') return
 

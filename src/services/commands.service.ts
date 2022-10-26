@@ -1,3 +1,4 @@
+import {LogType} from "@src/logger/logger-export";
 import { Command } from "../commands/types";
 
 export class CommandService {
@@ -42,6 +43,7 @@ export class CommandService {
   async updateDb() {
     await this.addCommandsToDb()
     await this.updateDeletedCommands()
+    hb.log(LogType.DEBUG, 'Successfully updated commands in Database')
   }
 
   async updateDeletedCommands() {
