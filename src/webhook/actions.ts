@@ -1,25 +1,43 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import {LogType} from '@src/logger/logger-export'
 export const app = express()
 
 app.use(bodyParser.json())
 
-app.post('/', (req, res) => {
-  evaluateWebhook(req.body as WebhookData)
+app.post('/', async (req, res) => {
+  hb.log(LogType.DEBUG, 'Incoming Webhook message')
+  const message = await evaluateWebhook(req.body as WebhookData)
+  await hb.sendMessage(hb.config.get('MAIN_USER'), message)
   res.send('a')
 })
 
-app.get('*', () => {
-  console.log('get')
-})
+export async function evaluateWebhook(
+  data: WebhookData
+): Promise<string | undefined> {
+  if (data.action !== 'completed') return
 
-export function evaluateWebhook(data: WebhookData): string | undefined {
-  if (data.action !== 'completed' || data.workflow_run.conclusion === 'success')
-    return
+  const repo = data.repository.name
+  const branch = data.workflow_run.head_branch
+  const key = getWebhookKey(repo, branch)
+  const lastStatus = await hb.cache.getString(key)
+  const status = data.workflow_run.conclusion
 
-  //const repo = data.repository.name
+  await hb.cache.set(key, status)
+
+  if (lastStatus === 'failure' && status === 'success') {
+    return `catJAM 👉 ✅ pipeline in ${repo} on branch ${branch} has been fixed`
+  }
+
+  if (status === 'failure') {
+    const event = data.workflow_run.event
+    return `monkaS 👉❌ pipeline in ${repo} on branch ${branch} failed @helltf (${event})`
+  }
 }
 
+export function getWebhookKey(repo: string, branch: string): string {
+  return `workflow-${repo}-${branch}`
+}
 export interface Repo {
   id: number
   url: string
