@@ -25,7 +25,8 @@ export enum LogType {
   PUBSUB = '#00ad9c',
   ERROR = '#ff3333',
   INFO = '#FFBA01',
-  DEBUG = '#FF0000'
+  DEBUG = '#FF0000',
+  WEBHOOK = '#652800'
 }
 
 export { log as customLogMessage }
