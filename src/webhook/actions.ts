@@ -17,7 +17,7 @@ export function evaluateWebhook(data: WebhookData): string | undefined {
   if (data.action !== 'completed' || data.workflow_run.conclusion === 'success')
     return
 
-  const repo = data.repository.name
+  //const repo = data.repository.name
 }
 
 export interface Repo {
