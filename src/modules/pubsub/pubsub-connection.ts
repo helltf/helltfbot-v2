@@ -3,7 +3,6 @@ import {
   TopicPrefix,
   OutgoingMessage,
   NotifyEventType,
-  ParsedPubSubData,
   Topic,
   MessageType
 } from './types'
