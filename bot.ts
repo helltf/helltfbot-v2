@@ -60,8 +60,10 @@ export class TwitchBot {
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     this.commands.updateDb()
-    this.webhook.listen(8090, () => {
-      console.log('listening')
+
+    const port = process.env.WEBHOOK_PORT
+    this.webhook.listen(Number(port), () => {
+      hb.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
     })
 
     const startUpMessage = hb.config.get('START_UP_MESSAGE')
