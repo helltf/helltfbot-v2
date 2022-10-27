@@ -40,7 +40,10 @@ export class PubSub {
   connect = async () => {
     const channels = await hb.db.notificationChannel.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
-    hb.log(LogType.PUBSUB, `Connecting to ${channels.length} topics ...`)
+    hb.log(
+      LogType.PUBSUB,
+      `Starting ${chunkedChannels.length} connections and connect to ${channels.length} topics ...`
+    )
 
     for (const channels of chunkedChannels) {
       const connection = this.createNewPubSubConnection().start()
@@ -58,6 +61,22 @@ export class PubSub {
 
     connection.connection.addEventListener('message', ({ data }) => {
       this.handlePubSubMessage(JSON.parse(data))
+    })
+
+    connection.connection.addEventListener('open', event => {
+      hb.log(
+        LogType.DEBUG,
+        `Connection has been opened: \n ${JSON.stringify(event)}`
+      )
+    })
+    connection.connection.addEventListener('close', event => {
+      hb.log(
+        LogType.DEBUG,
+        `Connection has been close: \n ${JSON.stringify(event)}`
+      )
+    })
+    connection.connection.addEventListener('error', event => {
+      hb.log(LogType.DEBUG, `Pubsub error occured: \n ${JSON.stringify(event)}`)
     })
 
     this.connections.push(connection)
@@ -92,7 +111,7 @@ export class PubSub {
 
   chunkTopicsIntoSize = (
     arr: NotificationChannelEntity[],
-    size = 25
+    size = 50
   ): NotificationChannelEntity[][] => {
     return arr.reduce(
       (resultArray: NotificationChannelEntity[][], item, index) => {
