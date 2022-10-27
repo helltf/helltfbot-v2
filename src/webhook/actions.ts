@@ -1,15 +1,17 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import {LogType} from '@src/logger/logger-export'
+import {validate} from './validate'
 export const app = express()
 
 app.use(bodyParser.json())
+app.use(validate)
 
 app.post('/', async (req, res) => {
   hb.log(LogType.DEBUG, 'Incoming Webhook message')
   const message = await evaluateWebhook(req.body as WebhookData)
   await hb.sendMessage(hb.config.get('MAIN_USER'), message)
-  res.send('a')
+  res.send({})
 })
 
 export async function evaluateWebhook(
