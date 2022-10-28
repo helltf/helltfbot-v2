@@ -22,6 +22,8 @@ services:
       - db
       - redis
     restart: always
+    ports:
+      - 8090:8090
     environment:
       - NODE_ENV=prod
       - DB_HOST=db

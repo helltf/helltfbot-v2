@@ -36,4 +36,23 @@ export class CacheService {
 
     return result === null ? null : JSON.parse(result)
   }
+
+  async set(key: string, value: string) {
+    await this.redis.set(key, value)
+  }
+
+  async getString(key: string): Promise<string | null> {
+    return this.redis.get(key)
+  }
+
+  async getObject<T>(key: string): Promise<T | null> {
+    const value = await this.redis.get(key)
+    if (!value) return null
+
+    try {
+      return JSON.parse(value) as T
+    } catch {
+      return null
+    }
+  }
 }

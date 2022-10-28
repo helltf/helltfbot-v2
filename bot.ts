@@ -14,6 +14,8 @@ import { Utility } from '@src/utilities/utility'
 import commands from '@src/commands/export-commands'
 import { ApiService } from '@src/services/api.service'
 import { modules } from '@modules/export-modules'
+import { app } from '@src/webhook/actions'
+import { Express } from 'express'
 
 export class TwitchBot {
   client: Client
@@ -27,6 +29,7 @@ export class TwitchBot {
   config: ConfigService
   games: GameService
   utils: Utility
+  webhook: Express
   debug: boolean
 
   constructor() {
@@ -42,6 +45,7 @@ export class TwitchBot {
     this.cache = new CacheService()
     this.games = new GameService()
     this.utils = new Utility()
+    this.webhook = app
   }
 
   async init() {
@@ -56,6 +60,11 @@ export class TwitchBot {
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     this.commands.updateDb()
+
+    const port = process.env.WEBHOOK_PORT
+    this.webhook.listen(Number(port), () => {
+      hb.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
+    })
 
     const startUpMessage = hb.config.get('START_UP_MESSAGE')
 
