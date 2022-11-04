@@ -3,11 +3,13 @@ import { PubSub } from '@modules/pubsub/pubsub'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
 import { NotificationChannelEntity } from '@db/entities'
 import { getExampleNotificationChannelEntity } from '@test-utils/example'
+import { setup } from '@test-utils/setup'
 
 describe('test pubsub', () => {
   let module: PubSub
 
   beforeEach(() => {
+    setup()
     module = new PubSub()
   })
   jest.useFakeTimers()
