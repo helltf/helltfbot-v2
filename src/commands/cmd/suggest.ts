@@ -28,6 +28,11 @@ export class SuggestCommand implements Command {
       parseInt(user['user-id']!)
     )
 
+    await hb.sendMessage(
+      process.env.MAIN_USER,
+      `@${process.env.MAIN_USER} new suggestion by ${user.username}`
+    )
+
     return {
       response: `Succesfully saved your suggestion with id ${id}`,
       success: true

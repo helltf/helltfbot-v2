@@ -63,22 +63,6 @@ export class PubSub {
       this.handlePubSubMessage(JSON.parse(data))
     })
 
-    connection.connection.addEventListener('open', event => {
-      hb.log(
-        LogType.DEBUG,
-        `Connection has been opened: \n ${JSON.stringify(event)}`
-      )
-    })
-    connection.connection.addEventListener('close', event => {
-      hb.log(
-        LogType.DEBUG,
-        `Connection has been close: \n ${JSON.stringify(event)}`
-      )
-    })
-    connection.connection.addEventListener('error', event => {
-      hb.log(LogType.DEBUG, `Pubsub error occured: \n ${JSON.stringify(event)}`)
-    })
-
     this.connections.push(connection)
 
     return connection

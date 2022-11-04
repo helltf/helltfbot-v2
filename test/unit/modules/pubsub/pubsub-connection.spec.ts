@@ -1,5 +1,6 @@
 import { PubSubConnection } from '@modules/pubsub/pubsub-connection'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
+import { setup } from '@test-utils/setup'
 import { TwitchBot } from 'bot'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
@@ -11,9 +12,10 @@ describe('test pubsub connection class', () => {
   beforeEach(() => {
     mockedWS = {
       send: jest.fn(),
-      reconnect: jest.fn()
+      reconnect: jest.fn(),
+      addEventListener: jest.fn()
     } as any
-
+    setup()
     connection = new PubSubConnection(mockedWS)
   })
 
