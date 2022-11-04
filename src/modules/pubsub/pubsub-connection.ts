@@ -7,6 +7,7 @@ import {
   MessageType
 } from './types'
 import * as WS from 'ws'
+import { LogType } from '@src/logger/logger-export'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
@@ -14,7 +15,7 @@ export class PubSubConnection {
   connection: ReconnectingWebSocket
   topics: Topic[] = []
   interval: NodeJS.Timer
-
+  id: string
   constructor(
     ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
       WebSocket: WS.WebSocket,
@@ -23,6 +24,9 @@ export class PubSubConnection {
   ) {
     this.connection = ws
     this.interval = this.setPingInterval()
+    if (process.env.DEBUG === 'true') {
+      this.addDebugListeners()
+    }
   }
 
   start() {
@@ -78,6 +82,21 @@ export class PubSubConnection {
     this.sendMessage(message)
 
     this.removeTopics(topics)
+  }
+
+  addDebugListeners() {
+    this.connection.addEventListener('open', () => {
+      hb.log(LogType.DEBUG, `${this.id}: Connection has been opened`)
+    })
+    this.connection.addEventListener('close', () => {
+      hb.log(LogType.DEBUG, `${this.id}: Connection has been closed`)
+    })
+    this.connection.addEventListener('error', event => {
+      hb.log(
+        LogType.DEBUG,
+        `${this.id}: Pubsub error occured: \n ${JSON.stringify(event)}`
+      )
+    })
   }
 
   removeTopics(topics: Topic[]) {
