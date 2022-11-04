@@ -24,6 +24,8 @@ export class PubSubConnection {
   ) {
     this.connection = ws
     this.interval = this.setPingInterval()
+    this.id = hb.utils.randomId(10)
+
     if (process.env.DEBUG === 'true') {
       this.addDebugListeners()
     }
