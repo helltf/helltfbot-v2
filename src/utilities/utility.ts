@@ -9,6 +9,8 @@ import {
 import { promisify } from 'util'
 
 const execute = promisify(exec)
+const validChars =
+  'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('')
 
 export class Utility {
   permission: Permission
@@ -35,6 +37,13 @@ export class Utility {
     } catch (e: any) {
       return new ResourceError('error')
     }
+  }
+
+  randomId(length: number): string {
+    return Array(length)
+      .fill('')
+      .map(() => validChars[this.random(0, validChars.length)])
+      .join('')
   }
 
   generateAllCombinations<T, U>(arr1: T[], arr2: U[]): (T | U)[][] {
