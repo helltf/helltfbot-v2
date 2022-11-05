@@ -9,7 +9,7 @@ export class AcceptCommand implements Command {
   description = 'Accepts the given suggestion with a reason'
   requiredParams = ['id']
   optionalParams = ['reason']
-  alias = ['acceptsuggestion']
+  alias = ['acceptsuggestion', 'approve']
   flags = [CommandFlag.WHISPER]
   cooldown = 0
   execute = async ({
