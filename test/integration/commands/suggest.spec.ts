@@ -42,7 +42,10 @@ describe('test suggest command', () => {
     jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
     await suggest.execute({ channel, user, message })
-    expect(hb.sendMessage).toHaveBeenCalledWith(process.env.MAIN_USER, expectedMessage)
+    expect(hb.sendMessage).toHaveBeenCalledWith(
+      process.env.MAIN_USER,
+      expectedMessage
+    )
   })
 
   it('suggestion is defined and response is successful', async () => {
@@ -98,7 +101,8 @@ describe('test suggest command', () => {
       suggestion: 'a',
       user: {
         id: parseInt(user['user-id']!)
-      }
+      },
+      channel
     })
 
     const response = await suggest.execute({ channel, user, message })
