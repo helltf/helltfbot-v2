@@ -13,6 +13,7 @@ describe('accept command', () => {
   let user: TwitchUserState
   let accept: AcceptCommand
   const channel = 'messageChannel'
+
   beforeAll(async () => {
     await setupDatabase()
   })
@@ -66,6 +67,18 @@ describe('accept command', () => {
       expect(response).toBe('Updated suggestion')
       expect(success).toBe(true)
     })
+
+    it('update suggestion returns true send user notification', async () => {
+      const id = '1'
+      jest
+        .spyOn(accept.methods, 'sendNotification')
+        .mockImplementation(jest.fn())
+      jest.spyOn(accept.methods, 'updateSuggestion').mockResolvedValue(true)
+
+      await accept.execute({ channel, message: [id], user })
+
+      expect(accept.methods.sendNotification).toHaveBeenCalled()
+    })
   })
 
   describe('update suggestion', () => {
@@ -86,7 +99,8 @@ describe('accept command', () => {
         id: id,
         date: Date.now(),
         suggestion: '',
-        user: user
+        user: user,
+        channel: channel
       })
 
       const success = await accept.methods.updateSuggestion(id.toString(), '')
@@ -103,14 +117,16 @@ describe('accept command', () => {
         id: id,
         date: Date.now(),
         suggestion: '',
-        user: user
+        user: user,
+        channel
       })
 
       await hb.db.suggestion.save({
         id: id + 1,
         date: Date.now(),
         suggestion: '',
-        user: user
+        user: user,
+        channel
       })
 
       const success = await accept.methods.updateSuggestion(id.toString(), '')
@@ -120,6 +136,28 @@ describe('accept command', () => {
       const updatedEntity = await hb.db.suggestion.findOneBy({ id: id })
 
       expect(updatedEntity?.status).toBe(SuggestionStatus.ACCEPTED)
+    })
+  })
+
+  describe('send notification', () => {
+    it('send notification from info from suggestion', async () => {
+      const id = '1'
+      const suggestionCreator = getExampleTwitchUserEntity({})
+      const expectedMessage = `@${suggestionCreator.name} your suggestion with id ${id} has been accepted`
+
+      await hb.db.user.save(suggestionCreator)
+      await hb.db.suggestion.save({
+        id: Number(id),
+        date: Date.now(),
+        suggestion: '',
+        suggestionCreator,
+        channel
+      })
+      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
+
+      await accept.methods.sendNotification(id)
+
+      expect(hb.sendMessage).toHaveBeenCalledWith(channel, expectedMessage)
     })
   })
 })
