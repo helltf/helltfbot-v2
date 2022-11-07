@@ -151,7 +151,8 @@ describe('accept command', () => {
         date: Date.now(),
         suggestion: '',
         suggestionCreator,
-        channel
+        channel,
+        user: suggestionCreator
       })
       jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
