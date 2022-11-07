@@ -49,7 +49,7 @@ export class DenyCommand implements Command {
 
       await hb.sendMessage(
         suggestion?.channel,
-        `@${suggestion?.user.name} your suggestion with id ${id} has been denied with reason: ${suggestion?.reason}`
+        `@${suggestion?.user?.name} your suggestion with id ${id} has been denied with reason: ${suggestion?.reason}`
       )
     }
   }

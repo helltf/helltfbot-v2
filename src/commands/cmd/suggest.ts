@@ -44,7 +44,7 @@ export class SuggestCommand implements Command {
   methods = {
     async saveSuggestion(
       suggestion: string,
-      user_id: number,
+      userId: number,
       channel: string
     ): Promise<number> {
       return (
@@ -53,7 +53,7 @@ export class SuggestCommand implements Command {
           channel,
           suggestion,
           user: {
-            id: user_id
+            id: userId
           }
         })
       ).id
