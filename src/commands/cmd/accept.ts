@@ -9,7 +9,7 @@ export class AcceptCommand implements Command {
   description = 'Accepts the given suggestion with a reason'
   requiredParams = ['id']
   optionalParams = ['reason']
-  alias = ['acceptsuggestion']
+  alias = ['acceptsuggestion', 'approve']
   flags = [CommandFlag.WHISPER]
   cooldown = 0
   execute = async ({
@@ -23,9 +23,14 @@ export class AcceptCommand implements Command {
 
     const success = await this.methods.updateSuggestion(id, reason.join(' '))
 
+    if (success) {
+      this.methods.sendNotification(id)
+      return { success: true, response: 'Updated suggestion' }
+    }
+
     return {
-      success: success,
-      response: success ? 'Updated suggestion' : 'suggestion does not exist'
+      success: false,
+      response: 'suggestion does not exist'
     }
   }
   methods = {
@@ -38,6 +43,14 @@ export class AcceptCommand implements Command {
       )
 
       return result.affected !== 0
+    },
+    sendNotification: async (id: string) => {
+      const suggestion = await hb.db.suggestion.findOneBy({ id: Number(id) })
+
+      await hb.sendMessage(
+        suggestion?.channel,
+        `@${suggestion?.user.name} your suggestion with id ${id} has been accepted`
+      )
     }
   }
 }

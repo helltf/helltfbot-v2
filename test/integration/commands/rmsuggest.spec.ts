@@ -10,6 +10,7 @@ describe('test rmsuggest command', () => {
   let channel: string
   let user: ChatUserstate
   let rmsuggest: RemoveSuggestCommand
+
   beforeAll(async () => {
     await setupDatabase()
   })
@@ -65,7 +66,8 @@ describe('test rmsuggest command', () => {
       user: {
         id: parseInt(user['user-id']!)
       },
-      suggestion: 'a'
+      suggestion: 'a',
+      channel
     })
 
     const id = savedEntity.id
@@ -94,7 +96,8 @@ describe('test rmsuggest command', () => {
       user: {
         id: parseInt(user['user-id']!)
       },
-      suggestion: 'a'
+      suggestion: 'a',
+      channel
     })
 
     user['user-id'] = '5'

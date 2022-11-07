@@ -28,9 +28,11 @@ import { ModCountCommand } from '@src/commands/cmd/modcount'
 import { DenyCommand } from '@src/commands/cmd/deny'
 import { RandomColorCommand } from '@src/commands/cmd/randomcolor'
 import { DisableCommand } from '@src/commands/cmd/disable'
+import { AcceptCommand } from './cmd/accept'
 
 const commands: Command[] = [
   new PingCommand(),
+  new AcceptCommand(),
   new RemovemeCommand(),
   new GithubCommand(),
   new WebsiteCommand(),

@@ -94,10 +94,7 @@ export class PubSubConnection {
       hb.log(LogType.DEBUG, `${this.id}: Connection has been closed`)
     })
     this.connection.addEventListener('error', event => {
-      hb.log(
-        LogType.DEBUG,
-        `${this.id}: Pubsub error occured: \n ${JSON.stringify(event)}`
-      )
+      hb.log(LogType.DEBUG, `${this.id}: Pubsub error occured: \n ${event}`)
     })
   }
 

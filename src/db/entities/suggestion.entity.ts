@@ -18,7 +18,9 @@ export class SuggestionEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @ManyToOne(() => TwitchUserEntity, user => user.notifications)
+  @ManyToOne(() => TwitchUserEntity, user => user.notifications, {
+    eager: true
+  })
   user: TwitchUserEntity
 
   @Column('varchar')
@@ -36,4 +38,7 @@ export class SuggestionEntity extends BaseEntity {
 
   @Column('varchar', { default: null, nullable: true })
   reason: string
+
+  @Column('varchar')
+  channel: string
 }

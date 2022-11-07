@@ -69,12 +69,23 @@ describe('deny', () => {
       expect(success).toBe(true)
       expect(deny.methods.updateSuggestion).toHaveBeenCalled()
     })
+
+    it('suggestion gets updated send notification', async () => {
+      const id = '1'
+
+      jest.spyOn(deny.methods, 'updateSuggestion').mockResolvedValue(true)
+      jest.spyOn(deny.methods, 'sendNotification').mockImplementation(jest.fn())
+      await deny.execute({ message: [id], user, channel })
+
+      expect(deny.methods.sendNotification).toHaveBeenCalledWith(id)
+    })
   })
 
   describe('udpate suggestion', () => {
     const id = '1'
     const reason = 'reason'
     const user = getExampleTwitchUserEntity({})
+    const channel = 'channel'
 
     it('id does not exist return false', async () => {
       const result = await deny.methods.updateSuggestion(id, reason)
@@ -88,7 +99,8 @@ describe('deny', () => {
         id: Number(id),
         user: user,
         date: Date.now(),
-        suggestion: 'something'
+        suggestion: 'something',
+        channel
       })
       const result = await deny.methods.updateSuggestion(id, reason)
 
@@ -100,6 +112,34 @@ describe('deny', () => {
 
       expect(updatedSuggestion?.status).toBe(SuggestionStatus.DENIED)
       expect(updatedSuggestion?.reason).toBe(reason)
+    })
+  })
+
+  describe('send notification', () => {
+    it('send message to twitch chat with reason', async () => {
+      const user = getExampleTwitchUserEntity({})
+      const channel = 'channel'
+      const id = '1'
+      const reason = 'reason'
+
+      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
+
+      await hb.db.user.save(user)
+      await hb.db.suggestion.save({
+        id: Number(id),
+        user: user,
+        date: Date.now(),
+        suggestion: '',
+        channel,
+        reason
+      })
+
+      await deny.methods.sendNotification(id)
+
+      expect(hb.sendMessage).toHaveBeenCalledWith(
+        channel,
+        `@${user.name} your suggestion with id ${id} has been denied with reason: ${reason}`
+      )
     })
   })
 })

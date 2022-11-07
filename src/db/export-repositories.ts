@@ -68,8 +68,8 @@ export class DB implements DbRepositories {
     this.dataSource = dataSource
   }
   async initialize(): Promise<DB> {
-    await this.dataSource.initialize().catch(() => {
-      throw new Error('Could not connect to database')
+    await this.dataSource.initialize().catch(e => {
+      throw new Error(e)
     })
     return this
   }

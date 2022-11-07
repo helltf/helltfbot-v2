@@ -22,6 +22,8 @@ export class DenyCommand implements Command {
     if (!success)
       return { response: 'suggestion does not exist', success: false }
 
+    await this.methods.sendNotification(id)
+
     return {
       response: `Successfully updated suggestion with id ${id}`,
       success: true
@@ -41,7 +43,14 @@ export class DenyCommand implements Command {
       )
 
       return updated.affected !== 0
+    },
+    sendNotification: async (id: string) => {
+      const suggestion = await hb.db.suggestion.findOneBy({ id: Number(id) })
+
+      await hb.sendMessage(
+        suggestion?.channel,
+        `@${suggestion?.user?.name} your suggestion with id ${id} has been denied with reason: ${suggestion?.reason}`
+      )
     }
   }
 }
-
