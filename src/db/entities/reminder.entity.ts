@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { TwitchUserEntity } from "./user.entity"
 
-enum ReminderStatus {
+export enum ReminderStatus {
   CREATED = 'created',
   FIRED = 'fired',
   REVOKED = 'revoked'
@@ -35,9 +35,12 @@ export class ReminderEntity {
   })
   status: ReminderStatus
 
-  @Column('bigint')
-  firedAt: number
+  @Column('bigint', { nullable: true })
+  firedAt: number | null
+
+  @Column('varchar', { nullable: true })
+  firedChannel: string | null
 
   @Column('varchar')
-  firedChannel: string
+  createdChannel: string
 }
