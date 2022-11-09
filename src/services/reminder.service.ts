@@ -15,7 +15,9 @@ export class ReminderService {
     message,
     channel
   }: ReminderCreationData): Promise<Resource<ReminderEntity>> {
-    const creator = (await hb.db.user.findOneBy({ id: creatorId }))!
+    const creator = await hb.db.user.findOneBy({ id: creatorId })
+
+    if (!creator) return new ResourceError('Creator does not exist')
     const reciever = (await hb.db.user.findOneBy({ name: recieverName }))!
 
     const result = await hb.db.reminder.save({

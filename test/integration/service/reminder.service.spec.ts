@@ -32,8 +32,23 @@ describe('reminder service', () => {
   })
 
   describe('create reminder', () => {
+    it('creator does not exist return resource error', async () => {
+      const reminderData: ReminderCreationData = {
+        creatorId: 1,
+        recieverName: 'user2',
+        message: 'message',
+        channel: 'channel'
+      }
+      const result = await service.create(reminderData)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('Creator does not exist')
+    })
+
     it('create function saves new reminder in database', async () => {
-      const id = 1
       const creator = getExampleTwitchUserEntity({})
       const reciever = getExampleTwitchUserEntity({ id: 2, name: 'user2' })
       const reminderData: ReminderCreationData = {
