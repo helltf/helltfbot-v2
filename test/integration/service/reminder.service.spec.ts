@@ -1,6 +1,10 @@
 import { ResourceSuccess } from "@api/types"
 import { ReminderEntity } from "@db/entities"
-import { ReminderCreationData, ReminderService } from "@src/services/reminder.service"
+import { ReminderStatus } from "@src/db/entities/reminder.entity"
+import {
+  ReminderCreationData,
+  ReminderService
+} from '@src/services/reminder.service'
 import { clearDb, clearRedis } from '@test-utils/clear'
 import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
 import {
@@ -29,16 +33,19 @@ describe('reminder service', () => {
 
   describe('create reminder', () => {
     it('create function saves new reminder in database', async () => {
+      const id = 1
       const creator = getExampleTwitchUserEntity({})
-      const reciever = getExampleTwitchUserEntity({ id: 2 })
+      const reciever = getExampleTwitchUserEntity({ id: 2, name: 'user2' })
       const reminderData: ReminderCreationData = {
         creatorId: creator.id,
         recieverName: reciever.name,
         message: 'message',
         channel: 'channel'
       }
+      jest.spyOn(Date, 'now').mockImplementation(() => 1)
       await hb.db.user.save(creator)
       await hb.db.user.save(reciever)
+
       const result = await service.create(reminderData)
 
       expect(result).toBeInstanceOf(ResourceSuccess)
@@ -48,8 +55,15 @@ describe('reminder service', () => {
       const expectedEntity: ReminderEntity = {
         id,
         creator,
-        reciever
+        reciever,
+        message: reminderData.message,
+        createdChannel: reminderData.channel,
+        firedAt: null,
+        firedChannel: null,
+        status: ReminderStatus.CREATED,
+        createdAt: Date.now()
       }
+
       expect(savedEntity).toEqual(expectedEntity)
     })
   })
