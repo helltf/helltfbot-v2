@@ -1,5 +1,6 @@
 import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
+import { ReminderStatus } from '@src/db/entities/reminder.entity'
 
 export interface ReminderCreationData {
   creatorId: number
@@ -46,5 +47,16 @@ export class ReminderService {
     const reminders = await hb.db.reminder.findBy({ reciever: { id } })
 
     return new ResourceSuccess(reminders)
+  }
+
+  async setFired(id: number, channel: string) {
+    return await hb.db.reminder.update(
+      { id },
+      {
+        firedChannel: channel,
+        firedAt: Date.now(),
+        status: ReminderStatus.FIRED
+      }
+    )
   }
 }
