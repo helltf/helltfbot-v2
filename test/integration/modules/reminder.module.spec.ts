@@ -44,12 +44,29 @@ describe('reminder module', () => {
 
     it("user has no reminders don't send message", () => {
       const reminders: ReminderEntity[] = []
-      jest.spyOn(hb, 'sendMessage')
+      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
       jest
         .spyOn(hb.reminder, 'getReminders')
         .mockResolvedValue(new ResourceSuccess(reminders))
 
       expect(hb.sendMessage).not.toHaveBeenCalled()
+    })
+
+    it('user has reminder send reminder message', async () => {
+      const reminders = [getExampleReminderEntity({})]
+      const channel = 'channel'
+      const reminderMessage = 'testMessage'
+      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
+      jest
+        .spyOn(hb.reminder, 'getReminders')
+        .mockResolvedValue(new ResourceSuccess(reminders))
+      jest
+        .spyOn(module, 'createReminderMessage')
+        .mockReturnValue(reminderMessage)
+
+      await module.checkReminders(1, channel)
+
+      expect(hb.sendMessage).toHaveBeenCalledWith(channel, reminderMessage)
     })
   })
 
@@ -59,19 +76,38 @@ describe('reminder module', () => {
 
       const reminderString = module.reminderAsString(reminder)
 
-      const expectedString = `reminder from @${
-        reminder.creator.name
-      } (${hb.utils.humanizeNow(reminder.createdAt)}): ${reminder.message}`
+      const expectedString = `by @${reminder.creator.name}-${
+        reminder.message
+      } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
 
       expect(reminderString).toBe(expectedString)
     })
   })
 
   describe('create reminder message', () => {
-it('user has 1 reminder return message', () => {
-const reminder = getExampleReminderEntity({})
-      const message = module:
+    it('user has 1 reminder return message', () => {
+      const reminder = getExampleReminderEntity({})
+      const message = module.createReminderMessage([reminder])
+
+      const expectedMessage = `@${
+        reminder.reciever.name
+      } you recieved 1 reminder: ${module.reminderAsString(reminder)}`
+
+      expect(message).toBe(expectedMessage)
+    })
+
+    it('user has 2 reminder return message', () => {
+      const reminder1 = getExampleReminderEntity({})
+      const reminder2 = getExampleReminderEntity({})
+      const message = module.createReminderMessage([reminder1, reminder2])
+
+      const expectedMessage = `@${
+        reminder1.reciever.name
+      } you recieved 2 reminders: ${module.reminderAsString(
+        reminder1
+      )} | ${module.reminderAsString(reminder2)}`
+
+      expect(message).toBe(expectedMessage)
     })
   })
-
 })
