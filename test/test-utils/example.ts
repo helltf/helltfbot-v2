@@ -164,8 +164,8 @@ export const getExampleNotificationEntity = ({
 
 export const getExampleReminderEntity = ({
   id = 1,
-  creator = getExampleTwitchUserEntity({}),
-  reciever = getExampleTwitchUserEntity({}),
+  creator = getExampleTwitchUserEntity({ id: 1 }),
+  reciever = getExampleTwitchUserEntity({ id: 2 }),
   message = 'message',
   createdAt = Date.now(),
   firedAt = null,
