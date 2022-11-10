@@ -7,7 +7,10 @@ import {
 } from '@src/services/reminder.service'
 import { clearDb, clearRedis } from '@test-utils/clear'
 import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
-import { getExampleTwitchUserEntity } from '@test-utils/example'
+import {
+  getExampleReminderEntity,
+  getExampleTwitchUserEntity
+} from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
 describe('reminder service', () => {
@@ -102,6 +105,45 @@ describe('reminder service', () => {
       expect(savedEntity.firedChannel).toEqual(expectedEntity.firedChannel)
       expect(savedEntity.firedAt).toEqual(expectedEntity.firedAt)
       expect(savedEntity.status).toEqual(expectedEntity.status)
+    })
+  })
+
+  describe('get reminders', () => {
+    it('user does not exist return error', async () => {
+      const result = await service.getReminders(1)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('Invalid user')
+    })
+
+    it('user has 0 reminders return empty array', async () => {
+      const user = getExampleTwitchUserEntity({})
+      await hb.db.user.save(user)
+
+      const result = await service.getReminders(user.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
+
+      expect(data).toHaveLength(0)
+    })
+
+    it('user has 1 reminder return empty array', async () => {
+      const user = getExampleTwitchUserEntity({})
+      const reminder = getExampleReminderEntity({ reciever: user })
+      await hb.db.user.save(user)
+      await hb.db.reminder.save(reminder)
+
+      const result = await service.getReminders(user.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
+      expect(data).toHaveLength(1)
     })
   })
 })
