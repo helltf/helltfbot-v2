@@ -16,6 +16,7 @@ export class ReminderModule implements Module {
       }
     )
   }
+
   async checkReminders(id: number, channel: string) {
     const userReminders = await hb.reminder.getReminders(id)
     if (userReminders instanceof ResourceError || !userReminders.data.length)
@@ -29,6 +30,7 @@ export class ReminderModule implements Module {
       userReminders.data.map((r: ReminderEntity) => r.id)
     )
   }
+
   async updateRemindersStatus(channel: string, reminderIds: number[]) {
     for await (const id of reminderIds) {
       await hb.reminder.setFired(id, channel)

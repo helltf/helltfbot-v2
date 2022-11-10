@@ -1,7 +1,6 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderModule } from '@modules/reminder.module'
-import { ReminderStatus } from '@src/db/entities/reminder.entity'
 import { clearDb, clearRedis } from '@test-utils/clear'
 import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
 import { getExampleReminderEntity } from '@test-utils/example'
@@ -54,7 +53,8 @@ describe('reminder module', () => {
     })
 
     it('user has reminder send reminder message', async () => {
-      const reminders = [getExampleReminderEntity({})]
+      const reminder = getExampleReminderEntity({})
+      const reminders = [reminder]
       const channel = 'channel'
       const reminderMessage = 'testMessage'
       jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
@@ -69,7 +69,9 @@ describe('reminder module', () => {
       await module.checkReminders(1, channel)
 
       expect(hb.sendMessage).toHaveBeenCalledWith(channel, reminderMessage)
-      expect(module.updateRemindersStatus).toHaveBeenCalledWith(reminders)
+      expect(module.updateRemindersStatus).toHaveBeenCalledWith(channel, [
+        reminder.id
+      ])
     })
   })
 
@@ -79,9 +81,21 @@ describe('reminder module', () => {
       const channel = 'channel'
       jest.spyOn(hb.reminder, 'setFired').mockImplementation(jest.fn())
 
-      module.updateRemindersStatus(channel, [reminder.id])
+      await module.updateRemindersStatus(channel, [reminder.id])
 
       expect(hb.reminder.setFired).toHaveBeenCalledWith(reminder.id, channel)
+    })
+
+    it('two reminders given update both status to fired', async () => {
+      const reminder1 = getExampleReminderEntity({})
+      const reminder2 = getExampleReminderEntity({})
+      const channel = 'channel'
+      jest.spyOn(hb.reminder, 'setFired').mockImplementation(jest.fn())
+
+      await module.updateRemindersStatus(channel, [reminder1.id, reminder2.id])
+
+      expect(hb.reminder.setFired).toHaveBeenCalledWith(reminder1.id, channel)
+      expect(hb.reminder.setFired).toHaveBeenCalledWith(reminder2.id, channel)
     })
   })
 
