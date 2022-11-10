@@ -22,22 +22,22 @@ export class ReminderModule implements Module {
       return
 
     const reminderMessage = this.createReminderMessage(userReminders.data)
+
     hb.sendMessage(channel, reminderMessage)
   }
 
   reminderAsString(reminder: ReminderEntity): string {
-    return `reminder from @${reminder.creator.name} (${hb.utils.humanizeNow(
-      reminder.createdAt
-    )}): ${reminder.message}`
+    return `by @${reminder.creator.name}-${
+      reminder.message
+    } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
   }
 
   createReminderMessage = (reminders: ReminderEntity[]) => {
     return (
-      `@${reminders[0].reciever.name} ${hb.utils.plularizeIf(
-        'reminder',
+      `@${reminders[0].reciever.name} you recieved ${
         reminders.length
-      )}` +
-      reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join('|')
+      } ${hb.utils.plularizeIf('reminder', reminders.length)}: ` +
+      reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join(' | ')
     )
   }
 }
