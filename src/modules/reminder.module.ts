@@ -23,7 +23,16 @@ export class ReminderModule implements Module {
 
     const reminderMessage = this.createReminderMessage(userReminders.data)
 
-    hb.sendMessage(channel, reminderMessage)
+    await hb.sendMessage(channel, reminderMessage)
+    await this.updateRemindersStatus(
+      channel,
+      userReminders.data.map((r: ReminderEntity) => r.id)
+    )
+  }
+  async updateRemindersStatus(channel: string, reminderIds: number[]) {
+    for await (const id of reminderIds) {
+      await hb.reminder.setFired(id, channel)
+    }
   }
 
   reminderAsString(reminder: ReminderEntity): string {
