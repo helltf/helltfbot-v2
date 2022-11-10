@@ -37,6 +37,7 @@ export class ReminderService {
 
     return new ResourceSuccess(result)
   }
+
   async getReminders(id: number): Promise<Resource<ReminderEntity[]>> {
     const user = await hb.db.user.findOneBy({ id })
 
