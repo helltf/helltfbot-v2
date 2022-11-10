@@ -3,6 +3,7 @@ import { ReminderEntity } from '@db/entities'
 import { ReminderModule } from '@modules/reminder.module'
 import { clearDb, clearRedis } from '@test-utils/clear'
 import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
+import { getExampleReminderEntity } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
 describe('reminder module', () => {
@@ -51,4 +52,26 @@ describe('reminder module', () => {
       expect(hb.sendMessage).not.toHaveBeenCalled()
     })
   })
+
+  describe('stringify', () => {
+    it('reminder gets return as info string', () => {
+      const reminder = getExampleReminderEntity({})
+
+      const reminderString = module.reminderAsString(reminder)
+
+      const expectedString = `reminder from @${
+        reminder.creator.name
+      } (${hb.utils.humanizeNow(reminder.createdAt)}): ${reminder.message}`
+
+      expect(reminderString).toBe(expectedString)
+    })
+  })
+
+  describe('create reminder message', () => {
+it('user has 1 reminder return message', () => {
+const reminder = getExampleReminderEntity({})
+      const message = module:
+    })
+  })
+
 })

@@ -21,10 +21,23 @@ export class ReminderModule implements Module {
     if (userReminders instanceof ResourceError || !userReminders.data.length)
       return
 
-    const
+    const reminderMessage = this.createReminderMessage(userReminders.data)
+    hb.sendMessage(channel, reminderMessage)
   }
 
   reminderAsString(reminder: ReminderEntity): string {
-    return `reminder from @${reminder.creator.name}: ${reminder.message}`
+    return `reminder from @${reminder.creator.name} (${hb.utils.humanizeNow(
+      reminder.createdAt
+    )}): ${reminder.message}`
+  }
+
+  createReminderMessage = (reminders: ReminderEntity[]) => {
+    return (
+      `@${reminders[0].reciever.name} ${hb.utils.plularizeIf(
+        'reminder',
+        reminders.length
+      )}` +
+      reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join('|')
+    )
   }
 }
