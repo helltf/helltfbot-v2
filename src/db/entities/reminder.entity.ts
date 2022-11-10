@@ -41,6 +41,6 @@ export class ReminderEntity {
   @Column('varchar', { nullable: true })
   firedChannel: string | null
 
-  @Column('varchar')
-  createdChannel: string
+  @Column('varchar', { nullable: true })
+  createdChannel: string | null
 }

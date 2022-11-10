@@ -7,11 +7,7 @@ import {
 } from '@src/services/reminder.service'
 import { clearDb, clearRedis } from '@test-utils/clear'
 import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
-import {
-  getExampleReminderEntity,
-  getExampleTwitchUserEntity,
-  getExampleTwitchUserState
-} from '@test-utils/example'
+import { getExampleTwitchUserEntity } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
 describe('reminder service', () => {
@@ -91,7 +87,7 @@ describe('reminder service', () => {
         creator,
         reciever,
         message: reminderData.message,
-        createdChannel: reminderData.channel,
+        createdChannel: reminderData.channel ?? null,
         firedAt: null,
         firedChannel: null,
         status: ReminderStatus.CREATED,

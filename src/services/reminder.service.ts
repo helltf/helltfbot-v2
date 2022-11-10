@@ -5,7 +5,7 @@ export interface ReminderCreationData {
   creatorId: number
   recieverName: string
   message: string
-  channel: string
+  channel?: string
 }
 
 export class ReminderService {
@@ -32,7 +32,7 @@ export class ReminderService {
       reciever,
       createdAt: Date.now(),
       message,
-      createdChannel: channel
+      createdChannel: channel ?? null
     })
 
     return new ResourceSuccess(result)
