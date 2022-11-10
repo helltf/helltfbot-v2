@@ -146,4 +146,23 @@ describe('reminder service', () => {
       expect(data).toHaveLength(1)
     })
   })
+
+  describe('set fired', () => {
+    it('reminder exists update fired fields and status', async () => {
+      const reminder = getExampleReminderEntity({})
+      const channel = 'channel'
+      await hb.db.user.save([reminder.creator, reminder.reciever])
+      await hb.db.reminder.save(reminder)
+      jest.spyOn(Date, 'now').mockImplementation(() => 1)
+
+      await service.setFired(reminder.id, channel)
+
+      const updatedReminder = (await hb.db.reminder.findOneBy({
+        id: reminder.id
+      }))!
+      expect(Number(updatedReminder.firedAt)).toBe(1)
+      expect(updatedReminder.status).toBe(ReminderStatus.FIRED)
+      expect(updatedReminder.firedChannel).toBe(channel)
+    })
+  })
 })
