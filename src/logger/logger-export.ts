@@ -10,6 +10,7 @@ const getCurrentDateString = (): string => {
 
 const log = (type: LogType, ...args: any) => {
   const typeName = getEnumKey(type)
+  if (typeName === LogType.DEBUG && process.env.DEBUG === 'false') return
   console.log(
     `${chalk.green(getCurrentDateString())}: ${chalk.hex(type)(
       `[${typeName}]`
@@ -23,7 +24,9 @@ export enum LogType {
   JOBS = '#34ebc6',
   PUBSUB = '#00ad9c',
   ERROR = '#ff3333',
-  INFO = '#FFBA01'
+  INFO = '#FFBA01',
+  DEBUG = '#FF0000',
+  WEBHOOK = '#652800'
 }
 
 export { log as customLogMessage }

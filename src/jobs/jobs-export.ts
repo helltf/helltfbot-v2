@@ -1,5 +1,3 @@
-import { updateGithubPipeline } from './github-pipeline'
-
 class Job {
   delay: number
   execute: () => any
@@ -10,6 +8,6 @@ class Job {
   }
 }
 
-const jobs: Job[] = [new Job(60000, updateGithubPipeline)]
+const jobs: Job[] = []
 
 export default jobs

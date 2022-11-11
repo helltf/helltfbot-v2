@@ -1,6 +1,6 @@
-import { Client } from 'tmi.js'
-import { Cooldown } from './src/services/cooldown.service'
-import { DB } from './src/db/export-repositories'
+import {Client} from 'tmi.js'
+import {Cooldown} from './src/services/cooldown.service'
+import {DB} from './src/db/export-repositories'
 import jobs from './src/jobs/jobs-export'
 import { customLogMessage, LogType } from '@src/logger/logger-export'
 import { PubSub } from './src/modules/pubsub/pubsub'
@@ -14,6 +14,8 @@ import { Utility } from '@src/utilities/utility'
 import commands from '@src/commands/export-commands'
 import { ApiService } from '@src/services/api.service'
 import { modules } from '@modules/export-modules'
+import { app } from '@src/webhook/actions'
+import { Express } from 'express'
 
 export class TwitchBot {
   client: Client
@@ -27,8 +29,11 @@ export class TwitchBot {
   config: ConfigService
   games: GameService
   utils: Utility
+  webhook: Express
+  debug: boolean
 
   constructor() {
+    this.debug = process.env.DEBUG === 'true'
     this.config = new ConfigService()
     this.log = customLogMessage
     this.client = client
@@ -40,18 +45,26 @@ export class TwitchBot {
     this.cache = new CacheService()
     this.games = new GameService()
     this.utils = new Utility()
+    this.webhook = app
   }
 
   async init() {
     await this.db.initialize()
     this.log(LogType.INFO, 'DB connected')
-    await this.client.connect()
+    await this.client.connect().catch(e => {
+      throw new Error(`Could not connect to twitch servers: ${e}`)
+    })
     this.log(LogType.INFO, 'Client connected')
     await this.api.init()
     await this.cache.connect()
     this.startPubSub()
     this.log(LogType.TWITCHBOT, 'Successfully initialized')
     this.commands.updateDb()
+
+    const port = process.env.WEBHOOK_PORT
+    this.webhook.listen(Number(port), () => {
+      hb.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
+    })
 
     const startUpMessage = hb.config.get('START_UP_MESSAGE')
 

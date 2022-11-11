@@ -13,6 +13,7 @@ export class SuggestCommand implements Command {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
+    channel,
     message: [...suggestion]
   }: CommandContext): Promise<BotResponse> {
     if (!suggestion[0])
@@ -25,7 +26,13 @@ export class SuggestCommand implements Command {
 
     const id = await this.methods.saveSuggestion(
       suggestionMessage,
-      parseInt(user['user-id']!)
+      parseInt(user['user-id']!),
+      channel
+    )
+
+    await hb.sendMessage(
+      process.env.MAIN_USER,
+      `@${process.env.MAIN_USER} new suggestion by ${user.username}`
     )
 
     return {
@@ -35,13 +42,18 @@ export class SuggestCommand implements Command {
   }
 
   methods = {
-    async saveSuggestion(suggestion: string, user_id: number): Promise<number> {
+    async saveSuggestion(
+      suggestion: string,
+      userId: number,
+      channel: string
+    ): Promise<number> {
       return (
         await hb.db.suggestion.save({
           date: Date.now(),
+          channel,
           suggestion,
           user: {
-            id: user_id
+            id: userId
           }
         })
       ).id

@@ -20,6 +20,8 @@ declare global {
       TEST_DATABASE_URI: string
       ENCRYPT_KEY: string
       SEVENTV_GQL_TOKEN: string
+      WEBHOOK_PORT: string
+      WEBHOOK_SECRET: string
     }
   }
 }

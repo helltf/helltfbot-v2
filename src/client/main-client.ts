@@ -14,11 +14,12 @@ function createclient(): Client {
       username: 'xdforsenxdlol'
     },
     connection: {
-      reconnect: true
+      reconnect: true,
+      secure: true
     },
     logger: {
       info: msg => {
-        if (process.env.DEBUG === 'true') hb.log(LogType.TWITCHBOT, msg)
+        if (hb.debug) hb.log(LogType.DEBUG, msg)
       },
       error: msg => {
         hb.log(LogType.TWITCHBOT, msg)
@@ -65,6 +66,10 @@ client.on('whisper', (from, user, message, self) => {
   from = from.replace('#', '')
 
   handleWhisper(from, user, message, self)
+})
+
+client.on('disconnected', r => {
+  console.log(`Bot has been disconnected because: ${r}`)
 })
 
 export { client }

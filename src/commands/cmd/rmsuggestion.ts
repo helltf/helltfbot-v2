@@ -1,6 +1,7 @@
 import { Command, CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+
 export class RemoveSuggestCommand implements Command {
   name = 'rmsuggest'
   description = 'removes your suggestion'
@@ -53,9 +54,6 @@ export class RemoveSuggestCommand implements Command {
           user: {
             id: parsedUserId
           }
-        },
-        relations: {
-          user: true
         }
       })
       return entity === null

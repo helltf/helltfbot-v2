@@ -3,7 +3,6 @@ import {
   TopicPrefix,
   OutgoingMessage,
   NotifyEventType,
-  ParsedPubSubData,
   Topic,
   MessageType
 } from './types'
@@ -16,7 +15,7 @@ export class PubSubConnection {
   connection: ReconnectingWebSocket
   topics: Topic[] = []
   interval: NodeJS.Timer
-
+  id: string
   constructor(
     ws: ReconnectingWebSocket = new RWS.default(PUBSUB_URL, [], {
       WebSocket: WS.WebSocket,
@@ -25,9 +24,11 @@ export class PubSubConnection {
   ) {
     this.connection = ws
     this.interval = this.setPingInterval()
-    this.connection.addEventListener('message', message => {
-      this.handleIncomingMessage(message)
-    })
+    this.id = hb.utils.randomId(10)
+
+    if (process.env.DEBUG === 'true') {
+      this.addDebugListeners()
+    }
   }
 
   start() {
@@ -73,27 +74,6 @@ export class PubSubConnection {
     return TopicPrefix.STATUS
   }
 
-  handleIncomingMessage({ data }: { data: string }) {
-    const parsedData: ParsedPubSubData = JSON.parse(data)
-
-    if (parsedData.type === 'RECONNECT') {
-      this.reconnect()
-    }
-  }
-
-  async reconnect() {
-    hb.log(
-      LogType.PUBSUB,
-      'A Pubsub connection has been closed and will restart'
-    )
-
-    this.connection.reconnect()
-
-    this.listenToTopics(this.topics)
-
-    hb.log(LogType.PUBSUB, 'Connection successfully restartet')
-  }
-
   containsTopic(topic: Topic): boolean {
     return this.topics.some(t => t.id === topic.id && t.prefix === topic.prefix)
   }
@@ -104,6 +84,18 @@ export class PubSubConnection {
     this.sendMessage(message)
 
     this.removeTopics(topics)
+  }
+
+  addDebugListeners() {
+    this.connection.addEventListener('open', () => {
+      hb.log(LogType.DEBUG, `${this.id}: Connection has been opened`)
+    })
+    this.connection.addEventListener('close', () => {
+      hb.log(LogType.DEBUG, `${this.id}: Connection has been closed`)
+    })
+    this.connection.addEventListener('error', event => {
+      hb.log(LogType.DEBUG, `${this.id}: Pubsub error occured: \n ${event}`)
+    })
   }
 
   removeTopics(topics: Topic[]) {

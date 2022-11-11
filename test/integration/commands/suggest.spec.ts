@@ -10,6 +10,7 @@ describe('test suggest command', () => {
   let channel: string
   let user: TwitchUserState = getExampleTwitchUserState({})
   let suggest: SuggestCommand
+
   beforeAll(async () => {
     channel = 'channel'
     suggest = new SuggestCommand()
@@ -31,6 +32,20 @@ describe('test suggest command', () => {
     const response = await suggest.execute({ channel, user, message })
 
     expect(response.success).toBe(false)
+  })
+
+  it('suggestion is defined and response is successful', async () => {
+    const message = ['add']
+    const expectedMessage = `@${process.env.MAIN_USER} new suggestion by ${user.username}`
+    await saveUserStateAsUser(user)
+
+    jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
+
+    await suggest.execute({ channel, user, message })
+    expect(hb.sendMessage).toHaveBeenCalledWith(
+      process.env.MAIN_USER,
+      expectedMessage
+    )
   })
 
   it('suggestion is defined and response is successful', async () => {
@@ -86,7 +101,8 @@ describe('test suggest command', () => {
       suggestion: 'a',
       user: {
         id: parseInt(user['user-id']!)
-      }
+      },
+      channel
     })
 
     const response = await suggest.execute({ channel, user, message })

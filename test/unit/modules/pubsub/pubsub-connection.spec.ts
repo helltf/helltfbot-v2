@@ -1,5 +1,6 @@
 import { PubSubConnection } from '@modules/pubsub/pubsub-connection'
 import { Topic, TopicPrefix } from '@modules/pubsub/types'
+import { setup } from '@test-utils/setup'
 import { TwitchBot } from 'bot'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
@@ -10,11 +11,11 @@ describe('test pubsub connection class', () => {
   jest.useFakeTimers()
   beforeEach(() => {
     mockedWS = {
-      addEventListener: jest.fn(),
       send: jest.fn(),
-      reconnect: jest.fn()
+      reconnect: jest.fn(),
+      addEventListener: jest.fn()
     } as any
-
+    setup()
     connection = new PubSubConnection(mockedWS)
   })
 
@@ -37,10 +38,6 @@ describe('test pubsub connection class', () => {
     const result = connection.containsTopic(topic)
 
     expect(result).toBe(true)
-  })
-
-  it('listener should be appended on creation', () => {
-    expect(mockedWS.addEventListener).toHaveBeenCalled()
   })
 
   it('set ping interval sends a ping at least in a 5 minute period', () => {
