@@ -33,7 +33,7 @@ export class ReminderModule implements Module {
 
   async updateRemindersStatus(channel: string, reminderIds: number[]) {
     for await (const id of reminderIds) {
-      await hb.reminder.setFired(id, channel)
+      await hb.reminder.fire(id, channel)
     }
   }
 

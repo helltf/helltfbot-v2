@@ -83,7 +83,7 @@ describe('reminder module', () => {
 
       await module.updateRemindersStatus(channel, [reminder.id])
 
-      expect(hb.reminder.setFired).toHaveBeenCalledWith(reminder.id, channel)
+      expect(hb.reminder.fire).toHaveBeenCalledWith(reminder.id, channel)
     })
 
     it('two reminders given update both status to fired', async () => {
@@ -94,8 +94,8 @@ describe('reminder module', () => {
 
       await module.updateRemindersStatus(channel, [reminder1.id, reminder2.id])
 
-      expect(hb.reminder.setFired).toHaveBeenCalledWith(reminder1.id, channel)
-      expect(hb.reminder.setFired).toHaveBeenCalledWith(reminder2.id, channel)
+      expect(hb.reminder.fire).toHaveBeenCalledWith(reminder1.id, channel)
+      expect(hb.reminder.fire).toHaveBeenCalledWith(reminder2.id, channel)
     })
   })
 
