@@ -49,7 +49,11 @@ export class ReminderService {
     return new ResourceSuccess(reminders)
   }
 
-  async setFired(id: number, channel: string) {
+  async revoke(id: number): Promise<Resource<null>> {
+    return new ResourceError('reminder fired already')
+  }
+
+  async fire(id: number, channel: string) {
     return await hb.db.reminder.update(
       { id },
       {

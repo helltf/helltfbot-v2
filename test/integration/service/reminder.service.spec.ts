@@ -147,7 +147,7 @@ describe('reminder service', () => {
     })
   })
 
-  describe('set fired', () => {
+  describe('fire', () => {
     it('reminder exists update fired fields and status', async () => {
       const reminder = getExampleReminderEntity({})
       const channel = 'channel'
@@ -155,14 +155,33 @@ describe('reminder service', () => {
       await hb.db.reminder.save(reminder)
       jest.spyOn(Date, 'now').mockImplementation(() => 1)
 
-      await service.setFired(reminder.id, channel)
+      await service.fire(reminder.id, channel)
 
       const updatedReminder = (await hb.db.reminder.findOneBy({
         id: reminder.id
       }))!
+
       expect(Number(updatedReminder.firedAt)).toBe(1)
       expect(updatedReminder.status).toBe(ReminderStatus.FIRED)
       expect(updatedReminder.firedChannel).toBe(channel)
+    })
+  })
+
+  describe('revoke reminder', () => {
+    it('reminder is has already been fired return error', async () => {
+      const reminder = getExampleReminderEntity({
+        status: ReminderStatus.FIRED
+      })
+      await hb.db.user.save([reminder.creator, reminder.reciever])
+      await hb.db.reminder.save(reminder)
+
+      const result = await service.revoke(reminder.id)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('reminder fired already')
     })
   })
 })
