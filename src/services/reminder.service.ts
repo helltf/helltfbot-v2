@@ -50,7 +50,20 @@ export class ReminderService {
   }
 
   async revoke(id: number): Promise<Resource<null>> {
-    return new ResourceError('reminder fired already')
+    const reminder = await hb.db.reminder.findOneBy({ id })
+
+    if (!reminder)
+      return new ResourceError('Cannot revoke not existing reminder')
+
+    if (reminder.status === ReminderStatus.FIRED)
+      return new ResourceError('reminder fired already')
+
+    if (reminder.status === ReminderStatus.REVOKED)
+      return new ResourceError('reminder has already been revoked')
+
+    await hb.db.reminder.update({ id }, { status: ReminderStatus.REVOKED })
+
+    return new ResourceSuccess(null)
   }
 
   async fire(id: number, channel: string) {

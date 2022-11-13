@@ -168,13 +168,11 @@ describe('reminder service', () => {
   })
 
   describe('revoke reminder', () => {
-    it('reminder is has already been fired return error', async () => {
+    it('reminder has already been fired return error', async () => {
       const reminder = getExampleReminderEntity({
         status: ReminderStatus.FIRED
       })
-      await hb.db.user.save([reminder.creator, reminder.reciever])
-      await hb.db.reminder.save(reminder)
-
+      await saveReminder(reminder)
       const result = await service.revoke(reminder.id)
 
       expect(result).toBeInstanceOf(ResourceError)
@@ -183,5 +181,47 @@ describe('reminder service', () => {
 
       expect(error).toBe('reminder fired already')
     })
+
+    it('reminder has already been revoked return error', async () => {
+      const reminder = getExampleReminderEntity({
+        status: ReminderStatus.REVOKED
+      })
+      await saveReminder(reminder)
+      const result = await service.revoke(reminder.id)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('reminder has already been revoked')
+    })
+
+    it('reminder does not exist return error', async () => {
+      const result = await service.revoke(1)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('Cannot revoke not existing reminder')
+    })
+
+    it('reminder is active revoke it', async () => {
+      const reminder = getExampleReminderEntity({})
+      await saveReminder(reminder)
+
+      const result = await service.revoke(reminder.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const updatedEntity = await hb.db.reminder.findOneBy({ id: reminder.id })
+
+      expect(updatedEntity?.status).toBe(ReminderStatus.REVOKED)
+    })
   })
 })
+
+async function saveReminder(reminder: ReminderEntity) {
+  await hb.db.user.save([reminder.creator, reminder.reciever])
+  await hb.db.reminder.save(reminder)
+}
