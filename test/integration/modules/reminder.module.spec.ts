@@ -79,7 +79,7 @@ describe('reminder module', () => {
     it('one reminder given update status to fired', async () => {
       const reminder = getExampleReminderEntity({})
       const channel = 'channel'
-      jest.spyOn(hb.reminder, 'setFired').mockImplementation(jest.fn())
+      jest.spyOn(hb.reminder, 'fire').mockImplementation(jest.fn())
 
       await module.updateRemindersStatus(channel, [reminder.id])
 
@@ -90,7 +90,7 @@ describe('reminder module', () => {
       const reminder1 = getExampleReminderEntity({})
       const reminder2 = getExampleReminderEntity({})
       const channel = 'channel'
-      jest.spyOn(hb.reminder, 'setFired').mockImplementation(jest.fn())
+      jest.spyOn(hb.reminder, 'fire').mockImplementation(jest.fn())
 
       await module.updateRemindersStatus(channel, [reminder1.id, reminder2.id])
 
