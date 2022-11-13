@@ -1,27 +1,18 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderModule } from '@modules/reminder.module'
-import { clearDb, clearRedis } from '@test-utils/clear'
-import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
 import { getExampleReminderEntity } from '@test-utils/example'
-import { setupDatabase } from '@test-utils/setup-db'
+import { setup } from '@test-utils/setup'
 
 describe('reminder module', () => {
   let module: ReminderModule
 
   beforeAll(async () => {
-    await setupDatabase()
+    setup()
   })
 
   beforeEach(async () => {
     module = new ReminderModule()
-    await clearDb()
-    await clearRedis()
-  })
-
-  afterAll(async () => {
-    await disconnectRedis()
-    await disconnectDatabase()
   })
 
   describe('initialize', () => {
