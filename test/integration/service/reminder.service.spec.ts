@@ -146,7 +146,7 @@ describe('reminder service', () => {
       expect(data).toHaveLength(1)
     })
 
-    fit('user has 1 active and 1 revoked reminder return 1 reminder', async () => {
+    it('user has 1 active and 1 revoked reminder return 1 reminder', async () => {
       const reminder1 = getExampleReminderEntity({
         status: ReminderStatus.REVOKED,
         id: 1
@@ -158,7 +158,6 @@ describe('reminder service', () => {
       await saveReminder(reminder1)
       await hb.db.reminder.save(reminder2)
 
-      console.log(await hb.db.reminder.find())
       const result = await service.getActiveReminders(reminder1.reciever.id)
 
       expect(result).toBeInstanceOf(ResourceSuccess)
