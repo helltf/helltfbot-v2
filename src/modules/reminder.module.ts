@@ -18,7 +18,7 @@ export class ReminderModule implements Module {
   }
 
   async checkReminders(id: number, channel: string) {
-    const userReminders = await hb.reminder.getReminders(id)
+    const userReminders = await hb.reminder.getActiveReminders(id)
     if (userReminders instanceof ResourceError || !userReminders.data.length)
       return
 

@@ -108,9 +108,9 @@ describe('reminder service', () => {
     })
   })
 
-  describe('get reminders', () => {
+  describe('get active reminders', () => {
     it('user does not exist return error', async () => {
-      const result = await service.getReminders(1)
+      const result = await service.getActiveReminders(1)
 
       expect(result).toBeInstanceOf(ResourceError)
 
@@ -123,7 +123,7 @@ describe('reminder service', () => {
       const user = getExampleTwitchUserEntity({})
       await hb.db.user.save(user)
 
-      const result = await service.getReminders(user.id)
+      const result = await service.getActiveReminders(user.id)
 
       expect(result).toBeInstanceOf(ResourceSuccess)
 
@@ -138,11 +138,33 @@ describe('reminder service', () => {
       await hb.db.user.save(user)
       await hb.db.reminder.save(reminder)
 
-      const result = await service.getReminders(user.id)
+      const result = await service.getActiveReminders(user.id)
 
       expect(result).toBeInstanceOf(ResourceSuccess)
 
       const { data } = result as ResourceSuccess<ReminderEntity[]>
+      expect(data).toHaveLength(1)
+    })
+
+    fit('user has 1 active and 1 revoked reminder return 1 reminder', async () => {
+      const reminder1 = getExampleReminderEntity({
+        status: ReminderStatus.REVOKED,
+        id: 1
+      })
+      const reminder2 = getExampleReminderEntity({
+        status: ReminderStatus.CREATED,
+        id: 2
+      })
+      await saveReminder(reminder1)
+      await hb.db.reminder.save(reminder2)
+
+      console.log(await hb.db.reminder.find())
+      const result = await service.getActiveReminders(reminder1.reciever.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
+
       expect(data).toHaveLength(1)
     })
   })

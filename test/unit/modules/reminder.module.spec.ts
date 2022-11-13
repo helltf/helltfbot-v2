@@ -28,7 +28,7 @@ describe('reminder module', () => {
     it('user does not exist do not send message', () => {
       jest.spyOn(hb, 'sendMessage')
       jest
-        .spyOn(hb.reminder, 'getReminders')
+        .spyOn(hb.reminder, 'getActiveReminders')
         .mockResolvedValue(new ResourceError('Invalid user'))
       expect(hb.sendMessage).not.toHaveBeenCalled()
     })
@@ -37,7 +37,7 @@ describe('reminder module', () => {
       const reminders: ReminderEntity[] = []
       jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
       jest
-        .spyOn(hb.reminder, 'getReminders')
+        .spyOn(hb.reminder, 'getActiveReminders')
         .mockResolvedValue(new ResourceSuccess(reminders))
 
       expect(hb.sendMessage).not.toHaveBeenCalled()
@@ -50,7 +50,7 @@ describe('reminder module', () => {
       const reminderMessage = 'testMessage'
       jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
       jest
-        .spyOn(hb.reminder, 'getReminders')
+        .spyOn(hb.reminder, 'getActiveReminders')
         .mockResolvedValue(new ResourceSuccess(reminders))
       jest
         .spyOn(module, 'createReminderMessage')
