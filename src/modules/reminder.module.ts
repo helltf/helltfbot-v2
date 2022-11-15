@@ -11,7 +11,7 @@ export class ReminderModule implements Module {
       (channel: string, user: ChatUserstate, _: string, self) => {
         if (self) return
         const id = Number(user['user-id'])
-
+        console.log('checking reminders')
         this.checkReminders(id, channel)
       }
     )
@@ -38,7 +38,7 @@ export class ReminderModule implements Module {
   }
 
   reminderAsString(reminder: ReminderEntity): string {
-    return `by @${reminder.creator.name}-${
+    return `by @${reminder.creator.name} - ${
       reminder.message
     } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
   }
