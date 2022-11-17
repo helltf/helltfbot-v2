@@ -16,6 +16,7 @@ import { ApiService } from '@src/services/api.service'
 import { modules } from '@modules/export-modules'
 import { app } from '@src/webhook/actions'
 import { Express } from 'express'
+import { ReminderService } from '@src/services/reminder.service'
 
 export class TwitchBot {
   client: Client
@@ -31,6 +32,7 @@ export class TwitchBot {
   utils: Utility
   webhook: Express
   debug: boolean
+  reminder: ReminderService
 
   constructor() {
     this.debug = process.env.DEBUG === 'true'
@@ -45,6 +47,7 @@ export class TwitchBot {
     this.cache = new CacheService()
     this.games = new GameService()
     this.utils = new Utility()
+    this.reminder = new ReminderService()
     this.webhook = app
   }
 
