@@ -57,6 +57,21 @@ export class ReminderService {
     return new ResourceSuccess(result)
   }
 
+  async getActiveSystemReminders(
+    id: number
+  ): Promise<Resource<SystemReminderEntity[]>> {
+    const user = await hb.db.user.findOneBy({ id })
+
+    if (!user) return new ResourceError('Invalid user')
+
+    const reminders = await hb.db.systemReminder.findBy({
+      reciever: { id },
+      status: ReminderStatus.CREATED
+    })
+
+    return new ResourceSuccess(reminders)
+  }
+
   async getActiveReminders(id: number): Promise<Resource<ReminderEntity[]>> {
     const user = await hb.db.user.findOneBy({ id })
 

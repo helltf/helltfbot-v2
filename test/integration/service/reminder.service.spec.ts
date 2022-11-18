@@ -264,10 +264,49 @@ describe('reminder service', () => {
       expect(result).toBeInstanceOf(ResourceSuccess)
 
       const { data } = result as ResourceSuccess<SystemReminderEntity>
-      console.log(await hb.db.reminder.find())
-      const savedEntity = await hb.db.reminder.findOneBy({ id: data.id })
+      const savedEntity = await hb.db.systemReminder.findOneBy({ id: data.id })
 
       expect(savedEntity).not.toBeNull()
+    })
+  })
+  describe('get system reminders', () => {
+    it('user does not exist return error', async () => {
+      const result = await service.getActiveSystemReminders(1)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('Invalid user')
+    })
+
+    it('user has no system reminders return empty list', async () => {
+      const user = getExampleTwitchUserEntity({})
+      await hb.db.user.save(user)
+
+      const result = await service.getActiveSystemReminders(user.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<SystemReminderEntity[]>
+
+      expect(data).toHaveLength(0)
+    })
+
+    it('user has 1 reminder return array with length 1', async () => {
+      const reminder = getExampleSystemReminderEntity({})
+      await hb.db.user.save(reminder.reciever)
+      await hb.db.systemReminder.save(reminder)
+
+      const result = await service.getActiveSystemReminders(
+        reminder.reciever.id
+      )
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<SystemReminderEntity[]>
+
+      expect(data).toHaveLength(1)
     })
   })
 })
