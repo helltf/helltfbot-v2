@@ -1,6 +1,7 @@
 import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderStatus } from '@src/db/entities/reminder.entity'
+import { SystemReminderEntity } from '@src/db/entities/system-reminder.entity'
 
 export interface ReminderCreationData {
   creatorId: number
@@ -34,6 +35,23 @@ export class ReminderService {
       createdAt: Date.now(),
       message,
       createdChannel: channel ?? null
+    })
+
+    return new ResourceSuccess(result)
+  }
+
+  async createSystemReminder(
+    recieverId: number,
+    message: string
+  ): Promise<Resource<SystemReminderEntity>> {
+    const reciever = await hb.db.user.findOneBy({ id: recieverId })
+
+    if (!reciever) return new ResourceError('User does not exist')
+
+    const result = await hb.db.systemReminder.save({
+      reciever,
+      message,
+      createdAt: Date.now()
     })
 
     return new ResourceSuccess(result)

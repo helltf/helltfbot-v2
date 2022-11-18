@@ -1,6 +1,7 @@
 import { ResourceError, ResourceSuccess } from "@api/types"
 import { ReminderEntity } from "@db/entities"
 import { ReminderStatus } from "@src/db/entities/reminder.entity"
+import { SystemReminderEntity } from '@src/db/entities/system-reminder.entity'
 import {
   ReminderCreationData,
   ReminderService
@@ -9,6 +10,7 @@ import { clearDb, clearRedis } from '@test-utils/clear'
 import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
 import {
   getExampleReminderEntity,
+  getExampleSystemReminderEntity,
   getExampleTwitchUserEntity
 } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
@@ -238,6 +240,34 @@ describe('reminder service', () => {
       const updatedEntity = await hb.db.reminder.findOneBy({ id: reminder.id })
 
       expect(updatedEntity?.status).toBe(ReminderStatus.REVOKED)
+    })
+  })
+
+  describe('create system reminder', () => {
+    it('reciever does not exist return error', async () => {
+      const result = await service.createSystemReminder(1, 'test')
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('User does not exist')
+    })
+
+    it('reciever exists create new system reminder', async () => {
+      const reciever = getExampleTwitchUserEntity({})
+      const message = 'message'
+      await hb.db.user.save(reciever)
+
+      const result = await service.createSystemReminder(reciever.id, message)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<SystemReminderEntity>
+      console.log(await hb.db.reminder.find())
+      const savedEntity = await hb.db.reminder.findOneBy({ id: data.id })
+
+      expect(savedEntity).not.toBeNull()
     })
   })
 })
