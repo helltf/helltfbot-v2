@@ -24,7 +24,7 @@ export class AcceptCommand implements Command {
     const success = await this.methods.updateSuggestion(id, reason.join(' '))
 
     if (success) {
-      this.methods.sendNotification(id)
+      this.methods.createNotificationReminder(id)
       return { success: true, response: 'Updated suggestion' }
     }
 
@@ -44,7 +44,7 @@ export class AcceptCommand implements Command {
 
       return result.affected !== 0
     },
-    sendNotification: async (id: string) => {
+    createNotificationReminder: async (id: string) => {
       const suggestion = await hb.db.suggestion.findOneBy({ id: Number(id) })
 
       await hb.sendMessage(
