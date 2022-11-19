@@ -17,7 +17,6 @@ import { TwitchTokenEntity } from '@src/db/entities/twitch_token.entity'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { getOrmConf } from '../../ormconfig'
-import { SystemReminderEntity } from './entities/system-reminder.entity'
 
 export interface DbRepositories {
   wordle: Repository<WordleWordEntity>
@@ -33,7 +32,6 @@ export interface DbRepositories {
   error: Repository<ErrorEntity>
   twitch_at: Repository<TwitchTokenEntity>
   reminder: Repository<ReminderEntity>
-  systemReminder: Repository<SystemReminderEntity>
 }
 
 export class DB implements DbRepositories {
@@ -52,7 +50,6 @@ export class DB implements DbRepositories {
   emoteStats: Repository<EmoteStatsEntity>
   twitch_at: Repository<TwitchTokenEntity>
   reminder: Repository<ReminderEntity>
-  systemReminder: Repository<SystemReminderEntity>
 
   constructor(config: PostgresConnectionOptions = getOrmConf()) {
     const dataSource = new DataSource(config)
@@ -72,7 +69,6 @@ export class DB implements DbRepositories {
     this.emoteStats = dataSource.getRepository(EmoteStatsEntity)
     this.twitch_at = dataSource.getRepository(TwitchTokenEntity)
     this.reminder = dataSource.getRepository(ReminderEntity)
-    this.systemReminder = dataSource.getRepository(SystemReminderEntity)
     this.dataSource = dataSource
   }
   async initialize(): Promise<DB> {

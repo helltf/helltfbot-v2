@@ -11,7 +11,6 @@ import { ErrorEntity } from './entities/error.entity'
 import { WordleWordEntity } from './entities/wordle.entity'
 import { EmoteStatsEntity } from './entities/emotestats.entity'
 import { ReminderEntity } from './entities/reminder.entity'
-import { SystemReminderEntity } from './entities/system-reminder.entity'
 
 export {
   BanEntity,
@@ -26,6 +25,5 @@ export {
   SuggestionEntity,
   ErrorEntity,
   EmoteStatsEntity,
-  ReminderEntity,
-  SystemReminderEntity
+  ReminderEntity
 }

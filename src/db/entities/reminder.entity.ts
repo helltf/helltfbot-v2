@@ -7,15 +7,21 @@ export enum ReminderStatus {
   REVOKED = 'revoked'
 }
 
+export enum ReminderType {
+  SYSTEM = 'system',
+  USER = 'user'
+}
+
 @Entity('reminders')
 export class ReminderEntity {
   @PrimaryGeneratedColumn('increment')
   id: number
 
   @ManyToOne(() => TwitchUserEntity, user => user.notifications, {
+    nullable: true,
     eager: true
   })
-  creator: TwitchUserEntity
+  creator: TwitchUserEntity | null
 
   @ManyToOne(() => TwitchUserEntity, user => user.notifications, {
     eager: true
@@ -38,9 +44,12 @@ export class ReminderEntity {
   @Column('bigint', { nullable: true })
   firedAt: number | null
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar', { nullable: true, default: null })
   firedChannel: string | null
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar', { nullable: true, default: null })
   createdChannel: string | null
+
+  @Column('enum', { enum: ReminderType })
+  type: ReminderType
 }
