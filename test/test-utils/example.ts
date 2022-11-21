@@ -9,8 +9,7 @@ import {
   ColorHistoryEntity,
   ReminderEntity
 } from '@db/entities'
-import { ReminderStatus } from '@src/db/entities/reminder.entity'
-import { SystemReminderEntity } from '@src/db/entities/system-reminder.entity'
+import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
@@ -163,28 +162,6 @@ export const getExampleNotificationEntity = ({
   return notification
 }
 
-export const getExampleSystemReminderEntity = ({
-  id = 1,
-  reciever = getExampleTwitchUserEntity({ id: 2 }),
-  message = 'message',
-  createdAt = Date.now(),
-  firedAt = null,
-  firedChannel = null,
-  status = ReminderStatus.CREATED
-}: Partial<SystemReminderEntity>): SystemReminderEntity => {
-  const reminder = new SystemReminderEntity()
-
-  reminder.id = id
-  reminder.reciever = reciever
-  reminder.message = message
-  reminder.createdAt = createdAt
-  reminder.firedAt = firedAt
-  reminder.firedChannel = firedChannel
-  reminder.status = status
-
-  return reminder
-}
-
 export const getExampleReminderEntity = ({
   id = 1,
   creator = getExampleTwitchUserEntity({ id: 1 }),
@@ -194,7 +171,8 @@ export const getExampleReminderEntity = ({
   firedAt = null,
   firedChannel = null,
   createdChannel = 'channel',
-  status = ReminderStatus.CREATED
+  status = ReminderStatus.CREATED,
+  type = ReminderType.USER
 }: Partial<ReminderEntity>): ReminderEntity => {
   const reminder = new ReminderEntity()
 
@@ -207,6 +185,7 @@ export const getExampleReminderEntity = ({
   reminder.firedChannel = firedChannel
   reminder.status = status
   reminder.createdChannel = createdChannel
+  reminder.type = type
 
   return reminder
 }
