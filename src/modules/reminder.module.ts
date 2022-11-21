@@ -27,7 +27,7 @@ export class ReminderModule implements Module {
     await hb.sendMessage(channel, reminderMessage)
     await this.updateRemindersStatus(
       channel,
-      userReminders.data.map((r: ReminderEntity) => r.id)
+      userReminders.data.map(r => r.id)
     )
   }
 
@@ -38,7 +38,7 @@ export class ReminderModule implements Module {
   }
 
   reminderAsString(reminder: ReminderEntity): string {
-    return `by @${reminder.creator.name} - ${
+    return `by @${reminder.creator?.name} - ${
       reminder.message
     } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
   }
