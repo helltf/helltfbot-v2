@@ -1,7 +1,6 @@
 import { ResourceError, ResourceSuccess } from "@api/types"
 import { ReminderEntity } from "@db/entities"
-import { ReminderStatus } from "@src/db/entities/reminder.entity"
-import { SystemReminderEntity } from '@src/db/entities/system-reminder.entity'
+import { ReminderStatus, ReminderType } from "@src/db/entities/reminder.entity"
 import {
   ReminderCreationData,
   ReminderService
@@ -10,7 +9,6 @@ import { clearDb, clearRedis } from '@test-utils/clear'
 import { disconnectDatabase, disconnectRedis } from '@test-utils/disconnect'
 import {
   getExampleReminderEntity,
-  getExampleSystemReminderEntity,
   getExampleTwitchUserEntity
 } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
@@ -96,10 +94,11 @@ describe('reminder service', () => {
         firedAt: null,
         firedChannel: null,
         status: ReminderStatus.CREATED,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        type: ReminderType.USER
       }
 
-      expect(savedEntity.creator.id).toEqual(expectedEntity.creator.id)
+      expect(savedEntity.creator?.id).toEqual(expectedEntity.creator?.id)
       expect(savedEntity.reciever.id).toEqual(expectedEntity.reciever.id)
       expect(savedEntity.createdChannel).toEqual(expectedEntity.createdChannel)
       expect(savedEntity.message).toEqual(expectedEntity.message)
@@ -174,7 +173,7 @@ describe('reminder service', () => {
     it('reminder exists update fired fields and status', async () => {
       const reminder = getExampleReminderEntity({})
       const channel = 'channel'
-      await hb.db.user.save([reminder.creator, reminder.reciever])
+      await hb.db.user.save([reminder.creator!, reminder.reciever])
       await hb.db.reminder.save(reminder)
       jest.spyOn(Date, 'now').mockImplementation(() => 1)
 
@@ -263,8 +262,11 @@ describe('reminder service', () => {
 
       expect(result).toBeInstanceOf(ResourceSuccess)
 
-      const { data } = result as ResourceSuccess<SystemReminderEntity>
-      const savedEntity = await hb.db.systemReminder.findOneBy({ id: data.id })
+      const { data } = result as ResourceSuccess<ReminderEntity>
+      const savedEntity = await hb.db.reminder.findOneBy({
+        id: data.id,
+        type: ReminderType.SYSTEM
+      })
 
       expect(savedEntity).not.toBeNull()
     })
@@ -288,15 +290,18 @@ describe('reminder service', () => {
 
       expect(result).toBeInstanceOf(ResourceSuccess)
 
-      const { data } = result as ResourceSuccess<SystemReminderEntity[]>
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
 
       expect(data).toHaveLength(0)
     })
 
-    it('user has 1 reminder return array with length 1', async () => {
-      const reminder = getExampleSystemReminderEntity({})
+    fit('user has 1 reminder return array with length 1', async () => {
+      const reminder = getExampleReminderEntity({
+        type: ReminderType.SYSTEM
+      })
+      reminder.creator = null
       await hb.db.user.save(reminder.reciever)
-      await hb.db.systemReminder.save(reminder)
+      await hb.db.reminder.save(reminder)
 
       const result = await service.getActiveSystemReminders(
         reminder.reciever.id
@@ -304,7 +309,7 @@ describe('reminder service', () => {
 
       expect(result).toBeInstanceOf(ResourceSuccess)
 
-      const { data } = result as ResourceSuccess<SystemReminderEntity[]>
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
 
       expect(data).toHaveLength(1)
     })
@@ -312,6 +317,6 @@ describe('reminder service', () => {
 })
 
 async function saveReminder(reminder: ReminderEntity) {
-  await hb.db.user.save([reminder.creator, reminder.reciever])
+  await hb.db.user.save([reminder.creator!, reminder.reciever])
   await hb.db.reminder.save(reminder)
 }
