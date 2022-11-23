@@ -295,7 +295,7 @@ describe('reminder service', () => {
       expect(data).toHaveLength(0)
     })
 
-    fit('user has 1 reminder return array with length 1', async () => {
+    it('user has 1 reminder return array with length 1', async () => {
       const reminder = getExampleReminderEntity({
         type: ReminderType.SYSTEM
       })

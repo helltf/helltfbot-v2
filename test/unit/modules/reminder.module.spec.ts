@@ -66,6 +66,34 @@ describe('reminder module', () => {
     })
   })
 
+  describe('check system reminders', () => {
+    it('send Reminder is invoked with active system reminders', async () => {
+      const reminders = new ResourceSuccess([] as ReminderEntity[])
+      const channel = 'channel'
+      jest.spyOn(module, 'sendReminders').mockImplementation(jest.fn())
+      jest
+        .spyOn(hb.reminder, 'getActiveSystemReminders')
+        .mockResolvedValue(reminders)
+
+      await module.checkSystemReminders(1, channel)
+
+      expect(module.sendReminders).toHaveBeenCalledWith(reminders, channel)
+    })
+  })
+
+  describe('check user reminders', () => {
+    it('send Reminder is invoked with active user reminders', async () => {
+      const reminders = new ResourceSuccess([] as ReminderEntity[])
+      const channel = 'channel'
+      jest.spyOn(module, 'sendReminders').mockImplementation(jest.fn())
+      jest.spyOn(hb.reminder, 'getActiveReminders').mockResolvedValue(reminders)
+
+      await module.checkReminders(1, channel)
+
+      expect(module.sendReminders).toHaveBeenCalledWith(reminders, channel)
+    })
+  })
+
   describe('update reminders status', () => {
     it('one reminder given update status to fired', async () => {
       const reminder = getExampleReminderEntity({})
