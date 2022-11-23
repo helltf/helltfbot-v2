@@ -1,6 +1,7 @@
 import { TwitchUserState } from "@src/client/types"
 import { AcceptCommand } from "@src/commands/cmd/accept"
-import { SuggestionStatus } from "@src/db/entities/suggestion.entity"
+import { ReminderType } from "@src/db/entities/reminder.entity"
+import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import {
@@ -55,6 +56,9 @@ describe('accept command', () => {
 
     it('update suggestion is successful return success', async () => {
       jest.spyOn(accept.methods, 'updateSuggestion').mockResolvedValue(true)
+      jest
+        .spyOn(accept.methods, 'createNotificationReminder')
+        .mockImplementation(jest.fn())
 
       const id = 1
 
@@ -159,6 +163,10 @@ describe('accept command', () => {
       const reminders = await hb.db.reminder.find()
 
       expect(reminders).toHaveLength(1)
+      expect(reminders[0].message).toBe(
+        `@${suggestionCreator.name} your suggestion with id ${id} has been accepted`
+      )
+      expect(reminders[0].type).toBe(ReminderType.SYSTEM)
     })
   })
 })

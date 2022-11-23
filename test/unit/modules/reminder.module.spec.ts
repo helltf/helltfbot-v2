@@ -96,7 +96,7 @@ describe('reminder module', () => {
 
       const reminderString = module.reminderAsString(reminder)
 
-      const expectedString = `by @${reminder.creator.name} - ${
+      const expectedString = `by @${reminder.creator?.name} - ${
         reminder.message
       } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
 
