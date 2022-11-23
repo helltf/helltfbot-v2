@@ -1,6 +1,6 @@
 import { Resource, ResourceError } from '@api/types'
 import { ReminderEntity } from '@db/entities'
-import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
+import { ReminderType } from '@src/db/entities/reminder.entity'
 import { ChatUserstate } from 'tmi.js'
 import { Module } from './types'
 
@@ -50,9 +50,14 @@ export class ReminderModule implements Module {
   }
 
   reminderAsString(reminder: ReminderEntity): string {
-    return `by @${reminder.creator?.name} - ${
-      reminder.message
-    } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
+    if (reminder.type === ReminderType.USER)
+      return `by @${reminder.creator?.name} - ${
+        reminder.message
+      } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
+
+    return `${reminder.message} (${hb.utils.humanizeNow(
+      reminder.createdAt
+    )} ago)`
   }
 
   createReminderMessage = (reminders: ReminderEntity[]) => {

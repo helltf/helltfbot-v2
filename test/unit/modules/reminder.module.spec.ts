@@ -120,14 +120,24 @@ describe('reminder module', () => {
   })
 
   describe('stringify', () => {
-    it('reminder gets return as info string', () => {
+    it('user reminder gets returned as info string', () => {
       const reminder = getExampleReminderEntity({})
-
-      const reminderString = module.reminderAsString(reminder)
-
       const expectedString = `by @${reminder.creator?.name} - ${
         reminder.message
       } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
+
+      const reminderString = module.reminderAsString(reminder)
+
+      expect(reminderString).toBe(expectedString)
+    })
+
+    it('system reminder gets returned as info string', () => {
+      const reminder = getExampleReminderEntity({ type: ReminderType.SYSTEM })
+      const expectedString = `${reminder.message} (${hb.utils.humanizeNow(
+        reminder.createdAt
+      )} ago)`
+
+      const reminderString = module.reminderAsString(reminder)
 
       expect(reminderString).toBe(expectedString)
     })
