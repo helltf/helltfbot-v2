@@ -1,5 +1,6 @@
 import { Resource, ResourceError } from '@api/types'
 import { ReminderEntity } from '@db/entities'
+import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 import { ChatUserstate } from 'tmi.js'
 import { Module } from './types'
 
@@ -56,9 +57,9 @@ export class ReminderModule implements Module {
 
   createReminderMessage = (reminders: ReminderEntity[]) => {
     return (
-      `@${reminders[0].reciever.name} you recieved ${
-        reminders.length
-      } ${hb.utils.plularizeIf('reminder', reminders.length)}: ` +
+      `@${reminders[0].reciever.name} you recieved ${reminders.length} ${
+        reminders[0].type === ReminderType.SYSTEM ? 'System ' : ''
+      }${hb.utils.plularizeIf('reminder', reminders.length)}: ` +
       reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join(' | ')
     )
   }

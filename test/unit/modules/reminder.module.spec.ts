@@ -1,6 +1,7 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderModule } from '@modules/reminder.module'
+import { ReminderType } from '@src/db/entities/reminder.entity'
 import { getExampleReminderEntity } from '@test-utils/example'
 import { setup } from '@test-utils/setup'
 
@@ -133,18 +134,18 @@ describe('reminder module', () => {
   })
 
   describe('create reminder message', () => {
-    it('user has 1 reminder return message', () => {
+    it('user has 1 user reminder return message', () => {
       const reminder = getExampleReminderEntity({})
-      const message = module.createReminderMessage([reminder])
-
       const expectedMessage = `@${
         reminder.reciever.name
       } you recieved 1 reminder: ${module.reminderAsString(reminder)}`
 
+      const message = module.createReminderMessage([reminder])
+
       expect(message).toBe(expectedMessage)
     })
 
-    it('user has 2 reminder return message', () => {
+    it('user has 2 user reminders return message', () => {
       const reminder1 = getExampleReminderEntity({})
       const reminder2 = getExampleReminderEntity({})
       const message = module.createReminderMessage([reminder1, reminder2])
@@ -154,6 +155,17 @@ describe('reminder module', () => {
       } you recieved 2 reminders: ${module.reminderAsString(
         reminder1
       )} | ${module.reminderAsString(reminder2)}`
+
+      expect(message).toBe(expectedMessage)
+    })
+
+    it('user has 1 system reminder return correct message', () => {
+      const reminder = getExampleReminderEntity({ type: ReminderType.SYSTEM })
+      const expectedMessage = `@${
+        reminder.reciever.name
+      } you recieved 1 System reminder: ${module.reminderAsString(reminder)}`
+
+      const message = module.createReminderMessage([reminder])
 
       expect(message).toBe(expectedMessage)
     })
