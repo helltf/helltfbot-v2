@@ -12,7 +12,12 @@ export class BanCheckCommand implements Command {
   alias = ['bc', 'banc']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 15000
-  execute: (context: CommandContext) => Promise<BotResponse>
+  execute = async (context: CommandContext): Promise<BotResponse> => {
+    return {
+      response: 'Channel is required in whisper context',
+      success: false
+    }
+  }
   method = {
     getBans: async (user: string, channel: string): Promise<BanEntity[]> => {
       return hb.db.ban.findBy({
