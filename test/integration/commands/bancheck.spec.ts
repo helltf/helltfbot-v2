@@ -1,3 +1,4 @@
+import { BanEntity } from "@db/entities"
 import { BanCheckCommand } from "@src/commands/cmd/bancheck"
 import { MessageType } from "@src/commands/types"
 import { clearDb } from "@test-utils/clear"
@@ -76,6 +77,43 @@ describe('ban check', () => {
       expect(result.response).toStrictEqual(expectedResponse)
       expect(result.success).toBe(true)
     })
+
+    it('user is given invoke method with given user', async () => {
+      const givenUser = 'givenUser'
+      jest.spyOn(bancheck.methods, 'getBans').mockResolvedValue([])
+
+      const result = await bancheck.execute({
+        message: [givenUser],
+        user,
+        channel
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.response).toBe('No bans recorded')
+      expect(bancheck.methods.getBans).toHaveBeenCalledWith(
+        givenUser,
+        undefined
+      )
+    })
+
+    it('user and channel given return specific bans for channel', async () => {
+      const givenUser = 'givenUser'
+      const givenChannel = 'givenChannel'
+      const expectedResponse = `@${givenUser} has never been banned before`
+
+      const result = await bancheck.execute({
+        message: [givenUser, givenChannel],
+        user,
+        channel
+      })
+
+      expect(result.success).toBe(true)
+      expect(result.response).toBe(expectedResponse)
+      expect(bancheck.methods.getBans).toHaveBeenCalledWith(
+        givenUser,
+        givenChannel
+      )
+    })
   })
 
   describe('methods', () => {
@@ -121,6 +159,22 @@ describe('ban check', () => {
 
         expect(result).toHaveLength(2)
       })
+    })
+
+    describe('get ban message', () => {
+      it('no channel message user has no bans return message', () => {
+        const result = bancheck.methods.getBanMessage([] as BanEntity[], false)
+
+        expect(result).toBe('No bans recorded')
+      })
+
+      it('channel given but user has no bans return message', () => {
+        const result = bancheck.methods.getBanMessage([] as BanEntity[], true)
+
+        expect(result).toBe('This user has never been banned in this channel')
+      })
+
+      it('no channel given user has one ban return message', () => {})
     })
   })
 })

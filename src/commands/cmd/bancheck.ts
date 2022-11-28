@@ -23,7 +23,10 @@ export class BanCheckCommand implements Command {
         success: false
       }
 
-    const bans = await this.methods.getBans(user.username!, givenChannel)
+    const bans = await this.methods.getBans(
+      givenUser ?? user.username!,
+      givenChannel
+    )
     const message =
       bans.length === 0
         ? 'No bans recorded'
@@ -43,6 +46,7 @@ export class BanCheckCommand implements Command {
     }
   }
   methods = {
+    // missing order
     getBans: async (
       user: string,
       channel: string | undefined
@@ -51,6 +55,7 @@ export class BanCheckCommand implements Command {
         user,
         ...(channel && { channel })
       })
-    }
+    },
+    getBanMessage: (bans: BanEntity[], channelMessage: boolean) => {}
   }
 }
