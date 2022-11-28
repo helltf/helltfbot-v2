@@ -34,6 +34,20 @@ describe('ban check', () => {
       expect(result.success).toBe(false)
       expect(result.response).toBe('Channel is required in whisper context')
     })
+
+    it('user and channel is not defined invoke get bans with context user and channel', async () => {
+      jest.spyOn(bancheck.methods, 'getBans').mockResolvedValue([])
+      await bancheck.execute({
+        channel,
+        user,
+        message: []
+      })
+
+      expect(bancheck.methods.getBans).toHaveBeenCalledWith(
+        user['display-name'],
+        channel
+      )
+    })
   })
 
   describe('methods', () => {
@@ -42,7 +56,7 @@ describe('ban check', () => {
         const user = 'user'
         const channel = 'channel'
 
-        const result = await bancheck.method.getBans(user, channel)
+        const result = await bancheck.methods.getBans(user, channel)
 
         expect(result).toHaveLength(0)
       })
@@ -52,7 +66,7 @@ describe('ban check', () => {
         const channel = 'channel'
         await hb.db.ban.save({ at: Date.now(), user, channel })
 
-        const result = await bancheck.method.getBans(user, channel)
+        const result = await bancheck.methods.getBans(user, channel)
 
         expect(result).toHaveLength(1)
       })
@@ -63,7 +77,7 @@ describe('ban check', () => {
         await hb.db.ban.save({ at: Date.now(), user, channel })
         await hb.db.ban.save({ at: Date.now(), user, channel: 'channel2' })
 
-        const result = await bancheck.method.getBans(user, channel)
+        const result = await bancheck.methods.getBans(user, channel)
 
         expect(result).toHaveLength(1)
       })
