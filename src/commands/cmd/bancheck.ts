@@ -1,6 +1,6 @@
 import { BanEntity } from "@db/entities";
 import { BotResponse } from "@src/client/types";
-import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { ChatPermissionLevel} from "@src/utilities/permission/types";
 import { Command, CommandContext, CommandFlag, MessageType } from '../types'
 
 export class BanCheckCommand implements Command {
@@ -8,14 +8,14 @@ export class BanCheckCommand implements Command {
   permissions = ChatPermissionLevel.USER
   description = 'check bans for a user in a channel'
   requiredParams = []
-  optionalParams = ['channel', 'user']
+  optionalParams = ['user', 'channel']
   alias = ['bc', 'banc']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 15000
   execute = async ({
     type,
-    channel,
-    message: [givenChannel, givenUser]
+    user,
+    message: [givenUser, givenChannel]
   }: CommandContext): Promise<BotResponse> => {
     if (type === MessageType.WHISPER && !givenChannel)
       return {
@@ -23,16 +23,33 @@ export class BanCheckCommand implements Command {
         success: false
       }
 
+    const bans = await this.methods.getBans(user.username!, givenChannel)
+    const message =
+      bans.length === 0
+        ? 'No bans recorded'
+        : [
+            `@${user.username} has ${bans.length} ${hb.utils.plularizeIf(
+              'ban',
+              bans.length
+            )} recorded`,
+            `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago in ${
+              bans[0].channel
+            }`
+          ]
+
     return {
-      response: '',
-      success: false
+      response: message,
+      success: true
     }
   }
   methods = {
-    getBans: async (user: string, channel: string): Promise<BanEntity[]> => {
+    getBans: async (
+      user: string,
+      channel: string | undefined
+    ): Promise<BanEntity[]> => {
       return hb.db.ban.findBy({
         user,
-        channel
+        ...(channel && { channel })
       })
     }
   }
