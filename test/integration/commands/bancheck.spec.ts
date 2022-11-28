@@ -98,6 +98,7 @@ describe('ban check', () => {
 
         expect(result).toHaveLength(1)
       })
+
       it('user has one ban in channel and one in other channel return one item', async () => {
         const user = 'user'
         const channel = 'channel'
@@ -108,6 +109,17 @@ describe('ban check', () => {
         const result = await bancheck.methods.getBans(user, channel)
 
         expect(result).toHaveLength(1)
+      })
+
+      it('user has two bans return both without channel param', async () => {
+        const user = 'user'
+        const channel = 'channel'
+        await hb.db.ban.save({ at: Date.now(), user, channel })
+        await hb.db.ban.save({ at: Date.now(), user, channel: 'channel2' })
+
+        const result = await bancheck.methods.getBans(user, undefined)
+
+        expect(result).toHaveLength(2)
       })
     })
   })
