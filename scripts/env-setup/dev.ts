@@ -3,11 +3,12 @@ import { GlobalPermissionLevel } from "@src/utilities/permission/types"
 
 export const setupDev = async () => {
   const user = hb.config.get('MAIN_USER')
+  const bot = hb.config.get('BOT_CHANNEL')
 
-  if (!user) return
+  if (!user || !bot) return
 
   await permitMainUser(user)
-  await addMainUserChannel(user)
+  await addBotUserChannel(bot)
 }
 
 async function permitMainUser(user: string) {
@@ -28,7 +29,7 @@ async function permitMainUser(user: string) {
   })
 }
 
-const addMainUserChannel = async (user: string) => {
+const addBotUserChannel = async (user: string) => {
   const existing = await hb.db.channel.findOneBy({
     channel: user
   })

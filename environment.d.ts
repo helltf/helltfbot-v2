@@ -22,6 +22,7 @@ declare global {
       SEVENTV_GQL_TOKEN: string
       WEBHOOK_PORT: string
       WEBHOOK_SECRET: string
+      BOT_CHANNEL: string
     }
   }
 }
@@ -41,4 +42,5 @@ export interface Environment {
   REDIS_URL: string
   MAIN_USER_ID: string
   TEST_DATABASE_URI: string
+  BOT_CHANNEL: string
 }
