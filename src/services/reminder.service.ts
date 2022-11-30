@@ -81,7 +81,8 @@ export class ReminderService {
 
     const reminders = await hb.db.reminder.findBy({
       reciever: { id },
-      status: ReminderStatus.CREATED
+      status: ReminderStatus.CREATED,
+      type: ReminderType.USER
     })
 
     return new ResourceSuccess(reminders)
