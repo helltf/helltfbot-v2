@@ -167,6 +167,21 @@ describe('reminder service', () => {
 
       expect(data).toHaveLength(1)
     })
+
+    it('user has 1 system reminder return empty array', async () => {
+      const reminder = getExampleReminderEntity({
+        type: ReminderType.SYSTEM
+      })
+      await saveReminder(reminder)
+
+      const result = await service.getActiveReminders(reminder.reciever.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
+
+      expect(data).toHaveLength(0)
+    })
   })
 
   describe('fire', () => {
