@@ -1,5 +1,6 @@
-import { ResourceError } from '@api/types'
+import { Resource, ResourceError } from '@api/types'
 import { ReminderEntity } from '@db/entities'
+import { ReminderType } from '@src/db/entities/reminder.entity'
 import { ChatUserstate } from 'tmi.js'
 import { Module } from './types'
 
@@ -11,23 +12,34 @@ export class ReminderModule implements Module {
       (channel: string, user: ChatUserstate, _: string, self) => {
         if (self) return
         const id = Number(user['user-id'])
-        console.log('checking reminders')
+
         this.checkReminders(id, channel)
+        this.checkSystemReminders(id, channel)
       }
     )
   }
 
   async checkReminders(id: number, channel: string) {
     const userReminders = await hb.reminder.getActiveReminders(id)
-    if (userReminders instanceof ResourceError || !userReminders.data.length)
-      return
 
-    const reminderMessage = this.createReminderMessage(userReminders.data)
+    await this.sendReminders(userReminders, channel)
+  }
+
+  async checkSystemReminders(id: number, channel: string) {
+    const reminders = await hb.reminder.getActiveSystemReminders(id)
+
+    await this.sendReminders(reminders, channel)
+  }
+
+  async sendReminders(reminders: Resource<ReminderEntity[]>, channel: string) {
+    if (reminders instanceof ResourceError || !reminders.data.length) return
+
+    const reminderMessage = this.createReminderMessage(reminders.data)
 
     await hb.sendMessage(channel, reminderMessage)
     await this.updateRemindersStatus(
       channel,
-      userReminders.data.map((r: ReminderEntity) => r.id)
+      reminders.data.map(r => r.id)
     )
   }
 
@@ -38,16 +50,21 @@ export class ReminderModule implements Module {
   }
 
   reminderAsString(reminder: ReminderEntity): string {
-    return `by @${reminder.creator.name} - ${
-      reminder.message
-    } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
+    if (reminder.type === ReminderType.USER)
+      return `by @${reminder.creator?.name} - ${
+        reminder.message
+      } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
+
+    return `${reminder.message} (${hb.utils.humanizeNow(
+      reminder.createdAt
+    )} ago)`
   }
 
   createReminderMessage = (reminders: ReminderEntity[]) => {
     return (
-      `@${reminders[0].reciever.name} you recieved ${
-        reminders.length
-      } ${hb.utils.plularizeIf('reminder', reminders.length)}: ` +
+      `@${reminders[0].reciever.name} you recieved ${reminders.length} ${
+        reminders[0].type === ReminderType.SYSTEM ? 'System ' : ''
+      }${hb.utils.plularizeIf('reminder', reminders.length)}: ` +
       reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join(' | ')
     )
   }

@@ -1,6 +1,6 @@
 import { ResourceError, ResourceSuccess } from "@api/types"
 import { ReminderEntity } from "@db/entities"
-import { ReminderStatus } from "@src/db/entities/reminder.entity"
+import { ReminderStatus, ReminderType } from "@src/db/entities/reminder.entity"
 import {
   ReminderCreationData,
   ReminderService
@@ -94,10 +94,11 @@ describe('reminder service', () => {
         firedAt: null,
         firedChannel: null,
         status: ReminderStatus.CREATED,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        type: ReminderType.USER
       }
 
-      expect(savedEntity.creator.id).toEqual(expectedEntity.creator.id)
+      expect(savedEntity.creator?.id).toEqual(expectedEntity.creator?.id)
       expect(savedEntity.reciever.id).toEqual(expectedEntity.reciever.id)
       expect(savedEntity.createdChannel).toEqual(expectedEntity.createdChannel)
       expect(savedEntity.message).toEqual(expectedEntity.message)
@@ -166,13 +167,28 @@ describe('reminder service', () => {
 
       expect(data).toHaveLength(1)
     })
+
+    it('user has 1 system reminder return empty array', async () => {
+      const reminder = getExampleReminderEntity({
+        type: ReminderType.SYSTEM
+      })
+      await saveReminder(reminder)
+
+      const result = await service.getActiveReminders(reminder.reciever.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
+
+      expect(data).toHaveLength(0)
+    })
   })
 
   describe('fire', () => {
     it('reminder exists update fired fields and status', async () => {
       const reminder = getExampleReminderEntity({})
       const channel = 'channel'
-      await hb.db.user.save([reminder.creator, reminder.reciever])
+      await hb.db.user.save([reminder.creator!, reminder.reciever])
       await hb.db.reminder.save(reminder)
       jest.spyOn(Date, 'now').mockImplementation(() => 1)
 
@@ -240,9 +256,82 @@ describe('reminder service', () => {
       expect(updatedEntity?.status).toBe(ReminderStatus.REVOKED)
     })
   })
+
+  describe('create system reminder', () => {
+    it('reciever does not exist return error', async () => {
+      const result = await service.createSystemReminder(1, 'test')
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('User does not exist')
+    })
+
+    it('reciever exists create new system reminder', async () => {
+      const reciever = getExampleTwitchUserEntity({})
+      const message = 'message'
+      await hb.db.user.save(reciever)
+
+      const result = await service.createSystemReminder(reciever.id, message)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity>
+      const savedEntity = await hb.db.reminder.findOneBy({
+        id: data.id,
+        type: ReminderType.SYSTEM
+      })
+
+      expect(savedEntity).not.toBeNull()
+    })
+  })
+  describe('get system reminders', () => {
+    it('user does not exist return error', async () => {
+      const result = await service.getActiveSystemReminders(1)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+
+      expect(error).toBe('Invalid user')
+    })
+
+    it('user has no system reminders return empty list', async () => {
+      const user = getExampleTwitchUserEntity({})
+      await hb.db.user.save(user)
+
+      const result = await service.getActiveSystemReminders(user.id)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
+
+      expect(data).toHaveLength(0)
+    })
+
+    it('user has 1 reminder return array with length 1', async () => {
+      const reminder = getExampleReminderEntity({
+        type: ReminderType.SYSTEM
+      })
+      reminder.creator = null
+      await hb.db.user.save(reminder.reciever)
+      await hb.db.reminder.save(reminder)
+
+      const result = await service.getActiveSystemReminders(
+        reminder.reciever.id
+      )
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<ReminderEntity[]>
+
+      expect(data).toHaveLength(1)
+    })
+  })
 })
 
 async function saveReminder(reminder: ReminderEntity) {
-  await hb.db.user.save([reminder.creator, reminder.reciever])
+  await hb.db.user.save([reminder.creator!, reminder.reciever])
   await hb.db.reminder.save(reminder)
 }

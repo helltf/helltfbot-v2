@@ -9,7 +9,7 @@ import {
   ColorHistoryEntity,
   ReminderEntity
 } from '@db/entities'
-import { ReminderStatus } from '@src/db/entities/reminder.entity'
+import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
@@ -171,7 +171,8 @@ export const getExampleReminderEntity = ({
   firedAt = null,
   firedChannel = null,
   createdChannel = 'channel',
-  status = ReminderStatus.CREATED
+  status = ReminderStatus.CREATED,
+  type = ReminderType.USER
 }: Partial<ReminderEntity>): ReminderEntity => {
   const reminder = new ReminderEntity()
 
@@ -184,6 +185,7 @@ export const getExampleReminderEntity = ({
   reminder.firedChannel = firedChannel
   reminder.status = status
   reminder.createdChannel = createdChannel
+  reminder.type = type
 
   return reminder
 }
