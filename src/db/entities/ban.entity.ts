@@ -13,11 +13,4 @@ export class BanEntity extends BaseEntity {
 
   @Column('bigint')
   at: number
-
-  constructor(opts?: Partial<BanEntity>) {
-    super()
-    this.at = opts?.at ?? Date.now()
-    this.channel = opts?.channel ?? ''
-    this.user = opts?.channel ?? ''
-  }
 }
