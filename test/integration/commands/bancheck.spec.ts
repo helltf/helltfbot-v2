@@ -11,13 +11,14 @@ import { setupDatabase } from '@test-utils/setup-db'
 
 describe('ban check', () => {
   let bancheck: BanCheckCommand
+
   beforeAll(async () => {
     await setupDatabase()
   })
 
   beforeEach(async () => {
     bancheck = new BanCheckCommand()
-    await clearDb(hb.db.dataSource)
+    await clearDb()
   })
 
   afterAll(async () => {
@@ -27,6 +28,7 @@ describe('ban check', () => {
   describe('execute', () => {
     const user = getExampleTwitchUserState({})
     const channel = 'channel'
+
     it('command runs as whisper and channel is undefined return error', async () => {
       const result = await bancheck.execute({
         channel,
@@ -162,19 +164,43 @@ describe('ban check', () => {
     })
 
     describe('get ban message', () => {
+      const username = 'username'
       it('no channel message user has no bans return message', () => {
-        const result = bancheck.methods.getBanMessage([] as BanEntity[], false)
+        const result = bancheck.methods.getBanMessage(
+          [] as BanEntity[],
+          username,
+          false
+        )
 
         expect(result).toBe('No bans recorded')
       })
 
       it('channel given but user has no bans return message', () => {
-        const result = bancheck.methods.getBanMessage([] as BanEntity[], true)
+        const result = bancheck.methods.getBanMessage(
+          [] as BanEntity[],
+          username,
+          true
+        )
 
         expect(result).toBe('This user has never been banned in this channel')
       })
 
-      it('no channel given user has one ban return message', () => {})
+      it('no channel given user has one ban return message', () => {
+        const bans = [getExampleBanEntity({})]
+        const expectedMessage = [
+          `@${username} has ${bans.length} ${hb.utils.plularizeIf(
+            'ban',
+            bans.length
+          )} recorded`,
+          `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago in ${
+            bans[0].channel
+          }`
+        ]
+
+        const result = bancheck.methods.getBanMessage(bans, username, false)
+
+        expect(result).toBe(expectedMessage)
+      })
     })
   })
 })

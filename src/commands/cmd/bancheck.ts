@@ -56,6 +56,34 @@ export class BanCheckCommand implements Command {
         ...(channel && { channel })
       })
     },
-    getBanMessage: (bans: BanEntity[], channelMessage: boolean) => {}
+    getBanMessage: (
+      bans: BanEntity[],
+      username: string,
+      isChannelBan: boolean
+    ): string | string[] => {
+      if (!bans.length) {
+        return isChannelBan
+          ? 'This user has never been banned in this channel'
+          : 'No bans recorded'
+      }
+
+      return isChannelBan
+        ? [
+            `${username} has been banned ${bans.length} ${hb.utils.plularizeIf(
+              'time',
+              bans.length
+            )}`,
+            `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago`
+          ]
+        : [
+            `@${username} has ${bans.length} ${hb.utils.plularizeIf(
+              'ban',
+              bans.length
+            )} recorded`,
+            `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago in ${
+              bans[0].channel
+            }`
+          ]
+    }
   }
 }
