@@ -22,23 +22,11 @@ export class BanCheckCommand implements Command {
         response: 'Channel is required in whisper context',
         success: false
       }
+    const searchUser = givenUser ?? user.username!
 
-    const bans = await this.methods.getBans(
-      givenUser ?? user.username!,
-      givenChannel
-    )
-    const message =
-      bans.length === 0
-        ? 'No bans recorded'
-        : [
-            `@${user.username} has ${bans.length} ${hb.utils.plularizeIf(
-              'ban',
-              bans.length
-            )} recorded`,
-            `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago in ${
-              bans[0].channel
-            }`
-          ]
+    const bans = await this.methods.getBans(searchUser, givenChannel)
+
+    const message = this.methods.getBanMessage(bans, searchUser, !!givenChannel)
 
     return {
       response: message,
