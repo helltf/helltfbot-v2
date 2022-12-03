@@ -101,7 +101,8 @@ describe('ban check', () => {
     it('user and channel given return specific bans for channel', async () => {
       const givenUser = 'givenUser'
       const givenChannel = 'givenChannel'
-      const expectedResponse = `@${givenUser} has never been banned before`
+      const expectedResponse = `This user has never been banned in this channel`
+      jest.spyOn(bancheck.methods, 'getBans').mockResolvedValue([])
 
       const result = await bancheck.execute({
         message: [givenUser, givenChannel],
@@ -199,7 +200,24 @@ describe('ban check', () => {
 
         const result = bancheck.methods.getBanMessage(bans, username, false)
 
-        expect(result).toBe(expectedMessage)
+        expect(result).toStrictEqual(expectedMessage)
+      })
+
+      it('channel given user has one ban return message', () => {
+        const bans = [getExampleBanEntity({})]
+        const expectedMessage = [
+          `@${username} has ${bans.length} ${hb.utils.plularizeIf(
+            'ban',
+            bans.length
+          )} recorded`,
+          `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago in ${
+            bans[0].channel
+          }`
+        ]
+
+        const result = bancheck.methods.getBanMessage(bans, username, false)
+
+        expect(result).toStrictEqual(expectedMessage)
       })
     })
   })
