@@ -162,6 +162,21 @@ describe('ban check', () => {
 
         expect(result).toHaveLength(2)
       })
+
+      it('user has two bans return ordered by time', async () => {
+        const user = 'user'
+        const channel = 'channel'
+        const channel2 = 'channel2'
+        await hb.db.ban.save([
+          { at: 1, user, channel },
+          { at: 2, user, channel: channel2 }
+        ])
+
+        const result = await bancheck.methods.getBans(user, undefined)
+
+        expect(result[0].channel).toBe(channel2)
+        expect(result[1].channel).toBe(channel)
+      })
     })
 
     describe('get ban message', () => {

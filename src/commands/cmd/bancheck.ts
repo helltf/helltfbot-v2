@@ -34,14 +34,16 @@ export class BanCheckCommand implements Command {
     }
   }
   methods = {
-    // missing order
     getBans: async (
       user: string,
       channel: string | undefined
     ): Promise<BanEntity[]> => {
-      return hb.db.ban.findBy({
-        user,
-        ...(channel && { channel })
+      return hb.db.ban.find({
+        where: {
+          user,
+          ...(channel && { channel })
+        },
+        order: { at: 'DESC' }
       })
     },
     getBanMessage: (
