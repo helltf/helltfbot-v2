@@ -221,16 +221,14 @@ describe('ban check', () => {
       it('channel given user has one ban return message', () => {
         const bans = [getExampleBanEntity({})]
         const expectedMessage = [
-          `@${username} has ${bans.length} ${hb.utils.plularizeIf(
-            'ban',
+          `@${username} has been banned ${bans.length} ${hb.utils.plularizeIf(
+            'time',
             bans.length
-          )} recorded`,
-          `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago in ${
-            bans[0].channel
-          }`
+          )} in this channel`,
+          `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago`
         ]
 
-        const result = bancheck.methods.getBanMessage(bans, username, false)
+        const result = bancheck.methods.getBanMessage(bans, username, true)
 
         expect(result).toStrictEqual(expectedMessage)
       })

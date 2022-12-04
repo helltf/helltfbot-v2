@@ -59,10 +59,10 @@ export class BanCheckCommand implements Command {
 
       return isChannelBan
         ? [
-            `${username} has been banned ${bans.length} ${hb.utils.plularizeIf(
+            `@${username} has been banned ${bans.length} ${hb.utils.plularizeIf(
               'time',
               bans.length
-            )}`,
+            )} in this channel`,
             `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago`
           ]
         : [
