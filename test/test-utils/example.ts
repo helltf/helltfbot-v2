@@ -7,7 +7,8 @@ import {
   NotificationChannelEntity,
   EmoteStatsEntity,
   ColorHistoryEntity,
-  ReminderEntity
+  ReminderEntity,
+  BanEntity
 } from '@db/entities'
 import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 import {
@@ -188,4 +189,20 @@ export const getExampleReminderEntity = ({
   reminder.type = type
 
   return reminder
+}
+
+export const getExampleBanEntity = ({
+  id = 1,
+  at = Date.now(),
+  user = 'user',
+  channel = 'channel'
+}: Partial<BanEntity>): BanEntity => {
+  const ban = new BanEntity()
+
+  ban.id = id
+  ban.at = at
+  ban.user = user
+  ban.channel = channel
+
+  return ban
 }

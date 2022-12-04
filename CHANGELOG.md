@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.2](https://github.com/helltf/helltfbot-v2/releases/tag/v1.4.2) - 2022-12-04
+
+### Added 
+
+- Command to check recorded bans
+- Reminder system for system and user reminders
+- Create reminder on suggestion update
+
+### Fixed
+
+- Branch was undefined if workflow was not on master
+
 ## [1.4.1](https://github.com/helltf/helltfbot-v2/releases/tag/v1.4.1) - 2022-11-11
 
 ### Added
