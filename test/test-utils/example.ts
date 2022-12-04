@@ -6,8 +6,11 @@ import {
   ChannelEntity,
   NotificationChannelEntity,
   EmoteStatsEntity,
-  ColorHistoryEntity
+  ColorHistoryEntity,
+  ReminderEntity,
+  BanEntity
 } from '@db/entities'
+import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
@@ -158,4 +161,48 @@ export const getExampleNotificationEntity = ({
   notification.user = user
   notification.game = game
   return notification
+}
+
+export const getExampleReminderEntity = ({
+  id = 1,
+  creator = getExampleTwitchUserEntity({ id: 1 }),
+  reciever = getExampleTwitchUserEntity({ id: 2 }),
+  message = 'message',
+  createdAt = Date.now(),
+  firedAt = null,
+  firedChannel = null,
+  createdChannel = 'channel',
+  status = ReminderStatus.CREATED,
+  type = ReminderType.USER
+}: Partial<ReminderEntity>): ReminderEntity => {
+  const reminder = new ReminderEntity()
+
+  reminder.id = id
+  reminder.creator = creator
+  reminder.reciever = reciever
+  reminder.message = message
+  reminder.createdAt = createdAt
+  reminder.firedAt = firedAt
+  reminder.firedChannel = firedChannel
+  reminder.status = status
+  reminder.createdChannel = createdChannel
+  reminder.type = type
+
+  return reminder
+}
+
+export const getExampleBanEntity = ({
+  id = 1,
+  at = Date.now(),
+  user = 'user',
+  channel = 'channel'
+}: Partial<BanEntity>): BanEntity => {
+  const ban = new BanEntity()
+
+  ban.id = id
+  ban.at = at
+  ban.user = user
+  ban.channel = channel
+
+  return ban
 }

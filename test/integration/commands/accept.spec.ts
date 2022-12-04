@@ -1,6 +1,7 @@
 import { TwitchUserState } from "@src/client/types"
 import { AcceptCommand } from "@src/commands/cmd/accept"
-import { SuggestionStatus } from "@src/db/entities/suggestion.entity"
+import { ReminderType } from "@src/db/entities/reminder.entity"
+import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import {
@@ -55,6 +56,9 @@ describe('accept command', () => {
 
     it('update suggestion is successful return success', async () => {
       jest.spyOn(accept.methods, 'updateSuggestion').mockResolvedValue(true)
+      jest
+        .spyOn(accept.methods, 'createNotificationReminder')
+        .mockImplementation(jest.fn())
 
       const id = 1
 
@@ -71,13 +75,13 @@ describe('accept command', () => {
     it('update suggestion returns true send user notification', async () => {
       const id = '1'
       jest
-        .spyOn(accept.methods, 'sendNotification')
+        .spyOn(accept.methods, 'createNotificationReminder')
         .mockImplementation(jest.fn())
       jest.spyOn(accept.methods, 'updateSuggestion').mockResolvedValue(true)
 
       await accept.execute({ channel, message: [id], user })
 
-      expect(accept.methods.sendNotification).toHaveBeenCalled()
+      expect(accept.methods.createNotificationReminder).toHaveBeenCalled()
     })
   })
 
@@ -139,11 +143,10 @@ describe('accept command', () => {
     })
   })
 
-  describe('send notification', () => {
-    it('send notification from info from suggestion', async () => {
+  describe('create notification', () => {
+    it('create reminder from info for suggestion', async () => {
       const id = '1'
       const suggestionCreator = getExampleTwitchUserEntity({})
-      const expectedMessage = `@${suggestionCreator.name} your suggestion with id ${id} has been accepted`
 
       await hb.db.user.save(suggestionCreator)
       await hb.db.suggestion.save({
@@ -154,11 +157,16 @@ describe('accept command', () => {
         channel,
         user: suggestionCreator
       })
-      jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
-      await accept.methods.sendNotification(id)
+      await accept.methods.createNotificationReminder(id)
 
-      expect(hb.sendMessage).toHaveBeenCalledWith(channel, expectedMessage)
+      const reminders = await hb.db.reminder.find()
+
+      expect(reminders).toHaveLength(1)
+      expect(reminders[0].message).toBe(
+        `@${suggestionCreator.name} your suggestion with id ${id} has been accepted`
+      )
+      expect(reminders[0].type).toBe(ReminderType.SYSTEM)
     })
   })
 })
