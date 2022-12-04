@@ -5,7 +5,10 @@
 |accept|Accepts the given suggestion with a reason|
 |add|adds an 7tv emote|
 |allow|allows messages from the bot|
+|bancheck|checks for bans in a channel|
+|colorhistory|shows your recent colors|
 |deny|denies a suggestion|
+|disable|disable messages from the bot|
 |emote|sends all emote for the channel|
 |emotegame|start or stop an emotegame|
 |eval|evaluates the given input|
@@ -20,7 +23,7 @@
 |randomcolor|generate a random hex code|
 |remove|removes a 7tv emote from channel|
 |removeme|removes your notification for the given streamer on the event|
-|rmsuggest|removes your suggestion|
+|rmsuggestion|removes your suggestion|
 |setalias|sets a the given alias for the emote|
 |setlevel|sets the permissions of a given user|
 |stats|displays your stats|
