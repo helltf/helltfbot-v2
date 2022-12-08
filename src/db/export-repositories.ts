@@ -76,9 +76,6 @@ export class DB implements DbRepositories {
       throw new Error(e)
     })
 
-    await this.dataSource.runMigrations().catch(e => {
-      throw new Error(e)
-    })
     return this
   }
 }
