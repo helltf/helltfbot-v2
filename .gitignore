@@ -39,4 +39,3 @@ dist/**/*
 
 .vscode
 
-src/db/migration
