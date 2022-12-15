@@ -32,7 +32,9 @@ function getDefaultOrmConf(): PostgresConnectionOptions {
     logging: false,
     entities: ['src/db/entities/**/*'],
     migrations: ['src/db/migration/**/*.ts'],
-    subscribers: ['src/db/subscriber/**/*.ts']
+    subscribers: ['src/db/subscriber/**/*.ts'],
+    migrationsRun: true,
+    connectTimeoutMS: 10000
   }
 }
 

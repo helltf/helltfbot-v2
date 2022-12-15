@@ -20,11 +20,14 @@ globalThis.hb = new TwitchBot()
     }
 
     process.on('uncaughtException', async error => {
-      await hb.db.error.save({
-        message: error.message,
-        stack_trace: error.stack,
-        timestamp: Date.now()
-      })
+      const dbIsAlive = hb.db.dataSource.isInitialized
+      if (dbIsAlive) {
+        await hb.db.error.save({
+          message: error.message,
+          stack_trace: error.stack,
+          timestamp: Date.now()
+        })
+      }
       console.error(error)
 
       process.exit(1)
