@@ -24,7 +24,7 @@ describe('coinflip command', () => {
 
       const result = await coinflip.execute()
 
-      expect(result.response).toBe('You flipped talis (no)')
+      expect(result.response).toBe('You flipped tails (no)')
       expect(result.success).toBe(true)
     })
   })
