@@ -30,6 +30,7 @@ import { RandomColorCommand } from '@src/commands/cmd/randomcolor'
 import { DisableCommand } from '@src/commands/cmd/disable'
 import { AcceptCommand } from './cmd/accept'
 import { BanCheckCommand } from './cmd/bancheck'
+import { CoinflipCommand } from './cmd/coinflip'
 
 const commands: Command[] = [
   new PingCommand(),
@@ -61,7 +62,8 @@ const commands: Command[] = [
   new DenyCommand(),
   new RandomColorCommand(),
   new DisableCommand(),
-  new BanCheckCommand()
+  new BanCheckCommand(),
+  new CoinflipCommand()
 ]
 
 export default commands
