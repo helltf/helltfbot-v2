@@ -1,4 +1,5 @@
 import { CoinflipCommand } from "@src/commands/cmd/coinflip"
+import { setup } from "@test-utils/setup"
 
 describe('coinflip command', () => {
   let coinflip: CoinflipCommand
@@ -6,6 +7,7 @@ describe('coinflip command', () => {
   describe('execute', () => {
     beforeEach(() => {
       coinflip = new CoinflipCommand()
+      setup()
     })
 
     it('result is heads return true result', async () => {
@@ -26,12 +28,22 @@ describe('coinflip command', () => {
       expect(result.success).toBe(true)
     })
   })
+
   describe('methods', () => {
     describe('flip coin', () => {
       it('random number is 1 return true', () => {
+        jest.spyOn(hb.utils, 'random').mockReturnValue(1)
+
         const result = coinflip.methods.flipCoin()
 
         expect(result).toBe(true)
+      })
+
+      it('random number is 0 return false', () => {
+        jest.spyOn(hb.utils, 'random').mockReturnValue(0)
+        const result = coinflip.methods.flipCoin()
+
+        expect(result).toBe(false)
       })
     })
   })
