@@ -22,6 +22,8 @@ export class CoinflipCommand implements Command {
     }
   }
   methods = {
-    flipCoin: async (): boolean => {}
+    flipCoin: (): boolean => {
+      return hb.utils.random(0, 1) === 1
+    }
   }
 }
