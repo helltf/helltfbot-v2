@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - coinflip command
 
+### Fixed
+
+- run migration before start
+
 ## [1.4.2](https://github.com/helltf/helltfbot-v2/releases/tag/v1.4.2) - 2022-12-04
 
 ### Added 
