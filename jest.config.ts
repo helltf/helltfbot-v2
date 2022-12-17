@@ -6,14 +6,16 @@ import {compilerOptions} from './tsconfig.json'
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
-      'ts-jest': {
-        tsconfig: 'tsconfig.json'
-      },
       hb: true
     },
 
     transform: {
-      '^.+\\.ts?$': 'ts-jest'
+      '^.+\\.ts?$': [
+        'ts-jest',
+        {
+          tsconfig: 'tsconfig.json'
+        }
+      ]
     },
     preset: 'ts-jest',
     displayName: {
