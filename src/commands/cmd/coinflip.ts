@@ -1,6 +1,6 @@
 import { BotResponse } from '@src/client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
-import { Command, CommandContext, CommandFlag } from '../types'
+import { Command, CommandFlag } from '../types'
 
 export class CoinflipCommand implements Command {
   name = 'coinflip'
