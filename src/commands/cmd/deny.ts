@@ -1,9 +1,10 @@
 import { BotResponse } from '@src/client/types';
-import { Command, CommandContext, CommandFlag } from '@src/commands/types'
+import {  CommandContext, CommandFlag } from '@src/commands/types'
 import { SuggestionStatus } from '@src/db/entities/suggestion.entity';
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class DenyCommand implements Command {
+export class DenyCommand extends BaseCommand {
   name = 'deny'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'denies a suggestion'

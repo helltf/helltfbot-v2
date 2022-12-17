@@ -1,8 +1,9 @@
-import { Command, CommandContext, CommandFlag } from '../types'
+import {  CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class SuggestCommand implements Command {
+export class SuggestCommand extends BaseCommand {
   name = 'suggest'
   description = 'suggest a feature you want to see'
   permissions = ChatPermissionLevel.USER
@@ -11,11 +12,11 @@ export class SuggestCommand implements Command {
   cooldown = 30000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  async execute({
+  execute = async ({
     user,
     channel,
     message: [...suggestion]
-  }: CommandContext): Promise<BotResponse> {
+  }: CommandContext): Promise<BotResponse> => {
     if (!suggestion[0])
       return {
         response: 'You have to specify a suggestion',

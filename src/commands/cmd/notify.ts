@@ -6,9 +6,10 @@ import {
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types'
-import { Command, CommandContext, CommandFlag } from '../types'
+import { BaseCommand } from '../base'
+import { CommandContext, CommandFlag } from '../types'
 
-export class NotifyCommand implements Command {
+export class NotifyCommand extends BaseCommand {
   name = 'notify'
   flags: CommandFlag[] = [CommandFlag.LOWERCASE]
   description = 'create a notification for any event'
@@ -17,11 +18,11 @@ export class NotifyCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = ['notifyme', 'noti', 'notification']
-  async execute({
+  execute = async ({
     channel,
     user,
     message: [streamer, event]
-  }: CommandContext): Promise<BotResponse> {
+  }: CommandContext): Promise<BotResponse> => {
     if (this.methods.eventIsNotValid(event))
       return this.methods.getUnknownEventErrorResponse()
 

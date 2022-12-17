@@ -1,9 +1,10 @@
 import { ResourceError } from "@api/types";
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext } from "@src/commands/types";
+import {  CommandContext } from "@src/commands/types";
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class RemoveCommand implements Command {
+export class RemoveCommand extends BaseCommand {
   name = 'remove'
   permissions = ChatPermissionLevel.USER
   description = 'removes a 7tv emote from channel'
@@ -45,7 +46,10 @@ export class RemoveCommand implements Command {
   }
 
   methods = {
-    addEmoteByName: async (emote: string, channel: string): Promise<BotResponse> => {
+    addEmoteByName: async (
+      emote: string,
+      channel: string
+    ): Promise<BotResponse> => {
       const result = await hb.api.seventv.gql.removeEmote(emote, channel)
 
       if (result instanceof ResourceError) {
@@ -61,20 +65,28 @@ export class RemoveCommand implements Command {
       }
     },
 
-    addEmoteById: async (emoteId: string, channel: string): Promise<BotResponse> => {
+    addEmoteById: async (
+      emoteId: string,
+      channel: string
+    ): Promise<BotResponse> => {
       const channelId = await hb.api.seventv.rest.getUserId(channel)
 
       if (channelId instanceof ResourceError)
         return { response: channelId.error, success: false }
 
-      const response = await hb.api.seventv.gql.removeEmoteById(emoteId, channelId.data)
+      const response = await hb.api.seventv.gql.removeEmoteById(
+        emoteId,
+        channelId.data
+      )
 
       if (response instanceof ResourceError) {
         return { response: response.error, success: false }
       }
 
-      return { response: `Successfully removed ${response.data.name}`, success: false }
+      return {
+        response: `Successfully removed ${response.data.name}`,
+        success: false
+      }
     }
   }
 }
-

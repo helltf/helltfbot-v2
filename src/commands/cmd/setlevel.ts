@@ -1,8 +1,9 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { BaseCommand } from '../base'
 
-export class SetLevelCommand implements Command {
+export class SetLevelCommand extends BaseCommand {
   name = 'setlevel'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'sets the permissions of a given user'

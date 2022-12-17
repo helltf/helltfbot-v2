@@ -1,9 +1,10 @@
 import { ResourceError } from '@api/types';
 import { BotResponse } from '@src/client/types';
-import { Command, CommandContext } from '@src/commands/types'
+import {  CommandContext } from '@src/commands/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class AddCommand implements Command {
+export class AddCommand extends BaseCommand {
   name = 'add'
   permissions = ChatPermissionLevel.USER
   description = 'adds an 7tv emote'

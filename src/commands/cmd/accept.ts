@@ -1,9 +1,10 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
-import { SuggestionStatus } from "@src/db/entities/suggestion.entity";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
+import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class AcceptCommand implements Command {
+export class AcceptCommand extends BaseCommand {
   name = 'accept'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'Accepts the given suggestion with a reason'

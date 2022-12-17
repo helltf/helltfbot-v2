@@ -1,10 +1,11 @@
 import { EmoteData } from "@api/7tv/seventv.gql";
 import { ResourceError } from "@api/types";
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext } from '@src/commands/types'
+import {  CommandContext } from '@src/commands/types'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class YoinkCommand implements Command {
+export class YoinkCommand extends BaseCommand {
   name = 'yoink'
   permissions = GlobalPermissionLevel.USER
   description = 'adds the given emote to you channel'

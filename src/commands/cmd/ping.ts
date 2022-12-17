@@ -1,8 +1,10 @@
-import { Command, CommandFlag } from '../types'
+import { CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { ResourceError } from '@api/types'
-export class PingCommand implements Command {
+import { BaseCommand } from '../base'
+
+export class PingCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   name = 'ping'
   description = 'just a ping command'
@@ -11,7 +13,7 @@ export class PingCommand implements Command {
   optionalParams = []
   cooldown = 5000
   alias = []
-  async execute(): Promise<BotResponse> {
+  execute = async (): Promise<BotResponse> => {
     const uptime = this.methods.getUptime()
     const memoryUsage = this.methods.getMemory()
     const [commandsIssued, joinedChannels, latency, commit] = await Promise.all(

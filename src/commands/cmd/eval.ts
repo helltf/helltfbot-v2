@@ -1,8 +1,9 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { BaseCommand } from '../base'
 
-export class EvalCommand implements Command {
+export class EvalCommand extends BaseCommand {
   name = 'eval'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'evaluates the given input'

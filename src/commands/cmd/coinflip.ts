@@ -1,8 +1,9 @@
 import { BotResponse } from '@src/client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
-import { Command, CommandFlag } from '../types'
+import { BaseCommand } from '../base'
+import { CommandFlag } from '../types'
 
-export class CoinflipCommand implements Command {
+export class CoinflipCommand extends BaseCommand {
   name = 'coinflip'
   permissions = ChatPermissionLevel.USER
   description = 'flips a coin'

@@ -1,9 +1,10 @@
 import { Resource, ResourceError, ResourceSuccess } from "@api/types";
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext } from "@src/commands/types";
+import {  CommandContext } from "@src/commands/types";
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class SetAliasCommand implements Command {
+export class SetAliasCommand extends BaseCommand {
   name = 'setalias'
   permissions = GlobalPermissionLevel.USER
   description = 'sets a the given alias for the emote'

@@ -1,10 +1,10 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { BaseCommand } from '../base'
 
-export class EmoteCommand implements Command {
+export class EmoteCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  methods?: { [key: string]: (...args: any) => any } | undefined
   name = 'emote'
   permissions = ChatPermissionLevel.USER
   description = 'sends all emote for the channel'

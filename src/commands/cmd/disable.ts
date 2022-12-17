@@ -1,10 +1,11 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext} from "@src/commands/types";
+import {  CommandContext} from "@src/commands/types";
 import {
   GlobalPermissionLevel
 } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class DisableCommand implements Command {
+export class DisableCommand extends BaseCommand {
   name = 'disable'
   permissions = GlobalPermissionLevel.USER
   description = 'disables messages from the bot'

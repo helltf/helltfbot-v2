@@ -1,9 +1,10 @@
 import { BanEntity } from "@db/entities";
 import { BotResponse } from "@src/client/types";
 import { ChatPermissionLevel} from "@src/utilities/permission/types";
-import { Command, CommandContext, CommandFlag, MessageType } from '../types'
+import { BaseCommand } from "../base";
+import { CommandContext, CommandFlag, MessageType } from '../types'
 
-export class BanCheckCommand implements Command {
+export class BanCheckCommand extends BaseCommand {
   name = 'bancheck'
   permissions = ChatPermissionLevel.USER
   description = 'check bans for a user in a channel'

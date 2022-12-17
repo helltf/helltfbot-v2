@@ -1,8 +1,9 @@
-import { Command, CommandContext, CommandFlag } from '../types'
+import {  CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class RemoveSuggestCommand implements Command {
+export class RemoveSuggestCommand extends BaseCommand {
   name = 'rmsuggest'
   description = 'removes your suggestion'
   permissions = ChatPermissionLevel.USER
@@ -12,7 +13,10 @@ export class RemoveSuggestCommand implements Command {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   alias = ['rms']
 
-  async execute({ user, message: [id] }: CommandContext): Promise<BotResponse> {
+  execute = async ({
+    user,
+    message: [id]
+  }: CommandContext): Promise<BotResponse> => {
     const response: BotResponse = {
       success: false,
       response: ''

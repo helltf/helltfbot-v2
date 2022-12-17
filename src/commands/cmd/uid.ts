@@ -1,8 +1,9 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { BaseCommand } from '../base'
 
-export class UidCommand implements Command {
+export class UidCommand extends BaseCommand {
   name = 'uid'
   permissions = ChatPermissionLevel.USER
   description = 'retrieves the user id'

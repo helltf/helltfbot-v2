@@ -1,10 +1,11 @@
 import { BotResponse } from '@src/client/types';
-import { Command, CommandFlag } from '@src/commands/types'
+import {  CommandFlag } from '@src/commands/types'
 import {
   ChatPermissionLevel,
 } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class RandomColorCommand implements Command {
+export class RandomColorCommand extends BaseCommand {
   name = 'randomcolor'
   permissions = ChatPermissionLevel.USER
   description = 'generates a random hex color'

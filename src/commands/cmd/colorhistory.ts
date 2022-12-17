@@ -1,10 +1,11 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import {
   ChatPermissionLevel,
 } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class ColorHistoryCommand implements Command {
+export class ColorHistoryCommand extends BaseCommand {
   name = 'colorhistory'
   permissions = ChatPermissionLevel.USER
   description = 'replies with the history of colors'
