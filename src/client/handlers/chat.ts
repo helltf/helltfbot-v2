@@ -1,12 +1,8 @@
+import { ResourceError } from '@api/types'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { wait } from '@src/utilities/wait'
 import { ChatUserstate } from 'tmi.js'
-import {
-  Command,
-  CommandContext,
-  CommandFlag,
-  MessageType
-} from '../../commands/types'
+import { Command, MessageType } from '../../commands/types'
 import {
   ChatContext,
   InputContext,
@@ -70,20 +66,25 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
 
   user.permission = await hb.utils.permission.get(user)
 
-  const context: InputContext = evaluateFlags(command, {
-    channel: where,
+  const evalResult = command.evaluate({
     message: contextMessage,
-    type: type,
-    user: user
+    type: type
   })
 
-  if (context.failed) {
+  if (evalResult instanceof ResourceError) {
     return sendResponse({
-      response: { response: context.error!, success: false },
+      response: { response: evalResult.error, success: false },
       type: type,
       where: where
     })
   }
+
+  const context = command.buildContext({
+    message: contextMessage,
+    type,
+    user,
+    where
+  })
 
   setCooldown(command, user)
 
@@ -92,30 +93,6 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
   incrementCommandCounter(command)
 
   sendResponse({ where, type, response })
-}
-
-function evaluateFlags(
-  command: Command,
-  context: CommandContext
-): InputContext {
-  const resultContext: InputContext = {
-    failed: false,
-    commandContext: context
-  }
-
-  if (
-    context.type === MessageType.WHISPER &&
-    !command.flags.includes(CommandFlag.WHISPER)
-  ) {
-    resultContext.failed = true
-    resultContext.error = 'This command is not available via whispers'
-  }
-
-  if (command.flags.includes(CommandFlag.LOWERCASE))
-    resultContext.commandContext.message =
-      resultContext.commandContext.message.map(m => m.toLowerCase())
-
-  return resultContext
 }
 
 function getMessageInfo(message: string): string[] {
