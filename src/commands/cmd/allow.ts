@@ -7,8 +7,8 @@ export class AllowCommand extends BaseCommand {
   name = 'allow'
   description = 'allows messages from the bot'
   permissions = ChatPermissionLevel.USER
-  requiredParams = []
-  optionalParams = ['channel']
+  requiredParams = [] as const
+  optionalParams = ['channel'] as const
   cooldown = 5000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]

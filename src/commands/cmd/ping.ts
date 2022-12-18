@@ -9,8 +9,8 @@ export class PingCommand extends BaseCommand {
   name = 'ping'
   description = 'just a ping command'
   permissions = ChatPermissionLevel.USER
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = []
   execute = async (): Promise<BotResponse> => {

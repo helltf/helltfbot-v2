@@ -7,8 +7,8 @@ export class SetLevelCommand extends BaseCommand {
   name = 'setlevel'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'sets the permissions of a given user'
-  requiredParams = ['user', 'level']
-  optionalParams = []
+  requiredParams = ['user', 'level'] as const
+  optionalParams = [] as const
   alias = ['setlvl']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 5000

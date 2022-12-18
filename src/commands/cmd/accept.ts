@@ -13,9 +13,9 @@ export class AcceptCommand extends BaseCommand {
   alias = ['acceptsuggestion', 'approve']
   flags = [CommandFlag.WHISPER]
   cooldown = 0
-  execute = async ({
+  async execute({
     message: [id, ...reason]
-  }: CommandContext<AcceptCommand>): Promise<BotResponse> => {
+  }: CommandContext<AcceptCommand>): Promise<BotResponse> {
     if (!id)
       return {
         response: 'id missing',

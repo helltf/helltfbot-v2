@@ -7,8 +7,8 @@ export class StatsCommand extends BaseCommand {
   name = 'stats'
   permissions: number = ChatPermissionLevel.USER
   description = 'displays your stats'
-  requiredParams: string[] = ['type']
-  optionalParams: string[] = ['user']
+  requiredParams = ['type'] as const
+  optionalParams = ['user'] as const
   alias: string[] = ['statistics']
   cooldown = 20000
   flags: CommandFlag[] = [CommandFlag.WHISPER]

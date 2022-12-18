@@ -7,8 +7,8 @@ export class JoinCommand extends BaseCommand {
   name = 'join'
   description = 'join a channel'
   permissions = ChatPermissionLevel.USER
-  requiredParams = ['channel']
-  optionalParams = []
+  requiredParams = ['channel'] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = ['j']
   flags: CommandFlag[] = [CommandFlag.WHISPER]

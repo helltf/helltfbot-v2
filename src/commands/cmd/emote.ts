@@ -8,8 +8,8 @@ export class EmoteCommand extends BaseCommand {
   name = 'emote'
   permissions = ChatPermissionLevel.USER
   description = 'sends all emote for the channel'
-  requiredParams: string[] = []
-  optionalParams: string[] = ['channel']
+  requiredParams = [] as const
+  optionalParams = ['channel'] as const
   alias: string[] = ['emotes']
   cooldown = 20000
 

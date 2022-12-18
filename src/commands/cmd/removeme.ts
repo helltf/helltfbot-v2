@@ -11,8 +11,8 @@ export class RemovemeCommand extends BaseCommand {
   alias = ['rmn', 'removenotify', 'removenotification']
   cooldown = 5000
   description = 'removes your notification for the given streamer on the event'
-  optionalParams = []
-  requiredParams = ['streamer', 'event']
+  optionalParams = [] as const
+  requiredParams = ['streamer', 'event'] as const
   permissions = ChatPermissionLevel.USER
   flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   execute = async ({

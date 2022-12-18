@@ -14,8 +14,8 @@ export class NotifyCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.LOWERCASE]
   description = 'create a notification for any event'
   permissions = ChatPermissionLevel.USER
-  requiredParams = ['streamer', 'event']
-  optionalParams = []
+  requiredParams = ['streamer', 'event'] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = ['notifyme', 'noti', 'notification']
   execute = async ({

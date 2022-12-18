@@ -7,8 +7,8 @@ export class EvalCommand extends BaseCommand {
   name = 'eval'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'evaluates the given input'
-  requiredParams = ['expression']
-  optionalParams = []
+  requiredParams = ['expression'] as const
+  optionalParams = [] as const
   alias: string[] = []
   cooldown = 0
   flags: CommandFlag[] = [CommandFlag.WHISPER]

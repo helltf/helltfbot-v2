@@ -9,8 +9,8 @@ export class DisableCommand extends BaseCommand {
   name = 'disable'
   permissions = GlobalPermissionLevel.USER
   description = 'disables messages from the bot'
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   alias = ['mute']
   flags = []
   cooldown = 30000

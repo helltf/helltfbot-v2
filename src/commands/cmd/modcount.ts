@@ -7,8 +7,8 @@ export class ModCountCommand extends BaseCommand {
   name = 'modcount'
   permissions = GlobalPermissionLevel.USER
   description = 'gets the amount of moderators'
-  requiredParams = []
-  optionalParams = ['channel']
+  requiredParams = [] as const
+  optionalParams = ['channel'] as const
   alias = ['mcount', 'moderatorcount']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000

@@ -9,8 +9,8 @@ export class ColorHistoryCommand extends BaseCommand {
   name = 'colorhistory'
   permissions = ChatPermissionLevel.USER
   description = 'replies with the history of colors'
-  requiredParams = []
-  optionalParams = ['user']
+  requiredParams = [] as const
+  optionalParams = ['user'] as const
   alias = ['colors', 'history']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000

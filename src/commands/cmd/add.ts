@@ -8,8 +8,8 @@ export class AddCommand extends BaseCommand {
   name = 'add'
   permissions = ChatPermissionLevel.USER
   description = 'adds an 7tv emote'
-  requiredParams = ['emote_name']
-  optionalParams = []
+  requiredParams = ['emote_name'] as const
+  optionalParams = [] as const
   alias = ['add7tv', 'addemote']
   flags = []
   cooldown = 10000

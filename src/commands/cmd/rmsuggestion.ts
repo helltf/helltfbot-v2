@@ -7,8 +7,8 @@ export class RemoveSuggestCommand extends BaseCommand {
   name = 'rmsuggest'
   description = 'removes your suggestion'
   permissions = ChatPermissionLevel.USER
-  requiredParams = ['id']
-  optionalParams = []
+  requiredParams = ['id'] as const
+  optionalParams = [] as const
   cooldown = 30000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   alias = ['rms']

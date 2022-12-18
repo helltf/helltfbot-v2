@@ -7,8 +7,8 @@ export class GithubCommand extends BaseCommand {
   name = 'github'
   description = 'link to my repo and my github profile'
   permissions = ChatPermissionLevel.USER
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]

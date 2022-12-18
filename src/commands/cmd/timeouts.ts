@@ -7,8 +7,8 @@ export class TimeoutsCommand extends BaseCommand {
   name = 'timeouts'
   permissions = GlobalPermissionLevel.USER
   description = 'returns latest timeout and amount of tracked timeouts'
-  requiredParams = []
-  optionalParams = ['user', 'channel']
+  requiredParams = [] as const
+  optionalParams = ['user', 'channel'] as const
   alias = ['timeoutcheck', 'timeoutstats', 'tms']
   flags = [CommandFlag.LOWERCASE, CommandFlag.WHISPER]
   cooldown = 30000

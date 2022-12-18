@@ -8,8 +8,8 @@ export class DenyCommand extends BaseCommand {
   name = 'deny'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'denies a suggestion'
-  requiredParams = ['id']
-  optionalParams = ['reason']
+  requiredParams = ['id'] as const
+  optionalParams = ['reason'] as const
   alias = ['denysuggestion']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000

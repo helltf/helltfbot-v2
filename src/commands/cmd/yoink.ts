@@ -9,8 +9,8 @@ export class YoinkCommand extends BaseCommand {
   name = 'yoink'
   permissions = GlobalPermissionLevel.USER
   description = 'adds the given emote to you channel'
-  requiredParams = ['emote']
-  optionalParams = []
+  requiredParams = ['emote'] as const
+  optionalParams = [] as const
   alias = ['yoinkemote']
   flags = []
   cooldown = 10000

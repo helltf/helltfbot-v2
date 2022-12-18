@@ -9,8 +9,8 @@ export class RandomColorCommand extends BaseCommand {
   name = 'randomcolor'
   permissions = ChatPermissionLevel.USER
   description = 'generates a random hex color'
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   alias = ['rc']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000

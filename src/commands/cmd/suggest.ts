@@ -7,8 +7,8 @@ export class SuggestCommand extends BaseCommand {
   name = 'suggest'
   description = 'suggest a feature you want to see'
   permissions = ChatPermissionLevel.USER
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   cooldown = 30000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]

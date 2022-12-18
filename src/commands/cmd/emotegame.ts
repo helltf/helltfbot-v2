@@ -9,8 +9,8 @@ export class EmotegameCommand extends BaseCommand {
   name = 'emotegame'
   permissions = ChatPermissionLevel.USER
   description = 'start or stop an emotegame'
-  requiredParams = ['start|stop']
-  optionalParams = ['type']
+  requiredParams = ['start|stop'] as const
+  optionalParams = ['type'] as const
   alias = ['hangman', 'egame', 'bttvgame', 'ffzgame', '7tvgame']
   cooldown = 10000
   flags: CommandFlag[] = [CommandFlag.LOWERCASE]

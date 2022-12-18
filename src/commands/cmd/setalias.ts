@@ -8,8 +8,8 @@ export class SetAliasCommand extends BaseCommand {
   name = 'setalias'
   permissions = GlobalPermissionLevel.USER
   description = 'sets a the given alias for the emote'
-  requiredParams = ['emote', 'alias']
-  optionalParams = []
+  requiredParams = ['emote', 'alias'] as const
+  optionalParams = [] as const
   alias = ['emotealias', '7tvalias']
   flags = []
   cooldown = 10000

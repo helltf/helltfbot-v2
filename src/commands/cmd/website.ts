@@ -7,8 +7,8 @@ export class WebsiteCommand extends BaseCommand {
   name = 'website'
   description = 'link to my website'
   permissions = ChatPermissionLevel.USER
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]

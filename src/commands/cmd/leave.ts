@@ -7,8 +7,8 @@ export class LeaveCommand extends BaseCommand {
   name = 'leave'
   description = 'leave a channel'
   permissions = ChatPermissionLevel.USER
-  requiredParams = ['channel']
-  optionalParams = []
+  requiredParams = ['channel'] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = ['l']
   flags: CommandFlag[] = [CommandFlag.WHISPER]

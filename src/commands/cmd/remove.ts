@@ -8,8 +8,8 @@ export class RemoveCommand extends BaseCommand {
   name = 'remove'
   permissions = ChatPermissionLevel.USER
   description = 'removes a 7tv emote from channel'
-  requiredParams = ['emote_name']
-  optionalParams = []
+  requiredParams = ['emote_name'] as const
+  optionalParams = [] as const
   alias = ['removeemote']
   flags = []
   cooldown = 10000

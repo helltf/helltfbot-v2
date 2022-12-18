@@ -8,8 +8,8 @@ export class BanCheckCommand extends BaseCommand {
   name = 'bancheck'
   permissions = ChatPermissionLevel.USER
   description = 'check bans for a user in a channel'
-  requiredParams = []
-  optionalParams = ['user', 'channel']
+  requiredParams = [] as const
+  optionalParams = ['user', 'channel'] as const
   alias = ['bc', 'banc']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 15000

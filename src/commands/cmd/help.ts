@@ -8,7 +8,7 @@ export class HelpCommmand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   permissions = ChatPermissionLevel.USER
   description = 'replies with information about the given command'
-  optionalParams = ['command']
+  optionalParams = ['command'] as const
   requiredParams: string[] = []
   alias = ['command', 'commandinfo', 'commands']
   cooldown = 10000

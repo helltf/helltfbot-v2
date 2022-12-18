@@ -7,8 +7,8 @@ export class CoinflipCommand extends BaseCommand {
   name = 'coinflip'
   permissions = ChatPermissionLevel.USER
   description = 'flips a coin'
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   alias = ['cf']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000

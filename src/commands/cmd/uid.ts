@@ -7,8 +7,8 @@ export class UidCommand extends BaseCommand {
   name = 'uid'
   permissions = ChatPermissionLevel.USER
   description = 'retrieves the user id'
-  requiredParams: string[] = []
-  optionalParams: string[] = ['user']
+  requiredParams = [] as const
+  optionalParams = ['user'] as const
   alias: string[] = ['userid']
   cooldown = 10000
   flags: CommandFlag[] = [CommandFlag.WHISPER]

@@ -10,8 +10,8 @@ class TestBaseCommand extends BaseCommand {
   name = 'test'
   permissions = GlobalPermissionLevel.USER
   description = 'this is a test command'
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   alias = []
   execute = async () => {}
 }
