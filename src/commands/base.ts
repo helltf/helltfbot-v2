@@ -3,16 +3,21 @@ import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permi
 import { Command, CommandContext, CommandFlag } from './types'
 
 export abstract class BaseCommand implements Command {
+  async execute<T extends BaseCommand>(
+    /* eslint-disable */
+    context: CommandContext<T>
+  ): Promise<BotResponse> {
+    return { response: 'No Implementation found', success: false }
+  }
   name: string
   permissions: ChatPermissionLevel | GlobalPermissionLevel
   description: string
-  requiredParams: string[]
-  optionalParams: string[]
+  readonly requiredParams: any
+  readonly optionalParams: any
   alias: string[]
   flags: CommandFlag[]
   cooldown: number
   methods?: { [key: string]: (...args: any) => any } | undefined
-  execute: (context: CommandContext) => Promise<BotResponse>
   static?: { [key: string]: any } | undefined
   evaluate = () => {
     console.log(this.name)

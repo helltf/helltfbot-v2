@@ -8,14 +8,14 @@ export class AcceptCommand extends BaseCommand {
   name = 'accept'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'Accepts the given suggestion with a reason'
-  requiredParams = ['id']
-  optionalParams = ['reason']
+  requiredParams = ['id'] as const
+  optionalParams = ['reason'] as const
   alias = ['acceptsuggestion', 'approve']
   flags = [CommandFlag.WHISPER]
   cooldown = 0
   execute = async ({
     message: [id, ...reason]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<AcceptCommand>): Promise<BotResponse> => {
     if (!id)
       return {
         response: 'id missing',
