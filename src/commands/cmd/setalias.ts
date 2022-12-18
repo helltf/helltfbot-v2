@@ -17,7 +17,7 @@ export class SetAliasCommand extends BaseCommand {
     message: [emote, alias],
     channel,
     user
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<SetAliasCommand >): Promise<BotResponse> => {
     if (!emote || !alias)
       return { response: 'emote and alias are required', success: false }
 

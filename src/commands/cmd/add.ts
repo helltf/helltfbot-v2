@@ -17,7 +17,7 @@ export class AddCommand extends BaseCommand {
     message: [emote],
     channel,
     user
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<AddCommand>): Promise<BotResponse> => {
     if (!emote)
       return {
         response: 'emote as parameter is required',

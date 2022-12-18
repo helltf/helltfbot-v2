@@ -17,7 +17,7 @@ export class EmotegameCommand extends BaseCommand {
   execute = async ({
     channel,
     message: [action, type]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<EmotegameCommand >): Promise<BotResponse> => {
     const emoteGameAction = action as EmotegameAction
     const emoteGameType = type as EmoteType
 

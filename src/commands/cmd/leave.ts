@@ -15,7 +15,7 @@ export class LeaveCommand extends BaseCommand {
   execute = async ({
     user,
     message: [channeltoLeave]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<LeaveCommand >): Promise<BotResponse> => {
     const errorResponse: BotResponse = {
       success: false,
       response: ''

@@ -15,7 +15,7 @@ export class JoinCommand extends BaseCommand {
   execute = async ({
     user,
     message: [joinChannel]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<JoinCommand >): Promise<BotResponse> => {
     const errorResponse: BotResponse = {
       response: '',
       success: false

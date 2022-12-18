@@ -17,7 +17,7 @@ export class BanCheckCommand extends BaseCommand {
     type,
     user,
     message: [givenUser, givenChannel]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<BanCheckCommand>): Promise<BotResponse> => {
     if (type === MessageType.WHISPER && !givenChannel)
       return {
         response: 'Channel is required in whisper context',

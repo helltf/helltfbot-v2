@@ -17,7 +17,7 @@ export class RemoveCommand extends BaseCommand {
     message: [emote],
     channel,
     user
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<RemoveCommand>): Promise<BotResponse> => {
     if (!emote)
       return {
         response: 'emote as parameter is required',

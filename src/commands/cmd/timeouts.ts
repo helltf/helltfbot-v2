@@ -15,7 +15,7 @@ export class TimeoutsCommand extends BaseCommand {
   execute = async ({
     user,
     message: [providedUser, providedChannel]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<TimeoutsCommand>): Promise<BotResponse> => {
     const username = providedUser ?? user.username!
 
     return this.methods.getTimeoutInfo(username, providedChannel)

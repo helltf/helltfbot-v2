@@ -16,7 +16,7 @@ export class EmoteCommand extends BaseCommand {
   execute = async ({
     channel,
     message: [channelParam]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<EmoteCommand>): Promise<BotResponse> => {
     const emoteChannel = !channelParam ? channel : channelParam
 
     const { ffz, bttv, seventv } = await hb.api.fetchAllEmotes(emoteChannel)

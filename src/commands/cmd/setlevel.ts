@@ -15,7 +15,7 @@ export class SetLevelCommand extends BaseCommand {
   execute = async ({
     user,
     message: [providedUser, providedLevel]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<SetLevelCommand >): Promise<BotResponse> => {
     const level =
       providedLevel?.toUpperCase() as keyof typeof GlobalPermissionLevel
 

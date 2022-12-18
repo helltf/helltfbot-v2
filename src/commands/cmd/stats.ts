@@ -16,7 +16,7 @@ export class StatsCommand extends BaseCommand {
     message: [type, lookup],
     user,
     channel
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<StatsCommand>): Promise<BotResponse> => {
     if (!this.methods.isValidType(type))
       return {
         response: `Valid stats are ${Object.values(StatsType)}`,

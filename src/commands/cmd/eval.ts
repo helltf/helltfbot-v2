@@ -14,7 +14,7 @@ export class EvalCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   execute = async ({
     message: [...code]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<EvalCommand >): Promise<BotResponse> => {
     try {
       const result = await eval('(async () => ' + code.join(' ') + ')()')
       const response =

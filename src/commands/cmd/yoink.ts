@@ -18,7 +18,7 @@ export class YoinkCommand extends BaseCommand {
     message: [emote],
     user,
     channel
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<YoinkCommand>): Promise<BotResponse> => {
     if (!emote) return { response: 'no emote specified', success: false }
     const yoinkChannel = user.username!
     const emoteResult = await hb.api.seventv.gql.yoink(

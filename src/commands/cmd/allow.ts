@@ -16,7 +16,7 @@ export class AllowCommand extends BaseCommand {
   execute = async ({
     user,
     message: [updateChannel]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<AllowCommand>): Promise<BotResponse> => {
     const errorResponse = {
       response: 'You are not permitted to execute this command',
       success: false

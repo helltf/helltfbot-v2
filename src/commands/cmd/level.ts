@@ -15,7 +15,7 @@ export class LevelCommand extends BaseCommand {
   alias = ['lvl', 'permission', 'permissions']
   cooldown = 5000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({ user }: CommandContext): Promise<BotResponse> => {
+  execute = async ({ user }: CommandContext<LevelCommand >): Promise<BotResponse> => {
     const dbPerm = await this.methods.getDatabasePermissions(
       Number(user['user-id'])
     )

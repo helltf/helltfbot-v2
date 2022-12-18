@@ -15,7 +15,7 @@ export class DenyCommand extends BaseCommand {
   cooldown = 10000
   execute = async ({
     message: [id, ...reason]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<DenyCommand >): Promise<BotResponse> => {
     if (!id) return { response: 'no id given', success: false }
 
     const success = await this.methods.updateSuggestion(id, reason.join(' '))

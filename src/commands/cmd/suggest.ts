@@ -16,7 +16,7 @@ export class SuggestCommand extends BaseCommand {
     user,
     channel,
     message: [...suggestion]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<SuggestCommand >): Promise<BotResponse> => {
     if (!suggestion[0])
       return {
         response: 'You have to specify a suggestion',

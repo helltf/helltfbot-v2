@@ -14,7 +14,7 @@ export class HelpCommmand extends BaseCommand {
   cooldown = 10000
   execute = async ({
     message: [command]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<HelpCommmand>): Promise<BotResponse> => {
     if (!command)
       return {
         response: [

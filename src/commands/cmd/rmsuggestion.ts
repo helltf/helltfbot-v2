@@ -16,7 +16,7 @@ export class RemoveSuggestCommand extends BaseCommand {
   execute = async ({
     user,
     message: [id]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<RemoveSuggestCommand >): Promise<BotResponse> => {
     const response: BotResponse = {
       success: false,
       response: ''

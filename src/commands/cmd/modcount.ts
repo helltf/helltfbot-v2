@@ -15,7 +15,7 @@ export class ModCountCommand extends BaseCommand {
   execute = async ({
     channel,
     message: [givenChannel]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<ModCountCommand >): Promise<BotResponse> => {
     const lookupChannel = givenChannel ?? channel
 
     const amount = await this.methods.getModCount(lookupChannel)

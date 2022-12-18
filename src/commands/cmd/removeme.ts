@@ -19,7 +19,7 @@ export class RemovemeCommand extends BaseCommand {
     channel,
     user: { 'user-id': unparsedUserId },
     message: [streamer, event]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<RemovemeCommand >): Promise<BotResponse> => {
     const userId = Number(unparsedUserId)
     const eventType = event as UserNotificationType
 

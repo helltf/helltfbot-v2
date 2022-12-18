@@ -15,7 +15,7 @@ export class UidCommand extends BaseCommand {
   execute = async ({
     message: [searchUser],
     user
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<UidCommand>): Promise<BotResponse> => {
     if (!searchUser)
       return {
         response: this.methods.getResponse(user['user-id'], user.username),

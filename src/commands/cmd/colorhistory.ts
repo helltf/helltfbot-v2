@@ -17,7 +17,7 @@ export class ColorHistoryCommand extends BaseCommand {
   execute = async ({
     user,
     message: [userParam]
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<ColorHistoryCommand>): Promise<BotResponse> => {
     const username = userParam !== undefined ? userParam : user.username!
     const history = await this.methods.getColorHistory(username)
 
