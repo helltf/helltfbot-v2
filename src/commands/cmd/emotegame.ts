@@ -14,10 +14,10 @@ export class EmotegameCommand extends BaseCommand {
   alias = ['hangman', 'egame', 'bttvgame', 'ffzgame', '7tvgame']
   cooldown = 10000
   flags: CommandFlag[] = [CommandFlag.LOWERCASE]
-  execute = async ({
+  async execute({
     channel,
     message: [action, type]
-  }: CommandContext<EmotegameCommand >): Promise<BotResponse> => {
+  }: CommandContext<EmotegameCommand>): Promise<BotResponse> {
     const emoteGameAction = action as EmotegameAction
     const emoteGameType = type as EmoteType
 

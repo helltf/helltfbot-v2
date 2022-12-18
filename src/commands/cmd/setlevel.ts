@@ -12,10 +12,10 @@ export class SetLevelCommand extends BaseCommand {
   alias = ['setlvl']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 5000
-  execute = async ({
+  async execute({
     user,
     message: [providedUser, providedLevel]
-  }: CommandContext<SetLevelCommand >): Promise<BotResponse> => {
+  }: CommandContext<SetLevelCommand >): Promise<BotResponse>  {
     const level =
       providedLevel?.toUpperCase() as keyof typeof GlobalPermissionLevel
 

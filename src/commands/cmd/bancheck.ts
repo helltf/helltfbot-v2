@@ -13,11 +13,11 @@ export class BanCheckCommand extends BaseCommand {
   alias = ['bc', 'banc']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 15000
-  execute = async ({
+  async execute({
     type,
     user,
     message: [givenUser, givenChannel]
-  }: CommandContext<BanCheckCommand>): Promise<BotResponse> => {
+  }: CommandContext<BanCheckCommand>): Promise<BotResponse> {
     if (type === MessageType.WHISPER && !givenChannel)
       return {
         response: 'Channel is required in whisper context',

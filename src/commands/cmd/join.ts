@@ -12,10 +12,10 @@ export class JoinCommand extends BaseCommand {
   cooldown = 5000
   alias = ['j']
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({
+  async execute({
     user,
     message: [joinChannel]
-  }: CommandContext<JoinCommand >): Promise<BotResponse> => {
+  }: CommandContext<JoinCommand>): Promise<BotResponse> {
     const errorResponse: BotResponse = {
       response: '',
       success: false

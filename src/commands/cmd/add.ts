@@ -13,11 +13,11 @@ export class AddCommand extends BaseCommand {
   alias = ['add7tv', 'addemote']
   flags = []
   cooldown = 10000
-  execute = async ({
+  async execute({
     message: [emote],
     channel,
     user
-  }: CommandContext<AddCommand>): Promise<BotResponse> => {
+  }: CommandContext<AddCommand>): Promise<BotResponse> {
     if (!emote)
       return {
         response: 'emote as parameter is required',

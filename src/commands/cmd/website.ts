@@ -12,7 +12,7 @@ export class WebsiteCommand extends BaseCommand {
   cooldown = 5000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async (): Promise<BotResponse> => {
+  async execute(): Promise<BotResponse>  {
     const response =
       `You can inspect my website on https://helltf.github.io/bot/#/ ` +
       `The website has been build with Vue https://vuejs.org/ and the backend is a flask https://flask.palletsprojects.com/en/2.1.x/ python webserver` +

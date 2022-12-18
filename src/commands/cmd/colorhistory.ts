@@ -14,10 +14,10 @@ export class ColorHistoryCommand extends BaseCommand {
   alias = ['colors', 'history']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000
-  execute = async ({
+  async execute({
     user,
     message: [userParam]
-  }: CommandContext<ColorHistoryCommand>): Promise<BotResponse> => {
+  }: CommandContext<ColorHistoryCommand>): Promise<BotResponse> {
     const username = userParam !== undefined ? userParam : user.username!
     const history = await this.methods.getColorHistory(username)
 

@@ -18,11 +18,11 @@ export class NotifyCommand extends BaseCommand {
   optionalParams = [] as const
   cooldown = 5000
   alias = ['notifyme', 'noti', 'notification']
-  execute = async ({
+  async execute({
     channel,
     user,
     message: [streamer, event]
-  }: CommandContext<NotifyCommand >): Promise<BotResponse> => {
+  }: CommandContext<NotifyCommand >): Promise<BotResponse>  {
     if (this.methods.eventIsNotValid(event))
       return this.methods.getUnknownEventErrorResponse()
 

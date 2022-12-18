@@ -12,7 +12,7 @@ export class GithubCommand extends BaseCommand {
   cooldown = 5000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async (): Promise<BotResponse> => {
+  async execute(): Promise<BotResponse> {
     const response = `FeelsOkayMan Feel free to leave a follow at https://github.com/helltf and visit the github page for my bot https://github.com/helltf/helltfbot-v2`
 
     return {

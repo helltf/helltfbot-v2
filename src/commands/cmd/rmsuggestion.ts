@@ -13,10 +13,10 @@ export class RemoveSuggestCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   alias = ['rms']
 
-  execute = async ({
+  async execute({
     user,
     message: [id]
-  }: CommandContext<RemoveSuggestCommand >): Promise<BotResponse> => {
+  }: CommandContext<RemoveSuggestCommand >): Promise<BotResponse>  {
     const response: BotResponse = {
       success: false,
       response: ''

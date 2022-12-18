@@ -13,11 +13,11 @@ export class SetAliasCommand extends BaseCommand {
   alias = ['emotealias', '7tvalias']
   flags = []
   cooldown = 10000
-  execute = async ({
+  async execute({
     message: [emote, alias],
     channel,
     user
-  }: CommandContext<SetAliasCommand >): Promise<BotResponse> => {
+  }: CommandContext<SetAliasCommand >): Promise<BotResponse>  {
     if (!emote || !alias)
       return { response: 'emote and alias are required', success: false }
 

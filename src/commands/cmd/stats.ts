@@ -12,11 +12,11 @@ export class StatsCommand extends BaseCommand {
   alias: string[] = ['statistics']
   cooldown = 20000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({
+  async execute({
     message: [type, lookup],
     user,
     channel
-  }: CommandContext<StatsCommand>): Promise<BotResponse> => {
+  }: CommandContext<StatsCommand>): Promise<BotResponse>  {
     if (!this.methods.isValidType(type))
       return {
         response: `Valid stats are ${Object.values(StatsType)}`,

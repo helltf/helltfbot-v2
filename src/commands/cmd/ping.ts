@@ -13,7 +13,7 @@ export class PingCommand extends BaseCommand {
   optionalParams = [] as const
   cooldown = 5000
   alias = []
-  execute = async (): Promise<BotResponse> => {
+  async execute(): Promise<BotResponse>  {
     const uptime = this.methods.getUptime()
     const memoryUsage = this.methods.getMemory()
     const [commandsIssued, joinedChannels, latency, commit] = await Promise.all(

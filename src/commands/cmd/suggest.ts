@@ -12,11 +12,11 @@ export class SuggestCommand extends BaseCommand {
   cooldown = 30000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({
+  async execute({
     user,
     channel,
     message: [...suggestion]
-  }: CommandContext<SuggestCommand >): Promise<BotResponse> => {
+  }: CommandContext<SuggestCommand>): Promise<BotResponse> {
     if (!suggestion[0])
       return {
         response: 'You have to specify a suggestion',

@@ -12,11 +12,10 @@ export class AllowCommand extends BaseCommand {
   cooldown = 5000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-
-  execute = async ({
+  async execute({
     user,
     message: [updateChannel]
-  }: CommandContext<AllowCommand>): Promise<BotResponse> => {
+  }: CommandContext<AllowCommand>): Promise<BotResponse> {
     const errorResponse = {
       response: 'You are not permitted to execute this command',
       success: false

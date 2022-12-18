@@ -12,9 +12,9 @@ export class HelpCommmand extends BaseCommand {
   requiredParams: string[] = []
   alias = ['command', 'commandinfo', 'commands']
   cooldown = 10000
-  execute = async ({
+  async execute({
     message: [command]
-  }: CommandContext<HelpCommmand>): Promise<BotResponse> => {
+  }: CommandContext<HelpCommmand>): Promise<BotResponse> {
     if (!command)
       return {
         response: [

@@ -14,7 +14,9 @@ export class DisableCommand extends BaseCommand {
   alias = ['mute']
   flags = []
   cooldown = 30000
-  execute = async ({ channel }: CommandContext<DisableCommand >): Promise<BotResponse> => {
+  async execute({
+    channel
+  }: CommandContext<DisableCommand>): Promise<BotResponse> {
     const success = await this.methods.disable(channel)
 
     if (!success) return { response: 'Bot is already disabled', success: false }

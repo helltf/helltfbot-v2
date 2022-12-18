@@ -12,10 +12,10 @@ export class ModCountCommand extends BaseCommand {
   alias = ['mcount', 'moderatorcount']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000
-  execute = async ({
+  async execute({
     channel,
     message: [givenChannel]
-  }: CommandContext<ModCountCommand >): Promise<BotResponse> => {
+  }: CommandContext<ModCountCommand>): Promise<BotResponse> {
     const lookupChannel = givenChannel ?? channel
 
     const amount = await this.methods.getModCount(lookupChannel)

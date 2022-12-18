@@ -15,11 +15,11 @@ export class RemovemeCommand extends BaseCommand {
   requiredParams = ['streamer', 'event'] as const
   permissions = ChatPermissionLevel.USER
   flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
-  execute = async ({
+  async execute({
     channel,
     user: { 'user-id': unparsedUserId },
     message: [streamer, event]
-  }: CommandContext<RemovemeCommand >): Promise<BotResponse> => {
+  }: CommandContext<RemovemeCommand>): Promise<BotResponse> {
     const userId = Number(unparsedUserId)
     const eventType = event as UserNotificationType
 

@@ -14,11 +14,11 @@ export class YoinkCommand extends BaseCommand {
   alias = ['yoinkemote']
   flags = []
   cooldown = 10000
-  execute = async ({
+  async execute({
     message: [emote],
     user,
     channel
-  }: CommandContext<YoinkCommand>): Promise<BotResponse> => {
+  }: CommandContext<YoinkCommand>): Promise<BotResponse>  {
     if (!emote) return { response: 'no emote specified', success: false }
     const yoinkChannel = user.username!
     const emoteResult = await hb.api.seventv.gql.yoink(

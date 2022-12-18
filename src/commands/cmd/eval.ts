@@ -12,9 +12,9 @@ export class EvalCommand extends BaseCommand {
   alias: string[] = []
   cooldown = 0
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({
+  async execute({
     message: [...code]
-  }: CommandContext<EvalCommand >): Promise<BotResponse> => {
+  }: CommandContext<EvalCommand>): Promise<BotResponse> {
     try {
       const result = await eval('(async () => ' + code.join(' ') + ')()')
       const response =

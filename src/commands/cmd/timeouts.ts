@@ -12,10 +12,10 @@ export class TimeoutsCommand extends BaseCommand {
   alias = ['timeoutcheck', 'timeoutstats', 'tms']
   flags = [CommandFlag.LOWERCASE, CommandFlag.WHISPER]
   cooldown = 30000
-  execute = async ({
+  async execute({
     user,
     message: [providedUser, providedChannel]
-  }: CommandContext<TimeoutsCommand>): Promise<BotResponse> => {
+  }: CommandContext<TimeoutsCommand>): Promise<BotResponse> {
     const username = providedUser ?? user.username!
 
     return this.methods.getTimeoutInfo(username, providedChannel)

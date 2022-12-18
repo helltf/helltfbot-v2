@@ -12,7 +12,7 @@ export class CoinflipCommand extends BaseCommand {
   alias = ['cf']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000
-  execute = async (): Promise<BotResponse> => {
+  async execute(): Promise<BotResponse> {
     const flipResult = this.methods.flipCoin()
 
     return {

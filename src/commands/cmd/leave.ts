@@ -12,10 +12,10 @@ export class LeaveCommand extends BaseCommand {
   cooldown = 5000
   alias = ['l']
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({
+  async execute({
     user,
     message: [channeltoLeave]
-  }: CommandContext<LeaveCommand >): Promise<BotResponse> => {
+  }: CommandContext<LeaveCommand>): Promise<BotResponse> {
     const errorResponse: BotResponse = {
       success: false,
       response: ''

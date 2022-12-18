@@ -13,11 +13,11 @@ export class RemoveCommand extends BaseCommand {
   alias = ['removeemote']
   flags = []
   cooldown = 10000
-  execute = async ({
+  async execute({
     message: [emote],
     channel,
     user
-  }: CommandContext<RemoveCommand>): Promise<BotResponse> => {
+  }: CommandContext<RemoveCommand>): Promise<BotResponse>  {
     if (!emote)
       return {
         response: 'emote as parameter is required',
