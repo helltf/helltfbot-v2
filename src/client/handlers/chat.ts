@@ -3,12 +3,7 @@ import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { wait } from '@src/utilities/wait'
 import { ChatUserstate } from 'tmi.js'
 import { Command, MessageType } from '../../commands/types'
-import {
-  ChatContext,
-  InputContext,
-  ResponseContext,
-  TwitchUserState
-} from '../types'
+import { ChatContext, ResponseContext, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
 
@@ -50,7 +45,13 @@ const hasPrefix = (message: string): boolean => {
   return message?.toLowerCase()?.startsWith(prefix)
 }
 
-async function runCommand({ message, self, type, user, where }: ChatContext) {
+export async function runCommand({
+  message,
+  self,
+  type,
+  user,
+  where
+}: ChatContext) {
   if (self) return
 
   if (!hasPrefix(message)) return
@@ -88,7 +89,15 @@ async function runCommand({ message, self, type, user, where }: ChatContext) {
 
   setCooldown(command, user)
 
-  const response = await command.execute(context.commandContext)
+  if (context instanceof ResourceError) {
+    return sendResponse({
+      where,
+      type,
+      response: { response: context.error, success: true }
+    })
+  }
+
+  const response = await command.execute(context.data)
 
   incrementCommandCounter(command)
 
