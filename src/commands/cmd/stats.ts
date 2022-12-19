@@ -16,7 +16,7 @@ export class StatsCommand extends BaseCommand {
     message: [type, lookup],
     user,
     channel
-  }: CommandContext<StatsCommand>): Promise<BotResponse>  {
+  }: CommandContext<StatsCommand>): Promise<BotResponse> {
     if (!this.methods.isValidType(type))
       return {
         response: `Valid stats are ${Object.values(StatsType)}`,
@@ -43,13 +43,20 @@ export class StatsCommand extends BaseCommand {
       return hb.utils.enumContains(StatsType, type)
     },
 
-    async getCommandStats(
+    getCommandStats: async (
       command: string,
       user: TwitchUserState,
       channel: string
-    ): Promise<BotResponse> {
+    ): Promise<BotResponse> => {
       const foundCommand = hb.commands.findCommand('help')
-      return foundCommand.execute({ message: [command], user, channel })
+      return foundCommand.execute({
+        message: [command],
+        user,
+        channel,
+        params: {
+          command
+        }
+      })
     },
 
     async getLeaderboardPosition(username: string): Promise<number> {
