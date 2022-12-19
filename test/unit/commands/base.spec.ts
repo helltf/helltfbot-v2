@@ -102,5 +102,31 @@ describe('base command', () => {
         param2: paramValue2
       })
     })
+
+    it('command has one required param and one optional param return params with both values', () => {
+      class TestBaseCommand extends BaseCommand {
+        requiredParams = ['req_param'] as const
+        optionalParams = ['opt_param'] as const
+      }
+      const paramValue1 = 'value1'
+      const paramValue2 = 'value2'
+
+      const result = new TestBaseCommand().buildContext({
+        user,
+        message: [paramValue1, paramValue2],
+        where: channel,
+        type: MessageType.MESSAGE
+      })
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<
+        CommandContext<TestBaseCommand>
+      >
+      expect(data.params).toStrictEqual({
+        req_param: paramValue1,
+        opt_param: paramValue2
+      })
+    })
   })
 })
