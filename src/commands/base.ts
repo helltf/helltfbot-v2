@@ -46,13 +46,27 @@ export abstract class BaseCommand implements Command {
     type: MessageType
     user: TwitchUserState
     where: string
-  }): CommandContext<T> {
-    return {
+  }): Resource<CommandContext<T>> {
+    const paramList = [...this.requiredParams, ...this.optionalParams]
+    if (message.length < this.requiredParams.length) {
+      return new ResourceError(
+        `Missing param ${this.requiredParams[message.length]}`
+      )
+    }
+    const params: {
+      [key in string]: string
+    } = {}
+
+    paramList.forEach((param: string, i: number) => {
+      params[param] = message[i]
+    })
+
+    return new ResourceSuccess({
       message,
       user,
       type,
       channel: where,
       params
-    }
+    })
   }
 }
