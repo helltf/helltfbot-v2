@@ -48,6 +48,7 @@ export abstract class BaseCommand implements Command {
     where: string
   }): Resource<CommandContext<T>> {
     const paramList = [...this.requiredParams, ...this.optionalParams]
+
     if (message.length < this.requiredParams.length) {
       return new ResourceError(
         `Missing param ${this.requiredParams[message.length]}`
