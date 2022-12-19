@@ -22,7 +22,7 @@ export class CommandService {
     }
   }
 
-  findCommand(input: string): Command {
+  findCommand(input: string): BaseCommand {
     return this.commands.filter(v => v.activate.includes(input))[0]?.command
   }
 
