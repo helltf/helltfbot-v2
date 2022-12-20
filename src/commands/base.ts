@@ -1,5 +1,5 @@
 import { Resource, ResourceError, ResourceSuccess } from "@api/types"
-import { BotResponse, InputContext, TwitchUserState } from "@src/client/types"
+import { BotResponse,  TwitchUserState } from "@src/client/types"
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
@@ -63,7 +63,6 @@ export abstract class BaseCommand implements Command {
     })
 
     return new ResourceSuccess({
-      message,
       user,
       type,
       channel: where,

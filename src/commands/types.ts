@@ -34,7 +34,6 @@ export type CommandParams<T extends BaseCommand> = {
 export interface CommandContext<T extends BaseCommand> {
   user: TwitchUserState
   channel: string
-  message: string[]
   params: CommandParams<T>
   type?: MessageType
 }
