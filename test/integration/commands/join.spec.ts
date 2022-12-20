@@ -81,7 +81,6 @@ describe('join command tests', () => {
 
   it('connnect to channel is successful return success response', async () => {
     const joinChannel = 'joinChannel'
-    const message = [joinChannel]
 
     jest.spyOn(hb.client, 'join').mockResolvedValue([joinChannel])
 
@@ -89,7 +88,7 @@ describe('join command tests', () => {
       response,
 
       success
-    } = await join.execute({ channel, user, message })
+    } = await join.execute({ channel, user, params: { channel: joinChannel } })
 
     expect(success).toBe(true)
     expect(response).toBeDefined()
@@ -97,11 +96,16 @@ describe('join command tests', () => {
 
   it('connect to channel is succesful saves channel', async () => {
     const joinChannel = 'joinChannel'
-    const message = [joinChannel]
 
     jest.spyOn(hb.client, 'join').mockResolvedValue([joinChannel])
 
-    await join.execute({ channel, user, message })
+    await join.execute({
+      channel,
+      user,
+      params: {
+        channel: joinChannel
+      }
+    })
 
     const savedChannel = await hb.db.channel.findOneBy({
       channel: joinChannel
@@ -113,14 +117,13 @@ describe('join command tests', () => {
   it('connnect to channel fails return error response', async () => {
     const error = ''
     const joinChannel = 'joinChannel'
-    const message = [joinChannel]
     jest.spyOn(hb.client, 'join').mockRejectedValue(error)
 
     const {
       response,
 
       success
-    } = await join.execute({ channel, user, message })
+    } = await join.execute({ channel, user, params: { channel: joinChannel } })
 
     expect(success).toBe(false)
     expect(response).toBeDefined()

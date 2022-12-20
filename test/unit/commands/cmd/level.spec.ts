@@ -63,7 +63,7 @@ describe('test level command', () => {
       const { response, success } = await level.execute({
         channel,
         user,
-        message: []
+        params: {}
       })
 
       const expectedResponse = `Permissions for ${
@@ -79,5 +79,4 @@ describe('test level command', () => {
     })
   })
 })
-
 

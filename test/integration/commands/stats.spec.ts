@@ -30,26 +30,11 @@ describe('stats command', () => {
     const user = getExampleTwitchUserState({})
     const channel = 'channel'
 
-    it('type is not given return error', async () => {
-      const message: string[] = []
-
-      const { response, success } = await stats.execute({
-        channel,
-        user,
-        message
-      })
-
-      expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
-      expect(success).toBe(false)
-    })
-
     it('type is not existing return error', async () => {
-      const message = ['abc']
-
       const { response, success } = await stats.execute({
         channel,
         user,
-        message
+        params: { type: 'abc' }
       })
 
       expect(response).toBe(`Valid stats are ${Object.values(StatsType)}`)
@@ -57,7 +42,6 @@ describe('stats command', () => {
     })
 
     it('type is command but no command given return error', async () => {
-      const message = [StatsType.COMMAND]
       const exampleResponse = {
         response: 'response',
         success: false
@@ -69,8 +53,10 @@ describe('stats command', () => {
 
       const { response, success } = await stats.execute({
         channel,
-        message,
-        user
+        user,
+        params: {
+          type: StatsType.COMMAND
+        }
       })
 
       expect(response).toBe(exampleResponse.response)
@@ -79,7 +65,8 @@ describe('stats command', () => {
     })
 
     it('type is command invoke get command stats function', async () => {
-      const message = [StatsType.COMMAND, 'testcommand']
+      const statsType = StatsType.COMMAND
+      const command = 'testcommand'
       const exampleResponse = {
         response: 'response',
         success: true
@@ -91,7 +78,7 @@ describe('stats command', () => {
 
       const response = await stats.execute({
         channel,
-        message,
+        params: { type: statsType, lookup: command },
         user
       })
 
@@ -100,12 +87,10 @@ describe('stats command', () => {
     })
 
     it('user has no stats return error', async () => {
-      const message = [StatsType.EMOTEGAME]
-
       const { response, success } = await stats.execute({
         channel,
         user,
-        message
+        params: { type: StatsType.EMOTEGAME }
       })
 
       expect(response).toBe(`${user.username} has no stats recorded`)
@@ -113,7 +98,6 @@ describe('stats command', () => {
     })
 
     it('type is emotegame return stats for user', async () => {
-      const message = [StatsType.EMOTEGAME]
       const letters = 1
       const emotes = 1
       const incorrect = 2
@@ -131,7 +115,7 @@ describe('stats command', () => {
       const { response, success } = await stats.execute({
         channel,
         user,
-        message
+        params: { type: StatsType.EMOTEGAME }
       })
 
       const expectedResponse = [
@@ -147,12 +131,14 @@ describe('stats command', () => {
 
     it('user is given as param has no stats return error', async () => {
       const lookupUser = 'lookup'
-      const message = [StatsType.EMOTEGAME, lookupUser]
 
       const { response, success } = await stats.execute({
         channel,
         user,
-        message
+        params: {
+          type: StatsType.EMOTEGAME,
+          lookup: lookupUser
+        }
       })
 
       expect(response).toBe(`${lookupUser} has no stats recorded`)
@@ -161,7 +147,7 @@ describe('stats command', () => {
 
     it('user is given as param has no stats but other user has return error', async () => {
       const lookupUser = 'lookup'
-      const message = [StatsType.EMOTEGAME, lookupUser]
+      const type = StatsType.EMOTEGAME
 
       await saveUserStateAsUser(user)
       await hb.db.emoteStats.save({
@@ -176,7 +162,7 @@ describe('stats command', () => {
       const { response, success } = await stats.execute({
         channel,
         user,
-        message
+        params: { type, lookup: lookupUser }
       })
 
       expect(response).toBe(`${lookupUser} has no stats recorded`)
@@ -185,7 +171,7 @@ describe('stats command', () => {
 
     it('user is given and has stats return stats', async () => {
       const lookupUser = getExampleTwitchUserEntity({ name: 'lookup' })
-      const message = [StatsType.EMOTEGAME, lookupUser.name]
+      const type = StatsType.EMOTEGAME
       const letters_guessed = 1
       const emotes_guessed = 1
       const incorrect_guesses = 2
@@ -203,7 +189,10 @@ describe('stats command', () => {
       const { response, success } = await stats.execute({
         channel,
         user,
-        message
+        params: {
+          type,
+          lookup: lookupUser.name
+        }
       })
 
       const expectedResponse = [

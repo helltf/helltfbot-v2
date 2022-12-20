@@ -19,17 +19,6 @@ describe('remove command', () => {
     const channel = 'channel'
     const user = getExampleTwitchUserState({})
 
-    it('emote is undefined return error', async () => {
-      const { response, success } = await remove.execute({
-        message: [],
-        channel,
-        user
-      })
-
-      expect(response).toBe('emote as parameter is required')
-      expect(success).toBe(false)
-    })
-
     it('editor request returns error return error response', async () => {
       const error = 'Error'
 
@@ -38,9 +27,9 @@ describe('remove command', () => {
         .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await remove.execute({
-        message: [emote],
         channel,
-        user
+        user,
+        params: { emote_name: emote }
       })
 
       expect(response).toBe('could not fetch editors')
@@ -53,7 +42,7 @@ describe('remove command', () => {
         .mockResolvedValue(new ResourceSuccess(false))
 
       const { response, success } = await remove.execute({
-        message: [emote],
+        params: { emote_name: emote },
         channel,
         user
       })
@@ -76,7 +65,7 @@ describe('remove command', () => {
         .mockResolvedValue(botResponse)
 
       const response = await remove.execute({
-        message: [emote],
+        params: { emote_name: emote },
         channel,
         user
       })
@@ -98,7 +87,7 @@ describe('remove command', () => {
       jest.spyOn(remove.methods, 'addEmoteById').mockResolvedValue(botResponse)
 
       const response = await remove.execute({
-        message: [emoteUrl],
+        params: { emote_name: emoteUrl },
         channel,
         user
       })

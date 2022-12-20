@@ -12,10 +12,13 @@ describe('test uid command', () => {
   })
 
   it('no user is given return usernames id', async () => {
-    const message: string[] = []
     const id = user['user-id']!
 
-    const { response, success } = await uid.execute({ channel, user, message })
+    const { response, success } = await uid.execute({
+      channel,
+      user,
+      params: {}
+    })
 
     expect(response).toBe(`${user.username}👉${id}`)
     expect(success).toBe(true)
@@ -23,11 +26,16 @@ describe('test uid command', () => {
 
   it('user is given return user id from api', async () => {
     const searchedUser = 'searchedUser'
-    const message = [searchedUser]
     const id = 300
     jest.spyOn(hb.api.twitch, 'getUserIdByName').mockResolvedValue(id)
 
-    const { response, success } = await uid.execute({ channel, user, message })
+    const { response, success } = await uid.execute({
+      channel,
+      user,
+      params: {
+        user: searchedUser
+      }
+    })
 
     expect(response).toBe(`${searchedUser}👉${id}`)
     expect(success).toBe(true)
@@ -35,11 +43,16 @@ describe('test uid command', () => {
 
   it("user can't be found return error response", async () => {
     const searchedUser = 'searchedUser'
-    const message = [searchedUser]
     const id = undefined
     jest.spyOn(hb.api.twitch, 'getUserIdByName').mockResolvedValue(id)
 
-    const { response, success } = await uid.execute({ channel, user, message })
+    const { response, success } = await uid.execute({
+      channel,
+      user,
+      params: {
+        user: searchedUser
+      }
+    })
 
     expect(response).toBe(`Could not find user`)
     expect(success).toBe(false)

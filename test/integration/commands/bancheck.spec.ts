@@ -33,7 +33,7 @@ describe('ban check', () => {
       const result = await bancheck.execute({
         channel,
         user,
-        params: {}
+        params: {},
         type: MessageType.WHISPER
       })
 
@@ -47,7 +47,7 @@ describe('ban check', () => {
       const result = await bancheck.execute({
         channel,
         user,
-        message: []
+        params: {}
       })
 
       expect(bancheck.methods.getBans).toHaveBeenCalledWith(
@@ -73,7 +73,7 @@ describe('ban check', () => {
       const result = await bancheck.execute({
         channel,
         user,
-        message: []
+        params: {}
       })
 
       expect(result.response).toStrictEqual(expectedResponse)
@@ -85,9 +85,9 @@ describe('ban check', () => {
       jest.spyOn(bancheck.methods, 'getBans').mockResolvedValue([])
 
       const result = await bancheck.execute({
-        message: [givenUser],
         user,
-        channel
+        channel,
+        params: { user: givenUser }
       })
 
       expect(result.success).toBe(true)
@@ -105,9 +105,9 @@ describe('ban check', () => {
       jest.spyOn(bancheck.methods, 'getBans').mockResolvedValue([])
 
       const result = await bancheck.execute({
-        message: [givenUser, givenChannel],
         user,
-        channel
+        channel,
+        params: { user: givenUser, channel: givenChannel }
       })
 
       expect(result.success).toBe(true)

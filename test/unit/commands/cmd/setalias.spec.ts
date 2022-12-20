@@ -17,28 +17,6 @@ describe('alias command', () => {
     const emote = 'emote'
     const alias = 'alias'
 
-    it('emote is not defined return error', async () => {
-      const { response, success } = await setalias.execute({
-        message: [],
-        user,
-        channel
-      })
-
-      expect(response).toBe('emote and alias are required')
-      expect(success).toBe(false)
-    })
-
-    it('alias is not defined return error', async () => {
-      const { response, success } = await setalias.execute({
-        message: [emote],
-        user,
-        channel
-      })
-
-      expect(response).toBe('emote and alias are required')
-      expect(success).toBe(false)
-    })
-
     it('editor request returns error return this as response', async () => {
       const error = 'Error'
       jest
@@ -46,7 +24,7 @@ describe('alias command', () => {
         .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await setalias.execute({
-        message: [emote, alias],
+        params: { emote, alias },
         user,
         channel
       })
@@ -65,7 +43,7 @@ describe('alias command', () => {
         .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await setalias.execute({
-        message: [emote, alias],
+        params: { emote, alias },
         user,
         channel
       })
@@ -87,7 +65,7 @@ describe('alias command', () => {
         .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await setalias.execute({
-        message: [emote, alias],
+        params: { emote, alias },
         user,
         channel
       })
@@ -109,7 +87,7 @@ describe('alias command', () => {
         .mockResolvedValue(new ResourceSuccess(emoteData))
 
       const { response, success } = await setalias.execute({
-        message: [emote, alias],
+        params: { emote, alias },
         user,
         channel
       })

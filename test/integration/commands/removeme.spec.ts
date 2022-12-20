@@ -1,6 +1,6 @@
 import { TwitchUserState } from '@client/types'
 import { RemovemeCommand } from '@commands/cmd/removeme'
-import { UserNotificationType } from '@modules/pubsub/types'
+import {  UserNotificationType } from '@modules/pubsub/types'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {
@@ -34,44 +34,16 @@ describe('test remove command', () => {
     await disconnectDatabase()
   })
 
-  it('streamer is not defined return error response', async () => {
-    const message = ['']
-
-    const {
-      response,
-
-      success
-    } = await remove.execute({ channel: messageChannel, user, message })
-
-    expect(success).toBe(false)
-    expect(response).toBe('No streamer specified')
-  })
-
-  it('event is not defined return error response', async () => {
-    const message = [streamer, '']
-
-    const {
-      response,
-
-      success
-    } = await remove.execute({ channel: messageChannel, user, message })
-
-    expect(success).toBe(false)
-    expect(response).toBe(
-      `Event unknown. Valid events are ${Object.values(
-        UserNotificationType
-      ).join(' ')}`
-    )
-  })
-
   it('event does not match existing events return error response', async () => {
-    const message = [streamer, 'a']
-
     const {
       response,
 
       success
-    } = await remove.execute({ channel: messageChannel, user, message })
+    } = await remove.execute({
+      channel: messageChannel,
+      user,
+      params: { streamer, event: 'a' }
+    })
 
     expect(success).toBe(false)
     expect(response).toBe(
@@ -82,13 +54,11 @@ describe('test remove command', () => {
   })
 
   it('notification does not exist return error response', async () => {
-    const message = [streamer, UserNotificationType.GAME]
-
-    const {
-      response,
-
-      success
-    } = await remove.execute({ channel: messageChannel, user, message })
+    const { response, success } = await remove.execute({
+      channel: messageChannel,
+      user,
+      params: { streamer, event: UserNotificationType.GAME }
+    })
 
     expect(success).toBe(false)
 
@@ -97,7 +67,6 @@ describe('test remove command', () => {
 
   it('notification existing and updated return success response', async () => {
     const event = UserNotificationType.GAME
-    const message = [streamer, event]
 
     const notification = getExampleNotificationEntity({
       user: getExampleTwitchUserEntity({
@@ -110,11 +79,14 @@ describe('test remove command', () => {
 
     await saveNotificationWithUser(notification)
 
-    const {
-      response,
-
-      success
-    } = await remove.execute({ channel: messageChannel, user, message })
+    const { response, success } = await remove.execute({
+      channel: messageChannel,
+      user,
+      params: {
+        streamer,
+        event
+      }
+    })
 
     expect(success).toBe(true)
 
@@ -123,7 +95,6 @@ describe('test remove command', () => {
 
   it('notification exists and game events gets set to false', async () => {
     const event = UserNotificationType.GAME
-    const message = [streamer, event]
 
     const notification = getExampleNotificationEntity({
       user: getExampleTwitchUserEntity({
@@ -136,7 +107,11 @@ describe('test remove command', () => {
 
     await saveNotificationWithUser(notification)
 
-    await remove.execute({ channel: messageChannel, user, message })
+    await remove.execute({
+      channel: messageChannel,
+      user,
+      params: { streamer, event }
+    })
 
     const updatedEntity = await hb.db.notification.findOneBy({
       user: {

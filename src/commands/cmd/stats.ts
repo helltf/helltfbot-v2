@@ -8,13 +8,13 @@ export class StatsCommand extends BaseCommand {
   permissions: number = ChatPermissionLevel.USER
   description = 'displays your stats'
   requiredParams = ['type'] as const
-  optionalParams = ['user'] as const
+  optionalParams = ['lookup'] as const
   alias: string[] = ['statistics']
   cooldown = 20000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
-    params: { type, user: lookup },
+    params: { type, lookup },
     channel
   }: CommandContext<StatsCommand>): Promise<BotResponse> {
     if (!this.methods.isValidType(type))
@@ -44,17 +44,16 @@ export class StatsCommand extends BaseCommand {
     },
 
     getCommandStats: async (
-      command: string,
+      command: string | undefined,
       user: TwitchUserState,
       channel: string
     ): Promise<BotResponse> => {
       const foundCommand = hb.commands.findCommand('help')
       return foundCommand.execute({
-        message: [command],
         user,
         channel,
         params: {
-          command
+          command: command!
         }
       })
     },

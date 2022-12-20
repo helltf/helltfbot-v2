@@ -18,9 +18,9 @@ describe('mod count', () => {
       jest.spyOn(hb.client, 'mods').mockResolvedValue(Array(count))
 
       const { response, success } = await modcount.execute({
-        message: [],
         channel,
-        user
+        user,
+        params: {}
       })
 
       expect(success).toBe(true)
@@ -33,9 +33,9 @@ describe('mod count', () => {
       jest.spyOn(hb.client, 'mods').mockResolvedValue(Array(count))
 
       const { response, success } = await modcount.execute({
-        message: [givenChannel],
         channel,
-        user
+        user,
+        params: { channel: givenChannel }
       })
 
       expect(success).toBe(true)
@@ -46,9 +46,9 @@ describe('mod count', () => {
       jest.spyOn(hb.client, 'mods').mockRejectedValue('error')
 
       const { response, success } = await modcount.execute({
-        message: [],
         channel,
-        user
+        user,
+        params: {}
       })
 
       expect(success).toBe(false)

@@ -28,20 +28,23 @@ describe('test suggest command', () => {
 
   it('suggestion is undefined return error', async () => {
     const suggestion = ''
-    const message = [suggestion]
-    const response = await suggest.execute({ channel, user, message })
+    const response = await suggest.execute({
+      channel,
+      user,
+      params: { suggestion }
+    })
 
     expect(response.success).toBe(false)
   })
 
   it('suggestion is defined and response is successful', async () => {
-    const message = ['add']
+    const suggestion = 'add'
     const expectedMessage = `@${process.env.MAIN_USER} new suggestion by ${user.username}`
     await saveUserStateAsUser(user)
 
     jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
-    await suggest.execute({ channel, user, message })
+    await suggest.execute({ channel, user, params: { suggestion } })
     expect(hb.sendMessage).toHaveBeenCalledWith(
       process.env.MAIN_USER,
       expectedMessage
@@ -49,19 +52,27 @@ describe('test suggest command', () => {
   })
 
   it('suggestion is defined and response is successful', async () => {
-    const message = ['add']
+    const suggestion = 'add'
     await saveUserStateAsUser(user)
 
-    const response = await suggest.execute({ channel, user, message })
+    const response = await suggest.execute({
+      channel,
+      user,
+      params: { suggestion }
+    })
 
     expect(response.success).toBe(true)
   })
 
   it('one word suggestion is defined and saved into db', async () => {
-    const message = ['add']
+    const suggestion = 'add'
     await saveUserStateAsUser(user)
 
-    const response = await suggest.execute({ channel, user, message })
+    const response = await suggest.execute({
+      channel,
+      user,
+      params: { suggestion }
+    })
 
     const savedEntity = await hb.db.suggestion.find()
     const expectedLength = 1
@@ -74,12 +85,16 @@ describe('test suggest command', () => {
   })
 
   it('save multiple words suggestion return succesfull response', async () => {
-    const message = ['add', 'this', 'do', 'this']
+    const suggestion = 'add this do this'
     const id = 1
 
     await saveUserStateAsUser(user)
 
-    const response = await suggest.execute({ channel, user, message })
+    const response = await suggest.execute({
+      channel,
+      user,
+      params: { suggestion }
+    })
 
     const savedEntity = await hb.db.suggestion.findOneBy({
       id: id
@@ -87,13 +102,13 @@ describe('test suggest command', () => {
 
     const expectedMessage = `Succesfully saved your suggestion with id ${id}`
 
-    expect(savedEntity!.suggestion).toBe(`${message.join(' ')}`)
+    expect(savedEntity!.suggestion).toBe(suggestion)
     expect(response.response).toEqual(expectedMessage)
     expect(response.success).toBe(true)
   })
 
   it('save two suggestions returns id 2', async () => {
-    const message = ['add', 'this', 'do', 'this']
+    const suggestion = 'add this do this'
     await saveUserStateAsUser(user)
 
     await hb.db.suggestion.save({
@@ -105,7 +120,11 @@ describe('test suggest command', () => {
       channel
     })
 
-    const response = await suggest.execute({ channel, user, message })
+    const response = await suggest.execute({
+      channel,
+      user,
+      params: { suggestion }
+    })
     const expectedId = 2
 
     const savedEntity = await hb.db.suggestion.findOneBy({
@@ -113,10 +132,9 @@ describe('test suggest command', () => {
     })
 
     const expectedMessage = `Succesfully saved your suggestion with id ${expectedId}`
-    const expectedSavedSuggestion = `${message.join(' ')}`
 
     expect(response.success).toBe(true)
     expect(response.response).toBe(expectedMessage)
-    expect(savedEntity!.suggestion).toBe(expectedSavedSuggestion)
+    expect(savedEntity!.suggestion).toBe(suggestion)
   })
 })
