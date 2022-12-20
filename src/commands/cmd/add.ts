@@ -14,18 +14,11 @@ export class AddCommand extends BaseCommand {
   flags = []
   cooldown = 10000
   async execute({
-    message: [emote],
     channel,
-    user
+    user,
+    params: { emote_name: emote }
   }: CommandContext<AddCommand>): Promise<BotResponse> {
-    if (!emote)
-      return {
-        response: 'emote as parameter is required',
-        success: false
-      }
-
     const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
-
     if (isEditor instanceof ResourceError) {
       return { response: 'could not fetch editors', success: false }
     }

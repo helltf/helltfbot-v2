@@ -14,7 +14,7 @@ export class AllowCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
-    message: [updateChannel]
+    params: { channel: updateChannel }
   }: CommandContext<AllowCommand>): Promise<BotResponse> {
     const errorResponse = {
       response: 'You are not permitted to execute this command',

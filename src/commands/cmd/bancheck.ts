@@ -16,7 +16,7 @@ export class BanCheckCommand extends BaseCommand {
   async execute({
     type,
     user,
-    message: [givenUser, givenChannel]
+    params: { user: givenUser, channel: givenChannel }
   }: CommandContext<BanCheckCommand>): Promise<BotResponse> {
     if (type === MessageType.WHISPER && !givenChannel)
       return {

@@ -11,18 +11,12 @@ export class AcceptCommand extends BaseCommand {
   requiredParams = ['id'] as const
   optionalParams = ['reason'] as const
   alias = ['acceptsuggestion', 'approve']
-  flags = [CommandFlag.WHISPER]
+  flags = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   cooldown = 0
   async execute({
-    message: [id, ...reason]
+    params: { id, reason }
   }: CommandContext<AcceptCommand>): Promise<BotResponse> {
-    if (!id)
-      return {
-        response: 'id missing',
-        success: false
-      }
-
-    const success = await this.methods.updateSuggestion(id, reason.join(' '))
+    const success = await this.methods.updateSuggestion(id, reason)
 
     if (success) {
       await this.methods.createNotificationReminder(id)
@@ -35,7 +29,10 @@ export class AcceptCommand extends BaseCommand {
     }
   }
   methods = {
-    updateSuggestion: async (id: string, reason: string): Promise<boolean> => {
+    updateSuggestion: async (
+      id: string,
+      reason: string | undefined
+    ): Promise<boolean> => {
       const result = await hb.db.suggestion.update(
         {
           id: Number(id)

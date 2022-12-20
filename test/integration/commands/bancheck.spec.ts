@@ -33,7 +33,7 @@ describe('ban check', () => {
       const result = await bancheck.execute({
         channel,
         user,
-        message: [],
+        params: {}
         type: MessageType.WHISPER
       })
 
