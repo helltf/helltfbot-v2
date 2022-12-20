@@ -7,16 +7,16 @@ export class EvalCommand extends BaseCommand {
   name = 'eval'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'evaluates the given input'
-  requiredParams = ['expression'] as const
+  requiredParams = ['code'] as const
   optionalParams = [] as const
   alias: string[] = []
   cooldown = 0
-  flags: CommandFlag[] = [CommandFlag.WHISPER]
+  flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   async execute({
-    message: [...code]
+    params: { code }
   }: CommandContext<EvalCommand>): Promise<BotResponse> {
     try {
-      const result = await eval('(async () => ' + code.join(' ') + ')()')
+      const result = await eval('(async () => ' + code + ')()')
       const response =
         typeof result === 'object' ? JSON.stringify(result) : `${result}`
       return {

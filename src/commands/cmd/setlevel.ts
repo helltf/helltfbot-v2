@@ -14,16 +14,11 @@ export class SetLevelCommand extends BaseCommand {
   cooldown = 5000
   async execute({
     user,
-    message: [providedUser, providedLevel]
-  }: CommandContext<SetLevelCommand >): Promise<BotResponse>  {
+    params: { user: providedUser, level: providedLevel }
+  }: CommandContext<SetLevelCommand>): Promise<BotResponse> {
     const level =
       providedLevel?.toUpperCase() as keyof typeof GlobalPermissionLevel
 
-    if (!providedUser)
-      return {
-        response: 'You need to define a user',
-        success: false
-      }
     if (user.username === providedUser) {
       return {
         response: 'Cannot change your own role',
@@ -31,9 +26,9 @@ export class SetLevelCommand extends BaseCommand {
       }
     }
 
-    if (!level || !(level in GlobalPermissionLevel))
+    if (!(level in GlobalPermissionLevel))
       return {
-        response: 'level is missing or not existing',
+        response: 'permission level does not exist',
         success: false
       }
     const success = await this.methods.updateRole(

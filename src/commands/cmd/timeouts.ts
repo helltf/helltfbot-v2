@@ -14,7 +14,7 @@ export class TimeoutsCommand extends BaseCommand {
   cooldown = 30000
   async execute({
     user,
-    message: [providedUser, providedChannel]
+    params: { user: providedUser, channel: providedChannel }
   }: CommandContext<TimeoutsCommand>): Promise<BotResponse> {
     const username = providedUser ?? user.username!
 

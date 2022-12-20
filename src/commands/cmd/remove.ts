@@ -14,16 +14,10 @@ export class RemoveCommand extends BaseCommand {
   flags = []
   cooldown = 10000
   async execute({
-    message: [emote],
+    params: { emote_name: emote },
     channel,
     user
-  }: CommandContext<RemoveCommand>): Promise<BotResponse>  {
-    if (!emote)
-      return {
-        response: 'emote as parameter is required',
-        success: false
-      }
-
+  }: CommandContext<RemoveCommand>): Promise<BotResponse> {
     const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
 
     if (isEditor instanceof ResourceError) {

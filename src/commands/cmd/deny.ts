@@ -11,10 +11,10 @@ export class DenyCommand extends BaseCommand {
   requiredParams = ['id'] as const
   optionalParams = ['reason'] as const
   alias = ['denysuggestion']
-  flags = [CommandFlag.WHISPER]
+  flags = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   cooldown = 10000
   async execute({
-    message: [id, ...reason]
+    params: { id, reason }
   }: CommandContext<DenyCommand>): Promise<BotResponse> {
     if (!id) return { response: 'no id given', success: false }
 

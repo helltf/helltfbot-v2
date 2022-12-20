@@ -15,7 +15,7 @@ export class EmoteCommand extends BaseCommand {
 
   async execute({
     channel,
-    message: [channelParam]
+    params: { channel: channelParam }
   }: CommandContext<EmoteCommand>): Promise<BotResponse> {
     const emoteChannel = !channelParam ? channel : channelParam
 

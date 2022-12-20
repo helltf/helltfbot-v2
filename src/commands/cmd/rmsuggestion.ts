@@ -15,16 +15,11 @@ export class RemoveSuggestCommand extends BaseCommand {
 
   async execute({
     user,
-    message: [id]
-  }: CommandContext<RemoveSuggestCommand >): Promise<BotResponse>  {
+    params: { id }
+  }: CommandContext<RemoveSuggestCommand>): Promise<BotResponse> {
     const response: BotResponse = {
       success: false,
       response: ''
-    }
-
-    if (!id) {
-      response.response = 'You need to specify an id to delete your suggestion'
-      return response
     }
 
     if (!parseInt(id)) {

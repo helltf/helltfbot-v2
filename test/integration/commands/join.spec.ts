@@ -32,34 +32,17 @@ describe('join command tests', () => {
     await disconnectDatabase()
   })
 
-  it('channel is undefined return error', async () => {
-    const message: string[] = []
-
-    const { success, response } = await join.execute({ channel, user, message })
-
-    const expectedResponse = 'Channel has to be defined'
-
-    expect(success).toBe(false)
-    expect(response).toBe(expectedResponse)
-  })
-
-  it('channel is empty string return error', async () => {
-    const message = ['']
-
-    const { success, response } = await join.execute({ channel, user, message })
-
-    const expectedResponse = 'Channel has to be defined'
-
-    expect(success).toBe(false)
-    expect(response).toBe(expectedResponse)
-  })
-
   it('channel is defined but client is already connected return error response', async () => {
     const joinChannel = 'joinChannel'
-    const message = [joinChannel]
     await saveExampleChannel(joinChannel)
 
-    const { success, response } = await join.execute({ channel, user, message })
+    const { success, response } = await join.execute({
+      channel,
+      user,
+      params: {
+        channel: joinChannel
+      }
+    })
     const expectedResponse = 'Already connected to that channel'
 
     expect(success).toBe(false)
@@ -154,7 +137,7 @@ describe('join command tests', () => {
       })
     )
 
-    await join.execute({ channel, user, message: [channelToJoin] })
+    await join.execute({ channel, user, params: { channel: channelToJoin } })
 
     const updatedEntity = await hb.db.channel.findOneBy({
       channel: channelToJoin
@@ -165,10 +148,9 @@ describe('join command tests', () => {
 
   it('use me as param join the users channel and save to db', async () => {
     const channelToJoin = 'me'
-    const message = [channelToJoin]
     jest.spyOn(hb.client, 'join').mockResolvedValue([channelToJoin])
 
-    await join.execute({ channel, user, message })
+    await join.execute({ channel, user, params: { channel: channelToJoin } })
 
     const savedEntity = await hb.db.channel.findOneBy({
       channel: user.username
@@ -179,7 +161,6 @@ describe('join command tests', () => {
 
   it('use me as param join the users channel and update it in db', async () => {
     const channelToJoin = 'me'
-    const message = [channelToJoin]
     jest.spyOn(hb.client, 'join').mockResolvedValue([channelToJoin])
 
     await hb.db.channel.save(
@@ -189,7 +170,7 @@ describe('join command tests', () => {
       })
     )
 
-    await join.execute({ channel, user, message })
+    await join.execute({ channel, user, params: { channel: channelToJoin } })
 
     const savedEntity = await hb.db.channel.findOneBy({
       channel: user.username
@@ -200,11 +181,14 @@ describe('join command tests', () => {
 
   it('user permissions are not admin return error if joining other channel', async () => {
     const channelToJoin = 'channelToJoin'
-    const message = [channelToJoin]
 
     user.permission = 0
 
-    const { success, response } = await join.execute({ channel, user, message })
+    const { success, response } = await join.execute({
+      channel,
+      user,
+      params: { channel: channelToJoin }
+    })
 
     expect(success).toBe(false)
     expect(response).toBe('You are not permitted to issue this command')

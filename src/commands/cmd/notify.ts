@@ -21,8 +21,8 @@ export class NotifyCommand extends BaseCommand {
   async execute({
     channel,
     user,
-    message: [streamer, event]
-  }: CommandContext<NotifyCommand >): Promise<BotResponse>  {
+    params: { streamer, event }
+  }: CommandContext<NotifyCommand>): Promise<BotResponse> {
     if (this.methods.eventIsNotValid(event))
       return this.methods.getUnknownEventErrorResponse()
 

@@ -14,16 +14,11 @@ export class LeaveCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
-    message: [channeltoLeave]
+    params: { channel: channeltoLeave }
   }: CommandContext<LeaveCommand>): Promise<BotResponse> {
     const errorResponse: BotResponse = {
       success: false,
       response: ''
-    }
-
-    if (!channeltoLeave) {
-      errorResponse.response = 'You need to define a channel'
-      return errorResponse
     }
 
     if (

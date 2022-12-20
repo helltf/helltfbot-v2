@@ -31,7 +31,7 @@ describe('colorhistory command', () => {
   it('user has no records return error', async () => {
     const { response, success } = await colorhistory.execute({
       channel: messageChannel,
-      message: [],
+      params: {},
       user
     })
 
@@ -50,7 +50,7 @@ describe('colorhistory command', () => {
 
     const { response, success } = await colorhistory.execute({
       channel: messageChannel,
-      message: [],
+      params: {},
       user
     })
 
@@ -73,7 +73,7 @@ describe('colorhistory command', () => {
 
     const { response, success } = await colorhistory.execute({
       channel: messageChannel,
-      message: [],
+      params: {},
       user
     })
 
@@ -99,7 +99,7 @@ describe('colorhistory command', () => {
 
     const { response, success } = await colorhistory.execute({
       channel: messageChannel,
-      message: [customUser],
+      params: { user: customUser },
       user
     })
 

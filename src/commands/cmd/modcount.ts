@@ -14,7 +14,7 @@ export class ModCountCommand extends BaseCommand {
   cooldown = 10000
   async execute({
     channel,
-    message: [givenChannel]
+    params: { channel: givenChannel }
   }: CommandContext<ModCountCommand>): Promise<BotResponse> {
     const lookupChannel = givenChannel ?? channel
 

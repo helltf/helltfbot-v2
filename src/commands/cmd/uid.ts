@@ -13,9 +13,9 @@ export class UidCommand extends BaseCommand {
   cooldown = 10000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
-    message: [searchUser],
-    user
-  }: CommandContext<UidCommand>): Promise<BotResponse>  {
+    user,
+    params: { user: searchUser }
+  }: CommandContext<UidCommand>): Promise<BotResponse> {
     if (!searchUser)
       return {
         response: this.methods.getResponse(user['user-id'], user.username),

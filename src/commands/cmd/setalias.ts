@@ -14,13 +14,10 @@ export class SetAliasCommand extends BaseCommand {
   flags = []
   cooldown = 10000
   async execute({
-    message: [emote, alias],
     channel,
-    user
-  }: CommandContext<SetAliasCommand >): Promise<BotResponse>  {
-    if (!emote || !alias)
-      return { response: 'emote and alias are required', success: false }
-
+    user,
+    params: { emote, alias }
+  }: CommandContext<SetAliasCommand>): Promise<BotResponse> {
     const isEditor = await this.methods.isEditor(user.username!, channel)
 
     if (isEditor instanceof ResourceError)

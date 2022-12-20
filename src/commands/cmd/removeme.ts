@@ -18,7 +18,7 @@ export class RemovemeCommand extends BaseCommand {
   async execute({
     channel,
     user: { 'user-id': unparsedUserId },
-    message: [streamer, event]
+    params: { streamer, event }
   }: CommandContext<RemovemeCommand>): Promise<BotResponse> {
     const userId = Number(unparsedUserId)
     const eventType = event as UserNotificationType

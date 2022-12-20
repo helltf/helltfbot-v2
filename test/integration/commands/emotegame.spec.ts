@@ -43,25 +43,16 @@ describe('test emotegame', () => {
   })
 
   describe('execute', () => {
-    it('no action given return error response', async () => {
-      const { response, success } = await emotegame.execute({
-        channel: messageChannel,
-        user,
-        message: []
-      })
-
-      expect(success).toBe(false)
-      expect(response).toBe('Action has to be either start or stop')
-    })
-
     it('emote type is not ffz, bttv oder 7tv return error response', async () => {
       const type = 'otherType'
-      const message = ['start', type]
 
       const { response, success } = await emotegame.execute({
         channel: messageChannel,
         user,
-        message
+        params: {
+          action: 'start',
+          type
+        }
       })
 
       expect(response).toBe('type has to be ffz, bttv or seventv')
@@ -69,13 +60,14 @@ describe('test emotegame', () => {
     })
 
     it('action is start return successful response', async () => {
-      const message = ['start']
       mockEmoteApis()
 
       const { response, success } = await emotegame.execute({
         channel: messageChannel,
         user,
-        message
+        params: {
+          action: 'start'
+        }
       })
 
       expect(response).toBe(
@@ -85,12 +77,12 @@ describe('test emotegame', () => {
     })
 
     it('action is not start or stop return error response', async () => {
-      const message = ['b']
-
       const { response, success } = await emotegame.execute({
         channel: messageChannel,
         user,
-        message
+        params: {
+          action: 't'
+        }
       })
 
       expect(response).toBe('Action has to be either start or stop')
@@ -100,12 +92,14 @@ describe('test emotegame', () => {
     emoteTypes.forEach(type => {
       it('action is start with set emotetype return successful response', async () => {
         mockEmoteApis()
-        const message = ['start', type]
 
         const { response, success } = await emotegame.execute({
           channel: messageChannel,
           user,
-          message
+          params: {
+            action: 'start',
+            type
+          }
         })
 
         expect(response).toBe(
@@ -117,7 +111,6 @@ describe('test emotegame', () => {
     })
 
     it('action is stop return successful response', async () => {
-      const message = ['stop']
       mockEmoteApis()
       jest.spyOn(hb.games, 'removeAfterTime').mockImplementation(jest.fn())
       hb.games.add(new Emotegame(messageChannel, 'emote'))
@@ -125,7 +118,9 @@ describe('test emotegame', () => {
       const { response, success } = await emotegame.execute({
         channel: messageChannel,
         user,
-        message
+        params: {
+          action: 'stop'
+        }
       })
 
       expect(response).toBe('The emotegame has been stopped')
@@ -133,17 +128,19 @@ describe('test emotegame', () => {
     })
 
     it('action is start create new game for channel', async () => {
-      const message = ['start']
       mockEmoteApis()
 
-      await emotegame.execute({ channel: messageChannel, user, message })
+      await emotegame.execute({
+        channel: messageChannel,
+        user,
+        params: { action: 'start' }
+      })
 
       expect(hb.games.eg).toHaveLength(1)
       expect(hb.games.eg[0].channel).toBe(messageChannel)
     })
 
     it('action is start but game already exists return error response', async () => {
-      const message = ['start']
       const emote = 'emote'
       mockEmoteApis()
 
@@ -152,7 +149,9 @@ describe('test emotegame', () => {
       const { response, success } = await emotegame.execute({
         channel: messageChannel,
         user,
-        message
+        params: {
+          action: 'start'
+        }
       })
 
       expect(success).toBe(false)

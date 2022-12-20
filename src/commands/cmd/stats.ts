@@ -13,8 +13,8 @@ export class StatsCommand extends BaseCommand {
   cooldown = 20000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
-    message: [type, lookup],
     user,
+    params: { type, user: lookup },
     channel
   }: CommandContext<StatsCommand>): Promise<BotResponse> {
     if (!this.methods.isValidType(type))

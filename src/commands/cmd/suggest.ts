@@ -7,15 +7,15 @@ export class SuggestCommand extends BaseCommand {
   name = 'suggest'
   description = 'suggest a feature you want to see'
   permissions = ChatPermissionLevel.USER
-  requiredParams = [] as const
+  requiredParams = ['suggestion'] as const
   optionalParams = [] as const
   cooldown = 30000
   alias = []
-  flags: CommandFlag[] = [CommandFlag.WHISPER]
+  flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   async execute({
     user,
     channel,
-    message: [...suggestion]
+    params: { suggestion }
   }: CommandContext<SuggestCommand>): Promise<BotResponse> {
     if (!suggestion[0])
       return {
@@ -23,10 +23,8 @@ export class SuggestCommand extends BaseCommand {
         success: false
       }
 
-    const suggestionMessage = suggestion.join(' ')
-
     const id = await this.methods.saveSuggestion(
-      suggestionMessage,
+      suggestion,
       parseInt(user['user-id']!),
       channel
     )

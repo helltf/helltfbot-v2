@@ -14,16 +14,11 @@ export class JoinCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
-    message: [joinChannel]
+    params: { channel: joinChannel }
   }: CommandContext<JoinCommand>): Promise<BotResponse> {
     const errorResponse: BotResponse = {
       response: '',
       success: false
-    }
-
-    if (!joinChannel) {
-      errorResponse.response = 'Channel has to be defined'
-      return errorResponse
     }
 
     if (

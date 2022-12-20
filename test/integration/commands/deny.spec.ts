@@ -28,25 +28,16 @@ describe('deny', () => {
     const user = getExampleTwitchUserState({})
     const channel = 'channel'
 
-    it('id is undefined return error', async () => {
-      const { response, success } = await deny.execute({
-        message: [],
-        channel,
-        user
-      })
-
-      expect(response).toBe('no id given')
-      expect(success).toBe(false)
-    })
-
     it('id does not exist return error', async () => {
       const id = '1'
 
       jest.spyOn(deny.methods, 'updateSuggestion').mockResolvedValue(false)
       const { response, success } = await deny.execute({
-        message: [id],
         channel,
-        user
+        user,
+        params: {
+          id
+        }
       })
 
       expect(response).toBe('suggestion does not exist')
@@ -60,7 +51,9 @@ describe('deny', () => {
 
       jest.spyOn(deny.methods, 'updateSuggestion').mockResolvedValue(true)
       const { response, success } = await deny.execute({
-        message: [id],
+        params: {
+          id
+        },
         user,
         channel
       })
@@ -75,8 +68,13 @@ describe('deny', () => {
 
       jest.spyOn(deny.methods, 'updateSuggestion').mockResolvedValue(true)
       jest.spyOn(deny.methods, 'sendNotification').mockImplementation(jest.fn())
-      await deny.execute({ message: [id], user, channel })
-
+      await deny.execute({
+        user,
+        channel,
+        params: {
+          id
+        }
+      })
       expect(deny.methods.sendNotification).toHaveBeenCalledWith(id)
     })
   })

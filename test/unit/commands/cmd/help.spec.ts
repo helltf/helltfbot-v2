@@ -13,10 +13,10 @@ describe('help command', () => {
     setup()
   })
 
-  it('no command given return error', async () => {
+  it('no command given return info message', async () => {
     const { response, success } = await help.execute({
       channel: channel,
-      message: [],
+      params: {},
       user
     })
     const expectedResponse = [
@@ -29,11 +29,9 @@ describe('help command', () => {
   })
 
   it('command does not exist return error', async () => {
-    const message = ['unknown command']
-
     const { response, success } = await help.execute({
       channel,
-      message,
+      params: { command: 'unknown command' },
       user
     })
 
@@ -43,12 +41,13 @@ describe('help command', () => {
 
   it('command does exist return information', async () => {
     const command = help
-    const message = [command.name]
 
     const { response, success } = await help.execute({
       channel,
-      message,
-      user
+      user,
+      params: {
+        command: command.name
+      }
     })
 
     const expectedResponse = [
@@ -75,14 +74,15 @@ describe('help command', () => {
       optionalParams: [],
       requiredParams: []
     })
-    const message = ['testmessage']
 
     jest.spyOn(hb, 'getCommand').mockReturnValue(command)
 
     const { response, success } = await help.execute({
       channel,
       user,
-      message
+      params: {
+        command: 'test'
+      }
     })
     const expectedResponse = [
       `Name: ${command.name}`,
