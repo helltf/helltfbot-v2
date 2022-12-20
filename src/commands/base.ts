@@ -58,7 +58,6 @@ export abstract class BaseCommand implements Command {
       [key in string]: string
     } = {}
 
-    console.log(this)
     paramList.forEach((param: string, i: number) => {
       if (
         i == paramList.length - 1 &&
