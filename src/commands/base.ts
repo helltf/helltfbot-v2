@@ -58,7 +58,14 @@ export abstract class BaseCommand implements Command {
       [key in string]: string
     } = {}
 
+    console.log(this)
     paramList.forEach((param: string, i: number) => {
+      if (
+        i == paramList.length - 1 &&
+        this.flags?.includes(CommandFlag.APPEND_PARAMS)
+      ) {
+        return (params[param] = message.slice(i, message.length).join(' '))
+      }
       params[param] = message[i]
     })
 

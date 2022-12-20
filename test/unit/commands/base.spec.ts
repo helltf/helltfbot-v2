@@ -1,6 +1,6 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { BaseCommand } from '@src/commands/base'
-import { CommandContext, MessageType } from '@src/commands/types'
+import { CommandContext, CommandFlag, MessageType } from '@src/commands/types'
 import { getExampleTwitchUserState } from '@test-utils/example'
 
 describe('base command', () => {
@@ -126,6 +126,60 @@ describe('base command', () => {
       expect(data.params).toStrictEqual({
         req_param: paramValue1,
         opt_param: paramValue2
+      })
+    })
+
+    it('command has flag append append values to last param', () => {
+      class TestBaseCommand extends BaseCommand {
+        requiredParams = ['param'] as const
+        optionalParams = [] as const
+        flags = [CommandFlag.APPEND_PARAMS]
+      }
+
+      const paramValue = ['ab', 'dc', 'fg', 'hi']
+
+      const result = new TestBaseCommand().buildContext({
+        user,
+        message: paramValue,
+        type: MessageType.MESSAGE,
+        where: channel
+      })
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<
+        CommandContext<TestBaseCommand>
+      >
+      expect(data.params).toStrictEqual({
+        param: paramValue.join(' ')
+      })
+    })
+
+    it('command has flag append append values to last param but two params given', () => {
+      class TestBaseCommand extends BaseCommand {
+        requiredParams = ['first'] as const
+        optionalParams = ['second'] as const
+        flags = [CommandFlag.APPEND_PARAMS]
+      }
+
+      const firstParamValue = 'firstValue'
+      const restParamValues = ['ab', 'dc', 'fg', 'hi']
+
+      const result = new TestBaseCommand().buildContext({
+        user,
+        message: [firstParamValue, ...restParamValues],
+        type: MessageType.MESSAGE,
+        where: channel
+      })
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+
+      const { data } = result as ResourceSuccess<
+        CommandContext<TestBaseCommand>
+      >
+      expect(data.params).toStrictEqual({
+        first: firstParamValue,
+        second: restParamValues.join(' ')
       })
     })
   })
