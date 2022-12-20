@@ -24,11 +24,9 @@ export interface Command {
 }
 
 export type CommandParams<T extends BaseCommand> = {
-  [key in
-    | T['optionalParams'][number]
-    | T['requiredParams'][number]]: key extends T['requiredParams'][number]
-    ? string
-    : string | undefined
+  [key in T['requiredParams'][number]]: string
+} & {
+  [key in T['optionalParams'][number]]?: string
 }
 
 export interface CommandContext<T extends BaseCommand> {
