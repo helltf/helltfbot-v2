@@ -3,22 +3,23 @@ import { UpdateResult } from "typeorm"
 import { BotResponse } from "../../client/types"
 import { UserNotificationType } from '../../modules/pubsub/types'
 import { NotificationService } from '../../services/notification.service'
-import { Command, CommandContext, CommandFlag } from '../types'
+import { BaseCommand } from '../base'
+import { CommandContext, CommandFlag } from '../types'
 
-export class RemovemeCommand implements Command {
+export class RemovemeCommand extends BaseCommand {
   name = 'removeme'
   alias = ['rmn', 'removenotify', 'removenotification']
   cooldown = 5000
   description = 'removes your notification for the given streamer on the event'
-  optionalParams = []
-  requiredParams = ['streamer', 'event']
+  optionalParams = [] as const
+  requiredParams = ['streamer', 'event'] as const
   permissions = ChatPermissionLevel.USER
   flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   async execute({
     channel,
     user: { 'user-id': unparsedUserId },
-    message: [streamer, event]
-  }: CommandContext): Promise<BotResponse> {
+    params: { streamer, event }
+  }: CommandContext<RemovemeCommand>): Promise<BotResponse> {
     const userId = Number(unparsedUserId)
     const eventType = event as UserNotificationType
 

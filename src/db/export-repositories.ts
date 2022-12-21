@@ -75,6 +75,7 @@ export class DB implements DbRepositories {
     await this.dataSource.initialize().catch(e => {
       throw new Error(e)
     })
+
     return this
   }
 }

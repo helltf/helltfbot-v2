@@ -1,25 +1,23 @@
 import { Resource, ResourceError, ResourceSuccess } from "@api/types";
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext } from "@src/commands/types";
+import {  CommandContext } from "@src/commands/types";
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class SetAliasCommand implements Command {
+export class SetAliasCommand extends BaseCommand {
   name = 'setalias'
   permissions = GlobalPermissionLevel.USER
   description = 'sets a the given alias for the emote'
-  requiredParams = ['emote', 'alias']
-  optionalParams = []
+  requiredParams = ['emote', 'alias'] as const
+  optionalParams = [] as const
   alias = ['emotealias', '7tvalias']
   flags = []
   cooldown = 10000
-  execute = async ({
-    message: [emote, alias],
+  async execute({
     channel,
-    user
-  }: CommandContext): Promise<BotResponse> => {
-    if (!emote || !alias)
-      return { response: 'emote and alias are required', success: false }
-
+    user,
+    params: { emote, alias }
+  }: CommandContext<SetAliasCommand>): Promise<BotResponse> {
     const isEditor = await this.methods.isEditor(user.username!, channel)
 
     if (isEditor instanceof ResourceError)

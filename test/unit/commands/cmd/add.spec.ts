@@ -16,17 +16,6 @@ describe('add command', () => {
     const user = getExampleTwitchUserState({})
     const channel = 'channel'
 
-    it('no emote is given return error', async () => {
-      const { response, success } = await add.execute({
-        channel,
-        message: [],
-        user: user
-      })
-
-      expect(response).toBe('emote as parameter is required')
-      expect(success).toBe(false)
-    })
-
     it('editor request fails return fetch editor error', async () => {
       const error = 'Error'
       const emote = 'emote'
@@ -37,7 +26,9 @@ describe('add command', () => {
       const { response, success } = await add.execute({
         user,
         channel,
-        message: [emote]
+        params: {
+          emote_name: emote
+        }
       })
 
       expect(response).toBe('could not fetch editors')
@@ -52,9 +43,11 @@ describe('add command', () => {
         .mockResolvedValue(new ResourceSuccess(false))
 
       const { response, success } = await add.execute({
-        message: [emote],
         channel,
-        user
+        user,
+        params: {
+          emote_name: emote
+        }
       })
 
       expect(response).toBe('You are not an editor of this channel :\\')
@@ -76,9 +69,11 @@ describe('add command', () => {
         .mockResolvedValue(returnedResponse)
 
       const result = await add.execute({
-        message: [emote],
         channel,
-        user
+        user,
+        params: {
+          emote_name: emote
+        }
       })
 
       expect(result).toEqual(returnedResponse)
@@ -96,7 +91,13 @@ describe('add command', () => {
         .mockResolvedValue(new ResourceSuccess(true))
       jest.spyOn(add.methods, 'addEmote').mockResolvedValue(returnedResponse)
 
-      const result = await add.execute({ message: [emote], channel, user })
+      const result = await add.execute({
+        channel,
+        user,
+        params: {
+          emote_name: emote
+        }
+      })
 
       expect(result).toEqual(returnedResponse)
       expect(add.methods.addEmote).toHaveBeenCalledWith(emote, channel)

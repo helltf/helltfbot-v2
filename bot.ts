@@ -7,7 +7,6 @@ import { PubSub } from './src/modules/pubsub/pubsub'
 import { CommandService } from './src/services/commands.service'
 import { client } from './src/client/main-client'
 import { ConfigService } from './src/services/config.service'
-import { Command } from './src/commands/types'
 import { GameService } from './src/services/game.service'
 import { CacheService } from './src/services/cache.service'
 import { Utility } from '@src/utilities/utility'
@@ -17,6 +16,7 @@ import { modules } from '@modules/export-modules'
 import { app } from '@src/webhook/actions'
 import { Express } from 'express'
 import { ReminderService } from '@src/services/reminder.service'
+import { BaseCommand } from '@src/commands/base'
 
 export class TwitchBot {
   client: Client
@@ -69,7 +69,7 @@ export class TwitchBot {
       hb.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
     })
 
-    const startUpMessage = hb.config.get('START_UP_MESSAGE')
+    const startUpMessage = hb.config.get('STARTUP_MESSAGE')
 
     hb.sendMessage(hb.config.get('MAIN_USER'), startUpMessage)
   }
@@ -106,7 +106,7 @@ export class TwitchBot {
     await this.client.say(channel, message)
   }
 
-  getCommand(input: string): Command {
+  getCommand(input: string): BaseCommand {
     return hb.commands.findCommand(input.toLowerCase())
   }
 }

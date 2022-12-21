@@ -26,21 +26,12 @@ describe('test rmsuggest command', () => {
     await disconnectDatabase()
   })
 
-  it('required id is undefined return error message', async () => {
-    const message = ['']
-
-    const response = await rmsuggest.execute({ channel, user, message })
-
-    expect(response.success).toBe(false)
-    expect(response.response).toBe(
-      'You need to specify an id to delete your suggestion'
-    )
-  })
-
   it('id is not an number return error', async () => {
-    const message = ['a']
-
-    const response = await rmsuggest.execute({ channel, user, message })
+    const response = await rmsuggest.execute({
+      channel,
+      user,
+      params: { id: 'a' }
+    })
 
     expect(response.success).toBe(false)
     expect(response.response).toBe('id has to be a number')
@@ -48,9 +39,8 @@ describe('test rmsuggest command', () => {
 
   it('id is defined but not in database return error', async () => {
     const id = '1'
-    const message = [id]
 
-    const response = await rmsuggest.execute({ channel, user, message })
+    const response = await rmsuggest.execute({ channel, user, params: { id } })
 
     expect(response.success).toBe(false)
     expect(response.response).toBe(
@@ -71,9 +61,12 @@ describe('test rmsuggest command', () => {
     })
 
     const id = savedEntity.id
-    const message = [`${id}`]
 
-    const response = await rmsuggest.execute({ channel, user, message })
+    const response = await rmsuggest.execute({
+      channel,
+      user,
+      params: { id: `${id}` }
+    })
 
     const entity = await hb.db.suggestion.findOneBy({
       id: id
@@ -88,7 +81,6 @@ describe('test rmsuggest command', () => {
 
   it('id is defined but user differs from db entry return fail', async () => {
     const id = '1'
-    const message = [id]
     await saveUserStateAsUser(user)
 
     const savedEntity = await hb.db.suggestion.save({
@@ -102,7 +94,7 @@ describe('test rmsuggest command', () => {
 
     user['user-id'] = '5'
 
-    const response = await rmsuggest.execute({ channel, user, message })
+    const response = await rmsuggest.execute({ channel, user, params: { id } })
 
     const remainingEntity = await hb.db.suggestion.findOneBy({
       id: savedEntity.id

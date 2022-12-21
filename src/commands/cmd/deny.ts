@@ -1,23 +1,24 @@
 import { BotResponse } from '@src/client/types';
-import { Command, CommandContext, CommandFlag } from '@src/commands/types'
+import {  CommandContext, CommandFlag } from '@src/commands/types'
 import { SuggestionStatus } from '@src/db/entities/suggestion.entity';
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class DenyCommand implements Command {
+export class DenyCommand extends BaseCommand {
   name = 'deny'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'denies a suggestion'
-  requiredParams = ['id']
-  optionalParams = ['reason']
+  requiredParams = ['id'] as const
+  optionalParams = ['reason'] as const
   alias = ['denysuggestion']
-  flags = [CommandFlag.WHISPER]
+  flags = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   cooldown = 10000
-  execute = async ({
-    message: [id, ...reason]
-  }: CommandContext): Promise<BotResponse> => {
+  async execute({
+    params: { id, reason }
+  }: CommandContext<DenyCommand>): Promise<BotResponse> {
     if (!id) return { response: 'no id given', success: false }
 
-    const success = await this.methods.updateSuggestion(id, reason.join(' '))
+    const success = await this.methods.updateSuggestion(id, reason)
 
     if (!success)
       return { response: 'suggestion does not exist', success: false }

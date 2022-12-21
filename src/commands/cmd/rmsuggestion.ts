@@ -1,26 +1,25 @@
-import { Command, CommandContext, CommandFlag } from '../types'
+import {  CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class RemoveSuggestCommand implements Command {
+export class RemoveSuggestCommand extends BaseCommand {
   name = 'rmsuggest'
   description = 'removes your suggestion'
   permissions = ChatPermissionLevel.USER
-  requiredParams = ['id']
-  optionalParams = []
+  requiredParams = ['id'] as const
+  optionalParams = [] as const
   cooldown = 30000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   alias = ['rms']
 
-  async execute({ user, message: [id] }: CommandContext): Promise<BotResponse> {
+  async execute({
+    user,
+    params: { id }
+  }: CommandContext<RemoveSuggestCommand>): Promise<BotResponse> {
     const response: BotResponse = {
       success: false,
       response: ''
-    }
-
-    if (!id) {
-      response.response = 'You need to specify an id to delete your suggestion'
-      return response
     }
 
     if (!parseInt(id)) {

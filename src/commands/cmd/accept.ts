@@ -1,27 +1,22 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
-import { SuggestionStatus } from "@src/db/entities/suggestion.entity";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
+import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class AcceptCommand implements Command {
+export class AcceptCommand extends BaseCommand {
   name = 'accept'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'Accepts the given suggestion with a reason'
-  requiredParams = ['id']
-  optionalParams = ['reason']
+  requiredParams = ['id'] as const
+  optionalParams = ['reason'] as const
   alias = ['acceptsuggestion', 'approve']
-  flags = [CommandFlag.WHISPER]
+  flags = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   cooldown = 0
-  execute = async ({
-    message: [id, ...reason]
-  }: CommandContext): Promise<BotResponse> => {
-    if (!id)
-      return {
-        response: 'id missing',
-        success: false
-      }
-
-    const success = await this.methods.updateSuggestion(id, reason.join(' '))
+  async execute({
+    params: { id, reason }
+  }: CommandContext<AcceptCommand>): Promise<BotResponse> {
+    const success = await this.methods.updateSuggestion(id, reason)
 
     if (success) {
       await this.methods.createNotificationReminder(id)
@@ -34,7 +29,10 @@ export class AcceptCommand implements Command {
     }
   }
   methods = {
-    updateSuggestion: async (id: string, reason: string): Promise<boolean> => {
+    updateSuggestion: async (
+      id: string,
+      reason: string | undefined
+    ): Promise<boolean> => {
       const result = await hb.db.suggestion.update(
         {
           id: Number(id)

@@ -1,6 +1,5 @@
 import { LevelCommand } from "@src/commands/cmd/level"
 import { UidCommand } from "@src/commands/cmd/uid"
-
 import { HelpCommmand } from '@src/commands/cmd/help'
 import { StatsCommand } from '@src/commands/cmd/stats'
 import { EvalCommand } from '@src/commands/cmd/eval'
@@ -19,7 +18,6 @@ import { PingCommand } from '@src/commands/cmd/ping'
 import { RemoveSuggestCommand } from '@src/commands/cmd/rmsuggestion'
 import { SuggestCommand } from '@src/commands/cmd/suggest'
 import { WebsiteCommand } from '@src/commands/cmd/website'
-import { Command } from '@src/commands/types'
 import { AddCommand } from '@src/commands/cmd/add'
 import { RemovemeCommand } from '@src/commands/cmd/removeme'
 import { YoinkCommand } from '@src/commands/cmd/yoink'
@@ -30,8 +28,10 @@ import { RandomColorCommand } from '@src/commands/cmd/randomcolor'
 import { DisableCommand } from '@src/commands/cmd/disable'
 import { AcceptCommand } from './cmd/accept'
 import { BanCheckCommand } from './cmd/bancheck'
+import { CoinflipCommand } from './cmd/coinflip'
+import { BaseCommand } from './base'
 
-const commands: Command[] = [
+const commands: BaseCommand[] = [
   new PingCommand(),
   new AcceptCommand(),
   new RemovemeCommand(),
@@ -61,7 +61,8 @@ const commands: Command[] = [
   new DenyCommand(),
   new RandomColorCommand(),
   new DisableCommand(),
-  new BanCheckCommand()
+  new BanCheckCommand(),
+  new CoinflipCommand()
 ]
 
 export default commands

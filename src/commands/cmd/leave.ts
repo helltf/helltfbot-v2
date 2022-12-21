@@ -1,28 +1,24 @@
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel, GlobalPermissionLevel } from '../../utilities/permission/types'
-import { Command, CommandContext, CommandFlag } from '../types'
+import { BaseCommand } from '../base'
+import { CommandContext, CommandFlag } from '../types'
 
-export class LeaveCommand implements Command {
+export class LeaveCommand extends BaseCommand {
   name = 'leave'
   description = 'leave a channel'
   permissions = ChatPermissionLevel.USER
-  requiredParams = ['channel']
-  optionalParams = []
+  requiredParams = ['channel'] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = ['l']
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
-    message: [channeltoLeave]
-  }: CommandContext): Promise<BotResponse> {
+    params: { channel: channeltoLeave }
+  }: CommandContext<LeaveCommand>): Promise<BotResponse> {
     const errorResponse: BotResponse = {
       success: false,
       response: ''
-    }
-
-    if (!channeltoLeave) {
-      errorResponse.response = 'You need to define a channel'
-      return errorResponse
     }
 
     if (
@@ -87,4 +83,3 @@ export class LeaveCommand implements Command {
     }
   }
 }
-

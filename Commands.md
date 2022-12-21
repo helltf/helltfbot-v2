@@ -6,6 +6,7 @@
 |add|adds an 7tv emote|
 |allow|allows messages from the bot|
 |bancheck|checks for bans in a channel|
+|coinflip|flips a coin|
 |colorhistory|shows your recent colors|
 |deny|denies a suggestion|
 |disable|disable messages from the bot|

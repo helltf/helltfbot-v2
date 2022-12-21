@@ -1,21 +1,22 @@
 import { BotResponse, TwitchUserState } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class StatsCommand implements Command {
+export class StatsCommand extends BaseCommand {
   name = 'stats'
   permissions: number = ChatPermissionLevel.USER
   description = 'displays your stats'
-  requiredParams: string[] = ['type']
-  optionalParams: string[] = ['user']
+  requiredParams = ['type'] as const
+  optionalParams = ['lookup'] as const
   alias: string[] = ['statistics']
   cooldown = 20000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({
-    message: [type, lookup],
+  async execute({
     user,
+    params: { type, lookup },
     channel
-  }: CommandContext): Promise<BotResponse> => {
+  }: CommandContext<StatsCommand>): Promise<BotResponse> {
     if (!this.methods.isValidType(type))
       return {
         response: `Valid stats are ${Object.values(StatsType)}`,
@@ -42,13 +43,19 @@ export class StatsCommand implements Command {
       return hb.utils.enumContains(StatsType, type)
     },
 
-    async getCommandStats(
-      command: string,
+    getCommandStats: async (
+      command: string | undefined,
       user: TwitchUserState,
       channel: string
-    ): Promise<BotResponse> {
+    ): Promise<BotResponse> => {
       const foundCommand = hb.commands.findCommand('help')
-      return foundCommand.execute({ message: [command], user, channel })
+      return foundCommand.execute({
+        user,
+        channel,
+        params: {
+          command: command!
+        }
+      })
     },
 
     async getLeaderboardPosition(username: string): Promise<number> {

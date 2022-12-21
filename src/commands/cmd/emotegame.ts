@@ -2,21 +2,22 @@ import { ChatPermissionLevel } from "@src/utilities/permission/types";
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
 import { BotResponse } from '../../client/types'
 import { Emotegame } from '../../games/emotegame'
-import { Command, CommandContext, CommandFlag } from '../types'
+import { BaseCommand } from '../base'
+import { CommandContext, CommandFlag } from '../types'
 
-export class EmotegameCommand implements Command {
+export class EmotegameCommand extends BaseCommand {
   name = 'emotegame'
   permissions = ChatPermissionLevel.USER
   description = 'start or stop an emotegame'
-  requiredParams = ['start|stop']
-  optionalParams = ['type']
+  requiredParams = ['action'] as const
+  optionalParams = ['type'] as const
   alias = ['hangman', 'egame', 'bttvgame', 'ffzgame', '7tvgame']
   cooldown = 10000
   flags: CommandFlag[] = [CommandFlag.LOWERCASE]
   async execute({
     channel,
-    message: [action, type]
-  }: CommandContext): Promise<BotResponse> {
+    params: { action, type }
+  }: CommandContext<EmotegameCommand>): Promise<BotResponse> {
     const emoteGameAction = action as EmotegameAction
     const emoteGameType = type as EmoteType
 

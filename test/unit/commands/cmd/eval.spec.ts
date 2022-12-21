@@ -13,8 +13,8 @@ describe('eval command', () => {
     const code = `throw new Error('${error}')`
 
     const { response, success } = await evalcommand.execute({
+      params: { code },
       channel: 'channel',
-      message: [code],
       user: user
     })
 
@@ -28,7 +28,7 @@ describe('eval command', () => {
 
     const { response, success } = await evalcommand.execute({
       channel: 'channel',
-      message: [code],
+      params: { code },
       user: user
     })
 
@@ -46,7 +46,7 @@ describe('eval command', () => {
 
     const { response, success } = await evalcommand.execute({
       channel: 'channel',
-      message: [code],
+      params: { code },
       user: user
     })
 

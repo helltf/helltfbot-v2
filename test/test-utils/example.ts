@@ -10,6 +10,7 @@ import {
   ReminderEntity,
   BanEntity
 } from '@db/entities'
+import { BaseCommand } from '@src/commands/base'
 import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 import {
   ChatPermissionLevel,
@@ -32,7 +33,7 @@ export function getExampleCommand({
   requiredParams = [],
   permissions = ChatPermissionLevel.USER,
   flags = []
-}: Partial<Command>): Command {
+}: Partial<Command>): BaseCommand {
   return {
     alias,
     cooldown,
@@ -43,7 +44,7 @@ export function getExampleCommand({
     permissions,
     requiredParams,
     flags
-  }
+  } as BaseCommand
 }
 
 export const getExampleEmoteStatsEntity = ({

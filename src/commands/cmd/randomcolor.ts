@@ -1,19 +1,20 @@
 import { BotResponse } from '@src/client/types';
-import { Command, CommandFlag } from '@src/commands/types'
+import {  CommandFlag } from '@src/commands/types'
 import {
   ChatPermissionLevel,
 } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class RandomColorCommand implements Command {
+export class RandomColorCommand extends BaseCommand {
   name = 'randomcolor'
   permissions = ChatPermissionLevel.USER
   description = 'generates a random hex color'
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   alias = ['rc']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000
-  execute = async (): Promise<BotResponse> => {
+  async execute(): Promise<BotResponse>  {
     return { response: this.methods.generateHex(), success: true }
   }
 
