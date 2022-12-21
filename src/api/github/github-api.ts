@@ -1,50 +1,16 @@
-import { Resource, ResourceError, ResourceSuccess } from '../types'
-import { Projects } from './github-projects'
+import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import fetch from 'node-fetch'
 
-const getPipeLineData = async (
-  project: Projects
-): Promise<Resource<PipelineData>> => {
+export const requestGithubApi = async <T>(path: string): Promise<Resource<T>> => {
   try {
-    const data = await requestGithubApi(project)
-    return new ResourceSuccess(new PipelineData(data, project))
-  } catch (e: any) {
-    return new ResourceError(e)
-  }
-}
-
-const requestGithubApi = async (path: string): Promise<any> => {
-  return await (
-    await fetch(path, {
+    const result = await fetch(path, {
       method: 'GET',
       headers: {
         Authorization: 'token ' + hb.config.get('GITHUB_TOKEN')
       }
     })
-  ).json()
-}
-
-export class PipelineData {
-  count: number
-  branch: string
-  status: string
-  conclusion: string
-  repository: string
-  project: Projects
-  event: string
-
-  constructor({ workflow_runs, total_count }: any, project: Projects) {
-    const { head_branch, status, conclusion, repository, event } =
-      workflow_runs[0]
-
-    this.count = total_count
-    this.branch = head_branch
-    this.status = status
-    this.conclusion = conclusion
-    this.repository = repository.name
-    this.project = project
-    this.event = event
+    return new ResourceSuccess((await result.json()) as T)
+  } catch (e: any) {
+    return new ResourceError(e)
   }
 }
-
-export { getPipeLineData }
