@@ -69,7 +69,7 @@ export class TwitchBot {
       hb.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
     })
 
-    const startUpMessage = hb.config.get('START_UP_MESSAGE')
+    const startUpMessage = hb.config.get('STARTUP_MESSAGE')
 
     hb.sendMessage(hb.config.get('MAIN_USER'), startUpMessage)
   }
