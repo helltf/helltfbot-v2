@@ -1,4 +1,4 @@
-import { CommandContext, MessageType } from '@src/commands/types'
+import {  MessageType } from '@src/commands/types'
 import { ChatUserstate } from 'tmi.js'
 import { ChatPermissionLevel, GlobalPermissionLevel } from '../utilities/permission/types'
 
@@ -22,10 +22,4 @@ export interface ResponseContext {
   where: string
   response: BotResponse
   type: MessageType
-}
-
-export interface InputContext {
-  failed: boolean
-  error?: string
-  commandContext: CommandContext
 }
