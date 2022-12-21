@@ -21,6 +21,7 @@ declare global {
       WEBHOOK_PORT: string
       WEBHOOK_SECRET: string
       BOT_CHANNEL: string
+      GITHUB_TOKEN: string
     }
   }
 }
@@ -43,4 +44,5 @@ export interface Environment {
   WEBHOOK_PORT: string
   WEBHOOK_SECRET: string
   BOT_CHANNEL: string
+  GITHUB_TOKEN: string
 }

@@ -72,6 +72,7 @@ SEVENTV_GQL_TOKEN= <7tv-Bearer>
 ENCRYPT_KEY=<key_to_encrypt>
 WEBHOOK_PORT=<port>
 WEBHOOK_SECRET=<secret>
+GITHUB_TOKEN=<api_token>
 STARTUP_MESSAGE=[message]
 ```
 
