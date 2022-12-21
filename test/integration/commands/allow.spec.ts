@@ -65,7 +65,7 @@ describe('test allow command', () => {
     expect(success).toBe(false)
   })
 
-  it('user has broadcaster permissions but provides no params return successful resoponse', async () => {
+  it('user has broadcaster permissions but provides no params return successful response', async () => {
     user.permission = ChatPermissionLevel.BROADCASTER
 
     await hb.db.channel.save(
@@ -78,9 +78,7 @@ describe('test allow command', () => {
     const { response, success } = await allow.execute({
       channel: messageChannel,
       user,
-      params: {
-        channel: 'channel'
-      }
+      params: {}
     })
 
     expect(response).toBe('Successfully updated settings')
@@ -98,13 +96,10 @@ describe('test allow command', () => {
     const { response, success } = await allow.execute({
       channel: messageChannel,
       user,
-      params: {
-        channel: 'channel'
-      }
+      params: {}
     })
 
     expect(response).toBe('Successfully updated settings')
-
     expect(success).toBe(true)
   })
 
@@ -157,9 +152,7 @@ describe('test allow command', () => {
     await allow.execute({
       channel: messageChannel,
       user,
-      params: {
-        channel: 'channel'
-      }
+      params: {}
     })
 
     const updatedEntity = await hb.db.channel.findOneBy({

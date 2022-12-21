@@ -48,7 +48,7 @@ describe('setlevel command', () => {
       })
 
       expect(success).toBe(false)
-      expect(response).toBe('level is missing or not existing')
+      expect(response).toBe('permission level does not exist')
     })
 
     it('user is not existing return error', async () => {
