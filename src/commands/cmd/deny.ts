@@ -18,7 +18,7 @@ export class DenyCommand extends BaseCommand {
   }: CommandContext<DenyCommand>): Promise<BotResponse> {
     if (!id) return { response: 'no id given', success: false }
 
-    const success = await this.methods.updateSuggestion(id, reason.join(' '))
+    const success = await this.methods.updateSuggestion(id, reason)
 
     if (!success)
       return { response: 'suggestion does not exist', success: false }
