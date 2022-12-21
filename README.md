@@ -56,9 +56,10 @@ Copy the following snippet into that file and fill in your own values:
 NODE_ENV=<env>
 MAIN_USER=<your_username>
 MAIN_USER_ID=<your_user_id>
+BOT_CHANNEL=<default_channel>
 DEBUG=<bool>
 PREFIX=<bot_prefix>
-START_UP_MESSAGE=[message]
+REDIS_URL=<redis_db_url>
 DB_USERNAME=<db_username>
 DB_PASSWORD=<db_password>
 DB_DATABASE=<db_table>
@@ -67,11 +68,12 @@ TEST_DATABASE_URI=<test_db_connection_uri>
 CLIENT_ID=<twitch_client_id>
 CLIENT_SECRET=<twitch_client_secret>
 TWITCH_OAUTH=<twitch_client_oauth>
-BEARERTOKEN_STREAMELEMENTS=<streamelements_api_key>
-GITHUB_TOKEN=<github_api_key>
-REDIS_URL=<redis_db_url>
 SEVENTV_GQL_TOKEN= <7tv-Bearer>
 ENCRYPT_KEY=<key_to_encrypt>
+WEBHOOK_PORT=<port>
+WEBHOOK_SECRET=<secret>
+GITHUB_TOKEN=<api_token>
+STARTUP_MESSAGE=[message]
 ```
 
 Install all dependencies using ```yarn install``` and build the project with ```yarn build```, then if nothing went wrong, you can now run the bot:

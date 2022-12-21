@@ -1,5 +1,5 @@
-import { getPipeLineData } from './github-api'
+import { requestGithubApi } from './github-api'
 
 export class GithubApi {
-  getPipeLineData = getPipeLineData
+  request = requestGithubApi
 }
