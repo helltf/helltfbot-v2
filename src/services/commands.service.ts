@@ -1,13 +1,14 @@
+import { BaseCommand } from "@src/commands/base";
 import {LogType} from "@src/logger/logger-export";
 import { Command } from "../commands/types";
 
 export class CommandService {
   commands: {
     activate: string[]
-    command: Command
+    command: BaseCommand
   }[] = []
 
-  constructor(commands: Command[]) {
+  constructor(commands: BaseCommand[]) {
     const usedNames = []
 
     for (const command of commands) {
@@ -21,7 +22,7 @@ export class CommandService {
     }
   }
 
-  findCommand(input: string): Command {
+  findCommand(input: string): BaseCommand {
     return this.commands.filter(v => v.activate.includes(input))[0]?.command
   }
 

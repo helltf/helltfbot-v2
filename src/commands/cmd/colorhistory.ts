@@ -1,22 +1,23 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import {
   ChatPermissionLevel,
 } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class ColorHistoryCommand implements Command {
+export class ColorHistoryCommand extends BaseCommand {
   name = 'colorhistory'
   permissions = ChatPermissionLevel.USER
   description = 'replies with the history of colors'
-  requiredParams = []
-  optionalParams = ['user']
+  requiredParams = [] as const
+  optionalParams = ['user'] as const
   alias = ['colors', 'history']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000
-  execute = async ({
+  async execute({
     user,
-    message: [userParam]
-  }: CommandContext): Promise<BotResponse> => {
+    params: { user: userParam }
+  }: CommandContext<ColorHistoryCommand>): Promise<BotResponse> {
     const username = userParam !== undefined ? userParam : user.username!
     const history = await this.methods.getColorHistory(username)
 

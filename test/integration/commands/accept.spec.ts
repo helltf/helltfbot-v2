@@ -30,23 +30,14 @@ describe('accept command', () => {
   })
 
   describe('execute', () => {
-    it('id is not defined return error response', async () => {
-      const { response, success } = await accept.execute({
-        channel: channel,
-        message: [],
-        user: user
-      })
-
-      expect(response).toBe('id missing')
-      expect(success).toBe(false)
-    })
-
     it('id does not exist return error response', async () => {
-      const id = 1
+      const id = '1'
 
       const { response, success } = await accept.execute({
         channel: channel,
-        message: [`${id}`],
+        params: {
+          id
+        },
         user: user
       })
 
@@ -60,11 +51,13 @@ describe('accept command', () => {
         .spyOn(accept.methods, 'createNotificationReminder')
         .mockImplementation(jest.fn())
 
-      const id = 1
+      const id = '1'
 
       const { response, success } = await accept.execute({
         channel: channel,
-        message: [`${id}`],
+        params: {
+          id
+        },
         user: user
       })
 
@@ -79,7 +72,13 @@ describe('accept command', () => {
         .mockImplementation(jest.fn())
       jest.spyOn(accept.methods, 'updateSuggestion').mockResolvedValue(true)
 
-      await accept.execute({ channel, message: [id], user })
+      await accept.execute({
+        channel,
+        params: {
+          id
+        },
+        user
+      })
 
       expect(accept.methods.createNotificationReminder).toHaveBeenCalled()
     })

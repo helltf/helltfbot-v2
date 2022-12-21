@@ -1,5 +1,6 @@
 import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permission/types"
 import { BotResponse, TwitchUserState } from "../client/types"
+import { BaseCommand } from "./base"
 
 
 export interface Command {
@@ -14,16 +15,24 @@ export interface Command {
   methods?: {
     [key: string]: (...args: any) => Promise<any> | any
   }
-  execute: (context: CommandContext) => Promise<BotResponse>
+  execute<T extends BaseCommand>(
+    context: CommandContext<T>
+  ): Promise<BotResponse>
   static?: {
     [key: string]: any
   }
 }
 
-export interface CommandContext {
+export type CommandParams<T extends BaseCommand> = {
+  [key in T['requiredParams'][number]]: string
+} & {
+  [key in T['optionalParams'][number]]?: string
+}
+
+export interface CommandContext<T extends BaseCommand> {
   user: TwitchUserState
   channel: string
-  message: string[]
+  params: CommandParams<T>
   type?: MessageType
 }
 
@@ -34,5 +43,6 @@ export enum MessageType {
 
 export enum CommandFlag {
   WHISPER = 'whisper',
-  LOWERCASE = 'lowercase'
+  LOWERCASE = 'lowercase',
+  APPEND_PARAMS = 'append_params'
 }

@@ -35,26 +35,13 @@ describe('test leave command', () => {
     await disconnectDatabase()
   })
 
-  it('no input is given return erorr response', async () => {
-    const message = ['']
-
-    const { response, success } = await leave.execute({
-      channel: messageChannel,
-      user,
-      message
-    })
-
-    expect(response).toBe('You need to define a channel')
-    expect(success).toBe(false)
-  })
-
   it('client is not connected to channel, channel is not in db return error response', async () => {
-    const message = ['leaveChannel']
+    const leaveChannel = 'leaveChannel'
 
     const { response, success } = await leave.execute({
       channel: messageChannel,
       user,
-      message
+      params: { channel: leaveChannel }
     })
 
     expect(response).toBe('Not connected to channel')
@@ -63,7 +50,6 @@ describe('test leave command', () => {
 
   it('client is not connected to channel, channel is in db return error response', async () => {
     const leaveChannel = 'leaveChannel'
-    const message = [leaveChannel]
     const channelEntity = getExampleChannel({
       joined: false,
       channel: leaveChannel
@@ -74,7 +60,9 @@ describe('test leave command', () => {
     const { response, success } = await leave.execute({
       channel: messageChannel,
       user,
-      message
+      params: {
+        channel: leaveChannel
+      }
     })
 
     expect(response).toBe('Not connected to channel')
@@ -107,7 +95,6 @@ describe('test leave command', () => {
 
   it('client leaves given channel return success response', async () => {
     const channelToLeave = 'leaveChannel'
-    const message = [channelToLeave]
     jest.spyOn(hb.client, 'part').mockResolvedValue([channelToLeave])
 
     await hb.db.channel.save(
@@ -120,7 +107,7 @@ describe('test leave command', () => {
     const { response, success } = await leave.execute({
       channel: messageChannel,
       user,
-      message
+      params: { channel: channelToLeave }
     })
 
     expect(success).toBe(true)
@@ -129,7 +116,6 @@ describe('test leave command', () => {
 
   it('client leaves given channel and updates joined to falsee', async () => {
     const channelToLeave = 'leaveChannel'
-    const message = [channelToLeave]
     jest.spyOn(hb.client, 'part').mockResolvedValue([channelToLeave])
 
     await hb.db.channel.save(
@@ -139,7 +125,13 @@ describe('test leave command', () => {
       })
     )
 
-    await leave.execute({ channel: messageChannel, user, message })
+    await leave.execute({
+      channel: messageChannel,
+      user,
+      params: {
+        channel: channelToLeave
+      }
+    })
 
     const savedEntity = await hb.db.channel.findOneBy({
       channel: channelToLeave
@@ -201,7 +193,6 @@ describe('test leave command', () => {
 
   it('leave channel me sets the channel to joined false', async () => {
     const channelToLeave = 'me'
-    const message = [channelToLeave]
 
     jest.spyOn(hb.client, 'part').mockResolvedValue([channelToLeave])
 
@@ -212,7 +203,11 @@ describe('test leave command', () => {
       })
     )
 
-    await leave.execute({ channel: messageChannel, user, message })
+    await leave.execute({
+      channel: messageChannel,
+      user,
+      params: { channel: channelToLeave }
+    })
 
     const updatedEntity = await hb.db.channel.findOneBy({
       channel: user.username
@@ -223,13 +218,14 @@ describe('test leave command', () => {
 
   it('user has no permissions but uses not me as param channel return error', async () => {
     const channelToLeave = 'channelToLeave'
-
-    const message = [channelToLeave]
     user.permission = ChatPermissionLevel.USER
+
     const response = await leave.execute({
       channel: messageChannel,
       user,
-      message
+      params: {
+        channel: channelToLeave
+      }
     })
 
     expect(response.success).toBe(false)

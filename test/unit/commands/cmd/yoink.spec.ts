@@ -17,17 +17,6 @@ describe('yoink', () => {
     const messageChannel = 'channel'
     const emote = 'emote'
 
-    it('emote is undefined return error', async () => {
-      const { response, success } = await yoink.execute({
-        message: [],
-        channel: messageChannel,
-        user
-      })
-
-      expect(response).toBe('no emote specified')
-      expect(success).toBe(false)
-    })
-
     it('yoink returns error return error response', async () => {
       const error = 'Error'
 
@@ -36,9 +25,9 @@ describe('yoink', () => {
         .mockResolvedValue(new ResourceError(error))
 
       const { response, success } = await yoink.execute({
-        message: [emote],
         channel: messageChannel,
-        user
+        user,
+        params: { emote }
       })
 
       expect(response).toBe(error)
@@ -56,7 +45,7 @@ describe('yoink', () => {
       const response = await yoink.execute({
         channel: messageChannel,
         user,
-        message: [emote]
+        params: { emote }
       })
 
       expect(response).toEqual(aliasResponse)

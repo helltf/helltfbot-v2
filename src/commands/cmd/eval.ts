@@ -1,21 +1,22 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { BaseCommand } from '../base'
 
-export class EvalCommand implements Command {
+export class EvalCommand extends BaseCommand {
   name = 'eval'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'evaluates the given input'
-  requiredParams = ['expression']
-  optionalParams = []
+  requiredParams = ['code'] as const
+  optionalParams = [] as const
   alias: string[] = []
   cooldown = 0
-  flags: CommandFlag[] = [CommandFlag.WHISPER]
-  execute = async ({
-    message: [...code]
-  }: CommandContext): Promise<BotResponse> => {
+  flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
+  async execute({
+    params: { code }
+  }: CommandContext<EvalCommand>): Promise<BotResponse> {
     try {
-      const result = await eval('(async () => ' + code.join(' ') + ')()')
+      const result = await eval('(async () => ' + code + ')()')
       const response =
         typeof result === 'object' ? JSON.stringify(result) : `${result}`
       return {

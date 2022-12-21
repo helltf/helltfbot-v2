@@ -1,22 +1,23 @@
 import { BanEntity } from "@db/entities";
 import { BotResponse } from "@src/client/types";
 import { ChatPermissionLevel} from "@src/utilities/permission/types";
-import { Command, CommandContext, CommandFlag, MessageType } from '../types'
+import { BaseCommand } from "../base";
+import { CommandContext, CommandFlag, MessageType } from '../types'
 
-export class BanCheckCommand implements Command {
+export class BanCheckCommand extends BaseCommand {
   name = 'bancheck'
   permissions = ChatPermissionLevel.USER
   description = 'check bans for a user in a channel'
-  requiredParams = []
-  optionalParams = ['user', 'channel']
+  requiredParams = [] as const
+  optionalParams = ['user', 'channel'] as const
   alias = ['bc', 'banc']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 15000
-  execute = async ({
+  async execute({
     type,
     user,
-    message: [givenUser, givenChannel]
-  }: CommandContext): Promise<BotResponse> => {
+    params: { user: givenUser, channel: givenChannel }
+  }: CommandContext<BanCheckCommand>): Promise<BotResponse> {
     if (type === MessageType.WHISPER && !givenChannel)
       return {
         response: 'Channel is required in whisper context',

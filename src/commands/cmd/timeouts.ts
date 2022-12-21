@@ -1,20 +1,21 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class TimeoutsCommand implements Command {
+export class TimeoutsCommand extends BaseCommand {
   name = 'timeouts'
   permissions = GlobalPermissionLevel.USER
   description = 'returns latest timeout and amount of tracked timeouts'
-  requiredParams = []
-  optionalParams = ['user', 'channel']
+  requiredParams = [] as const
+  optionalParams = ['user', 'channel'] as const
   alias = ['timeoutcheck', 'timeoutstats', 'tms']
   flags = [CommandFlag.LOWERCASE, CommandFlag.WHISPER]
   cooldown = 30000
-  execute = async ({
+  async execute({
     user,
-    message: [providedUser, providedChannel]
-  }: CommandContext): Promise<BotResponse> => {
+    params: { user: providedUser, channel: providedChannel }
+  }: CommandContext<TimeoutsCommand>): Promise<BotResponse> {
     const username = providedUser ?? user.username!
 
     return this.methods.getTimeoutInfo(username, providedChannel)

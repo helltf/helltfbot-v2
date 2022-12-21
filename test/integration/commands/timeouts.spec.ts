@@ -28,8 +28,8 @@ describe('test suggest command', () => {
     it('no param given return no bans because user has no bans', async () => {
       const { response, success } = await timeouts.execute({
         channel: channel,
-        message: [],
-        user: messageUser
+        user: messageUser,
+        params: {}
       })
 
       expect(success).toBe(true)
@@ -51,8 +51,8 @@ describe('test suggest command', () => {
 
       const { response, success } = await timeouts.execute({
         channel: channel,
-        message: [],
-        user: messageUser
+        user: messageUser,
+        params: {}
       })
 
       const expectedResponse = getFullResponse({
@@ -91,7 +91,7 @@ describe('test suggest command', () => {
 
       const { response, success } = await timeouts.execute({
         channel: channel,
-        message: [],
+        params: {},
         user: messageUser
       })
 
@@ -127,7 +127,7 @@ describe('test suggest command', () => {
       const { response, success } = await timeouts.execute({
         user: messageUser,
         channel: channel,
-        message: [username]
+        params: { user: username }
       })
 
       const expectedResponse = getFullResponse({
@@ -149,8 +149,8 @@ describe('test suggest command', () => {
 
       const { response, success } = await timeouts.execute({
         channel: channel,
-        message: [givenUser, givenChannel],
-        user: messageUser
+        user: messageUser,
+        params: { user: givenUser, channel: givenChannel }
       })
 
       expect(response).toBe('No timeout found')
@@ -172,8 +172,11 @@ describe('test suggest command', () => {
 
       const { response, success } = await timeouts.execute({
         channel: channel,
-        message: [givenUser, givenChannel],
-        user: messageUser
+        user: messageUser,
+        params: {
+          channel: givenChannel,
+          user: givenUser
+        }
       })
 
       const expectedResponse = getChannelResponse({

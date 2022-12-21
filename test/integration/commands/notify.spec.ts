@@ -45,7 +45,10 @@ describe('test notify command: ', () => {
     const response = await notify.execute({
       channel,
       user,
-      message: [streamer, event]
+      params: {
+        streamer,
+        event
+      }
     })
 
     expect(response.success).toBe(false)
@@ -58,7 +61,6 @@ describe('test notify command: ', () => {
 
   it('user already has this notification return error response', async () => {
     const event = UserNotificationType.GAME
-    const message = [notification.streamer, event]
     notification[event] = true
 
     await hb.db.user.save(notification.user)
@@ -69,7 +71,7 @@ describe('test notify command: ', () => {
       user: {
         'user-id': `${notification.user.id}`
       },
-      message
+      params: { streamer, event }
     })
 
     expect(success).toBe(false)
@@ -288,7 +290,7 @@ describe('test notify command: ', () => {
     })
 
     it('creating new connection and invoking listen to topic function', async () => {
-      const message = [streamer, UserNotificationType.LIVE]
+      const event = UserNotificationType.LIVE
       const userState = getExampleTwitchUserState({})
       const returnedStreamerId = 1
       await hb.db.user.save(user)
@@ -298,7 +300,11 @@ describe('test notify command: ', () => {
         .mockResolvedValue(returnedStreamerId)
       jest.spyOn(hb.pubSub, 'listenToTopic')
 
-      await notify.execute({ channel, user: userState, message })
+      await notify.execute({
+        channel,
+        user: userState,
+        params: { streamer, event }
+      })
 
       const expectedTopic = {
         id: returnedStreamerId,

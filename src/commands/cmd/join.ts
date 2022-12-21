@@ -1,28 +1,24 @@
 import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { BotResponse } from '../../client/types'
-import { Command, CommandContext, CommandFlag } from '../types'
+import { BaseCommand } from '../base'
+import { CommandContext, CommandFlag } from '../types'
 
-export class JoinCommand implements Command {
+export class JoinCommand extends BaseCommand {
   name = 'join'
   description = 'join a channel'
   permissions = ChatPermissionLevel.USER
-  requiredParams = ['channel']
-  optionalParams = []
+  requiredParams = ['channel'] as const
+  optionalParams = [] as const
   cooldown = 5000
   alias = ['j']
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   async execute({
     user,
-    message: [joinChannel]
-  }: CommandContext): Promise<BotResponse> {
+    params: { channel: joinChannel }
+  }: CommandContext<JoinCommand>): Promise<BotResponse> {
     const errorResponse: BotResponse = {
       response: '',
       success: false
-    }
-
-    if (!joinChannel) {
-      errorResponse.response = 'Channel has to be defined'
-      return errorResponse
     }
 
     if (
@@ -108,5 +104,3 @@ export class JoinCommand implements Command {
     }
   }
 }
-
-

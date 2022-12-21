@@ -26,7 +26,7 @@ describe('emote command', () => {
 
     const { success, response } = await emote.execute({
       channel: messageChannel,
-      message: [],
+      params: {},
       user: user
     })
 
@@ -41,7 +41,7 @@ describe('emote command', () => {
 
     const { success, response } = await emote.execute({
       channel: messageChannel,
-      message: [],
+      params: {},
       user: user
     })
 
@@ -72,7 +72,7 @@ describe('emote command', () => {
 
     const { success, response } = await emote.execute({
       channel: messageChannel,
-      message: [],
+      params: {},
       user: user
     })
 
@@ -102,7 +102,9 @@ describe('emote command', () => {
 
     const { success, response } = await emote.execute({
       channel: messageChannel,
-      message: [channelParam],
+      params: {
+        channel: channelParam
+      },
       user: user
     })
 

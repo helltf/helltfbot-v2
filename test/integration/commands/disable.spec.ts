@@ -30,9 +30,9 @@ describe('disable', () => {
     it('channel is already disabled return no success', async () => {
       jest.spyOn(disable.methods, 'disable').mockResolvedValue(false)
       const { response, success } = await disable.execute({
-        message: [],
         user,
-        channel
+        channel,
+        params: {}
       })
 
       expect(response).toBe('Bot is already disabled')
@@ -42,9 +42,9 @@ describe('disable', () => {
     it('bot is not disabled return success', async () => {
       jest.spyOn(disable.methods, 'disable').mockResolvedValue(true)
       const { response, success } = await disable.execute({
-        message: [],
         user,
-        channel
+        channel,
+        params: {}
       })
 
       expect(response).toBe('disabled')

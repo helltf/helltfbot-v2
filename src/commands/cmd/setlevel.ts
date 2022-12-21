@@ -1,28 +1,24 @@
 import { BotResponse } from "@src/client/types";
-import { Command, CommandContext, CommandFlag } from "@src/commands/types";
+import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { BaseCommand } from '../base'
 
-export class SetLevelCommand implements Command {
+export class SetLevelCommand extends BaseCommand {
   name = 'setlevel'
   permissions = GlobalPermissionLevel.ADMIN
   description = 'sets the permissions of a given user'
-  requiredParams = ['user', 'level']
-  optionalParams = []
+  requiredParams = ['user', 'level'] as const
+  optionalParams = [] as const
   alias = ['setlvl']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 5000
-  execute = async ({
+  async execute({
     user,
-    message: [providedUser, providedLevel]
-  }: CommandContext): Promise<BotResponse> => {
+    params: { user: providedUser, level: providedLevel }
+  }: CommandContext<SetLevelCommand>): Promise<BotResponse> {
     const level =
       providedLevel?.toUpperCase() as keyof typeof GlobalPermissionLevel
 
-    if (!providedUser)
-      return {
-        response: 'You need to define a user',
-        success: false
-      }
     if (user.username === providedUser) {
       return {
         response: 'Cannot change your own role',
@@ -30,9 +26,9 @@ export class SetLevelCommand implements Command {
       }
     }
 
-    if (!level || !(level in GlobalPermissionLevel))
+    if (!(level in GlobalPermissionLevel))
       return {
-        response: 'level is missing or not existing',
+        response: 'permission level does not exist',
         success: false
       }
     const success = await this.methods.updateRole(

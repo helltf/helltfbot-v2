@@ -1,30 +1,24 @@
 import { ResourceError } from '@api/types';
 import { BotResponse } from '@src/client/types';
-import { Command, CommandContext } from '@src/commands/types'
+import {  CommandContext } from '@src/commands/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { BaseCommand } from '../base'
 
-export class AddCommand implements Command {
+export class AddCommand extends BaseCommand {
   name = 'add'
   permissions = ChatPermissionLevel.USER
   description = 'adds an 7tv emote'
-  requiredParams = ['emote_name']
-  optionalParams = []
+  requiredParams = ['emote_name'] as const
+  optionalParams = [] as const
   alias = ['add7tv', 'addemote']
   flags = []
   cooldown = 10000
-  execute = async ({
-    message: [emote],
+  async execute({
     channel,
-    user
-  }: CommandContext): Promise<BotResponse> => {
-    if (!emote)
-      return {
-        response: 'emote as parameter is required',
-        success: false
-      }
-
+    user,
+    params: { emote_name: emote }
+  }: CommandContext<AddCommand>): Promise<BotResponse> {
     const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
-
     if (isEditor instanceof ResourceError) {
       return { response: 'could not fetch editors', success: false }
     }

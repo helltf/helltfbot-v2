@@ -1,17 +1,18 @@
 import { BotResponse } from '@src/client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
-import { Command, CommandFlag } from '../types'
+import { BaseCommand } from '../base'
+import { CommandFlag } from '../types'
 
-export class CoinflipCommand implements Command {
+export class CoinflipCommand extends BaseCommand {
   name = 'coinflip'
   permissions = ChatPermissionLevel.USER
   description = 'flips a coin'
-  requiredParams = []
-  optionalParams = []
+  requiredParams = [] as const
+  optionalParams = [] as const
   alias = ['cf']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000
-  execute = async (): Promise<BotResponse> => {
+  async execute(): Promise<BotResponse> {
     const flipResult = this.methods.flipCoin()
 
     return {

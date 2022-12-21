@@ -1,6 +1,9 @@
+import { BaseCommand } from "@src/commands/base"
 import { HelpCommmand } from "@src/commands/cmd/help"
-import {Command} from "@src/commands/types"
-import { getExampleCommand, getExampleTwitchUserState } from "@test-utils/example"
+import {
+  getExampleCommand,
+  getExampleTwitchUserState
+} from '@test-utils/example'
 import { setup } from '@test-utils/setup'
 
 describe('help command', () => {
@@ -13,10 +16,10 @@ describe('help command', () => {
     setup()
   })
 
-  it('no command given return error', async () => {
+  it('no command given return info message', async () => {
     const { response, success } = await help.execute({
       channel: channel,
-      message: [],
+      params: {},
       user
     })
     const expectedResponse = [
@@ -29,11 +32,9 @@ describe('help command', () => {
   })
 
   it('command does not exist return error', async () => {
-    const message = ['unknown command']
-
     const { response, success } = await help.execute({
       channel,
-      message,
+      params: { command: 'unknown command' },
       user
     })
 
@@ -43,12 +44,13 @@ describe('help command', () => {
 
   it('command does exist return information', async () => {
     const command = help
-    const message = [command.name]
 
     const { response, success } = await help.execute({
       channel,
-      message,
-      user
+      user,
+      params: {
+        command: command.name
+      }
     })
 
     const expectedResponse = [
@@ -70,19 +72,20 @@ describe('help command', () => {
   })
 
   it('command alias and params are empty do not return them', async () => {
-    const command: Command = getExampleCommand({
+    const command: BaseCommand = getExampleCommand({
       alias: [],
       optionalParams: [],
       requiredParams: []
     })
-    const message = ['testmessage']
 
     jest.spyOn(hb, 'getCommand').mockReturnValue(command)
 
     const { response, success } = await help.execute({
       channel,
       user,
-      message
+      params: {
+        command: 'test'
+      }
     })
     const expectedResponse = [
       `Name: ${command.name}`,
