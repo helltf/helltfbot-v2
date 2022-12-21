@@ -1,6 +1,6 @@
-import { Command } from "@commands/types"
+import { BaseCommand } from "@src/commands/base"
 import { CommandService } from "@src/services/commands.service"
-import { clearDb } from "../../test-utils/clear"
+import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import { getExampleCommand } from '../../test-utils/example'
 import { setupDatabase } from '../../test-utils/setup-db'
@@ -20,7 +20,7 @@ describe('test updating commands', () => {
 
   describe('add commands to db', () => {
     it("commands are empty add new commands doesn't update database", async () => {
-      const commands: Command[] = []
+      const commands: BaseCommand[] = []
       const commandsService = new CommandService(commands)
 
       await commandsService.addCommandsToDb()

@@ -1,6 +1,9 @@
+import { BaseCommand } from "@src/commands/base"
 import { HelpCommmand } from "@src/commands/cmd/help"
-import {Command} from "@src/commands/types"
-import { getExampleCommand, getExampleTwitchUserState } from "@test-utils/example"
+import {
+  getExampleCommand,
+  getExampleTwitchUserState
+} from '@test-utils/example'
 import { setup } from '@test-utils/setup'
 
 describe('help command', () => {
@@ -69,7 +72,7 @@ describe('help command', () => {
   })
 
   it('command alias and params are empty do not return them', async () => {
-    const command: Command = getExampleCommand({
+    const command: BaseCommand = getExampleCommand({
       alias: [],
       optionalParams: [],
       requiredParams: []
