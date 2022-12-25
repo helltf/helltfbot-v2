@@ -1,4 +1,5 @@
 import type { Config } from "@jest/types";
+import { TwitchBot } from "./bot";
 import { pathsToModuleNameMapper } from "ts-jest";
 import {compilerOptions} from './tsconfig.json'
 
