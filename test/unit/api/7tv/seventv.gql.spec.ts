@@ -1,12 +1,10 @@
 import { AddEmoteResponse, AliasResponse, Editor, EmoteData, RemoveEmoteResponse, SevenTvGQL, SevenTvUserResponse } from '@api/7tv/seventv.gql'
 import { ResourceError, ResourceSuccess } from '@api/types'
-import { setup } from '@test-utils/setup'
 
 describe('7tv gql', () => {
   let gql: SevenTvGQL
 
   beforeEach(() => {
-    setup()
     gql = new SevenTvGQL()
   })
 
