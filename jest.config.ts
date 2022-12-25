@@ -1,12 +1,12 @@
 import type { Config } from "@jest/types";
+import { TwitchBot } from "./bot";
 import { pathsToModuleNameMapper } from "ts-jest";
 import {compilerOptions} from './tsconfig.json'
-
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
-      hb: true
+      hb: new TwitchBot()
     },
 
     transform: {
@@ -22,6 +22,7 @@ export default async (): Promise<Config.InitialOptions> => {
       name: 'helltfbot-v2',
       color: 'greenBright'
     },
+    detectLeaks: true,
     verbose: true,
     setupFiles: ['dotenv/config'],
     testMatch: ['**/**/*.spec.ts'],
