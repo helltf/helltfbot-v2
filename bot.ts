@@ -54,7 +54,7 @@ export class TwitchBot {
   async init() {
     await this.db.initialize()
     this.log(LogType.INFO, 'DB connected')
-    await this.client.connect().catch(e => {
+    await this.client.connect().catch((e: Error) => {
       throw new Error(`Could not connect to twitch servers: ${e}`)
     })
     this.log(LogType.INFO, 'Client connected')
@@ -66,12 +66,12 @@ export class TwitchBot {
 
     const port = process.env.WEBHOOK_PORT
     this.webhook.listen(Number(port), () => {
-      hb.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
+      this.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
     })
 
-    const startUpMessage = hb.config.get('STARTUP_MESSAGE')
+    const startUpMessage = this.config.get('STARTUP_MESSAGE')
 
-    hb.sendMessage(hb.config.get('MAIN_USER'), startUpMessage)
+    this.sendMessage(this.config.get('MAIN_USER'), startUpMessage)
   }
 
   startPubSub() {
@@ -79,7 +79,7 @@ export class TwitchBot {
   }
 
   startJobs() {
-    if (hb.config.isDev()) return
+    if (this.config.isDev()) return
 
     for (const { delay, execute } of jobs) {
       execute()
@@ -107,6 +107,6 @@ export class TwitchBot {
   }
 
   getCommand(input: string): BaseCommand {
-    return hb.commands.findCommand(input.toLowerCase())
+    return this.commands.findCommand(input.toLowerCase())
   }
 }
