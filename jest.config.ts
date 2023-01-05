@@ -23,6 +23,7 @@ export default async (): Promise<Config.InitialOptions> => {
     detectLeaks: true,
     verbose: true,
     setupFiles: ['dotenv/config'],
+    setupFilesAfterEnv: ['<rootDir>/scripts/test/setup-test.ts'],
     testMatch: ['**/**/*.spec.ts'],
     testEnvironment: 'node',
     detectOpenHandles: true,

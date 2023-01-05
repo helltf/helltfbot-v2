@@ -1,6 +1,6 @@
-import { SevenTvApi } from '@api/7tv/seventv.api'
-import { Editor } from '@api/7tv/seventv.gql'
-import { ResourceError, ResourceSuccess } from '@api/types'
+import { SevenTvApi } from 'src/api/7tv/seventv.api'
+import { Editor } from 'src/api/7tv/seventv.gql'
+import { ResourceError, ResourceSuccess } from 'src/api/types'
 
 describe('7tv api', () => {
   let api: SevenTvApi
