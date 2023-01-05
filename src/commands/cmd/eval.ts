@@ -1,7 +1,8 @@
-import { BotResponse } from "@src/client/types";
-import {  CommandContext, CommandFlag } from "@src/commands/types";
-import { GlobalPermissionLevel } from "@src/utilities/permission/types";
+
+import { BotResponse } from '../../client/types'
+import { GlobalPermissionLevel } from '../../utilities/permission/types'
 import { BaseCommand } from '../base'
+import { CommandFlag, CommandContext } from '../types'
 
 export class EvalCommand extends BaseCommand {
   name = 'eval'

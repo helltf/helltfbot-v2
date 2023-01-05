@@ -1,6 +1,7 @@
-import { Resource, ResourceSuccess, ResourceError } from "@api/types"
+
 import request from 'graphql-request'
 import distance from 'jaro-winkler'
+import { Resource, ResourceSuccess, ResourceError } from '../types'
 
 export class SevenTvGQL {
   url = 'https://7tv.io/v2/gql'

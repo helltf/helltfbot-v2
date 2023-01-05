@@ -1,7 +1,7 @@
 import {  CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BaseCommand } from '../base'
+import { ChatPermissionLevel } from '../../utilities/permission/types'
 
 export class RemoveSuggestCommand extends BaseCommand {
   name = 'rmsuggest'

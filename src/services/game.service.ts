@@ -1,4 +1,5 @@
-import { EmoteStatsEntity } from '@db/entities'
+
+import { EmoteStatsEntity } from '../db/entities/emotestats.entity'
 import { Emotegame } from '../games/emotegame'
 import { ChatGame, EmoteGameInputResult } from '../games/types'
 

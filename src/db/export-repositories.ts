@@ -1,22 +1,9 @@
-import {
-  WordleWordEntity,
-  ColorHistoryEntity,
-  ChannelEntity,
-  TwitchUserEntity,
-  BanEntity,
-  TimeoutEntity,
-  CommandEntity,
-  NotificationEntity,
-  NotificationChannelEntity,
-  SuggestionEntity,
-  ErrorEntity,
-  EmoteStatsEntity,
-  ReminderEntity
-} from '@db/entities'
-import { TwitchTokenEntity } from '@src/db/entities/twitch_token.entity'
+
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { getOrmConf } from '../../ormconfig'
+import { TwitchTokenEntity } from './entities/twitch_token.entity'
+import { WordleWordEntity, ColorHistoryEntity, ChannelEntity, TwitchUserEntity, BanEntity, TimeoutEntity, CommandEntity, NotificationEntity, NotificationChannelEntity, SuggestionEntity, ErrorEntity, ReminderEntity, EmoteStatsEntity } from './export-entities'
 
 export interface DbRepositories {
   wordle: Repository<WordleWordEntity>

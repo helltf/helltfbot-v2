@@ -1,6 +1,6 @@
 import { Resource, ResourceError, ResourceSuccess } from "../types"
-import { SevenTvGQL } from '@api/7tv/seventv.gql'
-import { SevenTvRest } from '@api/7tv/seventv.rest'
+import { SevenTvGQL } from "./seventv.gql"
+import { SevenTvRest } from "./seventv.rest"
 
 export class SevenTvApi {
   gql: SevenTvGQL = new SevenTvGQL()

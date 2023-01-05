@@ -1,12 +1,13 @@
-import { Resource, ResourceError, ResourceSuccess } from '@api/types'
-import { CryptoUtility } from '@src/utilities/crypto'
-import { Permission } from '@src/utilities/permission/permission'
+
 import { exec } from 'child_process'
 import {
   HumanizeDuration,
   HumanizeDurationLanguage
 } from 'humanize-duration-ts'
 import { promisify } from 'util'
+import { Resource, ResourceError, ResourceSuccess } from '../api/types'
+import { CryptoUtility } from './crypto'
+import { Permission } from './permission/permission'
 
 const execute = promisify(exec)
 const validChars =

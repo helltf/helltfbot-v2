@@ -1,8 +1,9 @@
-import { ResourceError } from '@api/types'
-import { GlobalPermissionLevel } from '@src/utilities/permission/types'
-import { wait } from '@src/utilities/wait'
+
 import { ChatUserstate } from 'tmi.js'
+import { ResourceError } from '../../api/types'
 import { Command, MessageType } from '../../commands/types'
+import { GlobalPermissionLevel } from '../../utilities/permission/types'
+import { wait } from '../../utilities/wait'
 import { ChatContext, ResponseContext, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX

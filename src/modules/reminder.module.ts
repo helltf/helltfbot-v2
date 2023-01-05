@@ -1,7 +1,8 @@
-import { Resource, ResourceError } from '@api/types'
-import { ReminderEntity } from '@db/entities'
-import { ReminderType } from '@src/db/entities/reminder.entity'
+
 import { ChatUserstate } from 'tmi.js'
+import { Resource, ResourceError } from '../api/types'
+import { ReminderType } from '../db/entities/reminder.entity'
+import { ReminderEntity } from '../db/export-entities'
 import { Module } from './types'
 
 export class ReminderModule implements Module {

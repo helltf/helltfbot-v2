@@ -1,9 +1,10 @@
-import { SevenTvApi } from "@api/7tv/seventv.api"
-import { BttvApi } from "@api/bttv/bttv.api"
-import { FfzApi } from "@api/ffz/ffz.api"
-import { GithubApi } from "@api/github/export-github-api"
-import { TwitchApi } from '@api/twitch/export-api'
-import { EmoteInfo, ResourceSuccess } from '@api/types'
+import { SevenTvApi } from "../api/7tv/seventv.api"
+import { BttvApi } from "../api/bttv/bttv.api"
+import { FfzApi } from "../api/ffz/ffz.api"
+import { GithubApi } from "../api/github/export-github-api"
+import { TwitchApi } from "../api/twitch/export-api"
+import { EmoteInfo, ResourceSuccess } from "../api/types"
+
 
 export class ApiService {
   twitch: TwitchApi

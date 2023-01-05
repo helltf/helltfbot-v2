@@ -1,8 +1,9 @@
-import { ChatPermissionLevel } from "@src/utilities/permission/types"
+
 import { UpdateResult } from "typeorm"
 import { BotResponse } from "../../client/types"
 import { UserNotificationType } from '../../modules/pubsub/types'
 import { NotificationService } from '../../services/notification.service'
+import { ChatPermissionLevel } from "../../utilities/permission/types"
 import { BaseCommand } from '../base'
 import { CommandContext, CommandFlag } from '../types'
 

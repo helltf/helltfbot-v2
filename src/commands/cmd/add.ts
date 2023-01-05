@@ -1,8 +1,8 @@
-import { ResourceError } from '@api/types';
-import { BotResponse } from '@src/client/types';
-import {  CommandContext } from '@src/commands/types'
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
-import { BaseCommand } from '../base'
+import { ResourceError } from "../../api/types"
+import { BotResponse } from "../../client/types"
+import { ChatPermissionLevel } from "../../utilities/permission/types"
+import { BaseCommand } from "../base"
+import { CommandContext } from "../types"
 
 export class AddCommand extends BaseCommand {
   name = 'add'

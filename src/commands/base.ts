@@ -1,9 +1,7 @@
-import { Resource, ResourceError, ResourceSuccess } from "@api/types"
-import { BotResponse,  TwitchUserState } from "@src/client/types"
-import {
-  ChatPermissionLevel,
-  GlobalPermissionLevel
-} from '@src/utilities/permission/types'
+
+import { Resource, ResourceError, ResourceSuccess } from '../api/types'
+import { BotResponse, TwitchUserState } from '../client/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '../utilities/permission/types'
 import { Command, CommandContext, CommandFlag, MessageType } from './types'
 
 export abstract class BaseCommand implements Command {

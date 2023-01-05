@@ -1,5 +1,6 @@
-import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permission/types"
+
 import { BotResponse, TwitchUserState } from "../client/types"
+import { ChatPermissionLevel, GlobalPermissionLevel } from "../utilities/permission/types"
 import { BaseCommand } from "./base"
 
 

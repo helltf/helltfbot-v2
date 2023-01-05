@@ -1,6 +1,7 @@
-import { BaseCommand } from "@src/commands/base";
-import {LogType} from "@src/logger/logger-export";
-import { Command } from "../commands/types";
+import { BaseCommand } from "../commands/base"
+import { Command } from "../commands/types"
+import { LogType } from "../logger/logger-export"
+
 
 export class CommandService {
   commands: {

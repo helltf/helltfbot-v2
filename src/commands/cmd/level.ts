@@ -1,10 +1,8 @@
-import { TwitchUserState, BotResponse } from "@src/client/types";
-import { CommandContext, CommandFlag } from "@src/commands/types";
-import {
-  ChatPermissionLevel,
-  GlobalPermissionLevel
-} from '@src/utilities/permission/types'
+
+import { BotResponse, TwitchUserState } from '../../client/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '../../utilities/permission/types'
 import { BaseCommand } from '../base'
+import { CommandFlag, CommandContext } from '../types'
 
 export class LevelCommand extends BaseCommand {
   name = 'level'

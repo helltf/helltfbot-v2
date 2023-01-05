@@ -1,12 +1,10 @@
 import type { Config } from "@jest/types";
 import { TwitchBot } from "./bot";
-import { pathsToModuleNameMapper } from "ts-jest";
-import {compilerOptions} from './tsconfig.json'
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
-      hb: new TwitchBot()
+      hb: true
     },
 
     transform: {
@@ -29,7 +27,6 @@ export default async (): Promise<Config.InitialOptions> => {
     testEnvironment: 'node',
     detectOpenHandles: true,
     coveragePathIgnorePatterns: ['test/test-utils', 'src/db/migration'],
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
     modulePaths: ['<rootDir>'],
     forceExit: true,
     clearMocks: true,

@@ -7,7 +7,8 @@ import {
   MessageType
 } from './types'
 import * as WS from 'ws'
-import { LogType } from '@src/logger/logger-export'
+import { LogType } from '../../logger/logger-export'
+
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 

@@ -1,6 +1,7 @@
-import { BanEntity } from "@db/entities";
-import { BotResponse } from "@src/client/types";
-import { ChatPermissionLevel} from "@src/utilities/permission/types";
+
+import { BotResponse } from "../../client/types";
+import { BanEntity } from "../../db/export-entities";
+import { ChatPermissionLevel } from "../../utilities/permission/types";
 import { BaseCommand } from "../base";
 import { CommandContext, CommandFlag, MessageType } from '../types'
 

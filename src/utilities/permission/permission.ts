@@ -1,5 +1,6 @@
-import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
+
 import { Userstate, Badges } from 'tmi.js'
+import { ChatPermissionLevel, GlobalPermissionLevel } from './types'
 
 
 export class Permission {

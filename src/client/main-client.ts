@@ -1,5 +1,6 @@
-import { LogType } from '@src/logger/logger-export'
+
 import { ChatUserstate, Client } from 'tmi.js'
+import { LogType } from '../logger/logger-export'
 import { handleChat, handleWhisper } from './handlers/chat'
 import { handleConnect } from './handlers/connect'
 import { handleJoin } from './handlers/join'

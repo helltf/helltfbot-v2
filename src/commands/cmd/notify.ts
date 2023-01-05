@@ -1,4 +1,4 @@
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
+
 import { BotResponse } from '../../client/types'
 
 import {
@@ -6,6 +6,7 @@ import {
   Topic,
   UserNotificationType
 } from '../../modules/pubsub/types'
+import { ChatPermissionLevel } from '../../utilities/permission/types'
 import { BaseCommand } from '../base'
 import { CommandContext, CommandFlag } from '../types'
 

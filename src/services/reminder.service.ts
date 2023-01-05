@@ -1,6 +1,7 @@
-import { Resource, ResourceError, ResourceSuccess } from '@api/types'
-import { ReminderEntity } from '@db/entities'
-import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
+import { Resource, ResourceError, ResourceSuccess } from "../api/types"
+import { ReminderType, ReminderStatus } from "../db/entities/reminder.entity"
+import { ReminderEntity } from "../db/export-entities"
+
 
 export interface ReminderCreationData {
   creatorId: number

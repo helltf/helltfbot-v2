@@ -1,5 +1,6 @@
-import { Resource, ResourceError, ResourceSuccess } from '@api/types'
+
 import fetch from 'node-fetch'
+import { Resource, ResourceError, ResourceSuccess } from '../types'
 
 export const requestGithubApi = async <T>(path: string): Promise<Resource<T>> => {
   try {

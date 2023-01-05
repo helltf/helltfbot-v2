@@ -1,8 +1,9 @@
 import { CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
-import { ResourceError } from '@api/types'
+import { ResourceError } from '../../api/types'
+import { ChatPermissionLevel } from '../../utilities/permission/types'
 import { BaseCommand } from '../base'
+
 
 export class PingCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]

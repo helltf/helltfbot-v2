@@ -1,7 +1,8 @@
-import { ChatPermissionLevel } from "@src/utilities/permission/types";
+
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
 import { BotResponse } from '../../client/types'
 import { Emotegame } from '../../games/emotegame'
+import { ChatPermissionLevel } from "../../utilities/permission/types";
 import { BaseCommand } from '../base'
 import { CommandContext, CommandFlag } from '../types'
 

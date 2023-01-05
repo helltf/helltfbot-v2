@@ -1,9 +1,8 @@
-import { BotResponse } from '@src/client/types';
-import {  CommandFlag } from '@src/commands/types'
-import {
-  ChatPermissionLevel,
-} from '@src/utilities/permission/types'
+
+import { BotResponse } from '../../client/types'
+import { ChatPermissionLevel } from '../../utilities/permission/types'
 import { BaseCommand } from '../base'
+import { CommandFlag } from '../types'
 
 export class RandomColorCommand extends BaseCommand {
   name = 'randomcolor'

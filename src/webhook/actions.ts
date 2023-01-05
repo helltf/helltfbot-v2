@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import {LogType} from '@src/logger/logger-export'
 import {validate} from './validate'
+import { LogType } from '../logger/logger-export'
 export const app = express()
 
 app.use(bodyParser.json())
