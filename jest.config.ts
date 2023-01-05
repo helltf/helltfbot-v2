@@ -1,14 +1,9 @@
 import type { Config } from "@jest/types";
-import { TwitchBot } from "./bot";
 import { pathsToModuleNameMapper } from "ts-jest";
 import {compilerOptions} from './tsconfig.json'
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
-    globals: {
-      hb: new TwitchBot()
-    },
-
     transform: {
       '^.+\\.ts?$': [
         'ts-jest',
@@ -25,6 +20,7 @@ export default async (): Promise<Config.InitialOptions> => {
     detectLeaks: true,
     verbose: true,
     setupFiles: ['dotenv/config'],
+    setupFilesAfterEnv: ['<rootDir>/scripts/test/setup-test.ts'],
     testMatch: ['**/**/*.spec.ts'],
     testEnvironment: 'node',
     detectOpenHandles: true,
