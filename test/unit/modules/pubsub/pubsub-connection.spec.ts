@@ -123,7 +123,6 @@ describe('test pubsub connection class', () => {
   })
 
   it('unlisten command should send unlisten to pubsub', () => {
-    globalThis.hb = new TwitchBot()
     const topic = {
       id: 1,
       prefix: TopicPrefix.SETTING

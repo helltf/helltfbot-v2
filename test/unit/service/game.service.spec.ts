@@ -66,7 +66,6 @@ describe('test game service', () => {
 
   it('added emotegame will be removed after expiring time over', () => {
     jest.useFakeTimers()
-    globalThis.hb = new TwitchBot()
     jest
       .spyOn(hb, 'sendMessage')
       .mockImplementation(jest.fn())

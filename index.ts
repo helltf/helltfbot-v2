@@ -3,8 +3,7 @@ import { setupDev } from './scripts/env-setup/dev';
 import { TwitchBot } from './bot'
 import {LogType} from '@src/logger/logger-export';
 
-globalThis.hb = new TwitchBot()
-
+// globalThis.hb = new TwitchBot()
 {
   ;(async () => {
     hb.log(LogType.INFO, 'Initializing...')

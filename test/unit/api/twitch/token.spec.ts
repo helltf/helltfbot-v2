@@ -3,7 +3,7 @@ import { TwitchBot } from "bot"
 
 describe('test token api ', () => {
   beforeAll(() => {
-    globalThis.hb = new TwitchBot()
+    // globalThis.hb = new TwitchBot()
   })
   it('body should have a client id', () => {
     const testId = 'abc'
