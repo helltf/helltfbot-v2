@@ -4,7 +4,7 @@ import { TwitchBot } from "./bot";
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
-      hb: true
+      hb: new TwitchBot()
     },
 
     transform: {

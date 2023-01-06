@@ -42,7 +42,7 @@ export class TwitchBot {
     this.client = client
     this.cooldown = new Cooldown()
     this.pubSub = new PubSub()
-    this.db = new DB()
+    this.db = {} as DB //new DB()
     this.commands = new CommandService(commands)
     this.api = new ApiService()
     this.cache = new CacheService()
