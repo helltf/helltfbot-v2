@@ -40,6 +40,18 @@ export class ReminderService {
       return new ResourceError('Reciever does not exist')
     }
 
+    const recieverReminderLimit = await hb.db.reminder.countBy({
+      reciever: {
+        id: reciever.id
+      },
+      status: ReminderStatus.CREATED,
+      type: ReminderType.USER
+    })
+
+    if (recieverReminderLimit >= MAX_REMINDER_AMOUNT) {
+      return new ResourceError('Reciever reached reminder limit')
+    }
+
     const result = await hb.db.reminder.save({
       creator,
       reciever,

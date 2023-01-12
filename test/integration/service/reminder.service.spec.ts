@@ -154,7 +154,7 @@ describe('reminder service', () => {
           message: 'message',
           channel: 'channel'
         }
-        await hb.db.user.save([creator, reciever])
+        await hb.db.user.save([creator, reciever, secondCreator])
         await hb.db.reminder.save(
           Array(4)
             .fill('')
@@ -166,11 +166,13 @@ describe('reminder service', () => {
               })
             })
         )
-        await hb.db.reminder.save({
-          create: secondCreator,
-          reciever,
-          id: 10
-        })
+        await hb.db.reminder.save(
+          getExampleReminderEntity({
+            creator: secondCreator,
+            reciever,
+            id: 10
+          })
+        )
 
         const result = await service.create(reminderData)
 
