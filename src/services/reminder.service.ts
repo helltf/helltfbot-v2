@@ -2,6 +2,8 @@ import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 
+const MAX_REMINDER_AMOUNT = 5
+
 export interface ReminderCreationData {
   creatorId: number
   recieverName: string
@@ -20,6 +22,16 @@ export class ReminderService {
 
     if (!creator) {
       return new ResourceError('Creator does not exist')
+    }
+
+    const creatorRemindersLength = await hb.db.reminder.countBy({
+      creator: { id: creator.id },
+      type: ReminderType.USER,
+      status: ReminderStatus.CREATED
+    })
+
+    if (creatorRemindersLength >= MAX_REMINDER_AMOUNT) {
+      return new ResourceError('Cannot create more than 5 reminders')
     }
 
     const reciever = await hb.db.user.findOneBy({ name: recieverName })

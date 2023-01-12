@@ -107,6 +107,81 @@ describe('reminder service', () => {
       expect(savedEntity.firedAt).toEqual(expectedEntity.firedAt)
       expect(savedEntity.status).toEqual(expectedEntity.status)
     })
+
+    it('reminder create limit is exceeded return error', async () => {
+      const creator = getExampleTwitchUserEntity({})
+      const reciever = getExampleTwitchUserEntity({ id: 2, name: 'user2' })
+      const reminderData: ReminderCreationData = {
+        creatorId: creator.id,
+        recieverName: reciever.name,
+        message: 'message',
+        channel: 'channel'
+      }
+      await hb.db.user.save([creator, reciever])
+      await hb.db.reminder.save(
+        Array(5)
+          .fill('')
+          .map((_, index) => {
+            return getExampleReminderEntity({
+              creator,
+              reciever,
+              id: index
+            })
+          })
+      )
+
+      const result = await service.create(reminderData)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+      const expectedError = 'Cannot create more than 5 reminders'
+
+      expect(error).toBe(expectedError)
+    })
+
+    it('reciever already has 5 reminders pending return error', async () => {
+      {
+        const creator = getExampleTwitchUserEntity({})
+        const secondCreator = getExampleTwitchUserEntity({
+          id: 3,
+          name: 'test'
+        })
+        const reciever = getExampleTwitchUserEntity({ id: 2, name: 'user2' })
+        const reminderData: ReminderCreationData = {
+          creatorId: creator.id,
+          recieverName: reciever.name,
+          message: 'message',
+          channel: 'channel'
+        }
+        await hb.db.user.save([creator, reciever])
+        await hb.db.reminder.save(
+          Array(4)
+            .fill('')
+            .map((_, index) => {
+              return getExampleReminderEntity({
+                creator,
+                reciever,
+                id: index
+              })
+            })
+        )
+        await hb.db.reminder.save({
+          create: secondCreator,
+          reciever,
+          id: 10
+        })
+
+        const result = await service.create(reminderData)
+
+        expect(result).toBeInstanceOf(ResourceError)
+
+        const { error } = result as ResourceError
+        const expectedError = 'Reciever reached reminder limit'
+
+        expect(error).toBe(expectedError)
+      }
+    })
   })
 
   describe('get active reminders', () => {
