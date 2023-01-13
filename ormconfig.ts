@@ -13,7 +13,8 @@ function getTestOrmConf(): PostgresConnectionOptions {
   return {
     ...defaultConf,
     synchronize: true,
-    url: process.env.TEST_DATABASE_URI
+    url: process.env.TEST_DATABASE_URI,
+    migrationsRun: false
   }
 }
 
