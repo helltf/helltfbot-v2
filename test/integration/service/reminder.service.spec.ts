@@ -93,7 +93,7 @@ describe('reminder service', () => {
         createdChannel: reminderData.channel ?? null,
         firedAt: null,
         firedChannel: null,
-        status: ReminderStatus.CREATED,
+        status: ReminderStatus.OPEN,
         createdAt: Date.now(),
         type: ReminderType.USER
       }
@@ -230,7 +230,7 @@ describe('reminder service', () => {
         id: 1
       })
       const reminder2 = getExampleReminderEntity({
-        status: ReminderStatus.CREATED,
+        status: ReminderStatus.OPEN,
         id: 2
       })
       await saveReminder(reminder1)
