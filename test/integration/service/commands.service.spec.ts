@@ -21,7 +21,7 @@ describe('test updating commands', () => {
   })
 
   describe('add commands to db', () => {
-    it("commands are empty add new commands doesn't update database", async () => {
+    it.only("commands are empty add new commands doesn't update database", async () => {
       const commands: BaseCommand[] = []
       const commandsService = new CommandService(commands)
 

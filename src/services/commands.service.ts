@@ -1,6 +1,9 @@
 import { BaseCommand } from "@src/commands/base";
 import commands from "@src/commands/export-commands";
 import {LogType} from "@src/logger/logger-export";
+import { Command } from '../commands/types'
+import { db } from '@src/db/export-repositories'
+import { logger } from 'src/logger/logger-export'
 import { Command, CommandFlag } from "../commands/types";
 import { Command } from '../commands/types'
 import { logger } from 'src/logger/logger-export'
