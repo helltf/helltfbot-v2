@@ -30,3 +30,17 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
 
   next()
 }
+
+export const validateMethods = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const method = req.method
+
+  if (method !== 'POST') {
+    return res.status(405).send('Invalid http method')
+  }
+
+  next()
+}

@@ -1,9 +1,10 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import {LogType} from '@src/logger/logger-export'
-import {validate} from './validate'
+import {validate, validateMethods} from './validate'
 export const app = express()
 
+app.use(validateMethods)
 app.use(bodyParser.json())
 app.use(validate)
 
