@@ -56,3 +56,7 @@ export class CacheService {
     }
   }
 }
+
+const cache = new CacheService()
+
+export { cache }

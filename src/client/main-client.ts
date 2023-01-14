@@ -4,8 +4,13 @@ import { handleChat, handleWhisper } from './handlers/chat'
 import { handleConnect } from './handlers/connect'
 import { handleJoin } from './handlers/join'
 import { handlePart } from './handlers/part'
+import { logger } from '@src/logger/logger-export'
 
-const client = createclient()
+class TwitchClient {
+  client = createclient()
+}
+
+const client = new TwitchClient()
 
 function createclient(): Client {
   return Client({
@@ -19,19 +24,19 @@ function createclient(): Client {
     },
     logger: {
       info: msg => {
-        if (hb.debug) hb.log(LogType.DEBUG, msg)
+        if (hb.debug) logger.log(LogType.DEBUG, msg)
       },
       error: msg => {
-        hb.log(LogType.TWITCHBOT, msg)
+        logger.log(LogType.TWITCHBOT, msg)
       },
       warn: msg => {
-        hb.log(LogType.TWITCHBOT, msg)
+        logger.log(LogType.TWITCHBOT, msg)
       }
     }
   })
 }
 
-client.on(
+client.client.on(
   'chat',
   async (
     channel: string,
@@ -45,30 +50,30 @@ client.on(
   }
 )
 
-client.on('part', (channel: string, username: string, self: boolean) => {
+client.client.on('part', (channel: string, _: string, self: boolean) => {
   if (!self) return
   channel = channel.replace('#', '')
 
   handlePart(channel)
 })
 
-client.on('join', (channel: string, username: string, self: boolean) => {
+client.client.on('join', (channel: string, _: string, self: boolean) => {
   if (!self) return
 
   handleJoin(channel)
 })
 
-client.on('connected', () => {
+client.client.on('connected', () => {
   handleConnect()
 })
 
-client.on('whisper', (from, user, message, self) => {
+client.client.on('whisper', (from, user, message, self) => {
   from = from.replace('#', '')
 
   handleWhisper(from, user, message, self)
 })
 
-client.on('disconnected', r => {
+client.client.on('disconnected', r => {
   console.log(`Bot has been disconnected because: ${r}`)
 })
 

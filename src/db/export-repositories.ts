@@ -11,9 +11,9 @@ import {
   SuggestionEntity,
   ErrorEntity,
   EmoteStatsEntity,
-  ReminderEntity
+  ReminderEntity,
+  TwitchTokenEntity
 } from '@db/entities'
-import { TwitchTokenEntity } from '@src/db/entities/twitch_token.entity'
 import { DataSource, Repository } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { getOrmConf } from '../../ormconfig'
@@ -79,3 +79,7 @@ export class DB implements DbRepositories {
     return this
   }
 }
+
+const db = new DB()
+
+export { db }

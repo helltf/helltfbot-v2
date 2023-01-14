@@ -40,3 +40,7 @@ export class ApiService {
     }
   }
 }
+
+const api = new ApiService()
+
+export { api }

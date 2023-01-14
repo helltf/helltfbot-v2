@@ -11,6 +11,7 @@ import { ErrorEntity } from './entities/error.entity'
 import { WordleWordEntity } from './entities/wordle.entity'
 import { EmoteStatsEntity } from './entities/emotestats.entity'
 import { ReminderEntity } from './entities/reminder.entity'
+import { TwitchTokenEntity } from './entities/twitch_token.entity'
 
 export {
   BanEntity,
@@ -25,5 +26,6 @@ export {
   SuggestionEntity,
   ErrorEntity,
   EmoteStatsEntity,
-  ReminderEntity
+  ReminderEntity,
+  TwitchTokenEntity
 }

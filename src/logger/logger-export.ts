@@ -29,4 +29,10 @@ export enum LogType {
   WEBHOOK = '#652800'
 }
 
-export { log as customLogMessage }
+class Logger {
+  log = log
+}
+
+const logger = new Logger()
+
+export { logger }
