@@ -1,10 +1,13 @@
+import {Client} from 'tmi.js'
 import {Cooldown} from './src/services/cooldown.service'
 import {DB} from './src/db/export-repositories'
 import jobs from './src/jobs/jobs-export'
-import { logger, LogType } from '@src/logger/logger-export'
+import { customLogMessage, LogType } from '@src/logger/logger-export'
 import { PubSub } from './src/modules/pubsub/pubsub'
 import { CommandService } from './src/services/commands.service'
+import { client } from './src/client/main-client'
 import { ConfigService } from './src/services/config.service'
+import { Command } from './src/commands/types'
 import { GameService } from './src/services/game.service'
 import { CacheService } from './src/services/cache.service'
 import { Utility } from '@src/utilities/utility'
@@ -14,14 +17,15 @@ import { modules } from '@modules/export-modules'
 import { app } from '@src/webhook/actions'
 import { Express } from 'express'
 import { ReminderService } from '@src/services/reminder.service'
-import { BaseCommand } from '@src/commands/base'
 
 export class TwitchBot {
+  client: Client
   commands: CommandService
   cooldown: Cooldown
   db: DB
   api: ApiService
   pubSub: PubSub
+  log: (type: LogType, ...args: any) => void
   cache: CacheService
   config: ConfigService
   games: GameService
@@ -33,6 +37,8 @@ export class TwitchBot {
   constructor() {
     this.debug = process.env.DEBUG === 'true'
     this.config = new ConfigService()
+    this.log = customLogMessage
+    this.client = client
     this.cooldown = new Cooldown()
     this.pubSub = new PubSub()
     this.db = new DB()
@@ -45,51 +51,24 @@ export class TwitchBot {
     this.webhook = app
   }
 
-  async init() {
-    await this.db.initialize()
-    logger.log(LogType.INFO, 'DB connected')
-    await this.client.connect().catch((e: Error) => {
-      throw new Error(`Could not connect to twitch servers: ${e}`)
-    })
-    logger.log(LogType.INFO, 'Client connected')
-    await this.api.init()
-    await this.cache.connect()
-    this.startPubSub()
-    logger.log(LogType.TWITCHBOT, 'Successfully initialized')
-    this.commands.updateDb()
-
-    const port = process.env.WEBHOOK_PORT
-    this.webhook.listen(Number(port), () => {
-      logger.log(LogType.WEBHOOK, `Webhook listening on port ${port}`)
-    })
-
-    const startUpMessage = this.config.get('STARTUP_MESSAGE')
-
-    this.sendMessage(this.config.get('MAIN_USER'), startUpMessage)
-  }
-
-  startPubSub() {
-    this.pubSub.connect()
-  }
-
   startJobs() {
-    if (this.config.isDev()) return
+    if (hb.config.isDev()) return
 
     for (const { delay, execute } of jobs) {
       execute()
       setInterval(execute, delay)
     }
 
-    logger.log(LogType.JOBS, `Successfully innitialized ${jobs.length} job(s)`)
+    this.log(LogType.JOBS, `Successfully innitialized ${jobs.length} job(s)`)
   }
 
   async initModules() {
     for (const module of modules) {
       await module.initialize()
-      logger.log(LogType.MODULE, `${module.name} has been initialized`)
+      this.log(LogType.MODULE, `${module.name} has been initialized`)
     }
 
-    logger.log(
+    this.log(
       LogType.MODULE,
       `Successfully initialized ${modules.length} modules`
     )
@@ -100,7 +79,7 @@ export class TwitchBot {
     await this.client.say(channel, message)
   }
 
-  getCommand(input: string): BaseCommand {
-    return this.commands.findCommand(input.toLowerCase())
+  getCommand(input: string): Command {
+    return hb.commands.findCommand(input.toLowerCase())
   }
 }

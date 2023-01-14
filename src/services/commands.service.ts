@@ -1,6 +1,7 @@
 import { BaseCommand } from "@src/commands/base";
+import commands from "@src/commands/export-commands";
 import {LogType} from "@src/logger/logger-export";
-import { Command } from "../commands/types";
+import { Command } from '../commands/types'
 
 export class CommandService {
   commands: {
@@ -73,3 +74,7 @@ export class CommandService {
     }
   }
 }
+
+const commandsService = new CommandService(commands)
+
+export { commandsService }

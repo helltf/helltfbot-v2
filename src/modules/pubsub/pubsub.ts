@@ -161,3 +161,7 @@ export class PubSub {
     connection.unlisten([topic])
   }
 }
+
+const pubsub = new PubSub()
+
+export { pubsub }

@@ -34,7 +34,7 @@ export interface Environment {
   PREFIX: string
   MAIN_USER: string
   DEBUG: 'false' | 'true'
-  STARTUP_MESSAGE: string
+  START_UP_MESSAGE: string
   REDIS_URL: string
   MAIN_USER_ID: string
   DATABASE_URI: string

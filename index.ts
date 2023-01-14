@@ -5,6 +5,9 @@ import { client } from '@src/client/main-client';
 import { db } from '@src/db/export-repositories'
 import { api } from '@src/services/api.service'
 import { cache } from '@services/cache.service'
+import { pubsub } from '@modules/pubsub/pubsub'
+import { commandsService } from '@services/commands.service'
+import { app } from '@src/webhook/actions'
 
 {
   ;(async () => {
@@ -21,11 +24,24 @@ import { cache } from '@services/cache.service'
 
     await api.init()
     await cache.connect()
+    pubsub.connect()
+    logger.log(LogType.TWITCHBOT, 'Successfully initialized')
+
+    commandsService.updateDb()
+
+    app.listen(Number(process.env.WEBHOOK_PORT), () => {
+      hb.log(
+        LogType.WEBHOOK,
+        `Webhook listening on port ${process.env.WEBHOOK_PORT}`
+      )
+    })
 
     if (hb.config.isDev()) {
       await setupDev()
     }
 
+    const startUpMessage = config.get('START_UP_MESSAGE')
+    hb.sendMessage(config.get('MAIN_USER'), startUpMessage)
     hb.startJobs()
     hb.initModules()
   })()
