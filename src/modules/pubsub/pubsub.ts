@@ -167,3 +167,4 @@ export class PubSub implements Module {
     connection.unlisten([topic])
   }
 }
+
