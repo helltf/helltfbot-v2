@@ -62,18 +62,6 @@ export class TwitchBot {
     this.log(LogType.JOBS, `Successfully innitialized ${jobs.length} job(s)`)
   }
 
-  async initModules() {
-    for (const module of modules) {
-      await module.initialize()
-      this.log(LogType.MODULE, `${module.name} has been initialized`)
-    }
-
-    this.log(
-      LogType.MODULE,
-      `Successfully initialized ${modules.length} modules`
-    )
-  }
-
   async sendMessage(channel?: string, message?: string) {
     if (!message || !channel) return
     await this.client.say(channel, message)

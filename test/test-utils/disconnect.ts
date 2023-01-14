@@ -1,7 +1,10 @@
+import { db } from "@src/db/export-repositories"
+import { cache } from "@src/services/cache.service"
+
 export const disconnectDatabase = async () => {
-  await hb.db.dataSource.destroy()
+  await db.dataSource.destroy()
 }
 
 export const disconnectRedis = async () => {
-  await hb.cache.redis.disconnect()
+  await cache.redis.disconnect()
 }

@@ -2,6 +2,8 @@ import { BaseCommand } from "@src/commands/base";
 import commands from "@src/commands/export-commands";
 import {LogType} from "@src/logger/logger-export";
 import { Command } from '../commands/types'
+import { db } from '@src/db/export-repositories'
+import { logger } from 'src/logger/logger-export'
 
 export class CommandService {
   commands: {
@@ -45,15 +47,15 @@ export class CommandService {
   async updateDb() {
     await this.addCommandsToDb()
     await this.updateDeletedCommands()
-    hb.log(LogType.DEBUG, 'Successfully updated commands in Database')
+    logger.log(LogType.DEBUG, 'Successfully updated commands in Database')
   }
 
   async updateDeletedCommands() {
-    const commandNames = await hb.db.command.find()
+    const commandNames = await db.command.find()
 
     for await (const { name } of commandNames) {
       if (!this.findCommand(name)) {
-        await hb.db.command.update(
+        await db.command.update(
           {
             name: name
           },
@@ -67,7 +69,7 @@ export class CommandService {
 
   async addCommandsToDb() {
     for await (const command of this.getAll()) {
-      await hb.db.command.save({
+      await db.command.save({
         ...command,
         deleted: false
       })

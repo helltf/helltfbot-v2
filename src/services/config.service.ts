@@ -22,3 +22,6 @@ export class ConfigService {
   }
 }
 
+const config = new ConfigService()
+
+export { config }

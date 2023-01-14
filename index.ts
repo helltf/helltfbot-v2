@@ -8,6 +8,7 @@ import { cache } from '@services/cache.service'
 import { pubsub } from '@modules/pubsub/pubsub'
 import { commandsService } from '@services/commands.service'
 import { app } from '@src/webhook/actions'
+import { config } from '@services/config.service'
 
 {
   ;(async () => {
