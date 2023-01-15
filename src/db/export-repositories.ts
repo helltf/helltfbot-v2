@@ -80,6 +80,6 @@ export class DB implements DbRepositories {
   }
 }
 
-const db = new DB()
-
-export { db }
+// const db = new DB()
+//
+// export { db }

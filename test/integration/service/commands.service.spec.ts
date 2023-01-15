@@ -1,14 +1,14 @@
 import { BaseCommand } from "@src/commands/base"
-import { db } from "@src/db/export-repositories"
+import { DB } from "@src/db/export-repositories"
 import { CommandService } from "@src/services/commands.service"
 import { clearDb } from '../../test-utils/clear'
-import { disconnectDatabase } from '../../test-utils/disconnect'
 import { getExampleCommand } from '../../test-utils/example'
-import { setupDatabase } from '../../test-utils/setup-db'
 
 describe('test updating commands', () => {
+  let db: DB
   beforeAll(async () => {
-    await setupDatabase()
+    db = new DB()
+    await db.initialize()
   })
 
   beforeEach(async () => {
@@ -16,11 +16,11 @@ describe('test updating commands', () => {
   })
 
   afterAll(async () => {
-    await disconnectDatabase()
+    await db.dataSource.destroy()
   })
 
   describe('add commands to db', () => {
-    it.only("commands are empty add new commands doesn't update database", async () => {
+    it("commands are empty add new commands doesn't update database", async () => {
       const commands: BaseCommand[] = []
       const commandsService = new CommandService(commands)
 
