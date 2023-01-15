@@ -1,4 +1,5 @@
 import { BaseCommand } from "@src/commands/base"
+import { DB } from "@src/db/export-repositories"
 import { CommandFlag } from "@src/commands/types"
 import { DB } from "@src/db/export-repositories"
 import { CommandService } from "@src/services/commands.service"
@@ -21,7 +22,7 @@ describe('test updating commands', () => {
   })
 
   describe('add commands to db', () => {
-    it.only("commands are empty add new commands doesn't update database", async () => {
+    it("commands are empty add new commands doesn't update database", async () => {
       const commands: BaseCommand[] = []
       const commandsService = new CommandService(commands)
 
