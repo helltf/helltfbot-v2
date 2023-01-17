@@ -1,4 +1,5 @@
 import { BaseCommand } from "@src/commands/base"
+import { CommandFlag } from "@src/commands/types"
 import { DB } from "@src/db/export-repositories"
 import { CommandService } from "@src/services/commands.service"
 import { clearDb } from '../../test-utils/clear'
@@ -77,6 +78,22 @@ describe('test updating commands', () => {
       }))!
 
       expect(deleted).toBe(false)
+    })
+
+    it('command has disabled flag save disabled in database', async () => {
+      const exampleCommand = getExampleCommand({
+        flags: [CommandFlag.DISABLED]
+      })
+
+      const commandsService = new CommandService([exampleCommand])
+
+      await commandsService.addCommandsToDb()
+
+      const savedEntity = await hb.db.command.findOneBy({
+        name: exampleCommand.name
+      })
+
+      expect(savedEntity?.disabled).toBe(true)
     })
   })
 
