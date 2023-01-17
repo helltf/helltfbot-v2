@@ -35,4 +35,7 @@ export class CommandEntity extends BaseEntity {
     nullable: true
   })
   alias: string[]
+
+  @Column('boolean', { default: false })
+  disabled: boolean
 }

@@ -44,5 +44,6 @@ export enum MessageType {
 export enum CommandFlag {
   WHISPER = 'whisper',
   LOWERCASE = 'lowercase',
-  APPEND_PARAMS = 'append_params'
+  APPEND_PARAMS = 'append_params',
+  DISABLED = 'disabled'
 }
