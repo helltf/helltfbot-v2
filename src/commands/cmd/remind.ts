@@ -1,5 +1,4 @@
-import { Resource, ResourceError } from "@api/types";
-import { ReminderEntity } from "@db/entities";
+import {  ResourceError } from "@api/types";
 import { BotResponse } from "@src/client/types";
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { BaseCommand } from '../base'
