@@ -77,7 +77,7 @@ describe('reminder service', () => {
         channel: 'channel',
         scheduledAt: 1
       }
-      jest.spyOn(Date, 'now').mockImplementation(() => 1)
+      jest.spyOn(Date, 'now').mockReturnValue(1)
       await hb.db.user.save(creator)
       await hb.db.user.save(reciever)
 
@@ -270,7 +270,7 @@ describe('reminder service', () => {
       const channel = 'channel'
       await hb.db.user.save([reminder.creator!, reminder.reciever])
       await hb.db.reminder.save(reminder)
-      jest.spyOn(Date, 'now').mockImplementation(() => 1)
+      jest.spyOn(Date, 'now').mockReturnValue(1)
 
       await service.fire(reminder.id, channel)
 
@@ -407,6 +407,43 @@ describe('reminder service', () => {
       const { data } = result as ResourceSuccess<ReminderEntity[]>
 
       expect(data).toHaveLength(1)
+    })
+  })
+
+  describe('get scheduled reminders', () => {
+    it('user does not exist return empty array', async () => {
+      const userId = 1
+
+      const reminders = await service.getScheduledReminders(userId)
+
+      expect(reminders).toHaveLength(0)
+    })
+
+    it('user has one reminder scheduled return array with 1 reminder', async () => {
+      const reminder = getExampleReminderEntity({
+        scheduledAt: 1
+      })
+      await saveReminder(reminder)
+
+      const reminders = await service.getScheduledReminders(
+        reminder.reciever.id
+      )
+
+      expect(reminders).toHaveLength(1)
+    })
+
+    it('user has one reminder in future return empty array', async () => {
+      const reminder = getExampleReminderEntity({
+        scheduledAt: 1
+      })
+      jest.spyOn(Date, 'now').mockReturnValue(0)
+      await saveReminder(reminder)
+
+      const reminders = await service.getScheduledReminders(
+        reminder.reciever.id
+      )
+
+      expect(reminders).toHaveLength(0)
     })
   })
 })
