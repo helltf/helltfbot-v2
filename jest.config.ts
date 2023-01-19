@@ -27,7 +27,7 @@ export default async (): Promise<Config.InitialOptions> => {
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
     modulePaths: ['<rootDir>'],
     forceExit: true,
-    clearMocks: true,
+    restoreMocks: true,
     testTimeout: 15000
   }
 }
