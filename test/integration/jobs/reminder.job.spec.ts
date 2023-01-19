@@ -1,5 +1,4 @@
 import { ReminderEntity } from "@db/entities"
-import { ReminderStatus } from "@src/db/entities/reminder.entity"
 import { ReminderJob } from "@src/jobs/reminder.job"
 import { getExampleReminderEntity } from '@test-utils/example'
 import { setup } from '@test-utils/setup'
