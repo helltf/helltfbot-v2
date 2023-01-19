@@ -5,10 +5,6 @@ import {compilerOptions} from './tsconfig.json'
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
-    globals: {
-      hb: true
-    },
-
     transform: {
       '^.+\\.ts?$': [
         'ts-jest',
