@@ -1,6 +1,7 @@
 import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
+import { LessThan } from 'typeorm'
 
 const MAX_REMINDER_AMOUNT = 5
 
@@ -141,5 +142,16 @@ export class ReminderService {
         status: ReminderStatus.FIRED
       }
     )
+  }
+
+  async getScheduledReminders(userId: number): Promise<ReminderEntity[]> {
+    const reminders = await hb.db.reminder.find({
+      where: {
+        scheduledAt: LessThan(Date.now()),
+        reciever: { id: userId },
+        status: ReminderStatus.PENDING
+      }
+    })
+    return reminders
   }
 }
