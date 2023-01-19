@@ -27,7 +27,7 @@ export class ReminderService {
     const creatorRemindersLength = await hb.db.reminder.countBy({
       creator: { id: creator.id },
       type: ReminderType.USER,
-      status: ReminderStatus.OPEN
+      status: ReminderStatus.PENDING
     })
 
     if (creatorRemindersLength >= MAX_REMINDER_AMOUNT) {
@@ -44,7 +44,7 @@ export class ReminderService {
       reciever: {
         id: reciever.id
       },
-      status: ReminderStatus.OPEN,
+      status: ReminderStatus.PENDING,
       type: ReminderType.USER
     })
 
@@ -91,7 +91,7 @@ export class ReminderService {
 
     const reminders = await hb.db.reminder.findBy({
       reciever: { id },
-      status: ReminderStatus.OPEN,
+      status: ReminderStatus.PENDING,
       type: ReminderType.SYSTEM
     })
 
@@ -105,7 +105,7 @@ export class ReminderService {
 
     const reminders = await hb.db.reminder.findBy({
       reciever: { id },
-      status: ReminderStatus.OPEN,
+      status: ReminderStatus.PENDING,
       type: ReminderType.USER
     })
 
