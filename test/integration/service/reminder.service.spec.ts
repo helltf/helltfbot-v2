@@ -412,9 +412,7 @@ describe('reminder service', () => {
 
   describe('get scheduled reminders', () => {
     it('user does not exist return empty array', async () => {
-      const userId = 1
-
-      const reminders = await service.getScheduledReminders(userId)
+      const reminders = await service.getScheduledReminders()
 
       expect(reminders).toHaveLength(0)
     })
@@ -425,9 +423,7 @@ describe('reminder service', () => {
       })
       await saveReminder(reminder)
 
-      const reminders = await service.getScheduledReminders(
-        reminder.reciever.id
-      )
+      const reminders = await service.getScheduledReminders()
 
       expect(reminders).toHaveLength(1)
     })
@@ -439,9 +435,7 @@ describe('reminder service', () => {
       jest.spyOn(Date, 'now').mockReturnValue(0)
       await saveReminder(reminder)
 
-      const reminders = await service.getScheduledReminders(
-        reminder.reciever.id
-      )
+      const reminders = await service.getScheduledReminders()
 
       expect(reminders).toHaveLength(0)
     })
