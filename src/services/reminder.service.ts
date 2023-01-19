@@ -9,6 +9,7 @@ export interface ReminderCreationData {
   recieverName: string
   message: string
   channel?: string
+  scheduledAt?: number
 }
 
 export class ReminderService {
@@ -16,7 +17,8 @@ export class ReminderService {
     creatorId,
     recieverName,
     message,
-    channel
+    channel,
+    scheduledAt
   }: ReminderCreationData): Promise<Resource<ReminderEntity>> {
     const creator = await hb.db.user.findOneBy({ id: creatorId })
 
@@ -58,7 +60,8 @@ export class ReminderService {
       createdAt: Date.now(),
       message,
       createdChannel: channel,
-      type: ReminderType.USER
+      type: ReminderType.USER,
+      scheduledAt
     })
 
     return new ResourceSuccess(result)

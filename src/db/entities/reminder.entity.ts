@@ -52,4 +52,7 @@ export class ReminderEntity {
 
   @Column('enum', { enum: ReminderType })
   type: ReminderType
+
+  @Column('bigint', { nullable: true })
+  scheduledAt?: number
 }

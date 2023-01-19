@@ -74,7 +74,8 @@ describe('reminder service', () => {
         creatorId: creator.id,
         recieverName: reciever.name,
         message: 'message',
-        channel: 'channel'
+        channel: 'channel',
+        scheduledAt: 1
       }
       jest.spyOn(Date, 'now').mockImplementation(() => 1)
       await hb.db.user.save(creator)
@@ -95,7 +96,8 @@ describe('reminder service', () => {
         firedChannel: null,
         status: ReminderStatus.PENDING,
         createdAt: Date.now(),
-        type: ReminderType.USER
+        type: ReminderType.USER,
+        scheduledAt: 1
       }
 
       expect(savedEntity.creator?.id).toEqual(expectedEntity.creator?.id)
@@ -106,6 +108,7 @@ describe('reminder service', () => {
       expect(savedEntity.firedChannel).toEqual(expectedEntity.firedChannel)
       expect(savedEntity.firedAt).toEqual(expectedEntity.firedAt)
       expect(savedEntity.status).toEqual(expectedEntity.status)
+      expect(savedEntity.scheduledAt).toBe(expectedEntity.scheduledAt)
     })
 
     it('reminder create limit is exceeded return error', async () => {
