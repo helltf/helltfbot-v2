@@ -54,6 +54,7 @@ describe('test suggest command', () => {
   it('suggestion is defined and response is successful', async () => {
     const suggestion = 'add'
     await saveUserStateAsUser(user)
+    jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
     const response = await suggest.execute({
       channel,
@@ -67,6 +68,7 @@ describe('test suggest command', () => {
   it('one word suggestion is defined and saved into db', async () => {
     const suggestion = 'add'
     await saveUserStateAsUser(user)
+    jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
     const response = await suggest.execute({
       channel,
@@ -87,6 +89,7 @@ describe('test suggest command', () => {
   it('save multiple words suggestion return succesfull response', async () => {
     const suggestion = 'add this do this'
     const id = 1
+    jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
     await saveUserStateAsUser(user)
 
@@ -110,6 +113,7 @@ describe('test suggest command', () => {
   it('save two suggestions returns id 2', async () => {
     const suggestion = 'add this do this'
     await saveUserStateAsUser(user)
+    jest.spyOn(hb, 'sendMessage').mockImplementation(jest.fn())
 
     await hb.db.suggestion.save({
       date: 1,

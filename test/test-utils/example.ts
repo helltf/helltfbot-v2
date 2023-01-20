@@ -173,8 +173,9 @@ export const getExampleReminderEntity = ({
   firedAt = null,
   firedChannel = null,
   createdChannel = 'channel',
-  status = ReminderStatus.OPEN,
-  type = ReminderType.USER
+  status = ReminderStatus.PENDING,
+  type = ReminderType.USER,
+  scheduledAt = undefined
 }: Partial<ReminderEntity>): ReminderEntity => {
   const reminder = new ReminderEntity()
 
@@ -188,6 +189,7 @@ export const getExampleReminderEntity = ({
   reminder.status = status
   reminder.createdChannel = createdChannel
   reminder.type = type
+  reminder.scheduledAt = scheduledAt
 
   return reminder
 }

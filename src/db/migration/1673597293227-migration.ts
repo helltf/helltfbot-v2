@@ -8,10 +8,10 @@ export class migration1673597293227 implements MigrationInterface {
       `ALTER TYPE "public"."reminders_status_enum" RENAME TO "reminders_status_enum_old"`
     )
     await queryRunner.query(
-      `CREATE TYPE "public"."reminders_status_enum" AS ENUM('open', 'fired', 'revoked')`
+      `CREATE TYPE "public"."reminders_status_enum" AS ENUM('pending', 'fired', 'revoked')`
     )
     await queryRunner.query(
-      `CREATE TYPE "public"."reminders_status_enum_temp" AS ENUM('open', 'fired', 'revoked', 'created')`
+      `CREATE TYPE "public"."reminders_status_enum_temp" AS ENUM('pending', 'fired', 'revoked', 'created')`
     )
     await queryRunner.query(
       `ALTER TABLE "reminders" ALTER COLUMN "status" DROP DEFAULT`
@@ -20,13 +20,13 @@ export class migration1673597293227 implements MigrationInterface {
       `ALTER TABLE "reminders" ALTER COLUMN "status" TYPE "public"."reminders_status_enum_temp" USING "status"::"text"::"public"."reminders_status_enum_temp"`
     )
     await queryRunner.query(
-      `UPDATE "reminders" SET "status" = 'open' WHERE "status" = 'created'`
+      `UPDATE "reminders" SET "status" = 'pending' WHERE "status" = 'created'`
     )
     await queryRunner.query(
       `ALTER TABLE "reminders" ALTER COLUMN "status" TYPE "public"."reminders_status_enum" USING "status"::"text"::"public"."reminders_status_enum"`
     )
     await queryRunner.query(
-      `ALTER TABLE "reminders" ALTER COLUMN "status" SET DEFAULT 'open'`
+      `ALTER TABLE "reminders" ALTER COLUMN "status" SET DEFAULT 'pending'`
     )
     await queryRunner.query(`DROP TYPE "public"."reminders_status_enum_old"`)
     await queryRunner.query(`DROP TYPE "public"."reminders_status_enum_temp"`)
@@ -40,13 +40,13 @@ export class migration1673597293227 implements MigrationInterface {
       `ALTER TABLE "reminders" ALTER COLUMN "status" DROP DEFAULT`
     )
     await queryRunner.query(
-      `CREATE TYPE "public"."reminders_status_enum_temp" AS ENUM('open', 'fired', 'revoked', 'created')`
+      `CREATE TYPE "public"."reminders_status_enum_temp" AS ENUM('pending', 'fired', 'revoked', 'created')`
     )
     await queryRunner.query(
       `ALTER TABLE "reminders" ALTER COLUMN "status" TYPE "public"."reminders_status_enum_temp" USING "status"::"text"::"public"."reminders_status_enum_temp"`
     )
     await queryRunner.query(
-      `UPDATE "reminders" SET "status" = 'created' WHERE "status" = 'open'`
+      `UPDATE "reminders" SET "status" = 'created' WHERE "status" = 'pending'`
     )
     await queryRunner.query(
       `ALTER TABLE "reminders" ALTER COLUMN "status" TYPE "public"."reminders_status_enum_old" USING "status"::"text"::"public"."reminders_status_enum_old"`

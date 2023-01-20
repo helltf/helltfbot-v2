@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { TwitchUserEntity } from "./user.entity"
 
 export enum ReminderStatus {
-  OPEN = 'open',
+  PENDING = 'pending',
   FIRED = 'fired',
   REVOKED = 'revoked'
 }
@@ -37,7 +37,7 @@ export class ReminderEntity {
   @Column({
     type: 'enum',
     enum: ReminderStatus,
-    default: ReminderStatus.OPEN
+    default: ReminderStatus.PENDING
   })
   status: ReminderStatus
 
@@ -52,4 +52,7 @@ export class ReminderEntity {
 
   @Column('enum', { enum: ReminderType })
   type: ReminderType
+
+  @Column('bigint', { nullable: true })
+  scheduledAt?: number
 }
