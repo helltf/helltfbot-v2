@@ -1,13 +1,6 @@
-class Job {
-  delay: number
-  execute: () => any
+import { Job } from './job'
+import { ReminderJob } from './reminder.job'
 
-  constructor(delay: number, execute: () => any) {
-    this.delay = delay
-    this.execute = execute
-  }
-}
-
-const jobs: Job[] = []
+const jobs: Job[] = [new ReminderJob()]
 
 export default jobs

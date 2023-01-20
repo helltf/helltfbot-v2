@@ -74,9 +74,10 @@ describe('reminder service', () => {
         creatorId: creator.id,
         recieverName: reciever.name,
         message: 'message',
-        channel: 'channel'
+        channel: 'channel',
+        scheduledAt: 1
       }
-      jest.spyOn(Date, 'now').mockImplementation(() => 1)
+      jest.spyOn(Date, 'now').mockReturnValue(1)
       await hb.db.user.save(creator)
       await hb.db.user.save(reciever)
 
@@ -93,9 +94,10 @@ describe('reminder service', () => {
         createdChannel: reminderData.channel ?? null,
         firedAt: null,
         firedChannel: null,
-        status: ReminderStatus.CREATED,
+        status: ReminderStatus.PENDING,
         createdAt: Date.now(),
-        type: ReminderType.USER
+        type: ReminderType.USER,
+        scheduledAt: 1
       }
 
       expect(savedEntity.creator?.id).toEqual(expectedEntity.creator?.id)
@@ -106,6 +108,84 @@ describe('reminder service', () => {
       expect(savedEntity.firedChannel).toEqual(expectedEntity.firedChannel)
       expect(savedEntity.firedAt).toEqual(expectedEntity.firedAt)
       expect(savedEntity.status).toEqual(expectedEntity.status)
+      expect(savedEntity.scheduledAt).toBe(expectedEntity.scheduledAt)
+    })
+
+    it('reminder create limit is exceeded return error', async () => {
+      const creator = getExampleTwitchUserEntity({})
+      const reciever = getExampleTwitchUserEntity({ id: 2, name: 'user2' })
+      const reminderData: ReminderCreationData = {
+        creatorId: creator.id,
+        recieverName: reciever.name,
+        message: 'message',
+        channel: 'channel'
+      }
+      await hb.db.user.save([creator, reciever])
+      await hb.db.reminder.save(
+        Array(5)
+          .fill('')
+          .map((_, index) => {
+            return getExampleReminderEntity({
+              creator,
+              reciever,
+              id: index
+            })
+          })
+      )
+
+      const result = await service.create(reminderData)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const { error } = result as ResourceError
+      const expectedError = 'Cannot create more than 5 reminders'
+
+      expect(error).toBe(expectedError)
+    })
+
+    it('reciever already has 5 reminders pending return error', async () => {
+      {
+        const creator = getExampleTwitchUserEntity({})
+        const secondCreator = getExampleTwitchUserEntity({
+          id: 3,
+          name: 'test'
+        })
+        const reciever = getExampleTwitchUserEntity({ id: 2, name: 'user2' })
+        const reminderData: ReminderCreationData = {
+          creatorId: creator.id,
+          recieverName: reciever.name,
+          message: 'message',
+          channel: 'channel'
+        }
+        await hb.db.user.save([creator, reciever, secondCreator])
+        await hb.db.reminder.save(
+          Array(4)
+            .fill('')
+            .map((_, index) => {
+              return getExampleReminderEntity({
+                creator,
+                reciever,
+                id: index
+              })
+            })
+        )
+        await hb.db.reminder.save(
+          getExampleReminderEntity({
+            creator: secondCreator,
+            reciever,
+            id: 10
+          })
+        )
+
+        const result = await service.create(reminderData)
+
+        expect(result).toBeInstanceOf(ResourceError)
+
+        const { error } = result as ResourceError
+        const expectedError = 'Reciever reached reminder limit'
+
+        expect(error).toBe(expectedError)
+      }
     })
   })
 
@@ -153,7 +233,7 @@ describe('reminder service', () => {
         id: 1
       })
       const reminder2 = getExampleReminderEntity({
-        status: ReminderStatus.CREATED,
+        status: ReminderStatus.PENDING,
         id: 2
       })
       await saveReminder(reminder1)
@@ -190,7 +270,7 @@ describe('reminder service', () => {
       const channel = 'channel'
       await hb.db.user.save([reminder.creator!, reminder.reciever])
       await hb.db.reminder.save(reminder)
-      jest.spyOn(Date, 'now').mockImplementation(() => 1)
+      jest.spyOn(Date, 'now').mockReturnValue(1)
 
       await service.fire(reminder.id, channel)
 
@@ -327,6 +407,37 @@ describe('reminder service', () => {
       const { data } = result as ResourceSuccess<ReminderEntity[]>
 
       expect(data).toHaveLength(1)
+    })
+  })
+
+  describe('get scheduled reminders', () => {
+    it('user does not exist return empty array', async () => {
+      const reminders = await service.getScheduledReminders()
+
+      expect(reminders).toHaveLength(0)
+    })
+
+    it('user has one reminder scheduled return array with 1 reminder', async () => {
+      const reminder = getExampleReminderEntity({
+        scheduledAt: 1
+      })
+      await saveReminder(reminder)
+
+      const reminders = await service.getScheduledReminders()
+
+      expect(reminders).toHaveLength(1)
+    })
+
+    it('user has one reminder in future return empty array', async () => {
+      const reminder = getExampleReminderEntity({
+        scheduledAt: 1
+      })
+      jest.spyOn(Date, 'now').mockReturnValue(0)
+      await saveReminder(reminder)
+
+      const reminders = await service.getScheduledReminders()
+
+      expect(reminders).toHaveLength(0)
     })
   })
 })

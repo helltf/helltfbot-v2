@@ -1,6 +1,6 @@
 import { BaseCommand } from "@src/commands/base";
 import {LogType} from "@src/logger/logger-export";
-import { Command } from "../commands/types";
+import { Command, CommandFlag } from "../commands/types";
 
 export class CommandService {
   commands: {
@@ -68,7 +68,8 @@ export class CommandService {
     for await (const command of this.getAll()) {
       await hb.db.command.save({
         ...command,
-        deleted: false
+        deleted: false,
+        disabled: command.flags.includes(CommandFlag.DISABLED)
       })
     }
   }

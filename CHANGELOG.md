@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.4](https://github.com/helltf/helltfbot-v2/releases/tag/v1.4.3) - 2023-01-20
+
+### Added
+
+- Implement scheduled reminders
+- Command to create reminders for users
+
+### Fixed
+
+- Disallow all methods but post on webhook
+- limit reminders to 5
+
 ## [1.4.3](https://github.com/helltf/helltfbot-v2/releases/tag/v1.4.3) - 2022-12-21
 
 ### Added

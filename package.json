@@ -1,6 +1,6 @@
 {
   "name": "helltfbot-v2",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "version 2 for helltfbot",
   "main": "",
   "type": "commonjs",
@@ -16,6 +16,7 @@
     "start": "ts-node -r tsconfig-paths/register index.ts",
     "migration": "npx typeorm-ts-node-commonjs migration:run -d migration-datasource.ts",
     "migration:generate": "npx typeorm-ts-node-commonjs migration:generate -d migration-datasource.ts ./src/db/migration/migration",
+    "migration:down": "npx typeorm-ts-node-commonjs migration:revert -d migration-datasource.ts",
     "serve": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only index.ts "
   },
   "repository": {
