@@ -51,7 +51,6 @@ export class CommandService {
   }
 
   async updateDb() {
-   await db.initialize() 
     await this.addCommandsToDb()
     await this.updateDeletedCommands()
     logger.log(LogType.DEBUG, 'Successfully updated commands in Database')
