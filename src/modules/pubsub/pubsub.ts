@@ -4,8 +4,10 @@ import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types'
 import { PubSubEventHandler } from './pubsub-event-handler'
 import { NotificationChannelEntity } from '@db/entities'
 import { LogType } from '@src/logger/logger-export'
+import { Module } from '@modules/types'
 
-export class PubSub {
+export class PubSub implements Module {
+  name = 'pubsub'
   pubSubEventHandler: PubSubEventHandler
   notificationHandler: NotificationHandler
   connections: PubSubConnection[] = []
@@ -13,6 +15,10 @@ export class PubSub {
   constructor() {
     this.pubSubEventHandler = new PubSubEventHandler()
     this.notificationHandler = new NotificationHandler()
+  }
+
+  initialize = async () => {
+    await this.connect()
   }
 
   async handleIncomingMessage({ data }: any) {
@@ -161,7 +167,3 @@ export class PubSub {
     connection.unlisten([topic])
   }
 }
-
-const pubsub = new PubSub()
-
-export { pubsub }

@@ -2,30 +2,19 @@ import 'dotenv/config'
 import { setupDev } from './scripts/env-setup/dev';
 import {LogType, logger} from '@src/logger/logger-export';
 import { client } from '@src/client/main-client';
-import { api } from '@src/services/api.service'
-import { cache } from '@services/cache.service'
-import { pubsub } from '@modules/pubsub/pubsub'
 import { app } from '@src/webhook/actions'
 import { config } from '@services/config.service'
 import { initModules } from '@modules/export-modules'
+import { initDeps } from 'deps'
 
 {
   ;(async () => {
-    logger.log(LogType.INFO, 'Initializing...')
-
-    await db.initialize()
-    logger.log(LogType.INFO, 'DB connected')
-
-    await client.client.connect().catch((e: Error) => {
+    await client.connect().catch((e: Error) => {
       throw new Error(`Could not connect to twitch servers: ${e}`)
     })
-
     logger.log(LogType.INFO, 'Client connected')
 
-    await api.init()
-    await cache.connect()
-    pubsub.connect()
-    logger.log(LogType.TWITCHBOT, 'Successfully initialized')
+    await initDeps()
 
     commandsService.updateDb()
 
@@ -36,12 +25,11 @@ import { initModules } from '@modules/export-modules'
       )
     })
 
-    if (hb.config.isDev()) {
+    if (process.env.NODE_ENV === 'dev') {
       await setupDev()
     }
 
-    const startUpMessage = config.get('START_UP_MESSAGE')
-    hb.sendMessage(config.get('MAIN_USER'), startUpMessage)
+    client.say(config.get('MAIN_USER')!, config.get('START_UP_MESSAGE')!)
     hb.startJobs()
     initModules()
   })()

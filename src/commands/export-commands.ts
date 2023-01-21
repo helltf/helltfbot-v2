@@ -30,33 +30,13 @@ import { AcceptCommand } from './cmd/accept'
 import { BanCheckCommand } from './cmd/bancheck'
 import { CoinflipCommand } from './cmd/coinflip'
 import { BaseCommand } from './base'
-import { DB } from '@src/db/export-repositories'
 import { client } from '@src/client/main-client'
-import { Utility } from '@src/utilities/utility'
-import { ApiService } from '@src/services/api.service'
-import { CacheService } from '@src/services/cache.service'
-import { ConfigService } from '@src/services/config.service'
-import { GameService } from '@src/services/game.service'
-import { NotificationService } from '@src/services/notification.service'
-import { ReminderService } from '@src/services/reminder.service'
+import { getDeps } from 'deps'
 
 const getInitializedCommands = async (): Promise<BaseCommand[]> => {
-  const db = await new DB().initialize()
-  const utils = new Utility()
-  const shareables = {
-    db,
-    services: {
-      api: new ApiService().init(),
-      cache: new CacheService(),
-      config: new ConfigService(),
-      game: new GameService(),
-      notification: new NotificationService(),
-      reminder: new ReminderService()
-    },
-    utils
-  }
+  const deps = await getDeps()
   return [
-    new PingCommand(shareables.db, client, shareables.utils),
+    new PingCommand(deps.db, client, deps.utils),
     new AcceptCommand(),
     new RemovemeCommand(),
     new GithubCommand(),

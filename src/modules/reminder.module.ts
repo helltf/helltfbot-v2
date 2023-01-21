@@ -56,7 +56,7 @@ export class ReminderModule implements Module {
 
     const reminderMessage = this.createReminderMessage(reminders.data)
 
-    await this.client.sendMessage(channel, reminderMessage)
+    await this.client.say(channel, reminderMessage)
     await this.updateRemindersStatus(
       channel,
       reminders.data.map(r => r.id)
