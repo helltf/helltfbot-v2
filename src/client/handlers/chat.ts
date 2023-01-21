@@ -1,11 +1,16 @@
 import { ResourceError } from '@api/types'
+import { Cooldown } from '@src/services/cooldown.service'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { wait } from '@src/utilities/wait'
+import { getDeps } from 'deps'
 import { ChatUserstate } from 'tmi.js'
 import { Command, MessageType } from '../../commands/types'
+import { client } from '../main-client'
 import { ChatContext, ResponseContext, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
+const cooldown = new Cooldown()
+const { db,utils } = getDeps()
 
 const handleChat = async (
   where: string,
@@ -59,13 +64,13 @@ export async function runCommand({
   const [commandLookup, ...data] = getMessageInfo(message)
   const contextMessage = data
 
-  const command = hb.getCommand(commandLookup)
+  const command = getCommand(commandLookup)
 
   if (!command) return
 
   if (userHasCooldown(command, user)) return
 
-  user.permission = await hb.utils.permission.get(user)
+  user.permission = await utils.permission.get(user)
 
   const evalResult = command.evaluate({
     message: contextMessage,
@@ -112,14 +117,14 @@ function getMessageInfo(message: string): string[] {
 }
 
 function sendMessage(channel: string, message: string) {
-  hb.sendMessage(channel, message)
+  sendMessage(channel, message)
 }
 
 async function sendWhisper(user: string, message: string) {
   const msgParts = message.match(/.{1,450}(?=\s|$)/g)
 
   for await (const msg of msgParts!) {
-    await hb.client.whisper(user, msg)
+    await client.whisper(user, msg)
     await wait`1s`
   }
 }
@@ -145,18 +150,18 @@ function setCooldown(
   { 'user-id': id, permission }: TwitchUserState
 ) {
   if (permission! >= GlobalPermissionLevel.ADMIN) return
-  hb.cooldown.setCooldown(command, id!)
+  cooldown.setCooldown(command, id!)
 }
 
 function userHasCooldown(
   command: Command,
   { 'user-id': id }: ChatUserstate
 ): boolean | undefined {
-  return hb.cooldown.userHasCooldown(command, id!)
+  return cooldown.userHasCooldown(command, id!)
 }
 
 async function incrementCommandCounter(command: Command) {
-  await hb.db.command.increment(
+  await db.command.increment(
     {
       name: command.name
     },

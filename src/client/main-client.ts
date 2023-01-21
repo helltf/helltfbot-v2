@@ -32,7 +32,7 @@ function createClient(): Client {
   })
 }
 
-client.client.on(
+client.on(
   'chat',
   async (
     channel: string,
@@ -46,30 +46,30 @@ client.client.on(
   }
 )
 
-client.client.on('part', (channel: string, _: string, self: boolean) => {
+client.on('part', (channel: string, _: string, self: boolean) => {
   if (!self) return
   channel = channel.replace('#', '')
 
   handlePart(channel)
 })
 
-client.client.on('join', (channel: string, _: string, self: boolean) => {
+client.on('join', (channel: string, _: string, self: boolean) => {
   if (!self) return
 
   handleJoin(channel)
 })
 
-client.client.on('connected', () => {
+client.on('connected', () => {
   handleConnect()
 })
 
-client.client.on('whisper', (from, user, message, self) => {
+client.on('whisper', (from, user, message, self) => {
   from = from.replace('#', '')
 
   handleWhisper(from, user, message, self)
 })
 
-client.client.on('disconnected', r => {
+client.on('disconnected', r => {
   console.log(`Bot has been disconnected because: ${r}`)
 })
 
