@@ -6,13 +6,9 @@ import { handleJoin } from './handlers/join'
 import { handlePart } from './handlers/part'
 import { logger } from '@src/logger/logger-export'
 
-class TwitchClient {
-  client = createclient()
-}
+const client = createClient()
 
-const client = new TwitchClient()
-
-function createclient(): Client {
+function createClient(): Client {
   return Client({
     identity: {
       password: 'oauth:' + process.env.TWITCH_OAUTH,
