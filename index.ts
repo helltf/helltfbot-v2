@@ -2,13 +2,12 @@ import 'dotenv/config'
 import { setupDev } from './scripts/env-setup/dev';
 import {LogType, logger} from '@src/logger/logger-export';
 import { client } from '@src/client/main-client';
-import { db } from '@src/db/export-repositories'
 import { api } from '@src/services/api.service'
 import { cache } from '@services/cache.service'
 import { pubsub } from '@modules/pubsub/pubsub'
-import { commandsService } from '@services/commands.service'
 import { app } from '@src/webhook/actions'
 import { config } from '@services/config.service'
+import { initModules } from '@modules/export-modules'
 
 {
   ;(async () => {
@@ -44,7 +43,7 @@ import { config } from '@services/config.service'
     const startUpMessage = config.get('START_UP_MESSAGE')
     hb.sendMessage(config.get('MAIN_USER'), startUpMessage)
     hb.startJobs()
-    hb.initModules()
+    initModules()
   })()
 }
 
