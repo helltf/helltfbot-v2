@@ -2,9 +2,7 @@ import { BaseCommand } from "@src/commands/base";
 import {LogType} from "@src/logger/logger-export";
 import { Command } from '../commands/types'
 import { logger } from 'src/logger/logger-export'
-import { DB } from "@src/db/export-repositories";
 
-const db = new DB()
 
 export class CommandService {
   commands: {
@@ -46,7 +44,6 @@ export class CommandService {
   }
 
   async updateDb() {
-   await db.initialize() 
     await this.addCommandsToDb()
     await this.updateDeletedCommands()
     logger.log(LogType.DEBUG, 'Successfully updated commands in Database')
@@ -78,7 +75,3 @@ export class CommandService {
     }
   }
 }
-
-// const commandsService = new CommandService(commands)
-
-// export { commandsService }
