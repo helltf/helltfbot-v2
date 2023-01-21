@@ -1,12 +1,23 @@
-import { ChatUserstate } from 'tmi.js'
-import { EmoteGameInputResult } from '../games/types'
+import { DB } from '@src/db/export-repositories'
+import { gameServiceervice } from '@src/services/game.service'
+import { ChatUserstate, Client } from 'tmi.js'
+import { EmoteGameInputResult } from '../gameService/types'
 import { Module } from './types'
 
 export class GameModule implements Module {
   name = 'Game'
+  db: DB
+  client: Client
+  gameServiceervice: GameService
+
+  constructor(db: DB, client: Client, gameServiceervice: GameService) {
+    this.db = db
+    this.client = client
+    this.gameServiceervice = gameService
+  }
 
   initialize() {
-    hb.client.on(
+    this.client.on(
       'chat',
       (
         channel: string,
@@ -22,7 +33,7 @@ export class GameModule implements Module {
   }
 
   async input(channel: string, user: ChatUserstate, message: string) {
-    const game = hb.games.getGame(channel)
+    const game = this.gameService.getGame(channel)
 
     if (!game) return
 
@@ -30,15 +41,15 @@ export class GameModule implements Module {
     const userId = Number(user['user-id']!)
 
     if (result === EmoteGameInputResult.FINISHED) {
-      hb.games.removeGameForChannel(game.channel)
-      hb.sendMessage(
+      this.gameService.removeGameForChannel(game.channel)
+      this.sendMessage(
         channel,
         `${user.username} has guessed the emote. The emote was ${game.actualEmote}`
       )
     }
 
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
-      hb.sendMessage(
+      this.sendMessage(
         channel,
         `${
           user.username
@@ -50,7 +61,7 @@ export class GameModule implements Module {
   }
 
   async saveEmotegameEventStats(userId: number, result: EmoteGameInputResult) {
-    const value = hb.games.mapResultToValue(result)
+    const value = this.gameService.mapResultToValue(result)
 
     if (!value) return
 
@@ -60,7 +71,7 @@ export class GameModule implements Module {
   }
 
   async incrementStats(userId: number, value: string) {
-    await hb.db.emoteStats.increment(
+    await this.db.emoteStats.increment(
       {
         user: { id: userId }
       },
@@ -71,14 +82,14 @@ export class GameModule implements Module {
 
   async saveNotExistingStats(userId: number) {
     const userExists =
-      (await hb.db.emoteStats.countBy({
+      (await this.db.emoteStats.countBy({
         user: {
           id: userId
         }
       })) !== 0
 
     if (!userExists)
-      await hb.db.emoteStats.save({
+      await this.db.emoteStats.save({
         user: {
           id: userId
         }

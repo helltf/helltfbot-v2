@@ -1,10 +1,18 @@
+import { DB } from '@src/db/export-repositories'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
-import { ChatUserstate } from 'tmi.js'
+import { ChatUserstate, Client } from 'tmi.js'
 import { Module } from './types'
 
-export class ColorTracking implements Module {
+export class UserTracking implements Module {
   name = 'Color'
   MAX_SAVED_COLORS = 15
+  db: DB
+  client: Client
+
+  constructor(db: DB, client: Client) {
+    this.db = db
+    this.client = client
+  }
 
   async initialize() {
     hb.client.on('chat', async (_0, user: ChatUserstate, _1, self) => {

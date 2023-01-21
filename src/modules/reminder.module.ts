@@ -1,13 +1,33 @@
 import { Resource, ResourceError } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderType } from '@src/db/entities/reminder.entity'
-import { ChatUserstate } from 'tmi.js'
+import { DB } from '@src/db/export-repositories'
+import { ReminderService } from '@src/services/reminder.service'
+import { Utility } from '@src/utilities/utility'
+import { ChatUserstate, Client } from 'tmi.js'
 import { Module } from './types'
 
 export class ReminderModule implements Module {
   name = 'reminder'
+  db: DB
+  client: Client
+  reminderService: ReminderService
+  utils: Utility
+
+  constructor(
+    db: DB,
+    client: Client,
+    reminderService: ReminderService,
+    utils: Utility
+  ) {
+    this.db = db
+    this.client = client
+    this.reminderService = reminderService
+    this.utils = utils
+  }
+
   initialize = () => {
-    hb.client.addListener(
+    this.client.addListener(
       'message',
       (channel: string, user: ChatUserstate, _: string, self) => {
         if (self) return
@@ -20,13 +40,13 @@ export class ReminderModule implements Module {
   }
 
   async checkReminders(id: number, channel: string) {
-    const userReminders = await hb.reminder.getActiveReminders(id)
+    const userReminders = await this.reminderService.getActiveReminders(id)
 
     await this.sendReminders(userReminders, channel)
   }
 
   async checkSystemReminders(id: number, channel: string) {
-    const reminders = await hb.reminder.getActiveSystemReminders(id)
+    const reminders = await this.reminderService.getActiveSystemReminders(id)
 
     await this.sendReminders(reminders, channel)
   }
@@ -36,7 +56,7 @@ export class ReminderModule implements Module {
 
     const reminderMessage = this.createReminderMessage(reminders.data)
 
-    await hb.sendMessage(channel, reminderMessage)
+    await this.client.sendMessage(channel, reminderMessage)
     await this.updateRemindersStatus(
       channel,
       reminders.data.map(r => r.id)
@@ -45,7 +65,7 @@ export class ReminderModule implements Module {
 
   async updateRemindersStatus(channel: string, reminderIds: number[]) {
     for await (const id of reminderIds) {
-      await hb.reminder.fire(id, channel)
+      await this.reminderService.fire(id, channel)
     }
   }
 
@@ -53,9 +73,9 @@ export class ReminderModule implements Module {
     if (reminder.type === ReminderType.USER)
       return `by @${reminder.creator?.name} - ${
         reminder.message
-      } (${hb.utils.humanizeNow(reminder.createdAt)} ago)`
+      } (${this.utils.humanizeNow(reminder.createdAt)} ago)`
 
-    return `${reminder.message} (${hb.utils.humanizeNow(
+    return `${reminder.message} (${this.utils.humanizeNow(
       reminder.createdAt
     )} ago)`
   }
@@ -64,7 +84,7 @@ export class ReminderModule implements Module {
     return (
       `@${reminders[0].reciever.name} you recieved ${reminders.length} ${
         reminders[0].type === ReminderType.SYSTEM ? 'System ' : ''
-      }${hb.utils.plularizeIf('reminder', reminders.length)}: ` +
+      }${this.utils.plularizeIf('reminder', reminders.length)}: ` +
       reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join(' | ')
     )
   }
