@@ -1,24 +1,30 @@
 import { ResourceError, ResourceSuccess } from "@api/types"
 import { PingCommand } from "@commands/cmd/ping"
-import { clearDb } from "@test-utils/clear"
+import { DB } from "@src/db/export-repositories"
+import { Utility } from '@src/utilities/utility'
+import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import { getExampleChannel, getExampleCommand } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
+import { Client } from 'tmi.js'
 
 describe('test ping command', () => {
   let ping: PingCommand
+  const db: DB = new DB()
+  const utils = new Utility()
+  const client = {} as Client
 
   beforeAll(async () => {
-    await setupDatabase()
+    await setupDatabase(db)
   })
 
   beforeEach(async () => {
-    ping = new PingCommand()
-    await clearDb(hb.db.dataSource)
+    ping = new PingCommand(db, client, utils)
+    await clearDb(db.dataSource)
   })
 
   afterAll(async () => {
-    await disconnectDatabase()
+    await disconnectDatabase(db)
   })
 
   it('return success message', async () => {
@@ -58,7 +64,7 @@ describe('test ping command', () => {
     const commands = ['cmd1', 'cmd2']
 
     for await (const cmd of commands) {
-      await hb.db.command.save({
+      await db.command.save({
         ...getExampleCommand({
           name: cmd
         }),
@@ -79,8 +85,8 @@ describe('test ping command', () => {
       channel: 'channel2'
     })
 
-    await hb.db.channel.save(channel1)
-    await hb.db.channel.save(channel2)
+    await db.channel.save(channel1)
+    await db.channel.save(channel2)
 
     const amount = await ping.methods.getChannels()
 
@@ -107,9 +113,7 @@ describe('test ping command', () => {
 
     it('get branch returns current branch', async () => {
       const branch = 'master'
-      jest
-        .spyOn(hb.utils, 'exec')
-        .mockResolvedValue(new ResourceSuccess(branch))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceSuccess(branch))
 
       const result = await ping.methods.getCurrentBranch()
 
@@ -117,7 +121,7 @@ describe('test ping command', () => {
     })
 
     it('get branch failes return no-branch', async () => {
-      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getCurrentBranch()
 
@@ -126,7 +130,7 @@ describe('test ping command', () => {
 
     it('get rev returns short rev', async () => {
       const rev = 'abcdefg'
-      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceSuccess(rev))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceSuccess(rev))
 
       const result = await ping.methods.getRev()
 
@@ -134,7 +138,7 @@ describe('test ping command', () => {
     })
 
     it('get rev failes returns no-rev', async () => {
-      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getRev()
 
@@ -143,7 +147,7 @@ describe('test ping command', () => {
 
     it('get tag returns tag', async () => {
       const tag = 'v1.3.1'
-      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceSuccess(tag))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceSuccess(tag))
 
       const result = await ping.methods.getTag()
 
@@ -151,7 +155,7 @@ describe('test ping command', () => {
     })
 
     it('get tag failes returns no-tag', async () => {
-      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getTag()
 
@@ -160,9 +164,7 @@ describe('test ping command', () => {
 
     it('get commit count returns tag', async () => {
       const amount = '1000'
-      jest
-        .spyOn(hb.utils, 'exec')
-        .mockResolvedValue(new ResourceSuccess(amount))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceSuccess(amount))
 
       const result = await ping.methods.getCommitCount()
 
@@ -170,7 +172,7 @@ describe('test ping command', () => {
     })
 
     it('get commit count failes returns no-tag', async () => {
-      jest.spyOn(hb.utils, 'exec').mockResolvedValue(new ResourceError('error'))
+      jest.spyOn(utils, 'exec').mockResolvedValue(new ResourceError('error'))
 
       const result = await ping.methods.getCommitCount()
 

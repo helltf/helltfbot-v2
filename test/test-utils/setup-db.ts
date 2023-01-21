@@ -1,7 +1,5 @@
-import { cache } from '@src/services/cache.service'
-import { db } from '@src/db/export-repositories'
+import { DB } from '@src/db/export-repositories'
 
-export const setupDatabase = async () => {
+export const setupDatabase = async (db: DB) => {
   await db.initialize()
-  await cache.connect()
 }

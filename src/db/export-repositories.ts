@@ -79,7 +79,3 @@ export class DB implements DbRepositories {
     return this
   }
 }
-
-// const db = new DB()
-//
-// export { db }

@@ -1,10 +1,9 @@
-import { db } from "@src/db/export-repositories"
-import { cache } from "@src/services/cache.service"
+import { DB } from "@src/db/export-repositories"
 
-export const disconnectDatabase = async () => {
+export const disconnectDatabase = async (db: DB) => {
   await db.dataSource.destroy()
 }
 
 export const disconnectRedis = async () => {
-  await cache.redis.disconnect()
+  // await cache.redis.disconnect()
 }

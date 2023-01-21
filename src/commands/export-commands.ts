@@ -30,39 +30,64 @@ import { AcceptCommand } from './cmd/accept'
 import { BanCheckCommand } from './cmd/bancheck'
 import { CoinflipCommand } from './cmd/coinflip'
 import { BaseCommand } from './base'
+import { DB } from '@src/db/export-repositories'
+import { client } from '@src/client/main-client'
+import { Utility } from '@src/utilities/utility'
+import { ApiService } from '@src/services/api.service'
+import { CacheService } from '@src/services/cache.service'
+import { ConfigService } from '@src/services/config.service'
+import { GameService } from '@src/services/game.service'
+import { NotificationService } from '@src/services/notification.service'
+import { ReminderService } from '@src/services/reminder.service'
 
-const commands: BaseCommand[] = [
-  new PingCommand(),
-  new AcceptCommand(),
-  new RemovemeCommand(),
-  new GithubCommand(),
-  new WebsiteCommand(),
-  new NotifyCommand(),
-  new SuggestCommand(),
-  new RemoveSuggestCommand(),
-  new JoinCommand(),
-  new LeaveCommand(),
-  new AllowCommand(),
-  new EmotegameCommand(),
-  new LevelCommand(),
-  new UidCommand(),
-  new EmoteCommand(),
-  new HelpCommmand(),
-  new StatsCommand(),
-  new EvalCommand(),
-  new ColorHistoryCommand(),
-  new SetLevelCommand(),
-  new TimeoutsCommand(),
-  new AddCommand(),
-  new RemoveCommand(),
-  new YoinkCommand(),
-  new SetAliasCommand(),
-  new ModCountCommand(),
-  new DenyCommand(),
-  new RandomColorCommand(),
-  new DisableCommand(),
-  new BanCheckCommand(),
-  new CoinflipCommand()
-]
+const getInitializedCommands = async (): Promise<BaseCommand[]> => {
+  const db = await new DB().initialize()
+  const utils = new Utility()
+  const shareables = {
+    db,
+    services: {
+      api: new ApiService().init(),
+      cache: new CacheService(),
+      config: new ConfigService(),
+      game: new GameService(),
+      notification: new NotificationService(),
+      reminder: new ReminderService()
+    },
+    utils
+  }
+  return [
+    new PingCommand(shareables.db, client, shareables.utils),
+    new AcceptCommand(),
+    new RemovemeCommand(),
+    new GithubCommand(),
+    new WebsiteCommand(),
+    new NotifyCommand(),
+    new SuggestCommand(),
+    new RemoveSuggestCommand(),
+    new JoinCommand(),
+    new LeaveCommand(),
+    new AllowCommand(),
+    new EmotegameCommand(),
+    new LevelCommand(),
+    new UidCommand(),
+    new EmoteCommand(),
+    new HelpCommmand(),
+    new StatsCommand(),
+    new EvalCommand(),
+    new ColorHistoryCommand(),
+    new SetLevelCommand(),
+    new TimeoutsCommand(),
+    new AddCommand(),
+    new RemoveCommand(),
+    new YoinkCommand(),
+    new SetAliasCommand(),
+    new ModCountCommand(),
+    new DenyCommand(),
+    new RandomColorCommand(),
+    new DisableCommand(),
+    new BanCheckCommand(),
+    new CoinflipCommand()
+  ]
+}
 
-export default commands
+export default getInitializedCommands 

@@ -3,6 +3,9 @@ import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { ResourceError } from '@api/types'
 import { BaseCommand } from '../base'
+import { DB } from '@src/db/export-repositories'
+import { Client } from 'tmi.js'
+import { Utility } from '@src/utilities/utility'
 
 export class PingCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
@@ -13,7 +16,16 @@ export class PingCommand extends BaseCommand {
   optionalParams = [] as const
   cooldown = 5000
   alias = []
-  async execute(): Promise<BotResponse>  {
+  db: DB
+  client: Client
+  utils: Utility
+  constructor(db: DB, client: TwitchClient, utils: Utility) {
+    super()
+    this.db = db
+    this.client = client
+    this.utils = utils
+  }
+  async execute(): Promise<BotResponse> {
     const uptime = this.methods.getUptime()
     const memoryUsage = this.methods.getMemory()
     const [commandsIssued, joinedChannels, latency, commit] = await Promise.all(
@@ -42,7 +54,7 @@ export class PingCommand extends BaseCommand {
   methods = {
     getUptime: (): string => {
       const uptime = Math.floor(process.uptime()) * 1000
-      return hb.utils.humanize(uptime)
+      return this.utils.humanize(uptime)
     },
 
     getMemory: (): string =>
@@ -53,7 +65,7 @@ export class PingCommand extends BaseCommand {
     getCommandsIssued: async (): Promise<number> => {
       return Number(
         (
-          await hb.db.command
+          await this.db.command
             .createQueryBuilder('commands')
             .select('SUM(commands.counter)', 'sum')
             .getRawOne()
@@ -62,13 +74,13 @@ export class PingCommand extends BaseCommand {
     },
 
     getChannels: async (): Promise<number> => {
-      return hb.db.channel.countBy({
+      return this.db.channel.countBy({
         joined: true
       })
     },
 
     getLatency: async (): Promise<number> => {
-      return (await hb.client.ping())[0] * 1000
+      return (await this.client.ping())[0] * 1000
     },
 
     getCommitInfo: async (): Promise<string> => {
@@ -83,7 +95,7 @@ export class PingCommand extends BaseCommand {
     },
 
     getCurrentBranch: async (): Promise<string> => {
-      const branch = await hb.utils.exec(
+      const branch = await this.utils.exec(
         "git branch | grep \\* | cut -d ' ' -f2"
       )
 
@@ -95,7 +107,7 @@ export class PingCommand extends BaseCommand {
     },
 
     getRev: async (): Promise<string> => {
-      const rev = await hb.utils.exec('git rev-parse --short HEAD')
+      const rev = await this.utils.exec('git rev-parse --short HEAD')
 
       if (rev instanceof ResourceError) {
         return 'no-rev'
@@ -105,7 +117,7 @@ export class PingCommand extends BaseCommand {
     },
 
     getTag: async (): Promise<string> => {
-      const tag = await hb.utils.exec('git tag --points-at HEAD')
+      const tag = await this.utils.exec('git tag --points-at HEAD')
 
       if (tag instanceof ResourceError || !tag.data) {
         return 'no-tag'
@@ -115,7 +127,7 @@ export class PingCommand extends BaseCommand {
     },
 
     getCommitCount: async (): Promise<string> => {
-      const commitCount = await hb.utils.exec('git rev-list --count HEAD')
+      const commitCount = await this.utils.exec('git rev-list --count HEAD')
 
       if (commitCount instanceof ResourceError) {
         return 'no-commit-count'
