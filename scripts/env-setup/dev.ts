@@ -1,9 +1,13 @@
 import { SuggestionEntity, ColorHistoryEntity } from "@db/entities"
+import { client } from "@src/client/main-client"
 import { GlobalPermissionLevel } from "@src/utilities/permission/types"
+import { getDeps } from 'deps'
+
+const { db } = getDeps()
 
 export const setupDev = async () => {
-  const user = hb.config.get('MAIN_USER')
-  const bot = hb.config.get('BOT_CHANNEL')
+  const user = process.env.MAIN_USER
+  const bot = process.env.BOT_CHANNEL
 
   if (!user || !bot) return
 
@@ -12,11 +16,11 @@ export const setupDev = async () => {
 }
 
 async function permitMainUser(user: string) {
-  const user_id = hb.config.get('MAIN_USER_ID')
+  const user_id = process.env.MAIN_USER_ID
 
   if (!user_id) return
 
-  await hb.db.user.save({
+  await db.user.save({
     color: '',
     display_name: user,
     id: Number(user_id),
@@ -30,13 +34,13 @@ async function permitMainUser(user: string) {
 }
 
 const addBotUserChannel = async (user: string) => {
-  const existing = await hb.db.channel.findOneBy({
+  const existing = await db.channel.findOneBy({
     channel: user
   })
 
   if (existing) return
 
-  await hb.db.channel.save({
+  await db.channel.save({
     allowed: true,
     allowed_live: true,
     channel: user,
@@ -45,5 +49,5 @@ const addBotUserChannel = async (user: string) => {
     times_connected: 1
   })
 
-  await hb.client.join(user)
+  await client.join(user)
 }
