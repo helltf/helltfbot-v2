@@ -34,7 +34,7 @@ import { client } from '@src/client/main-client'
 import { getDeps } from 'deps'
 
 const getInitializedCommands = async (): Promise<BaseCommand[]> => {
-  const deps = await getDeps()
+  const deps = getDeps()
   return [
     new PingCommand(deps.db, client, deps.utils),
     new AcceptCommand(),

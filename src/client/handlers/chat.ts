@@ -1,4 +1,6 @@
 import { ResourceError } from '@api/types'
+import getInitializedCommands from '@src/commands/export-commands'
+import { CommandService } from '@src/services/commands.service'
 import { Cooldown } from '@src/services/cooldown.service'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { wait } from '@src/utilities/wait'
@@ -10,7 +12,13 @@ import { ChatContext, ResponseContext, TwitchUserState } from '../types'
 
 const prefix = process.env.PREFIX
 const cooldown = new Cooldown()
-const { db,utils } = getDeps()
+let commandsService: CommandService
+const { db, utils } = getDeps()
+
+export const initServices = async () => {
+  const commands = await getInitializedCommands()
+  commandsService = new CommandService(commands, db)
+}
 
 const handleChat = async (
   where: string,
@@ -64,7 +72,7 @@ export async function runCommand({
   const [commandLookup, ...data] = getMessageInfo(message)
   const contextMessage = data
 
-  const command = getCommand(commandLookup)
+  const command = commandsService.findCommand(commandLookup.toLowerCase())
 
   if (!command) return
 

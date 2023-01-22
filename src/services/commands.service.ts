@@ -2,7 +2,7 @@ import { BaseCommand } from "@src/commands/base";
 import {LogType} from "@src/logger/logger-export";
 import { Command } from '../commands/types'
 import { logger } from 'src/logger/logger-export'
-
+import { DB } from '@src/db/export-repositories'
 
 export class CommandService {
   commands: {
@@ -10,7 +10,10 @@ export class CommandService {
     command: BaseCommand
   }[] = []
 
-  constructor(commands: BaseCommand[]) {
+  db: DB
+
+  constructor(commands: BaseCommand[], db: DB) {
+    this.db = db
     const usedNames = []
 
     for (const command of commands) {
@@ -21,6 +24,7 @@ export class CommandService {
       })
 
       usedNames.push(...[command.name, ...command.alias])
+      this.updateDb()
     }
   }
 
@@ -50,11 +54,11 @@ export class CommandService {
   }
 
   async updateDeletedCommands() {
-    const commandNames = await db.command.find()
+    const commandNames = await this.db.command.find()
 
     for await (const { name } of commandNames) {
       if (!this.findCommand(name)) {
-        await db.command.update(
+        await this.db.command.update(
           {
             name: name
           },
@@ -68,7 +72,7 @@ export class CommandService {
 
   async addCommandsToDb() {
     for await (const command of this.getAll()) {
-      await db.command.save({
+      await this.db.command.save({
         ...command,
         deleted: false
       })

@@ -6,6 +6,7 @@ import { app } from '@src/webhook/actions'
 import { config } from '@services/config.service'
 import { initModules } from '@modules/export-modules'
 import { initDeps } from 'deps'
+import { initServices } from '@src/client/handlers/chat'
 
 {
   ;(async () => {
@@ -16,7 +17,7 @@ import { initDeps } from 'deps'
 
     await initDeps()
 
-    commandsService.updateDb()
+    await initServices()
 
     app.listen(Number(process.env.WEBHOOK_PORT), () => {
       hb.log(
@@ -30,7 +31,7 @@ import { initDeps } from 'deps'
     }
 
     client.say(config.get('MAIN_USER')!, config.get('START_UP_MESSAGE')!)
-    hb.startJobs()
+    startJobs()
     initModules()
   })()
 }
