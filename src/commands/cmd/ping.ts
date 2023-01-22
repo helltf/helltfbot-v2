@@ -19,7 +19,7 @@ export class PingCommand extends BaseCommand {
   db: DB
   client: Client
   utils: Utility
-  constructor(db: DB, client: TwitchClient, utils: Utility) {
+  constructor(db: DB, client: Client, utils: Utility) {
     super()
     this.db = db
     this.client = client

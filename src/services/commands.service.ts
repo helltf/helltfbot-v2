@@ -1,11 +1,8 @@
 import { BaseCommand } from "@src/commands/base";
 import {LogType} from "@src/logger/logger-export";
-import { Command } from '../commands/types'
-import { logger } from 'src/logger/logger-export'
-import { Command, CommandFlag } from "../commands/types";
-import { Command } from '../commands/types'
 import { logger } from 'src/logger/logger-export'
 import { DB } from '@src/db/export-repositories'
+import { Command, CommandFlag } from '@src/commands/types'
 
 export class CommandService {
   commands: {
@@ -27,8 +24,8 @@ export class CommandService {
       })
 
       usedNames.push(...[command.name, ...command.alias])
-      this.updateDb()
     }
+    this.updateDb()
   }
 
   findCommand(input: string): BaseCommand {

@@ -7,7 +7,8 @@ import {
   MessageType
 } from './types'
 import * as WS from 'ws'
-import { LogType } from '@src/logger/logger-export'
+import { logger, LogType } from '@src/logger/logger-export'
+import { Utility } from '@src/utilities/utility'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
 
@@ -24,7 +25,7 @@ export class PubSubConnection {
   ) {
     this.connection = ws
     this.interval = this.setPingInterval()
-    this.id = hb.utils.randomId(10)
+    this.id = new Utility().randomId(10)
 
     if (process.env.DEBUG === 'true') {
       this.addDebugListeners()
@@ -63,7 +64,7 @@ export class PubSubConnection {
       type: type,
       nonce: '',
       data: {
-        auth_token: hb.config.get('TWITCH_OAUTH')!,
+        auth_token: process.env.TWITCH_OAUTH!,
         topics: topics.map(t => t.prefix + t.id)
       }
     }
@@ -88,13 +89,13 @@ export class PubSubConnection {
 
   addDebugListeners() {
     this.connection.addEventListener('open', () => {
-      hb.log(LogType.DEBUG, `${this.id}: Connection has been opened`)
+      logger.log(LogType.DEBUG, `${this.id}: Connection has been opened`)
     })
     this.connection.addEventListener('close', () => {
-      hb.log(LogType.DEBUG, `${this.id}: Connection has been closed`)
+      logger.log(LogType.DEBUG, `${this.id}: Connection has been closed`)
     })
     this.connection.addEventListener('error', event => {
-      hb.log(LogType.DEBUG, `${this.id}: Pubsub error occured: \n ${event}`)
+      logger.log(LogType.DEBUG, `${this.id}: Pubsub error occured: \n ${event}`)
     })
   }
 

@@ -13,10 +13,10 @@ export class BanTracking implements Module {
   }
 
   initialize = () => {
-    hb.client.on('ban', (channel: string, username: string) => {
+    this.client.on('ban', (channel: string, username: string) => {
       channel = channel.replace('#', '')
 
-      hb.db.ban.save({
+      this.db.ban.save({
         at: Date.now(),
         channel: channel,
         user: username

@@ -15,7 +15,7 @@ export class UserTracking implements Module {
   }
 
   async initialize() {
-    hb.client.on('chat', async (_0, user: ChatUserstate, _1, self) => {
+    this.client.on('chat', async (_0, user: ChatUserstate, _1, self) => {
       if (self) return
       await this.updateUser(user)
       await this.handleColorChanges(user)
@@ -30,7 +30,7 @@ export class UserTracking implements Module {
     const id = Number(userId)
 
     const savedColors = (
-      await hb.db.user.findOne({
+      await this.db.user.findOne({
         where: {
           id: id
         },
@@ -54,7 +54,7 @@ export class UserTracking implements Module {
   }
 
   updateDatabaseColors(userId: number, colors: string[]) {
-    hb.db.color.update(
+    this.db.color.update(
       {
         user: {
           id: userId
@@ -68,7 +68,7 @@ export class UserTracking implements Module {
   }
 
   async saveNewHistory(userId: number, color: string) {
-    await hb.db.color.save({
+    await this.db.color.save({
       user: {
         id: userId
       },
@@ -111,12 +111,12 @@ export class UserTracking implements Module {
   async updateUser(user: ChatUserstate) {
     const id = parseInt(user['user-id']!)
 
-    const userEntry = await hb.db.user.findOneBy({
+    const userEntry = await this.db.user.findOneBy({
       id: id
     })
 
     if (userEntry) {
-      return await hb.db.user.update(
+      return await this.db.user.update(
         {
           id: id
         },
@@ -128,7 +128,7 @@ export class UserTracking implements Module {
       )
     }
 
-    await hb.db.user.save({
+    await this.db.user.save({
       color: user.color,
       display_name: user['display-name'],
       name: user.username,

@@ -1,19 +1,19 @@
 import { DB } from '@src/db/export-repositories'
-import { gameServiceervice } from '@src/services/game.service'
+import { EmoteGameInputResult } from '@src/games/types'
+import { GameService } from '@src/services/game.service'
 import { ChatUserstate, Client } from 'tmi.js'
-import { EmoteGameInputResult } from '../gameService/types'
 import { Module } from './types'
 
 export class GameModule implements Module {
   name = 'Game'
   db: DB
   client: Client
-  gameServiceervice: GameService
+  gameService: GameService
 
-  constructor(db: DB, client: Client, gameServiceervice: GameService) {
+  constructor(db: DB, client: Client, gameService: GameService) {
     this.db = db
     this.client = client
-    this.gameServiceervice = gameService
+    this.gameService = gameService
   }
 
   initialize() {
@@ -42,14 +42,14 @@ export class GameModule implements Module {
 
     if (result === EmoteGameInputResult.FINISHED) {
       this.gameService.removeGameForChannel(game.channel)
-      this.sendMessage(
+      this.client.say(
         channel,
         `${user.username} has guessed the emote. The emote was ${game.actualEmote}`
       )
     }
 
     if (result === EmoteGameInputResult.LETTER_CORRECT) {
-      this.sendMessage(
+      this.client.say(
         channel,
         `${
           user.username

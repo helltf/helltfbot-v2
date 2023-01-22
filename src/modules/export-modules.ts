@@ -18,7 +18,7 @@ const getModules = (): Module[] => {
     new BanTracking(deps.db, client),
     new GameModule(deps.db, client, deps.game),
     new ReminderModule(deps.db, client, deps.reminder, deps.utils),
-    new PubSub()
+    new PubSub(deps.db)
   ]
 }
 

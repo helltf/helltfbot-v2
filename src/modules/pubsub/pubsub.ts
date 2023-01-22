@@ -3,18 +3,21 @@ import { PubSubConnection } from './pubsub-connection'
 import { MessageType, NotifyEventType, TopicPrefix, Topic } from './types'
 import { PubSubEventHandler } from './pubsub-event-handler'
 import { NotificationChannelEntity } from '@db/entities'
-import { LogType } from '@src/logger/logger-export'
+import { logger, LogType } from '@src/logger/logger-export'
 import { Module } from '@modules/types'
+import { DB } from '@src/db/export-repositories'
 
 export class PubSub implements Module {
   name = 'pubsub'
   pubSubEventHandler: PubSubEventHandler
   notificationHandler: NotificationHandler
   connections: PubSubConnection[] = []
+  db: DB
 
-  constructor() {
+  constructor(db: DB) {
     this.pubSubEventHandler = new PubSubEventHandler()
     this.notificationHandler = new NotificationHandler()
+    this.db = db
   }
 
   initialize = async () => {
@@ -44,9 +47,9 @@ export class PubSub implements Module {
   }
 
   connect = async () => {
-    const channels = await hb.db.notificationChannel.find()
+    const channels = await this.db.notificationChannel.find()
     const chunkedChannels = this.chunkTopicsIntoSize(channels)
-    hb.log(
+    logger.log(
       LogType.PUBSUB,
       `Starting ${chunkedChannels.length} connections and connect to ${channels.length} topics ...`
     )
@@ -59,7 +62,7 @@ export class PubSub implements Module {
       connection.listenToTopics(topics)
     }
 
-    hb.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
+    logger.log(LogType.PUBSUB, 'Successfully connected to Pubsub')
   }
 
   createNewPubSubConnection(): PubSubConnection {
@@ -122,7 +125,7 @@ export class PubSub implements Module {
   async getStreamerForTopic(topic: string): Promise<string> {
     const id = this.getIdForTopic(topic)
 
-    return (await hb.db.notificationChannel.findOneBy({
+    return (await this.db.notificationChannel.findOneBy({
       id: parseInt(id)
     }))!.name
   }

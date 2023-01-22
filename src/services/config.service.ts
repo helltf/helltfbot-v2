@@ -21,7 +21,3 @@ export class ConfigService {
     return process.env[key] !== undefined
   }
 }
-
-const config = new ConfigService()
-
-export { config }
