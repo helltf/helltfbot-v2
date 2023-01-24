@@ -1,6 +1,7 @@
+import { DB } from "@src/db/export-repositories"
 import { ChatPermissionLevel } from "@src/utilities/permission/types"
 import { UpdateResult } from "typeorm"
-import { BotResponse } from "../../client/types"
+import { BotResponse } from '../../client/types'
 import { UserNotificationType } from '../../modules/pubsub/types'
 import { NotificationService } from '../../services/notification.service'
 import { BaseCommand } from '../base'
@@ -15,6 +16,13 @@ export class RemovemeCommand extends BaseCommand {
   requiredParams = ['streamer', 'event'] as const
   permissions = ChatPermissionLevel.USER
   flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
+  db: DB
+
+  constructor(db: DB) {
+    super()
+    this.db = db
+  }
+
   async execute({
     channel,
     user: { 'user-id': unparsedUserId },
@@ -61,12 +69,12 @@ export class RemovemeCommand extends BaseCommand {
     }
   }
   methods = {
-    async removeEventNotification(
+    removeEventNotification: async (
       userId: number,
       streamer: string,
       event: UserNotificationType
-    ): Promise<UpdateResult> {
-      return await hb.db.notification.update(
+    ): Promise<UpdateResult> => {
+      return await this.db.notification.update(
         {
           user: {
             id: userId

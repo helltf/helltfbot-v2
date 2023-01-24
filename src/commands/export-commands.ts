@@ -34,11 +34,11 @@ import { client } from '@src/client/main-client'
 import { getDeps } from 'deps'
 
 const getInitializedCommands = async (): Promise<BaseCommand[]> => {
-  const deps = getDeps()
+  const { db, utils, reminder, pubsub, api } = getDeps()
   return [
-    new PingCommand(deps.db, client, deps.utils),
-    new AcceptCommand(),
-    new RemovemeCommand(),
+    new PingCommand(db, client, utils),
+    new AcceptCommand(db, reminder),
+    new RemovemeCommand(db),
     new GithubCommand(),
     new WebsiteCommand(),
     new NotifyCommand(),

@@ -1,6 +1,8 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
+import { DB } from '@src/db/export-repositories'
+import { ReminderService } from '@src/services/reminder.service'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { BaseCommand } from '../base'
 
@@ -13,6 +15,15 @@ export class AcceptCommand extends BaseCommand {
   alias = ['acceptsuggestion', 'approve']
   flags = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   cooldown = 0
+  reminder: ReminderService
+  db: DB
+
+  constructor(db: DB, reminder: ReminderService) {
+    super()
+    this.reminder = reminder
+    this.db = db
+  }
+
   async execute({
     params: { id, reason }
   }: CommandContext<AcceptCommand>): Promise<BotResponse> {
@@ -33,7 +44,7 @@ export class AcceptCommand extends BaseCommand {
       id: string,
       reason: string | undefined
     ): Promise<boolean> => {
-      const result = await hb.db.suggestion.update(
+      const result = await this.db.suggestion.update(
         {
           id: Number(id)
         },
@@ -43,9 +54,11 @@ export class AcceptCommand extends BaseCommand {
       return result.affected !== 0
     },
     createNotificationReminder: async (id: string) => {
-      const suggestion = (await hb.db.suggestion.findOneBy({ id: Number(id) }))!
+      const suggestion = (await this.db.suggestion.findOneBy({
+        id: Number(id)
+      }))!
 
-      await hb.reminder.createSystemReminder(
+      await this.reminder.createSystemReminder(
         suggestion.user.id,
         `@${suggestion.user.name} your suggestion with id ${id} has been accepted`
       )

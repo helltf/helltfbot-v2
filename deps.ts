@@ -1,6 +1,7 @@
+import { PubSub } from "@modules/pubsub/pubsub"
 import { DB } from "@src/db/export-repositories"
 import { logger, LogType } from "@src/logger/logger-export"
-import { ApiService } from "@src/services/api.service"
+import { ApiService } from '@src/services/api.service'
 import { CacheService } from '@src/services/cache.service'
 import { ConfigService } from '@src/services/config.service'
 import { GameService } from '@src/services/game.service'
@@ -16,7 +17,8 @@ const deps = {
   config: new ConfigService(),
   game: new GameService(),
   notification: new NotificationService(),
-  reminder: new ReminderService()
+  reminder: new ReminderService(),
+  pubsub: new PubSub()
 }
 
 export const initDeps = async () => {
@@ -29,6 +31,8 @@ export const initDeps = async () => {
 
   await deps.api.init()
   logger.log(LogType.INFO, 'API initialized')
+
+  await deps.pubsub.initialize()
   logger.log(LogType.TWITCHBOT, 'Successfully initialized')
 }
 

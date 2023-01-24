@@ -6,7 +6,6 @@ import { UserTracking } from '@modules/user.module'
 import { client } from '@src/client/main-client'
 import { logger, LogType } from '@src/logger/logger-export'
 import { getDeps } from 'deps'
-import { PubSub } from './pubsub/pubsub'
 import { ReminderModule } from './reminder.module'
 
 const getModules = (): Module[] => {
@@ -17,8 +16,7 @@ const getModules = (): Module[] => {
     new UserTracking(deps.db, client),
     new BanTracking(deps.db, client),
     new GameModule(deps.db, client, deps.game),
-    new ReminderModule(deps.db, client, deps.reminder, deps.utils),
-    new PubSub(deps.db)
+    new ReminderModule(deps.db, client, deps.reminder, deps.utils)
   ]
 }
 
