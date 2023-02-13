@@ -14,13 +14,13 @@ export class PubSub implements Module {
   connections: PubSubConnection[] = []
   db: DB
 
-  constructor(db: DB) {
+  constructor() {
     this.pubSubEventHandler = new PubSubEventHandler()
     this.notificationHandler = new NotificationHandler()
-    this.db = db
   }
 
-  initialize = async () => {
+  initialize = async (db: DB) => {
+    this.db = db
     await this.connect()
   }
 
