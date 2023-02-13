@@ -8,7 +8,7 @@ import { NotificationService } from '@src/services/notification.service'
 import { ReminderService } from '@src/services/reminder.service'
 import { Utility } from '@src/utilities/utility'
 
-type CommandDependencies = {
+export type CommandDependencies = {
   db: DB
   api: ApiService
   utils: Utility

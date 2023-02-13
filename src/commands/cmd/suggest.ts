@@ -2,6 +2,7 @@ import {  CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BaseCommand } from '../base'
+import { CommandDependencies } from 'deps'
 
 export class SuggestCommand extends BaseCommand {
   name = 'suggest'
@@ -12,6 +13,11 @@ export class SuggestCommand extends BaseCommand {
   cooldown = 30000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     user,
     channel,

@@ -4,6 +4,7 @@ import {
   ChatPermissionLevel,
   GlobalPermissionLevel
 } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { Command, CommandContext, CommandFlag, MessageType } from './types'
 
 export abstract class BaseCommand implements Command {
@@ -13,6 +14,10 @@ export abstract class BaseCommand implements Command {
   ): Promise<BotResponse> {
     return { response: 'No Implementation found', success: false }
   }
+  constructor(deps: CommandDependencies) {
+    this.deps = deps
+  }
+  deps: CommandDependencies
   name: string
   permissions: ChatPermissionLevel | GlobalPermissionLevel
   description: string
