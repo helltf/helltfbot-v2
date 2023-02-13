@@ -42,7 +42,7 @@ export class ColorHistoryCommand extends BaseCommand {
       response: [
         `${username}s recent colors are ${begin}`,
         ...rest,
-        `changed ${hb.utils.humanizeNow(history.lastChange)} ago`
+        `changed ${this.deps.utils.humanizeNow(history.lastChange)} ago`
       ]
     }
   }
@@ -50,7 +50,7 @@ export class ColorHistoryCommand extends BaseCommand {
     getColorHistory: async (
       username: string
     ): Promise<{ history: string[]; lastChange: number } | undefined> => {
-      const entity = await hb.db.color.findOneBy({
+      const entity = await this.deps.db.color.findOneBy({
         user: {
           name: username
         }

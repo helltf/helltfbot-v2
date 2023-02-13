@@ -24,7 +24,7 @@ export class RemoveCommand extends BaseCommand {
     channel,
     user
   }: CommandContext<RemoveCommand>): Promise<BotResponse> {
-    const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
+    const isEditor = await this.deps.api.seventv.isEditor(user.username!, channel)
 
     if (isEditor instanceof ResourceError) {
       return { response: 'could not fetch editors', success: false }
@@ -36,7 +36,7 @@ export class RemoveCommand extends BaseCommand {
         success: false
       }
 
-    const idFromUrl = hb.api.seventv.getIdFromUrl(emote)
+    const idFromUrl = this.deps.api.seventv.getIdFromUrl(emote)
 
     if (idFromUrl) {
       return this.methods.addEmoteById(idFromUrl, channel)
@@ -50,7 +50,7 @@ export class RemoveCommand extends BaseCommand {
       emote: string,
       channel: string
     ): Promise<BotResponse> => {
-      const result = await hb.api.seventv.gql.removeEmote(emote, channel)
+      const result = await this.deps.api.seventv.gql.removeEmote(emote, channel)
 
       if (result instanceof ResourceError) {
         return {
@@ -69,12 +69,12 @@ export class RemoveCommand extends BaseCommand {
       emoteId: string,
       channel: string
     ): Promise<BotResponse> => {
-      const channelId = await hb.api.seventv.rest.getUserId(channel)
+      const channelId = await this.deps.api.seventv.rest.getUserId(channel)
 
       if (channelId instanceof ResourceError)
         return { response: channelId.error, success: false }
 
-      const response = await hb.api.seventv.gql.removeEmoteById(
+      const response = await this.deps.api.seventv.gql.removeEmoteById(
         emoteId,
         channelId.data
       )

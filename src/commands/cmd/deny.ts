@@ -42,7 +42,7 @@ export class DenyCommand extends BaseCommand {
       id: string,
       reason: string | undefined
     ): Promise<boolean> => {
-      const updated = await hb.db.suggestion.update(
+      const updated = await this.deps.db.suggestion.update(
         {
           id: Number(id)
         },
@@ -52,9 +52,9 @@ export class DenyCommand extends BaseCommand {
       return updated.affected !== 0
     },
     sendNotification: async (id: string) => {
-      const suggestion = await hb.db.suggestion.findOneBy({ id: Number(id) })
+      const suggestion = await this.deps.db.suggestion.findOneBy({ id: Number(id) })
 
-      await hb.sendMessage(
+      await this.deps.sendMessage(
         suggestion?.channel,
         `@${suggestion?.user?.name} your suggestion with id ${id} has been denied with reason: ${suggestion?.reason}`
       )

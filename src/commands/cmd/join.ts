@@ -58,7 +58,7 @@ export class JoinCommand extends BaseCommand {
 
   methods = {
     isAlreadyConnected: async (channel: string): Promise<number> => {
-      return hb.db.channel.countBy({
+      return this.deps.db.channel.countBy({
         joined: true,
         channel: channel
       })
@@ -71,7 +71,7 @@ export class JoinCommand extends BaseCommand {
       success: boolean
     }> => {
       try {
-        await hb.client.join(channel)
+        await this.deps.client.join(channel)
         return {
           message: 'Successfully joined the channel',
           success: true
@@ -85,12 +85,12 @@ export class JoinCommand extends BaseCommand {
     },
 
     updateChannelInDb: async (channel: string) => {
-      const channelExsisting = await hb.db.channel.countBy({
+      const channelExsisting = await this.deps.db.channel.countBy({
         channel: channel
       })
 
       if (channelExsisting) {
-        return await hb.db.channel.update(
+        return await this.deps.db.channel.update(
           {
             channel: channel
           },
@@ -99,7 +99,7 @@ export class JoinCommand extends BaseCommand {
           }
         )
       }
-      return await hb.db.channel.save({
+      return await this.deps.db.channel.save({
         channel: channel,
         allowed: true,
         allowed_live: true,

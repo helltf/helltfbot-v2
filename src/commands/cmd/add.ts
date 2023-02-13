@@ -24,7 +24,10 @@ export class AddCommand extends BaseCommand {
     user,
     params: { emote_name: emote }
   }: CommandContext<AddCommand>): Promise<BotResponse> {
-    const isEditor = await hb.api.seventv.isEditor(user.username!, channel)
+    const isEditor = await this.deps.api.seventv.isEditor(
+      user.username!,
+      channel
+    )
     if (isEditor instanceof ResourceError) {
       return { response: 'could not fetch editors', success: false }
     }
@@ -35,7 +38,7 @@ export class AddCommand extends BaseCommand {
         success: false
       }
 
-    const idFromUrl = hb.api.seventv.getIdFromUrl(emote)
+    const idFromUrl = this.deps.api.seventv.getIdFromUrl(emote)
 
     if (idFromUrl) {
       return this.methods.addEmoteById(idFromUrl, channel)
@@ -46,7 +49,7 @@ export class AddCommand extends BaseCommand {
 
   methods = {
     addEmote: async (emote: string, channel: string): Promise<BotResponse> => {
-      const result = await hb.api.seventv.gql.addEmote(emote, channel)
+      const result = await this.deps.api.seventv.gql.addEmote(emote, channel)
 
       if (result instanceof ResourceError) {
         return {
@@ -65,13 +68,13 @@ export class AddCommand extends BaseCommand {
       emoteId: string,
       channel: string
     ): Promise<BotResponse> => {
-      const channelId = await hb.api.seventv.rest.getUserId(channel)
+      const channelId = await this.deps.api.seventv.rest.getUserId(channel)
 
       if (channelId instanceof ResourceError) {
         return { response: channelId.error, success: false }
       }
 
-      const response = await hb.api.seventv.gql.addEmoteById(
+      const response = await this.deps.api.seventv.gql.addEmoteById(
         emoteId,
         channelId.data
       )

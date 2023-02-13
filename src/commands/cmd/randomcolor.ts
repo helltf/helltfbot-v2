@@ -30,7 +30,7 @@ export class RandomColorCommand extends BaseCommand {
         .fill('1')
         .map(() => {
           return this.static.chars[
-            hb.utils.random(0, this.static.chars.length - 1)
+            this.deps.utils.random(0, this.static.chars.length - 1)
           ]
         })
 

@@ -46,7 +46,7 @@ export class StatsCommand extends BaseCommand {
 
   methods = {
     isValidType(type: string): boolean {
-      return hb.utils.enumContains(StatsType, type)
+      return this.deps.utils.enumContains(StatsType, type)
     },
 
     getCommandStats: async (
@@ -54,7 +54,7 @@ export class StatsCommand extends BaseCommand {
       user: TwitchUserState,
       channel: string
     ): Promise<BotResponse> => {
-      const foundCommand = hb.commands.findCommand('help')
+      const foundCommand = this.deps.commands.findCommand('help')
       return foundCommand.execute({
         user,
         channel,
@@ -65,7 +65,7 @@ export class StatsCommand extends BaseCommand {
     },
 
     async getLeaderboardPosition(username: string): Promise<number> {
-      const userStats = await hb.db.emoteStats.find({
+      const userStats = await this.deps.db.emoteStats.find({
         order: { emotes_guessed: 'DESC' },
         relations: {
           user: true
@@ -76,7 +76,7 @@ export class StatsCommand extends BaseCommand {
     },
 
     getEmotegameStats: async (username: string): Promise<BotResponse> => {
-      const statsPromise = await hb.db.emoteStats.findOneBy({
+      const statsPromise = await this.deps.db.emoteStats.findOneBy({
         user: {
           name: username
         }

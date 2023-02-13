@@ -30,7 +30,7 @@ export class CoinflipCommand extends BaseCommand {
   }
   methods = {
     flipCoin: (): boolean => {
-      return hb.utils.random(0, 1) === 1
+      return this.deps.utils.random(0, 1) === 1
     }
   }
 }

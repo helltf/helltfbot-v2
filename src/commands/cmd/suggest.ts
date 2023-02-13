@@ -35,7 +35,7 @@ export class SuggestCommand extends BaseCommand {
       channel
     )
 
-    await hb.sendMessage(
+    await this.deps.sendMessage(
       process.env.MAIN_USER,
       `@${process.env.MAIN_USER} new suggestion by ${user.username}`
     )
@@ -53,7 +53,7 @@ export class SuggestCommand extends BaseCommand {
       channel: string
     ): Promise<number> {
       return (
-        await hb.db.suggestion.save({
+        await this.deps.db.suggestion.save({
           date: Date.now(),
           channel,
           suggestion,

@@ -52,7 +52,7 @@ export class SetLevelCommand extends BaseCommand {
       username: string,
       level: GlobalPermissionLevel
     ): Promise<boolean> => {
-      const result = await hb.db.user.update(
+      const result = await this.deps.db.user.update(
         {
           name: username
         },

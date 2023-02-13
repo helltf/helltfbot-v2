@@ -60,7 +60,7 @@ export class EmotegameCommand extends BaseCommand {
 
       const game = new Emotegame(channel, emote.data)
 
-      const success = hb.games.add(game)
+      const success = this.deps.games.add(game)
 
       return {
         response: success
@@ -71,14 +71,14 @@ export class EmotegameCommand extends BaseCommand {
     },
 
     stop: async (channel: string): Promise<BotResponse> => {
-      if (!hb.games.emoteGameExists(channel)) {
+      if (!this.deps.games.emoteGameExists(channel)) {
         return {
           success: false,
           response: 'There is no game running at the moment'
         }
       }
 
-      hb.games.removeGameForChannel(channel)
+      this.deps.games.removeGameForChannel(channel)
 
       return {
         response: 'The emotegame has been stopped',
@@ -102,7 +102,7 @@ export class EmotegameCommand extends BaseCommand {
       }
 
       const randomEmote =
-        emotes.data[hb.utils.random(0, emotes.data.length - 1)]
+        emotes.data[this.deps.utils.random(0, emotes.data.length - 1)]
 
       return new ResourceSuccess(randomEmote)
     },
@@ -110,21 +110,21 @@ export class EmotegameCommand extends BaseCommand {
     getRandomEmoteService() {
       const emoteTypes: EmoteType[] = Object.values(EmoteType)
 
-      return emoteTypes[hb.utils.random(0, emoteTypes.length - 1)]
+      return emoteTypes[this.deps.utils.random(0, emoteTypes.length - 1)]
     },
 
     getEmotes: async (
       channel: string,
       type: EmoteType
     ): Promise<Resource<Emote[]>> => {
-      const cachedEmotes = await hb.cache.getEmoteSet(channel, type)
+      const cachedEmotes = await this.deps.cache.getEmoteSet(channel, type)
 
       if (cachedEmotes) return new ResourceSuccess(cachedEmotes)
 
-      const apiEmotes = await hb.api[type].getEmotesForChannel(channel)
+      const apiEmotes = await this.deps.api[type].getEmotesForChannel(channel)
 
       if (apiEmotes instanceof ResourceSuccess && apiEmotes.data.length) {
-        await hb.cache.saveEmoteSet(apiEmotes.data, channel, type)
+        await this.deps.cache.saveEmoteSet(apiEmotes.data, channel, type)
       }
 
       return apiEmotes

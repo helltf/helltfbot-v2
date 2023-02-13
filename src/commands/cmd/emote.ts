@@ -24,7 +24,7 @@ export class EmoteCommand extends BaseCommand {
   }: CommandContext<EmoteCommand>): Promise<BotResponse> {
     const emoteChannel = !channelParam ? channel : channelParam
 
-    const { ffz, bttv, seventv } = await hb.api.fetchAllEmotes(emoteChannel)
+    const { ffz, bttv, seventv } = await this.deps.api.fetchAllEmotes(emoteChannel)
 
     const ffzHasEmotes = !!ffz.length
     const bttvHasEmotes = !!bttv.length

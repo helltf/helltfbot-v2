@@ -41,7 +41,7 @@ export class LevelCommand extends BaseCommand {
   methods = {
     getDatabasePermissions: async (id: number): Promise<number> => {
       const permissions = (
-        await hb.db.user.findOneBy({
+        await this.deps.db.user.findOneBy({
           id: id
         })
       )?.permission
@@ -52,7 +52,7 @@ export class LevelCommand extends BaseCommand {
     },
 
     getUserPermissions: ({ badges }: TwitchUserState): number => {
-      return hb.utils.permission.getChatPermissions(badges!)
+      return this.deps.utils.permission.getChatPermissions(badges!)
     },
 
     mapToPermissionName: (

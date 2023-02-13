@@ -18,7 +18,7 @@ export class RemindCommand extends BaseCommand {
     channel,
     params
   }: CommandContext<RemindCommand>): Promise<BotResponse> {
-    const reminder = await hb.reminder.create({
+    const reminder = await this.deps.reminder.create({
       message: params.message,
       channel,
       creatorId: Number(user.id),

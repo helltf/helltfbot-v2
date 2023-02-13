@@ -34,7 +34,7 @@ export class ModCountCommand extends BaseCommand {
     }
 
     return {
-      response: `@${lookupChannel} has ${amount} ${hb.utils.plularizeIf(
+      response: `@${lookupChannel} has ${amount} ${this.deps.utils.plularizeIf(
         'moderator',
         amount
       )}`,
@@ -45,7 +45,7 @@ export class ModCountCommand extends BaseCommand {
   methods = {
     getModCount: async (channel: string): Promise<number | undefined> => {
       try {
-        return (await hb.client.mods(channel)).length
+        return (await this.deps.client.mods(channel)).length
       } catch (e) {
         return undefined
       }

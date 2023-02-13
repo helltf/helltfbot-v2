@@ -27,7 +27,7 @@ export class YoinkCommand extends BaseCommand {
   }: CommandContext<YoinkCommand>): Promise<BotResponse> {
     if (!emote) return { response: 'no emote specified', success: false }
     const yoinkChannel = user.username!
-    const emoteResult = await hb.api.seventv.gql.yoink(
+    const emoteResult = await this.deps.api.seventv.gql.yoink(
       emote,
       channel,
       yoinkChannel
@@ -55,7 +55,7 @@ export class YoinkCommand extends BaseCommand {
       { id: emoteId, name: emoteName }: EmoteData,
       channel: string
     ): Promise<BotResponse> => {
-      const emoteData = await hb.api.seventv.rest.getEmoteById(emoteId)
+      const emoteData = await this.deps.api.seventv.rest.getEmoteById(emoteId)
 
       if (emoteData instanceof ResourceError) {
         return { response: 'could not fetch emote data', success: false }
@@ -64,7 +64,7 @@ export class YoinkCommand extends BaseCommand {
       const emoteDefaultName = emoteData.data.name
 
       if (emoteDefaultName !== emoteName) {
-        const aliasResult = await hb.api.seventv.gql.setAlias(
+        const aliasResult = await this.deps.api.seventv.gql.setAlias(
           emoteId,
           emoteName,
           channel

@@ -29,7 +29,7 @@ export class SetAliasCommand extends BaseCommand {
     if (isEditor instanceof ResourceError)
       return { response: isEditor.error, success: false }
 
-    const emoteData = await hb.api.seventv.rest.getEmoteIdAndName(
+    const emoteData = await this.deps.api.seventv.rest.getEmoteIdAndName(
       emote,
       channel
     )
@@ -37,7 +37,7 @@ export class SetAliasCommand extends BaseCommand {
     if (emoteData instanceof ResourceError)
       return { response: emoteData.error, success: false }
 
-    const result = await hb.api.seventv.gql.setAlias(
+    const result = await this.deps.api.seventv.gql.setAlias(
       emoteData.data.id,
       alias,
       channel
@@ -57,7 +57,7 @@ export class SetAliasCommand extends BaseCommand {
       user: string,
       channel: string
     ): Promise<Resource<boolean>> => {
-      const isEditor = await hb.api.seventv.isEditor(user, channel)
+      const isEditor = await this.deps.api.seventv.isEditor(user, channel)
 
       if (isEditor instanceof ResourceError)
         return new ResourceError('could not fetch editors')

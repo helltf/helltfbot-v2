@@ -1,8 +1,6 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
-import { DB } from '@src/db/export-repositories'
-import { ReminderService } from '@src/services/reminder.service'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
@@ -41,7 +39,7 @@ export class AcceptCommand extends BaseCommand {
       id: string,
       reason: string | undefined
     ): Promise<boolean> => {
-      const result = await this.db.suggestion.update(
+      const result = await this.deps.db.suggestion.update(
         {
           id: Number(id)
         },
@@ -51,11 +49,11 @@ export class AcceptCommand extends BaseCommand {
       return result.affected !== 0
     },
     createNotificationReminder: async (id: string) => {
-      const suggestion = (await this.db.suggestion.findOneBy({
+      const suggestion = (await this.deps.db.suggestion.findOneBy({
         id: Number(id)
       }))!
 
-      await this.reminder.createSystemReminder(
+      await this.deps.reminder.createSystemReminder(
         suggestion.user.id,
         `@${suggestion.user.name} your suggestion with id ${id} has been accepted`
       )

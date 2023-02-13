@@ -45,7 +45,7 @@ export class BanCheckCommand extends BaseCommand {
       user: string,
       channel: string | undefined
     ): Promise<BanEntity[]> => {
-      return hb.db.ban.find({
+      return this.deps.db.ban.find({
         where: {
           user,
           ...(channel && { channel })
@@ -66,18 +66,18 @@ export class BanCheckCommand extends BaseCommand {
 
       return isChannelBan
         ? [
-            `@${username} has been banned ${bans.length} ${hb.utils.plularizeIf(
+            `@${username} has been banned ${bans.length} ${this.deps.utils.plularizeIf(
               'time',
               bans.length
             )} in this channel`,
-            `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago`
+            `Last ban ${this.deps.utils.humanizeNow(bans[0].at)} ago`
           ]
         : [
-            `@${username} has ${bans.length} ${hb.utils.plularizeIf(
+            `@${username} has ${bans.length} ${this.deps.utils.plularizeIf(
               'ban',
               bans.length
             )} recorded`,
-            `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago in ${
+            `Last ban ${this.deps.utils.humanizeNow(bans[0].at)} ago in ${
               bans[0].channel
             }`
           ]

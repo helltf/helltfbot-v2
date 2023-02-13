@@ -31,11 +31,11 @@ export class DisableCommand extends BaseCommand {
   }
   methods = {
     disable: async (channel: string): Promise<boolean> => {
-      const channelData = await hb.db.channel.findOneBy({ channel })
+      const channelData = await this.deps.db.channel.findOneBy({ channel })
 
       if (!channelData?.allowed) return false
 
-      const updateResult = await hb.db.channel.update(
+      const updateResult = await this.deps.db.channel.update(
         { channel },
         { allowed: false }
       )

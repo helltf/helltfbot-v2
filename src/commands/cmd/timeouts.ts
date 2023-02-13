@@ -39,7 +39,7 @@ export class TimeoutsCommand extends BaseCommand {
     },
 
     getAllTimeouts: async (username: string): Promise<BotResponse> => {
-      const timeouts = await hb.db.timeout.find({
+      const timeouts = await this.deps.db.timeout.find({
         where: {
           user: username
         },
@@ -65,9 +65,9 @@ export class TimeoutsCommand extends BaseCommand {
         response: [
           `${username} has been timeouted ${timeouts.length} time(s)`,
           `${channels.length} different channels`,
-          `Last timeout ${hb.utils.humanizeNow(lastTimeout.at)} ago in ${
+          `Last timeout ${this.deps.utils.humanizeNow(lastTimeout.at)} ago in ${
             lastTimeout.channel
-          } for ${hb.utils.humanize(lastTimeout.duration)}`
+          } for ${this.deps.utils.humanize(lastTimeout.duration)}`
         ]
       }
     },
@@ -76,7 +76,7 @@ export class TimeoutsCommand extends BaseCommand {
       username: string,
       channel: string
     ): Promise<BotResponse> => {
-      const result = await hb.db.timeout.find({
+      const result = await this.deps.db.timeout.find({
         where: {
           channel: channel,
           user: username
@@ -91,9 +91,9 @@ export class TimeoutsCommand extends BaseCommand {
       return {
         response: [
           `${username} has been timeouted ${result.length} times in channel ${channel}`,
-          `Last timeout: ${hb.utils.humanizeNow(
+          `Last timeout: ${this.deps.utils.humanizeNow(
             lastTimeout.at
-          )} ago for ${hb.utils.humanize(lastTimeout.duration)}`
+          )} ago for ${this.deps.utils.humanize(lastTimeout.duration)}`
         ],
         success: true
       }
