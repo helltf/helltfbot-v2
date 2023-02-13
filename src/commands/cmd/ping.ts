@@ -3,9 +3,8 @@ import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { ResourceError } from '@api/types'
 import { BaseCommand } from '../base'
-import { DB } from '@src/db/export-repositories'
-import { Client } from 'tmi.js'
 import { Utility } from '@src/utilities/utility'
+import { CommandDependencies } from 'deps'
 
 export class PingCommand extends BaseCommand {
   flags: CommandFlag[] = [CommandFlag.WHISPER]
@@ -16,15 +15,12 @@ export class PingCommand extends BaseCommand {
   optionalParams = [] as const
   cooldown = 5000
   alias = []
-  db: DB
-  client: Client
   utils: Utility
-  constructor(db: DB, client: Client, utils: Utility) {
-    super()
-    this.db = db
-    this.client = client
-    this.utils = utils
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
   }
+
   async execute(): Promise<BotResponse> {
     const uptime = this.methods.getUptime()
     const memoryUsage = this.methods.getMemory()
@@ -65,7 +61,7 @@ export class PingCommand extends BaseCommand {
     getCommandsIssued: async (): Promise<number> => {
       return Number(
         (
-          await this.db.command
+          await this.deps.db.command
             .createQueryBuilder('commands')
             .select('SUM(commands.counter)', 'sum')
             .getRawOne()
@@ -74,13 +70,13 @@ export class PingCommand extends BaseCommand {
     },
 
     getChannels: async (): Promise<number> => {
-      return this.db.channel.countBy({
+      return this.deps.db.channel.countBy({
         joined: true
       })
     },
 
     getLatency: async (): Promise<number> => {
-      return (await this.client.ping())[0] * 1000
+      return (await this.deps.client.ping())[0] * 1000
     },
 
     getCommitInfo: async (): Promise<string> => {

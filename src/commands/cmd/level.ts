@@ -4,6 +4,7 @@ import {
   ChatPermissionLevel,
   GlobalPermissionLevel
 } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class LevelCommand extends BaseCommand {
@@ -15,6 +16,11 @@ export class LevelCommand extends BaseCommand {
   alias = ['lvl', 'permission', 'permissions']
   cooldown = 5000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({ user }: CommandContext<LevelCommand>): Promise<BotResponse> {
     const dbPerm = await this.methods.getDatabasePermissions(
       Number(user['user-id'])

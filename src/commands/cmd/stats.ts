@@ -1,6 +1,7 @@
 import { BotResponse, TwitchUserState } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class StatsCommand extends BaseCommand {
@@ -12,6 +13,11 @@ export class StatsCommand extends BaseCommand {
   alias: string[] = ['statistics']
   cooldown = 20000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     user,
     params: { type, lookup },

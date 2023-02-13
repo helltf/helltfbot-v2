@@ -1,5 +1,5 @@
-import { DB } from "@src/db/export-repositories"
 import { ChatPermissionLevel } from "@src/utilities/permission/types"
+import { CommandDependencies } from "deps"
 import { UpdateResult } from "typeorm"
 import { BotResponse } from '../../client/types'
 import { UserNotificationType } from '../../modules/pubsub/types'
@@ -16,11 +16,9 @@ export class RemovemeCommand extends BaseCommand {
   requiredParams = ['streamer', 'event'] as const
   permissions = ChatPermissionLevel.USER
   flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
-  db: DB
 
-  constructor(db: DB) {
-    super()
-    this.db = db
+  constructor(deps: CommandDependencies) {
+    super(deps)
   }
 
   async execute({

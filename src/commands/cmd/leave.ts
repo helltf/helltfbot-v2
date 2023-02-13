@@ -1,3 +1,4 @@
+import { CommandDependencies } from 'deps'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel, GlobalPermissionLevel } from '../../utilities/permission/types'
 import { BaseCommand } from '../base'
@@ -12,6 +13,11 @@ export class LeaveCommand extends BaseCommand {
   cooldown = 5000
   alias = ['l']
   flags: CommandFlag[] = [CommandFlag.WHISPER]
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     user,
     params: { channel: channeltoLeave }

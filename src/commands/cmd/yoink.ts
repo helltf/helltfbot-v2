@@ -3,6 +3,7 @@ import { ResourceError } from "@api/types";
 import { BotResponse } from "@src/client/types";
 import {  CommandContext } from '@src/commands/types'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class YoinkCommand extends BaseCommand {
@@ -14,6 +15,11 @@ export class YoinkCommand extends BaseCommand {
   alias = ['yoinkemote']
   flags = []
   cooldown = 10000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     user,
     channel,

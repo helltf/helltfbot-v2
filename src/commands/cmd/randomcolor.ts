@@ -3,6 +3,7 @@ import {  CommandFlag } from '@src/commands/types'
 import {
   ChatPermissionLevel,
 } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class RandomColorCommand extends BaseCommand {
@@ -14,7 +15,12 @@ export class RandomColorCommand extends BaseCommand {
   alias = ['rc']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000
-  async execute(): Promise<BotResponse>  {
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
+  async execute(): Promise<BotResponse> {
     return { response: this.methods.generateHex(), success: true }
   }
 

@@ -1,4 +1,5 @@
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BotResponse } from '../../client/types'
 
 import {
@@ -18,6 +19,11 @@ export class NotifyCommand extends BaseCommand {
   optionalParams = [] as const
   cooldown = 5000
   alias = ['notifyme', 'noti', 'notification']
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     channel,
     user,
@@ -61,34 +67,34 @@ export class NotifyCommand extends BaseCommand {
   }
 
   methods = {
-    async createNewStreamerConnection(
+    createNewStreamerConnection: async (
       streamer: string,
       event: UserNotificationType
-    ): Promise<boolean> {
-      const id = await hb.api.twitch.getUserIdByName(streamer)
+    ): Promise<boolean> => {
+      const id = await this.deps.api.twitch.getUserIdByName(streamer)
       if (!id) return false
 
-      const notifyType = this.mapEventTypeToNotifyType(event)
+      const notifyType = this.methods.mapEventTypeToNotifyType(event)
 
-      await this.updateTopicTypeForChannel(streamer, id, notifyType)
+      await this.methods.updateTopicTypeForChannel(streamer, id, notifyType)
 
       const topic: Topic = {
         id: id,
-        prefix: hb.pubSub.mapNotifyTypeToTopicPrefix(notifyType)
+        prefix: this.deps.pubSub.mapNotifyTypeToTopicPrefix(notifyType)
       }
 
-      hb.pubSub.listenToTopic(topic)
+      this.deps.pubSub.listenToTopic(topic)
 
       return true
     },
 
-    async userIsAlreadyNotified(
+    userIsAlreadyNotified: async (
       userId: number,
       streamer: string,
       event: UserNotificationType
-    ): Promise<boolean> {
+    ): Promise<boolean> => {
       return (
-        (await hb.db.notification.findOne({
+        (await this.deps.db.notification.findOne({
           where: {
             user: {
               id: userId
@@ -103,25 +109,25 @@ export class NotifyCommand extends BaseCommand {
       )
     },
 
-    async updateTopicTypeForChannel(
+    updateTopicTypeForChannel: async (
       channel: string,
       id: number,
       topicType: NotifyEventType
-    ) {
-      await hb.db.notificationChannel.save({
+    ) => {
+      await this.db.notificationChannel.save({
         name: channel,
         [topicType]: true,
         id: id
       })
     },
 
-    async pubSubConnectedToStreamerEvent(
+    pubSubConnectedToStreamerEvent: async (
       streamer: string,
       eventType: UserNotificationType
-    ): Promise<boolean> {
-      const event = this.mapEventTypeToNotifyType(eventType)
+    ): Promise<boolean> => {
+      const event = this.methods.mapEventTypeToNotifyType(eventType)
       return (
-        (await hb.db.notificationChannel.countBy({
+        (await this.db.notificationChannel.countBy({
           name: streamer,
           [event]: true
         })) === 1
@@ -143,14 +149,14 @@ export class NotifyCommand extends BaseCommand {
       return NotifyEventType.STATUS
     },
 
-    async updateNotification(
+    updateNotification: async (
       channel: string,
       streamer: string,
       event: UserNotificationType,
       id: number
-    ) {
+    ) => {
       if (await this.userNotificationIsExisting(id, streamer)) {
-        await hb.db.notification.update(
+        await this.db.notification.update(
           {
             streamer: streamer,
             user: {
@@ -162,7 +168,7 @@ export class NotifyCommand extends BaseCommand {
           }
         )
       } else {
-        await hb.db.notification.save({
+        await this.db.notification.save({
           channel: channel,
           streamer: streamer,
           [event]: true,
@@ -173,12 +179,12 @@ export class NotifyCommand extends BaseCommand {
       }
     },
 
-    async userNotificationIsExisting(
+    userNotificationIsExisting: async (
       userId: number,
       streamer: string
-    ): Promise<boolean> {
+    ): Promise<boolean> => {
       return (
-        (await hb.db.notification.findOneBy({
+        (await this.db.notification.findOneBy({
           user: {
             id: userId
           },

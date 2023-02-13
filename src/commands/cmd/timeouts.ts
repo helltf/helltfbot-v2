@@ -1,6 +1,7 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class TimeoutsCommand extends BaseCommand {
@@ -12,6 +13,11 @@ export class TimeoutsCommand extends BaseCommand {
   alias = ['timeoutcheck', 'timeoutstats', 'tms']
   flags = [CommandFlag.LOWERCASE, CommandFlag.WHISPER]
   cooldown = 30000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     user,
     params: { user: providedUser, channel: providedChannel }

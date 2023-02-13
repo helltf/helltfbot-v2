@@ -3,6 +3,7 @@ import {  CommandContext, CommandFlag } from "@src/commands/types";
 import {
   ChatPermissionLevel,
 } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class ColorHistoryCommand extends BaseCommand {
@@ -14,6 +15,11 @@ export class ColorHistoryCommand extends BaseCommand {
   alias = ['colors', 'history']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     user,
     params: { user: userParam }

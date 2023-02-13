@@ -1,7 +1,8 @@
 import { BanEntity } from "@db/entities";
 import { BotResponse } from "@src/client/types";
 import { ChatPermissionLevel} from "@src/utilities/permission/types";
-import { BaseCommand } from "../base";
+import { CommandDependencies } from 'deps'
+import { BaseCommand } from '../base'
 import { CommandContext, CommandFlag, MessageType } from '../types'
 
 export class BanCheckCommand extends BaseCommand {
@@ -13,6 +14,11 @@ export class BanCheckCommand extends BaseCommand {
   alias = ['bc', 'banc']
   flags = [CommandFlag.WHISPER, CommandFlag.LOWERCASE]
   cooldown = 15000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     type,
     user,

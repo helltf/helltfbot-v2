@@ -1,4 +1,5 @@
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { CommandDependencies } from "deps";
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
 import { BotResponse } from '../../client/types'
 import { Emotegame } from '../../games/emotegame'
@@ -14,6 +15,11 @@ export class EmotegameCommand extends BaseCommand {
   alias = ['hangman', 'egame', 'bttvgame', 'ffzgame', '7tvgame']
   cooldown = 10000
   flags: CommandFlag[] = [CommandFlag.LOWERCASE]
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     channel,
     params: { action, type }

@@ -1,4 +1,5 @@
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BotResponse } from '../../client/types'
 import { BaseCommand } from '../base'
 import { CommandContext, CommandFlag } from '../types'
@@ -12,6 +13,11 @@ export class AllowCommand extends BaseCommand {
   cooldown = 5000
   alias = []
   flags: CommandFlag[] = [CommandFlag.WHISPER]
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     user,
     params: { channel: updateChannel }

@@ -1,6 +1,7 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class EmoteCommand extends BaseCommand {
@@ -12,6 +13,10 @@ export class EmoteCommand extends BaseCommand {
   optionalParams = ['channel'] as const
   alias: string[] = ['emotes']
   cooldown = 20000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
 
   async execute({
     channel,

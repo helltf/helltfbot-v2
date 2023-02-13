@@ -1,6 +1,7 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class EvalCommand extends BaseCommand {
@@ -12,6 +13,11 @@ export class EvalCommand extends BaseCommand {
   alias: string[] = []
   cooldown = 0
   flags: CommandFlag[] = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     params: { code }
   }: CommandContext<EvalCommand>): Promise<BotResponse> {

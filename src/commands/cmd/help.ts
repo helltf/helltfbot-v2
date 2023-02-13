@@ -1,6 +1,7 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class HelpCommmand extends BaseCommand {
@@ -12,6 +13,11 @@ export class HelpCommmand extends BaseCommand {
   requiredParams: string[] = []
   alias = ['command', 'commandinfo', 'commands']
   cooldown = 10000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     params: { command }
   }: CommandContext<HelpCommmand>): Promise<BotResponse> {

@@ -2,6 +2,7 @@ import { BotResponse } from '@src/client/types';
 import {  CommandContext, CommandFlag } from '@src/commands/types'
 import { SuggestionStatus } from '@src/db/entities/suggestion.entity';
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class DenyCommand extends BaseCommand {
@@ -13,6 +14,11 @@ export class DenyCommand extends BaseCommand {
   alias = ['denysuggestion']
   flags = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   cooldown = 10000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     params: { id, reason }
   }: CommandContext<DenyCommand>): Promise<BotResponse> {

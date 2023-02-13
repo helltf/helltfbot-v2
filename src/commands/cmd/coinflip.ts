@@ -1,5 +1,6 @@
 import { BotResponse } from '@src/client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 import { CommandFlag } from '../types'
 
@@ -12,6 +13,11 @@ export class CoinflipCommand extends BaseCommand {
   alias = ['cf']
   flags = [CommandFlag.WHISPER]
   cooldown = 15000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute(): Promise<BotResponse> {
     const flipResult = this.methods.flipCoin()
 

@@ -2,6 +2,7 @@ import { ResourceError } from "@api/types";
 import { BotResponse } from "@src/client/types";
 import {  CommandContext } from "@src/commands/types";
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class RemoveCommand extends BaseCommand {
@@ -13,6 +14,11 @@ export class RemoveCommand extends BaseCommand {
   alias = ['removeemote']
   flags = []
   cooldown = 10000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     params: { emote_name: emote },
     channel,

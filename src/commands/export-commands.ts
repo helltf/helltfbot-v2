@@ -30,43 +30,42 @@ import { AcceptCommand } from './cmd/accept'
 import { BanCheckCommand } from './cmd/bancheck'
 import { CoinflipCommand } from './cmd/coinflip'
 import { BaseCommand } from './base'
-import { client } from '@src/client/main-client'
 import { getDeps } from 'deps'
 
 const getInitializedCommands = async (): Promise<BaseCommand[]> => {
   const deps = getDeps()
   return [
-    new PingCommand(),
-    new AcceptCommand(),
-    new RemovemeCommand(),
-    new GithubCommand(),
-    new WebsiteCommand(),
-    new NotifyCommand(),
-    new SuggestCommand(),
-    new RemoveSuggestCommand(),
-    new JoinCommand(),
-    new LeaveCommand(),
-    new AllowCommand(),
-    new EmotegameCommand(),
-    new LevelCommand(),
-    new UidCommand(),
-    new EmoteCommand(),
-    new HelpCommmand(),
-    new StatsCommand(),
-    new EvalCommand(),
-    new ColorHistoryCommand(),
-    new SetLevelCommand(),
-    new TimeoutsCommand(),
-    new AddCommand(),
-    new RemoveCommand(),
-    new YoinkCommand(),
-    new SetAliasCommand(),
-    new ModCountCommand(),
-    new DenyCommand(),
-    new RandomColorCommand(),
-    new DisableCommand(),
-    new BanCheckCommand(),
-    new CoinflipCommand()
+    new PingCommand(deps),
+    new AcceptCommand(deps),
+    new RemovemeCommand(deps),
+    new GithubCommand(deps),
+    new WebsiteCommand(deps),
+    new NotifyCommand(deps),
+    new SuggestCommand(deps),
+    new RemoveSuggestCommand(deps),
+    new JoinCommand(deps),
+    new LeaveCommand(deps),
+    new AllowCommand(deps),
+    new EmotegameCommand(deps),
+    new LevelCommand(deps),
+    new UidCommand(deps),
+    new EmoteCommand(deps),
+    new HelpCommmand(deps),
+    new StatsCommand(deps),
+    new EvalCommand(deps),
+    new ColorHistoryCommand(deps),
+    new SetLevelCommand(deps),
+    new TimeoutsCommand(deps),
+    new AddCommand(deps),
+    new RemoveCommand(deps),
+    new YoinkCommand(deps),
+    new SetAliasCommand(deps),
+    new ModCountCommand(deps),
+    new DenyCommand(deps),
+    new RandomColorCommand(deps),
+    new DisableCommand(deps),
+    new BanCheckCommand(deps),
+    new CoinflipCommand(deps)
   ]
 }
 

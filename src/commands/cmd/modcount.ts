@@ -1,6 +1,7 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { GlobalPermissionLevel } from "@src/utilities/permission/types";
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class ModCountCommand extends BaseCommand {
@@ -12,6 +13,11 @@ export class ModCountCommand extends BaseCommand {
   alias = ['mcount', 'moderatorcount']
   flags = [CommandFlag.WHISPER]
   cooldown = 10000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     channel,
     params: { channel: givenChannel }

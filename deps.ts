@@ -1,12 +1,14 @@
 import { PubSub } from "@modules/pubsub/pubsub"
+import { client } from "@src/client/main-client"
 import { DB } from "@src/db/export-repositories"
-import { logger, LogType } from "@src/logger/logger-export"
+import { logger, LogType } from '@src/logger/logger-export'
 import { ApiService } from '@src/services/api.service'
 import { CacheService } from '@src/services/cache.service'
 import { GameService } from '@src/services/game.service'
 import { NotificationService } from '@src/services/notification.service'
 import { ReminderService } from '@src/services/reminder.service'
 import { Utility } from '@src/utilities/utility'
+import { Client } from 'tmi.js'
 
 export type CommandDependencies = {
   db: DB
@@ -17,6 +19,7 @@ export type CommandDependencies = {
   notification: NotificationService
   reminder: ReminderService
   pubSub: PubSub
+  client: Client
 }
 
 const deps: CommandDependencies = {
@@ -27,7 +30,8 @@ const deps: CommandDependencies = {
   game: new GameService(),
   notification: new NotificationService(),
   reminder: new ReminderService(),
-  pubSub: new PubSub()
+  pubSub: new PubSub(),
+  client: client
 }
 
 export const initDeps = async () => {

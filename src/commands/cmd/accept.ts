@@ -4,6 +4,7 @@ import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
 import { DB } from '@src/db/export-repositories'
 import { ReminderService } from '@src/services/reminder.service'
 import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class AcceptCommand extends BaseCommand {
@@ -15,13 +16,9 @@ export class AcceptCommand extends BaseCommand {
   alias = ['acceptsuggestion', 'approve']
   flags = [CommandFlag.WHISPER, CommandFlag.APPEND_PARAMS]
   cooldown = 0
-  reminder: ReminderService
-  db: DB
 
-  constructor(db: DB, reminder: ReminderService) {
-    super()
-    this.reminder = reminder
-    this.db = db
+  constructor(deps: CommandDependencies) {
+    super(deps)
   }
 
   async execute({

@@ -2,6 +2,7 @@ import {  CommandContext, CommandFlag } from '../types'
 import { BotResponse } from '../../client/types'
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { BaseCommand } from '../base'
+import { CommandDependencies } from 'deps'
 
 export class RemoveSuggestCommand extends BaseCommand {
   name = 'rmsuggest'
@@ -12,6 +13,10 @@ export class RemoveSuggestCommand extends BaseCommand {
   cooldown = 30000
   flags: CommandFlag[] = [CommandFlag.WHISPER]
   alias = ['rms']
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
 
   async execute({
     user,
@@ -40,14 +45,14 @@ export class RemoveSuggestCommand extends BaseCommand {
     }
   }
   methods = {
-    async idIsNotValidForUser(
+    idIsNotValidForUser: async (
       userId: string,
       suggestionId: string
-    ): Promise<boolean> {
+    ): Promise<boolean> => {
       const parsedUserId = parseInt(userId)
       const parsedSuggestionId = parseInt(suggestionId)
 
-      const entity = await hb.db.suggestion.findOne({
+      const entity = await this.deps.db.suggestion.findOne({
         where: {
           id: parsedSuggestionId,
           user: {
@@ -58,10 +63,10 @@ export class RemoveSuggestCommand extends BaseCommand {
       return entity === null
     },
 
-    async deleteSuggestion(suggestionId: string) {
+    deleteSuggestion: async (suggestionId: string) => {
       const parsedSuggestionId = parseInt(suggestionId)
 
-      await hb.db.suggestion.delete({
+      await this.deps.db.suggestion.delete({
         id: parsedSuggestionId
       })
     }

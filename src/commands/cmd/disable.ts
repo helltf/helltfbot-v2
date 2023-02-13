@@ -3,6 +3,7 @@ import {  CommandContext} from "@src/commands/types";
 import {
   GlobalPermissionLevel
 } from '@src/utilities/permission/types'
+import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
 
 export class DisableCommand extends BaseCommand {
@@ -14,6 +15,11 @@ export class DisableCommand extends BaseCommand {
   alias = ['mute']
   flags = []
   cooldown = 30000
+
+  constructor(deps: CommandDependencies) {
+    super(deps)
+  }
+
   async execute({
     channel
   }: CommandContext<DisableCommand>): Promise<BotResponse> {
