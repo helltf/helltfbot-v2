@@ -3,30 +3,31 @@ import { AcceptCommand } from "@src/commands/cmd/accept"
 import { ReminderType } from "@src/db/entities/reminder.entity"
 import { SuggestionStatus } from '@src/db/entities/suggestion.entity'
 import { clearDb } from '@test-utils/clear'
-import { disconnectDatabase } from '@test-utils/disconnect'
+import { createTestDeps } from '@test-utils/deps'
 import {
   getExampleTwitchUserEntity,
   getExampleTwitchUserState
 } from '@test-utils/example'
-import { setupDatabase } from '@test-utils/setup-db'
+import { CommandDependencies } from 'deps'
 
 describe('accept command', () => {
   let user: TwitchUserState
   let accept: AcceptCommand
+  const deps: CommandDependencies = createTestDeps()
   const channel = 'messageChannel'
 
   beforeAll(async () => {
-    await setupDatabase()
+    await deps.db.initialize()
   })
 
   beforeEach(async () => {
-    accept = new AcceptCommand()
-    await clearDb(hb.db.dataSource)
+    accept = new AcceptCommand(deps)
+    await clearDb(deps.db.dataSource)
     user = getExampleTwitchUserState({})
   })
 
   afterAll(async () => {
-    await disconnectDatabase()
+    await deps.db.dataSource.destroy()
   })
 
   describe('execute', () => {

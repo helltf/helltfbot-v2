@@ -17,10 +17,10 @@ export class CommandEntity extends BaseEntity {
   description: string
 
   @Column('text', { array: true })
-  requiredParams?: string[]
+  requiredParams: string[]
 
   @Column('text', { array: true })
-  optionalParams?: string[]
+  optionalParams: string[]
 
   @Column('int')
   cooldown: number

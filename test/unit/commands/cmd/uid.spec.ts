@@ -1,9 +1,11 @@
 import { UidCommand } from "@src/commands/cmd/uid"
+import { createTestDeps } from "@test-utils/deps"
 import { getExampleTwitchUserState } from "@test-utils/example"
-import { setup } from "@test-utils/setup"
+import { setup } from '@test-utils/setup'
 
 describe('test uid command', () => {
-  const uid = new UidCommand()
+  const deps = createTestDeps()
+  const uid = new UidCommand(deps)
   const channel = 'channel'
   const user = getExampleTwitchUserState({})
 
@@ -27,7 +29,7 @@ describe('test uid command', () => {
   it('user is given return user id from api', async () => {
     const searchedUser = 'searchedUser'
     const id = 300
-    jest.spyOn(hb.api.twitch, 'getUserIdByName').mockResolvedValue(id)
+    jest.spyOn(deps.api.twitch, 'getUserIdByName').mockResolvedValue(id)
 
     const { response, success } = await uid.execute({
       channel,
@@ -44,7 +46,7 @@ describe('test uid command', () => {
   it("user can't be found return error response", async () => {
     const searchedUser = 'searchedUser'
     const id = undefined
-    jest.spyOn(hb.api.twitch, 'getUserIdByName').mockResolvedValue(id)
+    jest.spyOn(deps.api.twitch, 'getUserIdByName').mockResolvedValue(id)
 
     const { response, success } = await uid.execute({
       channel,
