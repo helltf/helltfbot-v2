@@ -1,12 +1,18 @@
 import { Emote } from "../../commands/cmd/emotegame";
 import { Resource, ResourceError, ResourceSuccess } from "../types";
 import fetch from 'node-fetch'
+import { TwitchApi } from '@api/twitch/export-api'
 
 export class BttvApi {
   url = 'https://api.betterttv.net/3/cached/users/twitch/'
+  twitchApi: TwitchApi
+
+  constructor(twitchApi: TwitchApi) {
+    this.twitchApi = twitchApi
+  }
 
   async fetchEmotes(channel: string): Promise<Resource<Emote[]>> {
-    const id = await hb.api.twitch.getUserIdByName(channel)
+    const id = await this.twitchApi.getUserIdByName(channel)
     const error = new ResourceError('Could not fetch bttv emotes')
     if (!id) return error
 

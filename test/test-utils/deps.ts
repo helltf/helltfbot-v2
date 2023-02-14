@@ -10,15 +10,16 @@ import { CommandDependencies } from 'deps'
 import { Client } from 'tmi.js'
 
 export function createTestDeps() {
+  const client = {} as Client
   return {
     db: new DB(),
     utils: new Utility(),
     api: new ApiService(),
     cache: new CacheService(),
-    game: new GameService(),
+    game: new GameService(client),
     notification: new NotificationService(),
     reminder: new ReminderService(),
     pubSub: new PubSub(),
-    client: {} as Client
+    client: client
   } as CommandDependencies
 }

@@ -1,17 +1,12 @@
 import { UidCommand } from "@src/commands/cmd/uid"
 import { createTestDeps } from "@test-utils/deps"
 import { getExampleTwitchUserState } from "@test-utils/example"
-import { setup } from '@test-utils/setup'
 
 describe('test uid command', () => {
   const deps = createTestDeps()
   const uid = new UidCommand(deps)
   const channel = 'channel'
   const user = getExampleTwitchUserState({})
-
-  beforeAll(() => {
-    setup()
-  })
 
   it('no user is given return usernames id', async () => {
     const id = user['user-id']!

@@ -16,7 +16,7 @@ export class ApiService {
     this.github = new GithubApi()
     this.twitch = new TwitchApi()
     this.seventv = new SevenTvApi()
-    this.bttv = new BttvApi()
+    this.bttv = new BttvApi(this.twitch)
     this.ffz = new FfzApi()
   }
   async init() {

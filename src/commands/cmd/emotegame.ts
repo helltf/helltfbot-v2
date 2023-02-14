@@ -60,7 +60,7 @@ export class EmotegameCommand extends BaseCommand {
 
       const game = new Emotegame(channel, emote.data)
 
-      const success = this.deps.games.add(game)
+      const success = this.deps.game.add(game)
 
       return {
         response: success
@@ -71,14 +71,14 @@ export class EmotegameCommand extends BaseCommand {
     },
 
     stop: async (channel: string): Promise<BotResponse> => {
-      if (!this.deps.games.emoteGameExists(channel)) {
+      if (!this.deps.game.emoteGameExists(channel)) {
         return {
           success: false,
           response: 'There is no game running at the moment'
         }
       }
 
-      this.deps.games.removeGameForChannel(channel)
+      this.deps.game.removeGameForChannel(channel)
 
       return {
         response: 'The emotegame has been stopped',
@@ -107,7 +107,7 @@ export class EmotegameCommand extends BaseCommand {
       return new ResourceSuccess(randomEmote)
     },
 
-    getRandomEmoteService() {
+    getRandomEmoteService: () => {
       const emoteTypes: EmoteType[] = Object.values(EmoteType)
 
       return emoteTypes[this.deps.utils.random(0, emoteTypes.length - 1)]

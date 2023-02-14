@@ -1,11 +1,21 @@
+import { PubSub } from "@modules/pubsub/pubsub"
+import { DB } from "@src/db/export-repositories"
 import { NotificationChannelEntity } from "../db/export-entities"
-import { NotifyEventType, UserNotificationType } from "../modules/pubsub/types"
+import { NotifyEventType, UserNotificationType } from '../modules/pubsub/types'
 
 export class NotificationService {
+  db: DB
+  pubSub: PubSub
+
+  initialize(db: DB, pubSub: PubSub) {
+    this.db = db
+    this.pubSub = pubSub
+  }
+
   async cleanAllNotifications() {
     let notificationChannels: NotificationChannelEntity[] = []
     try {
-      notificationChannels = await hb.db.notificationChannel.find()
+      notificationChannels = await this.db.notificationChannel.find()
     } catch (e) {
       console.log(e)
     }
@@ -27,7 +37,7 @@ export class NotificationService {
   }
 
   async clean(id: number, event: NotifyEventType) {
-    await hb.db.notificationChannel.update(
+    await this.db.notificationChannel.update(
       {
         id: id
       },
@@ -36,7 +46,7 @@ export class NotificationService {
       }
     )
 
-    hb.pubSub.unlistenStreamerTopic(id, event)
+    this.pubSub.unlistenStreamerTopic(id, event)
   }
 
   async cleanNotificationsForStreamer(
@@ -69,7 +79,7 @@ export class NotificationService {
 
     return (
       (
-        await hb.db.notification.find({
+        await this.db.notification.find({
           where: queryParams
         })
       ).length !== 0

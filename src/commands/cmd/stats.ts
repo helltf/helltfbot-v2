@@ -3,6 +3,7 @@ import {  CommandContext, CommandFlag } from "@src/commands/types";
 import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { CommandDependencies } from 'deps'
 import { BaseCommand } from '../base'
+import { HelpCommmand } from './help'
 
 export class StatsCommand extends BaseCommand {
   name = 'stats'
@@ -45,7 +46,7 @@ export class StatsCommand extends BaseCommand {
   }
 
   methods = {
-    isValidType(type: string): boolean {
+    isValidType: (type: string): boolean => {
       return this.deps.utils.enumContains(StatsType, type)
     },
 
@@ -54,8 +55,8 @@ export class StatsCommand extends BaseCommand {
       user: TwitchUserState,
       channel: string
     ): Promise<BotResponse> => {
-      const foundCommand = this.deps.commands.findCommand('help')
-      return foundCommand.execute({
+      const helpCommand = new HelpCommmand(this.deps)
+      return helpCommand.execute({
         user,
         channel,
         params: {
@@ -64,7 +65,7 @@ export class StatsCommand extends BaseCommand {
       })
     },
 
-    async getLeaderboardPosition(username: string): Promise<number> {
+    getLeaderboardPosition: async (username: string): Promise<number> => {
       const userStats = await this.deps.db.emoteStats.find({
         order: { emotes_guessed: 'DESC' },
         relations: {

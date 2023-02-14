@@ -1,9 +1,15 @@
 import { Resource, ResourceSuccess, ResourceError } from "@api/types"
 import request from 'graphql-request'
 import distance from 'jaro-winkler'
+import { SevenTvRest } from './seventv.rest'
 
 export class SevenTvGQL {
   url = 'https://7tv.io/v2/gql'
+  rest: SevenTvRest
+
+  constructor(rest: SevenTvRest) {
+    this.rest = rest
+  }
 
   async runGqlRequest<T>(
     query: string,
@@ -29,7 +35,7 @@ export class SevenTvGQL {
   }
 
   async addEmote(emote: string, channel: string): Promise<Resource<EmoteData>> {
-    const channelId = await hb.api.seventv.rest.getUserId(channel)
+    const channelId = await this.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
 
@@ -99,14 +105,11 @@ export class SevenTvGQL {
     emote: string,
     channel: string
   ): Promise<Resource<EmoteData>> {
-    const channelId = await hb.api.seventv.rest.getUserId(channel)
+    const channelId = await this.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
 
-    const emoteResource = await hb.api.seventv.rest.getEmoteIdAndName(
-      emote,
-      channel
-    )
+    const emoteResource = await this.rest.getEmoteIdAndName(emote, channel)
 
     if (emoteResource instanceof ResourceError) {
       return emoteResource
@@ -120,14 +123,11 @@ export class SevenTvGQL {
     channel: string,
     newChannel: string
   ): Promise<Resource<EmoteData>> {
-    const channelId = await hb.api.seventv.rest.getUserId(newChannel)
+    const channelId = await this.rest.getUserId(newChannel)
 
     if (channelId instanceof ResourceError) return channelId
 
-    const emoteResource = await hb.api.seventv.rest.getEmoteIdAndName(
-      emote,
-      channel
-    )
+    const emoteResource = await this.rest.getEmoteIdAndName(emote, channel)
 
     if (emoteResource instanceof ResourceError) {
       return emoteResource
@@ -190,7 +190,7 @@ export class SevenTvGQL {
     emoteName: string,
     channel: string
   ): Promise<Resource<string>> {
-    const channelId = await hb.api.seventv.rest.getUserId(channel)
+    const channelId = await this.rest.getUserId(channel)
 
     if (channelId instanceof ResourceError) return channelId
 
@@ -214,7 +214,7 @@ export class SevenTvGQL {
   }
 
   async getUserEditors(username: string): Promise<Resource<Editor[]>> {
-    const userId = await hb.api.seventv.rest.getUserId(username)
+    const userId = await this.rest.getUserId(username)
 
     if (userId instanceof ResourceError) {
       return userId

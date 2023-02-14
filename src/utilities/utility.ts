@@ -1,4 +1,5 @@
 import { Resource, ResourceError, ResourceSuccess } from '@api/types'
+import { DB } from '@src/db/export-repositories'
 import { CryptoUtility } from '@src/utilities/crypto'
 import { Permission } from '@src/utilities/permission/permission'
 import { exec } from 'child_process'
@@ -17,8 +18,11 @@ export class Utility {
   crypto: CryptoUtility
 
   constructor() {
-    this.permission = new Permission()
     this.crypto = new CryptoUtility()
+  }
+
+  initialize(db: DB) {
+    this.permission = new Permission(db)
   }
 
   random = (lowerLimit = 0, upperLimit = 1): number => {

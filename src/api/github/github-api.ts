@@ -6,7 +6,7 @@ export const requestGithubApi = async <T>(path: string): Promise<Resource<T>> =>
     const result = await fetch(path, {
       method: 'GET',
       headers: {
-        Authorization: 'token ' + hb.config.get('GITHUB_TOKEN')
+        Authorization: 'token ' + process.env.GITHUB_TOKEN
       }
     })
     return new ResourceSuccess((await result.json()) as T)

@@ -1,8 +1,15 @@
+import { DB } from '@src/db/export-repositories'
 import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { Userstate, Badges } from 'tmi.js'
 
 
 export class Permission {
+  db: DB
+
+  constructor(db: DB) {
+    this.db = db
+  }
+
   getChatPermissions = (badges: Badges): ChatPermissionLevel => {
     if (badges?.broadcaster !== undefined)
       return ChatPermissionLevel.BROADCASTER
@@ -24,7 +31,7 @@ export class Permission {
   async getDbPermissions(id: number): Promise<GlobalPermissionLevel> {
     return (
       (
-        await hb.db.user.findOneBy({
+        await this.db.user.findOneBy({
           id: id
         })
       )?.permission ?? GlobalPermissionLevel.USER

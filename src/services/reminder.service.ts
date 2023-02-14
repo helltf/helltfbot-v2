@@ -1,6 +1,7 @@
 import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
+import { DB } from '@src/db/export-repositories'
 import { LessThan } from 'typeorm'
 
 const MAX_REMINDER_AMOUNT = 5
@@ -14,6 +15,12 @@ export interface ReminderCreationData {
 }
 
 export class ReminderService {
+  db: DB
+
+  initialize(db: DB) {
+    this.db = db
+  }
+
   async create({
     creatorId,
     recieverName,
@@ -21,13 +28,13 @@ export class ReminderService {
     channel,
     scheduledAt
   }: ReminderCreationData): Promise<Resource<ReminderEntity>> {
-    const creator = await hb.db.user.findOneBy({ id: creatorId })
+    const creator = await this.db.user.findOneBy({ id: creatorId })
 
     if (!creator) {
       return new ResourceError('Creator does not exist')
     }
 
-    const creatorRemindersLength = await hb.db.reminder.countBy({
+    const creatorRemindersLength = await this.db.reminder.countBy({
       creator: { id: creator.id },
       type: ReminderType.USER,
       status: ReminderStatus.PENDING
@@ -37,13 +44,13 @@ export class ReminderService {
       return new ResourceError('Cannot create more than 5 reminders')
     }
 
-    const reciever = await hb.db.user.findOneBy({ name: recieverName })
+    const reciever = await this.db.user.findOneBy({ name: recieverName })
 
     if (!reciever) {
       return new ResourceError('Reciever does not exist')
     }
 
-    const recieverReminderLimit = await hb.db.reminder.countBy({
+    const recieverReminderLimit = await this.db.reminder.countBy({
       reciever: {
         id: reciever.id
       },
@@ -55,7 +62,7 @@ export class ReminderService {
       return new ResourceError('Reciever reached reminder limit')
     }
 
-    const result = await hb.db.reminder.save({
+    const result = await this.db.reminder.save({
       creator,
       reciever,
       createdAt: Date.now(),
@@ -72,11 +79,11 @@ export class ReminderService {
     recieverId: number,
     message: string
   ): Promise<Resource<ReminderEntity>> {
-    const reciever = await hb.db.user.findOneBy({ id: recieverId })
+    const reciever = await this.db.user.findOneBy({ id: recieverId })
 
     if (!reciever) return new ResourceError('User does not exist')
 
-    const result = await hb.db.reminder.save({
+    const result = await this.db.reminder.save({
       reciever,
       message,
       createdAt: Date.now(),
@@ -89,11 +96,11 @@ export class ReminderService {
   async getActiveSystemReminders(
     id: number
   ): Promise<Resource<ReminderEntity[]>> {
-    const user = await hb.db.user.findOneBy({ id })
+    const user = await this.db.user.findOneBy({ id })
 
     if (!user) return new ResourceError('Invalid user')
 
-    const reminders = await hb.db.reminder.findBy({
+    const reminders = await this.db.reminder.findBy({
       reciever: { id },
       status: ReminderStatus.PENDING,
       type: ReminderType.SYSTEM
@@ -103,11 +110,11 @@ export class ReminderService {
   }
 
   async getActiveReminders(id: number): Promise<Resource<ReminderEntity[]>> {
-    const user = await hb.db.user.findOneBy({ id })
+    const user = await this.db.user.findOneBy({ id })
 
     if (!user) return new ResourceError('Invalid user')
 
-    const reminders = await hb.db.reminder.findBy({
+    const reminders = await this.db.reminder.findBy({
       reciever: { id },
       status: ReminderStatus.PENDING,
       type: ReminderType.USER
@@ -117,7 +124,7 @@ export class ReminderService {
   }
 
   async revoke(id: number): Promise<Resource<null>> {
-    const reminder = await hb.db.reminder.findOneBy({ id })
+    const reminder = await this.db.reminder.findOneBy({ id })
 
     if (!reminder)
       return new ResourceError('Cannot revoke not existing reminder')
@@ -128,13 +135,13 @@ export class ReminderService {
     if (reminder.status === ReminderStatus.REVOKED)
       return new ResourceError('reminder has already been revoked')
 
-    await hb.db.reminder.update({ id }, { status: ReminderStatus.REVOKED })
+    await this.db.reminder.update({ id }, { status: ReminderStatus.REVOKED })
 
     return new ResourceSuccess(null)
   }
 
   async fire(id: number, channel: string) {
-    return await hb.db.reminder.update(
+    return await this.db.reminder.update(
       { id },
       {
         firedChannel: channel,
@@ -145,7 +152,7 @@ export class ReminderService {
   }
 
   async getScheduledReminders(): Promise<ReminderEntity[]> {
-    const reminders = await hb.db.reminder.find({
+    const reminders = await this.db.reminder.find({
       where: {
         scheduledAt: LessThan(Date.now()),
         status: ReminderStatus.PENDING

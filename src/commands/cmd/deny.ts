@@ -52,10 +52,14 @@ export class DenyCommand extends BaseCommand {
       return updated.affected !== 0
     },
     sendNotification: async (id: string) => {
-      const suggestion = await this.deps.db.suggestion.findOneBy({ id: Number(id) })
+      const suggestion = await this.deps.db.suggestion.findOneBy({
+        id: Number(id)
+      })
 
-      await this.deps.sendMessage(
-        suggestion?.channel,
+      if (!suggestion) return
+
+      await this.deps.client.say(
+        suggestion.channel,
         `@${suggestion?.user?.name} your suggestion with id ${id} has been denied with reason: ${suggestion?.reason}`
       )
     }

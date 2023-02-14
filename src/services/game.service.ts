@@ -1,9 +1,15 @@
 import { EmoteStatsEntity } from '@db/entities'
+import { Client } from 'tmi.js'
 import { Emotegame } from '../games/emotegame'
 import { ChatGame, EmoteGameInputResult } from '../games/types'
 
 export class GameService {
   eg: Emotegame[] = []
+  client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
 
   add(game: ChatGame) {
     if (game instanceof Emotegame) {
@@ -49,7 +55,7 @@ export class GameService {
 
       if (index > -1) {
         this.eg.splice(index, 1)
-        await hb.sendMessage(
+        await this.client.say(
           game.channel,
           `The running emotegame has been cancelled, because the time limit of ${
             game.EXPIRING_AFTER / 1000 / 60

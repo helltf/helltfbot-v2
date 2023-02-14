@@ -72,7 +72,7 @@ export class RemovemeCommand extends BaseCommand {
       streamer: string,
       event: UserNotificationType
     ): Promise<UpdateResult> => {
-      return await this.db.notification.update(
+      return await this.deps.db.notification.update(
         {
           user: {
             id: userId

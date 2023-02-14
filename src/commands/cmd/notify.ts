@@ -114,7 +114,7 @@ export class NotifyCommand extends BaseCommand {
       id: number,
       topicType: NotifyEventType
     ) => {
-      await this.db.notificationChannel.save({
+      await this.deps.db.notificationChannel.save({
         name: channel,
         [topicType]: true,
         id: id
@@ -127,7 +127,7 @@ export class NotifyCommand extends BaseCommand {
     ): Promise<boolean> => {
       const event = this.methods.mapEventTypeToNotifyType(eventType)
       return (
-        (await this.db.notificationChannel.countBy({
+        (await this.deps.db.notificationChannel.countBy({
           name: streamer,
           [event]: true
         })) === 1
@@ -155,8 +155,8 @@ export class NotifyCommand extends BaseCommand {
       event: UserNotificationType,
       id: number
     ) => {
-      if (await this.userNotificationIsExisting(id, streamer)) {
-        await this.db.notification.update(
+      if (await this.methods.userNotificationIsExisting(id, streamer)) {
+        await this.deps.db.notification.update(
           {
             streamer: streamer,
             user: {
@@ -168,7 +168,7 @@ export class NotifyCommand extends BaseCommand {
           }
         )
       } else {
-        await this.db.notification.save({
+        await this.deps.db.notification.save({
           channel: channel,
           streamer: streamer,
           [event]: true,
@@ -184,7 +184,7 @@ export class NotifyCommand extends BaseCommand {
       streamer: string
     ): Promise<boolean> => {
       return (
-        (await this.db.notification.findOneBy({
+        (await this.deps.db.notification.findOneBy({
           user: {
             id: userId
           },

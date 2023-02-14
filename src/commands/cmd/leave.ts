@@ -50,10 +50,12 @@ export class LeaveCommand extends BaseCommand {
   }
 
   methods = {
-    async leaveChannel(channel: string): Promise<{
+    leaveChannel: async (
+      channel: string
+    ): Promise<{
       success: boolean
       message: string
-    }> {
+    }> => {
       try {
         await this.deps.client.part(channel)
         return {
@@ -68,7 +70,7 @@ export class LeaveCommand extends BaseCommand {
       }
     },
 
-    async updateChannelProperty(channel: string) {
+    updateChannelProperty: async (channel: string) => {
       await this.deps.db.channel.update(
         {
           channel: channel
@@ -79,7 +81,7 @@ export class LeaveCommand extends BaseCommand {
       )
     },
 
-    async isNotConnectedToChannel(channel: string): Promise<boolean> {
+    isNotConnectedToChannel: async (channel: string): Promise<boolean> => {
       return (
         (await this.deps.db.channel.countBy({
           channel: channel,

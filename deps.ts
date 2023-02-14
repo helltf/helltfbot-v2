@@ -27,7 +27,7 @@ const deps: CommandDependencies = {
   utils: new Utility(),
   api: new ApiService(),
   cache: new CacheService(),
-  game: new GameService(),
+  game: new GameService(client),
   notification: new NotificationService(),
   reminder: new ReminderService(),
   pubSub: new PubSub(),
@@ -46,6 +46,9 @@ export const initDeps = async () => {
   logger.log(LogType.INFO, 'API initialized')
 
   await deps.pubSub.initialize(deps.db)
+  deps.notification.initialize(deps.db, deps.pubSub)
+  deps.reminder.initialize(deps.db)
+  deps.utils.initialize(deps.db)
   logger.log(LogType.TWITCHBOT, 'Successfully initialized')
 }
 

@@ -35,7 +35,7 @@ export class SuggestCommand extends BaseCommand {
       channel
     )
 
-    await this.deps.sendMessage(
+    await this.deps.client.say(
       process.env.MAIN_USER,
       `@${process.env.MAIN_USER} new suggestion by ${user.username}`
     )
@@ -47,11 +47,11 @@ export class SuggestCommand extends BaseCommand {
   }
 
   methods = {
-    async saveSuggestion(
+    saveSuggestion: async (
       suggestion: string,
       userId: number,
       channel: string
-    ): Promise<number> {
+    ): Promise<number> => {
       return (
         await this.deps.db.suggestion.save({
           date: Date.now(),
