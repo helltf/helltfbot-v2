@@ -30,7 +30,9 @@ export class HelpCommmand extends BaseCommand {
         success: true
       }
 
-    const foundCommand = this.deps.getCommand(command)
+    const foundCommand = await this.deps.db.command.findOneBy({
+      name: command
+    })
 
     if (!foundCommand)
       return {
@@ -47,7 +49,9 @@ export class HelpCommmand extends BaseCommand {
           : []),
         `Description: ${foundCommand.description}`,
         `Cooldown: ${foundCommand.cooldown / 1000}s`,
-        `Permissions: ${this.deps.utils.permission.map(foundCommand.permissions)}`,
+        `Permissions: ${this.deps.utils.permission.map(
+          foundCommand.permissions
+        )}`,
         ...(foundCommand.requiredParams.length
           ? [`Required params: ${foundCommand.requiredParams.join(',')}`]
           : []),

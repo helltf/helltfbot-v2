@@ -45,7 +45,7 @@ export class UidCommand extends BaseCommand {
     getResponse(id?: number | string, username?: string): string {
       return `${username}👉${id}`
     },
-    getId(username: string): Promise<number | undefined> {
+    getId: async (username: string): Promise<number | undefined> => {
       return this.deps.api.twitch.getUserIdByName(username)
     }
   }
