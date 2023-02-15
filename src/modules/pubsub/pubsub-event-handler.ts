@@ -1,3 +1,4 @@
+import { DB } from '@src/db/export-repositories'
 import { NotificationEntity } from '../../db/export-entities'
 import { MessageGenerator } from './message-generator'
 import {
@@ -10,9 +11,11 @@ import {
 
 export class PubSubEventHandler {
   messageGenerator: MessageGenerator
+  db: DB
 
-  constructor() {
+  constructor(db: DB) {
     this.messageGenerator = new MessageGenerator()
+    this.db = db
   }
 
   async handleUpdate(
@@ -90,7 +93,7 @@ export class PubSubEventHandler {
     streamer: string,
     event: UserNotificationType
   ): Promise<NotificationEntity[]> {
-    const users = hb.db.notification.find({
+    const users = this.db.notification.find({
       where: {
         streamer: streamer,
         [event]: true

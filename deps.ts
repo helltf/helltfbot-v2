@@ -45,7 +45,7 @@ export const initDeps = async () => {
   await deps.api.init()
   logger.log(LogType.INFO, 'API initialized')
 
-  await deps.pubSub.initialize(deps.db)
+  await deps.pubSub.initialize(deps.db, deps.client)
   deps.notification.initialize(deps.db, deps.pubSub)
   deps.reminder.initialize(deps.db)
   deps.utils.initialize(deps.db)

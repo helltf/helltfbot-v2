@@ -6,6 +6,7 @@ import { NotificationChannelEntity } from '@db/entities'
 import { logger, LogType } from '@src/logger/logger-export'
 import { Module } from '@modules/types'
 import { DB } from '@src/db/export-repositories'
+import { Client } from 'tmi.js'
 
 export class PubSub implements Module {
   name = 'pubsub'
@@ -14,13 +15,10 @@ export class PubSub implements Module {
   connections: PubSubConnection[] = []
   db: DB
 
-  constructor() {
-    this.pubSubEventHandler = new PubSubEventHandler()
-    this.notificationHandler = new NotificationHandler()
-  }
-
-  initialize = async (db: DB) => {
+  initialize = async (db: DB, client: Client) => {
     this.db = db
+    this.pubSubEventHandler = new PubSubEventHandler(db)
+    this.notificationHandler = new NotificationHandler(client)
     await this.connect()
   }
 
