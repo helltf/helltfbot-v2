@@ -1,33 +1,20 @@
 import { Resource, ResourceError } from '@api/types'
 import { ReminderEntity } from '@db/entities'
 import { ReminderType } from '@src/db/entities/reminder.entity'
-import { DB } from '@src/db/export-repositories'
-import { ReminderService } from '@src/services/reminder.service'
-import { Utility } from '@src/utilities/utility'
-import { ChatUserstate, Client } from 'tmi.js'
+import { CommandDependencies } from 'deps'
+import { ChatUserstate } from 'tmi.js'
 import { Module } from './types'
 
 export class ReminderModule implements Module {
   name = 'reminder'
-  db: DB
-  client: Client
-  reminderService: ReminderService
-  utils: Utility
+  deps: CommandDependencies
 
-  constructor(
-    db: DB,
-    client: Client,
-    reminderService: ReminderService,
-    utils: Utility
-  ) {
-    this.db = db
-    this.client = client
-    this.reminderService = reminderService
-    this.utils = utils
+  constructor(deps: CommandDependencies) {
+    this.deps = deps
   }
 
   initialize = () => {
-    this.client.addListener(
+    this.deps.client.addListener(
       'message',
       (channel: string, user: ChatUserstate, _: string, self) => {
         if (self) return
@@ -46,7 +33,9 @@ export class ReminderModule implements Module {
   }
 
   async checkSystemReminders(id: number, channel: string) {
-    const reminders = await this.reminderService.getActiveSystemReminders(id)
+    const reminders = await this.deps.reminderService.getActiveSystemReminders(
+      id
+    )
 
     await this.sendReminders(reminders, channel)
   }
@@ -56,7 +45,7 @@ export class ReminderModule implements Module {
 
     const reminderMessage = this.createReminderMessage(reminders.data)
 
-    await this.client.say(channel, reminderMessage)
+    await this.deps.client.say(channel, reminderMessage)
     await this.updateRemindersStatus(
       channel,
       reminders.data.map(r => r.id)
@@ -65,7 +54,7 @@ export class ReminderModule implements Module {
 
   async updateRemindersStatus(channel: string, reminderIds: number[]) {
     for await (const id of reminderIds) {
-      await this.reminderService.fire(id, channel)
+      await this.deps.reminderService.fire(id, channel)
     }
   }
 
@@ -75,7 +64,7 @@ export class ReminderModule implements Module {
         reminder.message
       } (${this.utils.humanizeNow(reminder.createdAt)} ago)`
 
-    return `${reminder.message} (${this.utils.humanizeNow(
+    return `${reminder.message} (${this.deps.utils.humanizeNow(
       reminder.createdAt
     )} ago)`
   }
@@ -84,7 +73,7 @@ export class ReminderModule implements Module {
     return (
       `@${reminders[0].reciever.name} you recieved ${reminders.length} ${
         reminders[0].type === ReminderType.SYSTEM ? 'System ' : ''
-      }${this.utils.plularizeIf('reminder', reminders.length)}: ` +
+      }${this.deps.utils.plularizeIf('reminder', reminders.length)}: ` +
       reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join(' | ')
     )
   }

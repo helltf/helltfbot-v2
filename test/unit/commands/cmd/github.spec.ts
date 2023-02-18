@@ -1,10 +1,12 @@
 import { GithubCommand } from '@src/commands/cmd/github'
+import { createTestDeps } from '@test-utils/deps'
 
 describe('github command', () => {
   let github: GithubCommand
 
   beforeEach(() => {
-    github = new GithubCommand()
+    const deps = createTestDeps()
+    github = new GithubCommand(deps)
   })
 
   describe('execute', () => {

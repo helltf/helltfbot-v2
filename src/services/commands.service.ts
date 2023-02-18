@@ -25,7 +25,6 @@ export class CommandService {
 
       usedNames.push(...[command.name, ...command.alias])
     }
-    this.updateDb()
   }
 
   findCommand(input: string): BaseCommand {

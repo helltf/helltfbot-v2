@@ -1,30 +1,26 @@
 import { ResourceError, ResourceSuccess } from "@api/types"
 import { PingCommand } from "@commands/cmd/ping"
-import { DB } from "@src/db/export-repositories"
-import { Utility } from '@src/utilities/utility'
 import { clearDb } from '@test-utils/clear'
+import { createTestDeps } from '@test-utils/deps'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import { getExampleChannel, getExampleCommand } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
-import { Client } from 'tmi.js'
 
 describe('test ping command', () => {
   let ping: PingCommand
-  const db: DB = new DB()
-  const utils = new Utility()
-  const client = {} as Client
+  const deps = createTestDeps()
 
   beforeAll(async () => {
-    await setupDatabase(db)
+    await setupDatabase(deps.db)
   })
 
   beforeEach(async () => {
-    ping = new PingCommand(db, client, utils)
-    await clearDb(db.dataSource)
+    ping = new PingCommand(deps)
+    await clearDb(deps.db.dataSource)
   })
 
   afterAll(async () => {
-    await disconnectDatabase(db)
+    await disconnectDatabase(deps.db)
   })
 
   it('return success message', async () => {

@@ -18,6 +18,7 @@ const { db, utils } = getDeps()
 export const initServices = async () => {
   const commands = await getInitializedCommands()
   commandsService = new CommandService(commands, db)
+  commandsService.updateDb()
 }
 
 const handleChat = async (

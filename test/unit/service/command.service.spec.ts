@@ -1,16 +1,18 @@
+import { DB } from '@src/db/export-repositories'
 import { CommandService } from '@src/services/commands.service'
 import { getExampleCommand } from '../../test-utils/example'
 
 describe('testing commands class', () => {
+  const db = {} as DB
   it('input no command should have no command', () => {
-    const commands = new CommandService([])
+    const commands = new CommandService([], db)
 
     expect(commands.commands).toHaveLength(0)
   })
 
   it('input one command should have one command', () => {
     const command = getExampleCommand({})
-    const commands = new CommandService([command])
+    const commands = new CommandService([command], db)
 
     expect(commands.commands).toHaveLength(1)
   })
@@ -18,7 +20,7 @@ describe('testing commands class', () => {
     const command = getExampleCommand({
       alias: ['a', 'b', 'c']
     })
-    const commands = new CommandService([command])
+    const commands = new CommandService([command], db)
 
     const activateForCommand = commands.commands[0].activate
     const expectedActivate = [command.name, ...command.alias]
@@ -27,7 +29,7 @@ describe('testing commands class', () => {
   })
   it('input one command command info should be the same', () => {
     const command = getExampleCommand({})
-    const commands = new CommandService([command])
+    const commands = new CommandService([command], db)
 
     const savedCommand = commands.commands[0].command
     expect(savedCommand).toEqual(command)
@@ -35,7 +37,7 @@ describe('testing commands class', () => {
 
   it('find command input name return correct command', () => {
     const command = getExampleCommand({})
-    const commands = new CommandService([command])
+    const commands = new CommandService([command], db)
 
     const foundCommand = commands.findCommand(command.name)
 
@@ -43,7 +45,7 @@ describe('testing commands class', () => {
   })
   it('find command input wrong name return undefined', () => {
     const command = getExampleCommand({})
-    const commands = new CommandService([command])
+    const commands = new CommandService([command], db)
 
     const foundCommand = commands.findCommand('wrong name')
 
@@ -55,7 +57,7 @@ describe('testing commands class', () => {
     const command = getExampleCommand({
       alias: exampleAliases
     })
-    const commands = new CommandService([command])
+    const commands = new CommandService([command], db)
 
     const foundCommand = commands.findCommand(exampleAliases[0])
 
@@ -67,7 +69,7 @@ describe('testing commands class', () => {
     const command = getExampleCommand({
       alias: exampleAliases
     })
-    const commands = new CommandService([command])
+    const commands = new CommandService([command], db)
 
     const foundCommand = commands.findCommand(exampleAliases[1])
 
@@ -79,7 +81,7 @@ describe('testing commands class', () => {
     const command1 = getExampleCommand({ name })
     const command2 = getExampleCommand({ name })
     const createCommands = () => {
-      new CommandService([command1, command2])
+      new CommandService([command1, command2], db)
     }
     expect(createCommands).toThrowError()
   })
@@ -98,7 +100,7 @@ describe('testing commands class', () => {
     })
 
     const createCommands = () => {
-      new CommandService([command1, command2])
+      new CommandService([command1, command2], db)
     }
 
     expect(createCommands).toThrowError()
@@ -115,7 +117,7 @@ describe('testing commands class', () => {
     })
 
     const createCommands = () => {
-      new CommandService([command1, command2])
+      new CommandService([command1, command2], db)
     }
 
     expect(createCommands).toThrowError()
@@ -132,14 +134,14 @@ describe('testing commands class', () => {
     })
 
     const createCommands = () => {
-      new CommandService([command1, command2])
+      new CommandService([command1, command2], db)
     }
 
     expect(createCommands).toThrowError()
   })
 
   it('commands contains 0 commands getAll returns empty array', () => {
-    const commands = new CommandService([])
+    const commands = new CommandService([], db)
 
     const allCommands = commands.getAll()
 
@@ -148,7 +150,7 @@ describe('testing commands class', () => {
 
   it('commands contains one command get all returns this command', () => {
     const exampleCommand = getExampleCommand({})
-    const commands = new CommandService([exampleCommand])
+    const commands = new CommandService([exampleCommand], db)
     const allCommands = commands.getAll()
 
     const givenCommand = allCommands[0]
@@ -166,7 +168,7 @@ describe('testing commands class', () => {
       name: 'command2'
     })
 
-    const commands = new CommandService([command1, command2])
+    const commands = new CommandService([command1, command2], db)
     const allCommands = commands.getAll()
 
     expect(allCommands).toHaveLength(2)

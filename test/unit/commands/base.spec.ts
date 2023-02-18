@@ -1,9 +1,11 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { BaseCommand } from '@src/commands/base'
 import { CommandContext, CommandFlag, MessageType } from '@src/commands/types'
+import { createTestDeps } from '@test-utils/deps'
 import { getExampleTwitchUserState } from '@test-utils/example'
 
 describe('base command', () => {
+  const deps = createTestDeps()
   describe('build context', () => {
     const user = getExampleTwitchUserState({})
     const channel = 'channel'
@@ -14,7 +16,7 @@ describe('base command', () => {
         optionalParams = [] as const
       }
 
-      const test = new TestBaseCommand()
+      const test = new TestBaseCommand(deps)
 
       const result = test.buildContext({
         user,
@@ -35,7 +37,7 @@ describe('base command', () => {
         optionalParams = [] as const
       }
 
-      const result = new TestBaseCommand().buildContext({
+      const result = new TestBaseCommand(deps).buildContext({
         user,
         message: [],
         where: channel,
@@ -58,7 +60,7 @@ describe('base command', () => {
       }
       const paramValue = 'value'
 
-      const result = new TestBaseCommand().buildContext({
+      const result = new TestBaseCommand(deps).buildContext({
         user,
         message: [paramValue],
         where: channel,
@@ -84,7 +86,7 @@ describe('base command', () => {
       const paramValue1 = 'value1'
       const paramValue2 = 'value2'
 
-      const result = new TestBaseCommand().buildContext({
+      const result = new TestBaseCommand(deps).buildContext({
         user,
         message: [paramValue1, paramValue2],
         where: channel,
@@ -111,7 +113,7 @@ describe('base command', () => {
       const paramValue1 = 'value1'
       const paramValue2 = 'value2'
 
-      const result = new TestBaseCommand().buildContext({
+      const result = new TestBaseCommand(deps).buildContext({
         user,
         message: [paramValue1, paramValue2],
         where: channel,
@@ -138,7 +140,7 @@ describe('base command', () => {
 
       const paramValue = ['ab', 'dc', 'fg', 'hi']
 
-      const result = new TestBaseCommand().buildContext({
+      const result = new TestBaseCommand(deps).buildContext({
         user,
         message: paramValue,
         type: MessageType.MESSAGE,
@@ -165,7 +167,7 @@ describe('base command', () => {
       const firstParamValue = 'firstValue'
       const restParamValues = ['ab', 'dc', 'fg', 'hi']
 
-      const result = new TestBaseCommand().buildContext({
+      const result = new TestBaseCommand(deps).buildContext({
         user,
         message: [firstParamValue, ...restParamValues],
         type: MessageType.MESSAGE,
