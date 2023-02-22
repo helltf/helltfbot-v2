@@ -1,5 +1,5 @@
+import { GlobalPermissionLevel } from '@src/services/permissions.service'
 import { Permission } from '@src/utilities/permission/permission'
-import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import { getExampleTwitchUserEntity } from '@test-utils/example'
