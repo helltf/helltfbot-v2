@@ -1,6 +1,6 @@
 import {  MessageType } from '@src/commands/types'
 import { ChatUserstate } from 'tmi.js'
-import { ChatPermissionLevel, GlobalPermissionLevel } from '../utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 
 export interface TwitchUserState extends ChatUserstate {
   permission?: ChatPermissionLevel | GlobalPermissionLevel

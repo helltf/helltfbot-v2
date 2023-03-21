@@ -1,5 +1,5 @@
 import { TwitchUserState } from '@client/types'
-import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 
 export async function saveUserStateAsUser(user: TwitchUserState) {
   let permission: GlobalPermissionLevel

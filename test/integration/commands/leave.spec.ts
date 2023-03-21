@@ -2,7 +2,7 @@ import { TwitchUserState } from '@client/types'
 import {
   LeaveCommand
 } from '@commands/cmd/leave'
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {

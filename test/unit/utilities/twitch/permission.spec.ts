@@ -1,7 +1,7 @@
 import { Badges } from 'tmi.js'
 
 import { Permission } from '@src/utilities/permission/permission'
-import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 
 describe('test mapping of permissions', () => {
   let permission: Permission

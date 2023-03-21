@@ -1,4 +1,4 @@
-import { ChatPermissionLevel } from "@src/utilities/permission/types"
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 import { UpdateResult } from "typeorm"
 import { BotResponse } from "../../client/types"
 import { UserNotificationType } from '../../modules/pubsub/types'

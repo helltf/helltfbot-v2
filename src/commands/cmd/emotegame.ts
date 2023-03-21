@@ -1,4 +1,4 @@
-import { ChatPermissionLevel } from "@src/utilities/permission/types";
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 import { Resource, ResourceError, ResourceSuccess } from "../../api/types";
 import { BotResponse } from '../../client/types'
 import { Emotegame } from '../../games/emotegame'

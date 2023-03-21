@@ -1,7 +1,7 @@
 import { ResourceError } from '@api/types';
 import { BotResponse } from '@src/client/types';
 import {  CommandContext } from '@src/commands/types'
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 import { BaseCommand } from '../base'
 
 export class AddCommand extends BaseCommand {

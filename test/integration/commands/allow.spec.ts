@@ -1,5 +1,5 @@
 import { AllowCommand } from '@commands/cmd/allow'
-import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 import { clearDb } from '../../test-utils/clear'
 import { disconnectDatabase } from '../../test-utils/disconnect'
 import {

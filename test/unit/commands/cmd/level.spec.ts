@@ -1,5 +1,5 @@
 import { LevelCommand } from "@src/commands/cmd/level"
-import { ChatPermissionLevel, GlobalPermissionLevel } from "@src/utilities/permission/types"
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 import { getExampleTwitchUserState } from '@test-utils/example'
 import { setup } from '@test-utils/setup'
 

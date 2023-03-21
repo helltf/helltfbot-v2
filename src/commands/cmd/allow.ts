@@ -1,4 +1,4 @@
-import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 import { BotResponse } from '../../client/types'
 import { BaseCommand } from '../base'
 import { CommandContext, CommandFlag } from '../types'
