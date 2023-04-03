@@ -24,7 +24,7 @@ export class PubSubConnection {
   ) {
     this.connection = ws
     this.interval = this.setPingInterval()
-    this.id = hb.utils.randomId(10)
+    this.id = this.randomId(10)
 
     if (process.env.DEBUG === 'true') {
       this.addDebugListeners()
@@ -44,6 +44,13 @@ export class PubSubConnection {
         })
       )
     }, 250 * 1000)
+  }
+
+  randomId(length: number): string {
+    return Array(length)
+      .fill('')
+      .map(() => validChars[this.random(0, validChars.length)])
+      .join('')
   }
 
   listenToTopics(topics: Topic[]) {
