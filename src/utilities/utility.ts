@@ -1,6 +1,5 @@
 import { Resource, ResourceError, ResourceSuccess } from '@api/types'
 import { CryptoUtility } from '@src/utilities/crypto'
-import { Permission } from '@src/utilities/permission/permission'
 import { exec } from 'child_process'
 import {
   HumanizeDuration,
@@ -13,11 +12,9 @@ const validChars =
   'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('')
 
 export class Utility {
-  permission: Permission
   crypto: CryptoUtility
 
   constructor() {
-    this.permission = new Permission()
     this.crypto = new CryptoUtility()
   }
 

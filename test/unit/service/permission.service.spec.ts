@@ -1,13 +1,13 @@
 import { Badges } from 'tmi.js'
 
-import { Permission } from '@src/utilities/permission/permission'
+import { PermissionService } from '@src/services/permissions.service'
 import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
 
 describe('test mapping of permissions', () => {
-  let permission: Permission
+  let permission: PermissionService
 
   beforeEach(() => {
-    permission = new Permission()
+    permission = new PermissionService()
   })
 
   it('normal user has permissions of 0', () => {
@@ -75,10 +75,10 @@ describe('test mapping of permissions', () => {
 })
 
 describe('return correct permission', () => {
-  let permission: Permission
+  let permission: PermissionService
 
   beforeEach(() => {
-    permission = new Permission()
+    permission = new PermissionService()
   })
 
   it('chat perm is heigher returning chat perm', () => {

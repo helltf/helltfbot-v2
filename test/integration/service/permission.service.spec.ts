@@ -1,19 +1,19 @@
 import { GlobalPermissionLevel } from '@src/services/permissions.service'
-import { Permission } from '@src/utilities/permission/permission'
+import { PermissionService } from '@src/services/permissions.service'
 import { clearDb } from '@test-utils/clear'
 import { disconnectDatabase } from '@test-utils/disconnect'
 import { getExampleTwitchUserEntity } from '@test-utils/example'
 import { setupDatabase } from '@test-utils/setup-db'
 
 describe('permission  utils', () => {
-  let permission: Permission
+  let permission: PermissionService
 
   beforeAll(async () => {
     await setupDatabase()
   })
 
   beforeEach(async () => {
-    permission = new Permission()
+    permission = new PermissionService()
     await clearDb()
   })
 
