@@ -28,7 +28,7 @@ export class ModCountCommand extends BaseCommand {
     }
 
     return {
-      response: `@${lookupChannel} has ${amount} ${hb.utils.plularizeIf(
+      response: `@${lookupChannel} has ${amount} ${hb.language.pluralizeIf(
         'moderator',
         amount
       )}`,

@@ -62,7 +62,7 @@ describe('ban check', () => {
       const ban = getExampleBanEntity({})
       const bans = [ban]
       const expectedResponse = [
-        `@${user.username} has ${bans.length} ${hb.utils.plularizeIf(
+        `@${user.username} has ${bans.length} ${hb.language.pluralizeIf(
           'ban',
           bans.length
         )} recorded`,
@@ -204,7 +204,7 @@ describe('ban check', () => {
       it('no channel given user has one ban return message', () => {
         const bans = [getExampleBanEntity({})]
         const expectedMessage = [
-          `@${username} has ${bans.length} ${hb.utils.plularizeIf(
+          `@${username} has ${bans.length} ${hb.language.pluralizeIf(
             'ban',
             bans.length
           )} recorded`,
@@ -221,7 +221,7 @@ describe('ban check', () => {
       it('channel given user has one ban return message', () => {
         const bans = [getExampleBanEntity({})]
         const expectedMessage = [
-          `@${username} has been banned ${bans.length} ${hb.utils.plularizeIf(
+          `@${username} has been banned ${bans.length} ${hb.language.pluralizeIf(
             'time',
             bans.length
           )} in this channel`,

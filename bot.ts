@@ -18,6 +18,7 @@ import { Express } from 'express'
 import { ReminderService } from '@src/services/reminder.service'
 import { BaseCommand } from '@src/commands/base'
 import { PermissionService } from '@src/services/permissions.service'
+import { LanguageService } from '@src/services/language.service'
 
 export class TwitchBot {
   client: Client
@@ -35,6 +36,7 @@ export class TwitchBot {
   debug: boolean
   reminder: ReminderService
   permission: PermissionService
+  language: LanguageService
 
   constructor() {
     this.debug = process.env.DEBUG === 'true'
@@ -52,6 +54,7 @@ export class TwitchBot {
     this.reminder = new ReminderService()
     this.webhook = app
     this.permission = new PermissionService()
+    this.language = new LanguageService()
   }
 
   async init() {

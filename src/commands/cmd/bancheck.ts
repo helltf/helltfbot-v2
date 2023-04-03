@@ -60,14 +60,14 @@ export class BanCheckCommand extends BaseCommand {
 
       return isChannelBan
         ? [
-            `@${username} has been banned ${bans.length} ${hb.utils.plularizeIf(
+            `@${username} has been banned ${bans.length} ${hb.language.pluralizeIf(
               'time',
               bans.length
             )} in this channel`,
             `Last ban ${hb.utils.humanizeNow(bans[0].at)} ago`
           ]
         : [
-            `@${username} has ${bans.length} ${hb.utils.plularizeIf(
+            `@${username} has ${bans.length} ${hb.language.pluralizeIf(
               'ban',
               bans.length
             )} recorded`,

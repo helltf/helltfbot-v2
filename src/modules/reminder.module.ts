@@ -64,7 +64,7 @@ export class ReminderModule implements Module {
     return (
       `@${reminders[0].reciever.name} you recieved ${reminders.length} ${
         reminders[0].type === ReminderType.SYSTEM ? 'System ' : ''
-      }${hb.utils.plularizeIf('reminder', reminders.length)}: ` +
+      }${hb.language.pluralizeIf('reminder', reminders.length)}: ` +
       reminders.map((r: ReminderEntity) => this.reminderAsString(r)).join(' | ')
     )
   }
