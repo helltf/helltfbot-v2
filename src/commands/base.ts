@@ -26,6 +26,7 @@ export abstract class BaseCommand implements Command {
   evaluate = (context: {
     message: string[]
     type: MessageType
+    user: TwitchUserState
   }): Resource<null> => {
     if (
       context.type === MessageType.WHISPER &&
