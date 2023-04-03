@@ -1,7 +1,10 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { BaseCommand } from '@src/commands/base'
 import { CommandContext, CommandFlag, MessageType } from '@src/commands/types'
-import { getExampleTwitchUserState } from '@test-utils/example'
+import {
+  getExampleTwitchUserEntity,
+  getExampleTwitchUserState
+} from '@test-utils/example'
 
 describe('base command', () => {
   describe('build context', () => {
@@ -182,5 +185,56 @@ describe('base command', () => {
         second: restParamValues.join(' ')
       })
     })
+  })
+  describe('evaluate', () => {
+    it('context is not whisper return ResourceSuccess', () => {
+      class TestBaseCommand extends BaseCommand {
+        flags = []
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.MESSAGE,
+        user: getExampleTwitchUserState({})
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+    })
+
+    it('context is whisper but command doesnt allow whisper return error', () => {
+      class TestBaseCommand extends BaseCommand {
+        flags = []
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.WHISPER,
+        user: getExampleTwitchUserState({})
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceError)
+    })
+
+    it('conext is whipser and command allows whisper return true', () => {
+      class TestBaseCommand extends BaseCommand {
+        flags = [CommandFlag.WHISPER]
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.WHISPER,
+        user: getExampleTwitchUserState({})
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+    })
+
+    it('user has not enough perms return error')
   })
 })
