@@ -1,5 +1,5 @@
 import { ResourceError } from '@api/types'
-import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { GlobalPermissionLevel } from "@src/services/permissions.service"
 import { wait } from '@src/utilities/wait'
 import { ChatUserstate } from 'tmi.js'
 import { Command, MessageType } from '../../commands/types'

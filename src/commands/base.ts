@@ -3,7 +3,7 @@ import { BotResponse,  TwitchUserState } from "@src/client/types"
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
-} from '@src/utilities/permission/types'
+} from '@src/services/permissions.service'
 import { Command, CommandContext, CommandFlag, MessageType } from './types'
 
 export abstract class BaseCommand implements Command {

@@ -1,5 +1,5 @@
 import { SetLevelCommand } from "@src/commands/cmd/setlevel"
-import { GlobalPermissionLevel } from "@src/utilities/permission/types"
+import { GlobalPermissionLevel } from "@src/services/permissions.service"
 import { clearDb } from "@test-utils/clear"
 import { disconnectDatabase } from '@test-utils/disconnect'
 import {

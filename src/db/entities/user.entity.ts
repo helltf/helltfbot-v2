@@ -7,7 +7,7 @@ import {
   OneToOne,
   PrimaryColumn
 } from 'typeorm'
-import { GlobalPermissionLevel } from '../../utilities/permission/types'
+import { GlobalPermissionLevel } from '@src/services/permissions.service'
 import { ColorHistoryEntity } from './color_history.entity'
 import { NotificationEntity } from './notification.entity'
 import { SuggestionEntity } from './suggestion.entity'

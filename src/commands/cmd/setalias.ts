@@ -1,7 +1,7 @@
 import { Resource, ResourceError, ResourceSuccess } from "@api/types";
 import { BotResponse } from "@src/client/types";
 import {  CommandContext } from "@src/commands/types";
-import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { GlobalPermissionLevel } from "@src/services/permissions.service"
 import { BaseCommand } from '../base'
 
 export class SetAliasCommand extends BaseCommand {

@@ -1,5 +1,5 @@
 import { SuggestionEntity, ColorHistoryEntity } from "@db/entities"
-import { GlobalPermissionLevel } from "@src/utilities/permission/types"
+import { GlobalPermissionLevel } from "@src/services/permissions.service"
 
 export const setupDev = async () => {
   const user = hb.config.get('MAIN_USER')

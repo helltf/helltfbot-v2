@@ -3,7 +3,7 @@ import { CommandContext, CommandFlag } from "@src/commands/types";
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
-} from '@src/utilities/permission/types'
+} from '@src/services/permissions.service'
 import { BaseCommand } from '../base'
 
 export class LevelCommand extends BaseCommand {

@@ -1,4 +1,4 @@
-import { GlobalPermissionLevel } from '@src/utilities/permission/types'
+import { GlobalPermissionLevel } from "@src/services/permissions.service"
 import { ChatUserstate } from 'tmi.js'
 import { Module } from './types'
 

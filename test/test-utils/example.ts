@@ -15,7 +15,7 @@ import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
-} from '@src/utilities/permission/types'
+} from '@src/services/permissions.service'
 
 export function getExampleCommand({
   alias = [],
