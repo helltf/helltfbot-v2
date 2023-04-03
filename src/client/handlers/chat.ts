@@ -65,7 +65,7 @@ export async function runCommand({
 
   if (userHasCooldown(command, user)) return
 
-  user.permission = await hb.utils.permission.get(user)
+  user.permission = await hb.permission.get(user)
 
   const evalResult = command.evaluate({
     message: contextMessage,

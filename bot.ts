@@ -17,6 +17,7 @@ import { app } from '@src/webhook/actions'
 import { Express } from 'express'
 import { ReminderService } from '@src/services/reminder.service'
 import { BaseCommand } from '@src/commands/base'
+import { PermissionService } from '@src/services/permissions.service'
 
 export class TwitchBot {
   client: Client
@@ -33,6 +34,7 @@ export class TwitchBot {
   webhook: Express
   debug: boolean
   reminder: ReminderService
+  permission: PermissionService
 
   constructor() {
     this.debug = process.env.DEBUG === 'true'
@@ -49,6 +51,7 @@ export class TwitchBot {
     this.utils = new Utility()
     this.reminder = new ReminderService()
     this.webhook = app
+    this.permission = new PermissionService()
   }
 
   async init() {
