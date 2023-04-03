@@ -58,7 +58,7 @@ describe('help command', () => {
       `Aliases: ${command.alias.join(',')}`,
       `Description: ${command.description}`,
       `Cooldown: ${command.cooldown / 1000}s`,
-      `Permissions: ${hb.utils.permission.map(command.permissions)}`,
+      `Permissions: ${hb.permission.map(command.permissions)}`,
       ...(command.requiredParams.length
         ? [`Required params: ${command.requiredParams.join(',')}`]
         : []),
@@ -91,7 +91,7 @@ describe('help command', () => {
       `Name: ${command.name}`,
       `Description: ${command.description}`,
       `Cooldown: ${command.cooldown / 1000}s`,
-      `Permissions: ${hb.utils.permission.map(command.permissions)}`
+      `Permissions: ${hb.permission.map(command.permissions)}`
     ]
 
     expect(success).toBe(true)

@@ -1,6 +1,8 @@
 import { BotResponse } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
-import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
+import {
+  ChatPermissionLevel,
+} from '@src/services/permissions.service'
 import { BaseCommand } from '../base'
 
 export class HelpCommmand extends BaseCommand {
@@ -41,7 +43,7 @@ export class HelpCommmand extends BaseCommand {
           : []),
         `Description: ${foundCommand.description}`,
         `Cooldown: ${foundCommand.cooldown / 1000}s`,
-        `Permissions: ${hb.utils.permission.map(foundCommand.permissions)}`,
+        `Permissions: ${hb.permission.map(foundCommand.permissions)}`,
         ...(foundCommand.requiredParams.length
           ? [`Required params: ${foundCommand.requiredParams.join(',')}`]
           : []),

@@ -46,7 +46,7 @@ export class LevelCommand extends BaseCommand {
     },
 
     getUserPermissions: ({ badges }: TwitchUserState): number => {
-      return hb.utils.permission.getChatPermissions(badges!)
+      return hb.permission.getChatPermissions(badges!)
     },
 
     mapToPermissionName: (
