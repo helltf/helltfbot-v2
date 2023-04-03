@@ -1,6 +1,9 @@
 import { BotResponse, TwitchUserState } from "@src/client/types";
 import {  CommandContext, CommandFlag } from "@src/commands/types";
-import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
+import {
+  ChatPermissionLevel,
+  GlobalPermissionLevel
+} from '@src/services/permissions.service'
 import { BaseCommand } from '../base'
 
 export class StatsCommand extends BaseCommand {
@@ -39,8 +42,12 @@ export class StatsCommand extends BaseCommand {
   }
 
   methods = {
-    isValidType(type: string): boolean {
-      return hb.utils.enumContains(StatsType, type)
+    isValidType: (type: string): boolean => {
+      return this.methods.enumContains(StatsType, type)
+    },
+
+    enumContains: (anyEnum: any, value: string): boolean => {
+      return Object.values(anyEnum).indexOf(value) !== -1
     },
 
     getCommandStats: async (

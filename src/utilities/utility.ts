@@ -36,29 +36,8 @@ export class Utility {
     }
   }
 
-  randomId(length: number): string {
-    return Array(length)
-      .fill('')
-      .map(() => validChars[this.random(0, validChars.length)])
-      .join('')
-  }
-
-  generateAllCombinations<T, U>(arr1: T[], arr2: U[]): (T | U)[][] {
-    return arr1.flatMap(val1 => arr2.map(val2 => [val1, val2]))
-  }
-
   plularizeIf(input: string, someNumber: number) {
     return someNumber === 1 ? input : this.plularize(input)
-  }
-
-  getEnumValues(anyEnum: any): any[] {
-    return Object.keys(anyEnum)
-      .filter(v => !isNaN(Number(v)))
-      .map(v => Number(v))
-  }
-
-  enumContains(anyEnum: any, value: string) {
-    return Object.values(anyEnum).indexOf(value) !== -1
   }
 
   humanize(time: number): string {

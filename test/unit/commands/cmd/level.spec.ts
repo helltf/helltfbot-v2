@@ -1,15 +1,16 @@
 import { LevelCommand } from "@src/commands/cmd/level"
 import { ChatPermissionLevel, GlobalPermissionLevel } from '@src/services/permissions.service'
+import { getEnumValues } from "@test-utils/enum"
 import { getExampleTwitchUserState } from '@test-utils/example'
 import { setup } from '@test-utils/setup'
 
 describe('test level command', () => {
   setup()
   let level: LevelCommand
-  const chatPermissionLevels = hb.utils.getEnumValues(ChatPermissionLevel)
-  const globalPermissionLevels = hb.utils.getEnumValues(GlobalPermissionLevel)
+  const chatPermissionLevels = getEnumValues(ChatPermissionLevel)
+  const globalPermissionLevels = getEnumValues(GlobalPermissionLevel)
 
-  const combinations = hb.utils.generateAllCombinations(
+  const combinations = generateAllCombinations(
     chatPermissionLevels,
     globalPermissionLevels
   )
@@ -30,7 +31,7 @@ describe('test level command', () => {
   })
 
   describe('map to name', () => {
-    hb.utils.getEnumValues(ChatPermissionLevel).forEach(lvl => {
+    getEnumValues(ChatPermissionLevel).forEach(lvl => {
       it(`chat permission lvl ${lvl} returns corrosponding ${ChatPermissionLevel[lvl]} in lower case`, () => {
         const result = level.methods.mapToPermissionName(lvl)
         const expectedResult = ChatPermissionLevel[lvl].toLowerCase()
@@ -80,3 +81,6 @@ describe('test level command', () => {
   })
 })
 
+function generateAllCombinations<T, U>(arr1: T[], arr2: U[]): (T | U)[][] {
+  return arr1.flatMap(val1 => arr2.map(val2 => [val1, val2]))
+}
