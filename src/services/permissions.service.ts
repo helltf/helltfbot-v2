@@ -1,6 +1,6 @@
 import { Userstate, Badges } from 'tmi.js'
 
-export class Permission {
+export class PermissionService {
   getChatPermissions = (badges: Badges): ChatPermissionLevel => {
     if (badges?.broadcaster !== undefined)
       return ChatPermissionLevel.BROADCASTER
