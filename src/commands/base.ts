@@ -35,6 +35,10 @@ export abstract class BaseCommand implements Command {
       return new ResourceError('This command is not available via whispers')
     }
 
+    if (this.permissions > context.user.permission!) {
+      return new ResourceError('Invalid permissions')
+    }
+
     return new ResourceSuccess(null)
   }
   buildContext<T extends BaseCommand>({
