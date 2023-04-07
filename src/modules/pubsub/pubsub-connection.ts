@@ -10,6 +10,8 @@ import * as WS from 'ws'
 import { LogType } from '@src/logger/logger-export'
 
 const PUBSUB_URL = 'wss://pubsub-edge.twitch.tv'
+const validChars =
+  'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('')
 
 export class PubSubConnection {
   connection: ReconnectingWebSocket
