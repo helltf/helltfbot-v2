@@ -1,14 +1,8 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { BaseCommand } from '@src/commands/base'
 import { CommandContext, CommandFlag, MessageType } from '@src/commands/types'
-import {
-  ChatPermissionLevel,
-  GlobalPermissionLevel
-} from '@src/utilities/permission/types'
-import {
-  getExampleTwitchUserEntity,
-  getExampleTwitchUserState
-} from '@test-utils/example'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
+import { getExampleTwitchUserState } from '@test-utils/example'
 
 describe('base command', () => {
   describe('build context', () => {
