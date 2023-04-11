@@ -1,6 +1,7 @@
 import { ResourceError, ResourceSuccess } from '@api/types'
 import { BaseCommand } from '@src/commands/base'
 import { CommandContext, CommandFlag, MessageType } from '@src/commands/types'
+import { ChatPermissionLevel } from '@src/utilities/permission/types'
 import { getExampleTwitchUserState } from '@test-utils/example'
 
 describe('base command', () => {
@@ -181,6 +182,99 @@ describe('base command', () => {
         first: firstParamValue,
         second: restParamValues.join(' ')
       })
+    })
+  })
+  describe('evaluate', () => {
+    it('context is not whisper return ResourceSuccess', () => {
+      class TestBaseCommand extends BaseCommand {
+        flags = []
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.MESSAGE,
+        user: getExampleTwitchUserState({})
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+    })
+
+    it('context is whisper but command doesnt allow whisper return error', () => {
+      class TestBaseCommand extends BaseCommand {
+        flags = []
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.WHISPER,
+        user: getExampleTwitchUserState({})
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const error = result as ResourceError
+
+      expect(error.error).toBe('This command is not available via whispers')
+    })
+
+    it('conext is whipser and command allows whisper return true', () => {
+      class TestBaseCommand extends BaseCommand {
+        flags = [CommandFlag.WHISPER]
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.WHISPER,
+        user: getExampleTwitchUserState({})
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
+    })
+
+    it('user has not enough perms return error', () => {
+      class TestBaseCommand extends BaseCommand {
+        permissions = ChatPermissionLevel.MOD
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.MESSAGE,
+        user: getExampleTwitchUserState({
+          permission: ChatPermissionLevel.USER
+        })
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceError)
+
+      const error = result as ResourceError
+
+      expect(error.error).toBe('Invalid permissions')
+    })
+
+    it('user has enough perms return success', () => {
+      class TestBaseCommand extends BaseCommand {
+        permissions = ChatPermissionLevel.MOD
+      }
+
+      const context = {
+        message: [''],
+        type: MessageType.MESSAGE,
+        user: getExampleTwitchUserState({
+          permission: ChatPermissionLevel.MOD
+        })
+      }
+
+      const result = new TestBaseCommand().evaluate(context)
+
+      expect(result).toBeInstanceOf(ResourceSuccess)
     })
   })
 })

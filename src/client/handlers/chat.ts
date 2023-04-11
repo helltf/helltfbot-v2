@@ -69,7 +69,8 @@ export async function runCommand({
 
   const evalResult = command.evaluate({
     message: contextMessage,
-    type: type
+    type: type,
+    user
   })
 
   if (evalResult instanceof ResourceError) {

@@ -26,12 +26,17 @@ export abstract class BaseCommand implements Command {
   evaluate = (context: {
     message: string[]
     type: MessageType
+    user: TwitchUserState
   }): Resource<null> => {
     if (
       context.type === MessageType.WHISPER &&
       !this.flags.includes(CommandFlag.WHISPER)
     ) {
       return new ResourceError('This command is not available via whispers')
+    }
+
+    if (this.permissions > context.user.permission!) {
+      return new ResourceError('Invalid permissions')
     }
 
     return new ResourceSuccess(null)
