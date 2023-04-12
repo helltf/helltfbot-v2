@@ -2,7 +2,7 @@ import { GlobalPermissionLevel } from '@src/utilities/permission/types'
 import { ChatUserstate } from 'tmi.js'
 import { Module } from './types'
 
-export class ColorTracking implements Module {
+export class UserModule implements Module {
   name = 'Color'
   MAX_SAVED_COLORS = 15
 
