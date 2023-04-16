@@ -11,7 +11,8 @@ import {
   SuggestionEntity,
   ErrorEntity,
   EmoteStatsEntity,
-  ReminderEntity
+  ReminderEntity,
+  StatusEntity
 } from '@db/entities'
 import { TwitchTokenEntity } from '@src/db/entities/twitch_token.entity'
 import { DataSource, Repository } from 'typeorm'
@@ -32,6 +33,7 @@ export interface DbRepositories {
   error: Repository<ErrorEntity>
   twitch_at: Repository<TwitchTokenEntity>
   reminder: Repository<ReminderEntity>
+  status: Repository<StatusEntity>
 }
 
 export class DB implements DbRepositories {
@@ -50,6 +52,7 @@ export class DB implements DbRepositories {
   emoteStats: Repository<EmoteStatsEntity>
   twitch_at: Repository<TwitchTokenEntity>
   reminder: Repository<ReminderEntity>
+  status: Repository<StatusEntity>
 
   constructor(config: PostgresConnectionOptions = getOrmConf()) {
     const dataSource = new DataSource(config)
@@ -69,6 +72,7 @@ export class DB implements DbRepositories {
     this.emoteStats = dataSource.getRepository(EmoteStatsEntity)
     this.twitch_at = dataSource.getRepository(TwitchTokenEntity)
     this.reminder = dataSource.getRepository(ReminderEntity)
+    this.status = dataSource.getRepository(StatusEntity)
     this.dataSource = dataSource
   }
   async initialize(): Promise<DB> {

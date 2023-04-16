@@ -1,6 +1,7 @@
-import { Column } from 'typeorm'
+import { TwitchUserEntity } from '@db/entities'
+import { Column, OneToOne } from 'typeorm'
 
-enum StatusEnum {
+export enum StatusEnum {
   NONE = 'none',
   AFK = 'afk',
   SLEEP = 'sleep'
@@ -13,6 +14,11 @@ export class StatusEntity {
   @Column('bigint')
   lastChanged: number
 
-  @Column('varchar')
-  message: string
+  @Column('varchar', { nullable: true })
+  message: string | undefined
+
+  @OneToOne(() => TwitchUserEntity, user => user.notifications, {
+    eager: true
+  })
+  user: TwitchUserEntity
 }
