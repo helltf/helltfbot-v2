@@ -8,10 +8,12 @@ import {
   EmoteStatsEntity,
   ColorHistoryEntity,
   ReminderEntity,
-  BanEntity
+  BanEntity,
+  StatusEntity
 } from '@db/entities'
 import { BaseCommand } from '@src/commands/base'
 import { ReminderStatus, ReminderType } from '@src/db/entities/reminder.entity'
+import { StatusEnum } from '@src/db/entities/status.entity'
 import {
   ChatPermissionLevel,
   GlobalPermissionLevel
@@ -208,4 +210,20 @@ export const getExampleBanEntity = ({
   ban.channel = channel
 
   return ban
+}
+
+export const getExampleStatusEntity = ({
+  lastChanged = 1,
+  user = getExampleTwitchUserEntity({}),
+  message = undefined,
+  status = StatusEnum.NONE
+}: Partial<StatusEntity>): StatusEntity => {
+  const statusEntity = new StatusEntity()
+
+  statusEntity.lastChanged = lastChanged
+  statusEntity.status = status
+  statusEntity.message = message
+  statusEntity.user = user
+
+  return statusEntity
 }

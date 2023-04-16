@@ -11,6 +11,7 @@ export class UserModule implements Module {
       if (self) return
       await this.updateUser(user)
       await this.handleColorChanges(user)
+      await this.updateUserStatus(user)
     })
   }
 
@@ -130,4 +131,6 @@ export class UserModule implements Module {
       registered_at: Date.now()
     })
   }
+
+  async updateUserStatus(user: ChatUserstate)
 }
