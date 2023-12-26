@@ -1,9 +1,9 @@
-FROM node:16
+FROM node:20
 WORKDIR /usr/helltfbot-v2
 
 COPY package.json yarn.lock ./
 
-RUN yarn install
+RUN npm install
 
 COPY . . 
 EXPOSE 8090
